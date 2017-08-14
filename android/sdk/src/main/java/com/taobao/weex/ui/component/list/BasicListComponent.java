@@ -100,6 +100,8 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   private boolean isScrollable = true;
   private ArrayMap<String, Long> mRefToViewType;
   private SparseArray<ArrayList<WXComponent>> mViewTypes;
+  private List<WXComponent>  mListComponents;  //list view adapter's component, exclude, header footer
+
   private WXRecyclerViewOnScrollListener mViewOnScrollListener = new WXRecyclerViewOnScrollListener(this);
 
   private static final int MAX_VIEWTYPE_ALLOW_CACHE = 9;
@@ -154,6 +156,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   public BasicListComponent(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
     super(instance, node, parent);
     stickyHelper = new WXStickyHelper(this);
+    mListComponents = new ArrayList<>();
   }
 
   @Override
@@ -166,12 +169,12 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       return;
     }
 
-    if (mChildren == null) {
+    if (mListComponents == null || mListComponents.size() == 0) {
       WXLogUtils.e(TAG, "children is null");
       return;
     }
 
-    mDragHelper = new DefaultDragHelper(mChildren, recyclerView, new EventTrigger() {
+    mDragHelper = new DefaultDragHelper(mListComponents, recyclerView, new EventTrigger() {
       @Override
       public void triggerEvent(String type, Map<String, Object> args) {
         fireEvent(type, args);
@@ -202,13 +205,17 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
   @Override
   public void destroy() {
-    super.destroy();
+    if(mListComponents != null){
+      mListComponents.clear();
+    }
     if (mStickyMap != null)
       mStickyMap.clear();
     if (mViewTypes != null)
       mViewTypes.clear();
     if (mRefToViewType != null)
       mRefToViewType.clear();
+
+    super.destroy();
   }
 
   @Override
@@ -455,7 +462,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       //Do nothing if disable target not exist.
     } else {
       WXComponent dChild = findDirectListChild(component);
-      int index = mChildren.indexOf(dChild);
+      int index = mListComponents.indexOf(dChild);
       if (index != -1) {
         item = new AppearanceHelper(component, index);
         item.setWatchEvent(event, true);
@@ -519,7 +526,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     }
 
     if (cell != null) {
-      final int pos = mChildren.indexOf(cell);
+      final int pos = mListComponents.indexOf(cell);
       final WXRecyclerView view = bounceRecyclerView.getInnerView();
 
       if (!smooth) {
@@ -583,7 +590,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
           layoutManager = getHostView().getInnerView().getLayoutManager();
           if (layoutManager instanceof LinearLayoutManager || layoutManager instanceof GridLayoutManager) {
             int fVisible = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-            int pos = mChildren.indexOf(cell);
+            int pos = mListComponents.indexOf(cell);
             cell.setScrollPositon(pos);
 
             if (pos <= fVisible) {
@@ -595,7 +602,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
           } else if(layoutManager instanceof StaggeredGridLayoutManager){
             int [] firstItems= new int[3];
             int fVisible = ((StaggeredGridLayoutManager) layoutManager).findFirstVisibleItemPositions(firstItems)[0];
-            int pos = mChildren.indexOf(cell);
+            int pos = mListComponents.indexOf(cell);
 
             if (pos <= fVisible) {
               beforeFirstVisibleItem = true;
@@ -667,11 +674,19 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     if (child == null || index < -1) {
       return;
     }
-    int count = mChildren.size();
+    if((child instanceof  WXBaseRefresh)){
+      return;
+    }
+    if(index < 0 || index >= mListComponents.size()){
+      mListComponents.add(child);
+    }else{
+      mListComponents.add(index, child);
+    }
+    int count = mListComponents.size();
     index = index >= count ? -1 : index;
     bindViewType(child);
 
-    int adapterPosition = index == -1 ? mChildren.size() - 1 : index;
+    int adapterPosition = index == -1 ? mListComponents.size() - 1 : index;
     T view = getHostView();
     if (view != null) {
       boolean isAddAnimation = isAddAnimation(child);
@@ -717,7 +732,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     ImmutableDomObject domObject = child.getDomObject();
     if (domObject != null) {
       Object attr = domObject.getAttrs().get(Constants.Name.KEEP_SCROLL_POSITION);
-      if (WXUtils.getBoolean(attr, false) && index <= getChildCount() && index>-1) {
+      if (WXUtils.getBoolean(attr, false) && index <= mListComponents.size() && index>-1) {
         return true;
       }
     }
@@ -731,7 +746,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       Map.Entry<String, AppearanceHelper> item = iterator.next();
       AppearanceHelper value = item.getValue();
       WXComponent dChild = findDirectListChild(value.getAwareChild());
-      int index = mChildren.indexOf(dChild);
+      int index = mListComponents.indexOf(dChild);
       value.setCellPosition(index);
     }
   }
@@ -757,7 +772,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
    */
   @Override
   public void remove(WXComponent child, boolean destroy) {
-    int index = mChildren.indexOf(child);
+    int index = mListComponents.indexOf(child);
     if (destroy) {
       child.detachViewAndClearPreInfo();
     }
@@ -825,10 +840,10 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       /**
        * Recycle cache{@link recycleViewList} when recycleViewList.size() > list max child count or threshold
        */
-      if (recycleViewList.size() > getChildCount() + 1 || recycleViewList.size() >= threshold) {
+      if (recycleViewList.size() > mListComponents.size() + 1 || recycleViewList.size() >= threshold) {
         WXLogUtils.d(TAG, "Recycle holder list recycled : cache size is " + recycleViewList.size() +
                 ", visibleCellCount is " + visibleCellCount + ", threshold is " + threshold +
-                ", child count is " + getChildCount());
+                ", child count is " + mListComponents.size());
         recycleViewHolderList();
       }
     } else {
@@ -849,7 +864,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   public void onBindViewHolder(final ListBaseViewHolder holder, int position) {
     if (holder == null) return;
     holder.setComponentUsing(true);
-    WXComponent component = getChild(position);
+    WXComponent component = mListComponents.get(position);
     if (component == null
         || (component instanceof WXRefresh)
         || (component instanceof WXLoading)
@@ -909,7 +924,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   }
 
   protected void markComponentUsable(){
-    for (WXComponent component : mChildren){
+    for (WXComponent component : mListComponents){
       component.setUsing(false);
     }
   }
@@ -924,7 +939,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
    */
   @Override
   public ListBaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    if (mChildren != null) {
+    if (mListComponents != null && mListComponents.size() > 0) {
       if (mViewTypes == null)
         return createVHForFakeComponent(viewType);
       ArrayList<WXComponent> mTypes = mViewTypes.get(viewType);
@@ -1002,7 +1017,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
    */
   @Override
   public int getItemViewType(int position) {
-    return generateViewType(getChild(position));
+    return generateViewType(mListComponents.get(position));
   }
 
   @Nullable
@@ -1135,11 +1150,11 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   /**
    * Get child component num.
    *
-   * @return return the size of {@link #mChildren} if mChildren is not empty, otherwise, return 0;
+   * @return return the size of {@link #mListComponents} if mListComponents is not empty, otherwise, return 0;
    */
   @Override
   public int getItemCount() {
-    return getChildCount();
+    return mListComponents.size();
   }
 
   @Override
@@ -1154,7 +1169,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   public long getItemId(int position) {
     long id;
     try {
-      id = Long.parseLong(getChild(position).getDomObject().getRef());
+      id = Long.parseLong(mListComponents.get(position).getDomObject().getRef());
     } catch (RuntimeException e) {
       WXLogUtils.e(TAG, WXLogUtils.getStackTrace(e));
       id = RecyclerView.NO_ID;
@@ -1174,10 +1189,10 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
       if (offScreenY < offsetParsed) {
 
-        if (mListCellCount != mChildren.size()
+        if (mListCellCount != mListComponents.size()
             || mForceLoadmoreNextTime) {
           fireEvent(Constants.Event.LOADMORE);
-          mListCellCount = mChildren.size();
+          mListCellCount = mListComponents.size();
           mForceLoadmoreNextTime = false;
         }
       }
@@ -1239,7 +1254,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   private ListBaseViewHolder createVHForRefreshComponent(int viewType) {
     FrameLayout view = new FrameLayout(getContext());
     view.setBackgroundColor(Color.WHITE);
-    view.setLayoutParams(new FrameLayout.LayoutParams(1, 1));
+    view.setLayoutParams(new FrameLayout.LayoutParams(1, 0));
     view.setVisibility(View.GONE);
     return new ListBaseViewHolder(view, viewType);
   }
