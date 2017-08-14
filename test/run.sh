@@ -25,6 +25,7 @@ function runAndroid {
     buildAndroid
     startMacacaServer
     startWeexServer
+    echo 'hello weex'
     platform=android ./node_modules/mocha/bin/mocha  $1 -f '@ignore-android' -i --recursive --bail
 }
 
@@ -32,14 +33,14 @@ function buildiOS {
     builddir=$(pwd)'/ios/playground'
     current_dir=$PWD
     cd $builddir
-    
+
     pod update
     if [ $needCoverage = "cover" ] && [ -d "./XcodeCoverage/" ]; then
         ./XcodeCoverage/podsGcovConfig
     fi
     product=$(PWD)'/build/Debug-iphonesimulator/'
     [ -f $product ] && rm -rf $product
-    
+
     xcodebuild clean build -quiet -workspace WeexDemo.xcworkspace -sdk iphonesimulator -scheme Pods-WeexDemo SYMROOT=$(PWD)/build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
     xcodebuild clean build -quiet -workspace WeexDemo.xcworkspace -sdk iphonesimulator -scheme WeexSDK SYMROOT=$(PWD)/build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
     xcodebuild clean build -quiet -arch x86_64 -configuration RELEASE -workspace WeexDemo.xcworkspace -sdk iphonesimulator -scheme WeexDemo SYMROOT=$(PWD)/build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
@@ -88,12 +89,12 @@ platform_android='android'
 platform=${1:-$platform_android}
 coverage_status='noCover'
 needCoverage=${2:-$coverage_status}
- 
+
 killserver
 #run tests
 if [ $platform = $platform_android ]; then
-    runAndroid ./test/scripts/
-elif [ $platform = 'web' ]; 
+    runAndroid ./test/scripts/components/list-onrefresh-header-1px.js
+elif [ $platform = 'web' ];
 then
     runWeb ./test/scripts/
 else

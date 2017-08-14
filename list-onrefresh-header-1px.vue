@@ -1,6 +1,6 @@
 <template>
     <div class="body">
-      <list class="list" test-id="list">
+      <list class="list">
          <refresh class="refresh-view" :display="refresh_display" @refresh="onrefresh">
          </refresh>
          <cell>
