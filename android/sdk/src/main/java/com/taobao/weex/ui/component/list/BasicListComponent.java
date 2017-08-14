@@ -1254,7 +1254,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   private ListBaseViewHolder createVHForRefreshComponent(int viewType) {
     FrameLayout view = new FrameLayout(getContext());
     view.setBackgroundColor(Color.WHITE);
-    view.setLayoutParams(new FrameLayout.LayoutParams(1, 0));
+    view.setLayoutParams(new FrameLayout.LayoutParams(1, 1));
     view.setVisibility(View.GONE);
     return new ListBaseViewHolder(view, viewType);
   }
