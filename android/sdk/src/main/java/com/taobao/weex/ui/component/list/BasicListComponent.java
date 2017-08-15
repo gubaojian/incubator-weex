@@ -777,6 +777,9 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       child.detachViewAndClearPreInfo();
     }
     unBindViewType(child);
+    if(index >= 0){
+       mListComponents.remove(child);
+    }
 
     T view = getHostView();
     if (view == null) {
