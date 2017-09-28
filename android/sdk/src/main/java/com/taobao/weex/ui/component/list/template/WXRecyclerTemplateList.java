@@ -54,6 +54,7 @@ import com.taobao.weex.dom.WXCellDomObject;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.WXEvent;
 import com.taobao.weex.dom.WXRecyclerDomObject;
+import com.taobao.weex.dom.flex.CSSLayoutContext;
 import com.taobao.weex.dom.flex.Spacing;
 import com.taobao.weex.el.parse.ArrayStack;
 import com.taobao.weex.ui.component.AppearanceHelper;
@@ -537,6 +538,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 Object templateId = child.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
                 String key = WXUtils.getString(templateId, null);
                 if(key != null){
+                    //set visible false, skip layout in dom thread, set visible in onCreateViewHolder
+                    if(child.getDomObject() != null) {
+                        WXDomObject domObject = (WXDomObject) child.getDomObject();
+                        domObject.setVisible(false);
+                    }
                     mTemplates.put(key, (WXCell) child);
                     mTemplatesCache.put(key, (WXCell) Statements.copyComponentTree(child));
                     if(mTemplateViewTypes.get(key) == null){
@@ -1043,6 +1049,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         WXCell component = mTemplatesCache.remove(template);
         if(component == null) {
             component = (WXCell) Statements.copyComponentTree(source);
+        }
+        if(component.getDomObject() != null){
+            ((WXDomObject)component.getDomObject()).setVisible(true);
         }
         prefetchCellCacheAsync(template);
         if(component.getDomObject() instanceof  WXCellDomObject
