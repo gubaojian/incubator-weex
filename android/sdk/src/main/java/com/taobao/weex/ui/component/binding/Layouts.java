@@ -46,7 +46,9 @@ public class Layouts {
             @Override
             protected Void doInBackground(Void... params) {
                 if(templateViewHolder.getHolderPosition() == position){
-                    doLayout(component, templateViewHolder.getLayoutContext());
+                    if(component.getInstance() != null && !component.getInstance().isDestroy()) {
+                        doLayout(component, templateViewHolder.getLayoutContext());
+                    }
                 }
                 return null;
             }
@@ -54,7 +56,9 @@ public class Layouts {
             @Override
             protected void onPostExecute(Void aVoid) {
                 if(position == templateViewHolder.getHolderPosition()) {
-                    setLayout(component, false);
+                    if(component.getInstance() != null && !component.getInstance().isDestroy()) {
+                        setLayout(component, false);
+                    }
                 }
             }
         };
@@ -78,7 +82,9 @@ public class Layouts {
                 dom.layoutBefore();
             }
         });
-        domObject.calculateLayout(layoutContext);
+        if(instance != null && !instance.isDestroy()){
+            domObject.calculateLayout(layoutContext);
+        }
         domObject.traverseTree( new WXDomObject.Consumer() {
             @Override
             public void accept(WXDomObject dom) {

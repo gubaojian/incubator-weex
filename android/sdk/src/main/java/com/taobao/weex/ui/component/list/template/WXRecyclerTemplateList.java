@@ -1060,7 +1060,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 WXCellDomObject domObject = (WXCellDomObject) component.getDomObject();
                 domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
                 if(WXEnvironment.isApkDebugable()){
-                    WXLogUtils.d(TAG, template + " onCreateViewHolder copy used " + (System.currentTimeMillis() - start));
+                    WXLogUtils.d(TAG, template + " onCreateViewHolder sync copy used " + (System.currentTimeMillis() - start));
                 }
             }
         }
@@ -1068,6 +1068,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(needLayout){
             layoutContext = new CSSLayoutContext();
             Layouts.doLayout(component, layoutContext);
+            if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.d(TAG, template + " onCreateViewHolder sync layout used " + (System.currentTimeMillis() - start));
+            }
         }
         Layouts.setLayout(component, false);
         prefetchCellCacheAsync(template);
@@ -1078,7 +1081,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         component.applyLayoutAndEvent(component);
         if(WXEnvironment.isApkDebugable()) {
-            WXLogUtils.d(TAG, template +  " onCreateViewHolder layout used " + (System.currentTimeMillis() - start));
+            WXLogUtils.d(TAG, template +  " onCreateViewHolder apply layout used " + (System.currentTimeMillis() - start));
         }
         component.bindData(component);
         if(WXEnvironment.isApkDebugable()) {

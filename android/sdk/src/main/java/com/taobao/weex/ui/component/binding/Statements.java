@@ -23,6 +23,7 @@ import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXAttr;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.WXEvent;
@@ -33,6 +34,7 @@ import com.taobao.weex.el.parse.Operators;
 import com.taobao.weex.el.parse.Token;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentFactory;
+import com.taobao.weex.ui.component.WXImage;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
@@ -307,7 +309,14 @@ public class Statements {
             }
 
             if(dynamic.size() > 0) {
-                domObject.updateAttr(dynamic);
+                if(dynamic.size() == 1
+                        && dynamic.get(Constants.Name.SRC) != null
+                        && component instanceof WXImage){
+                    //for image avoid dirty layout, only update src attrs
+                    domObject.getAttrs().put(Constants.Name.SRC, dynamic.get(Constants.Name.SRC));
+                }else {
+                    domObject.updateAttr(dynamic); //dirty layout
+                }
                 component.updateProperties(dynamic);
             }
         }
