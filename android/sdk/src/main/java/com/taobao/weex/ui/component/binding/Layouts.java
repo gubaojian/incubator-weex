@@ -21,16 +21,13 @@ package com.taobao.weex.ui.component.binding;
 
 
 import android.os.AsyncTask;
-import android.speech.tts.Voice;
 
-import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.CSSLayoutContext;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.component.list.template.TemplateViewHolder;
-import com.taobao.weex.utils.WXLogUtils;
 
 /**
  * Created by furture on 2017/8/21.
@@ -39,77 +36,17 @@ public class Layouts {
     /**
      * do dom layout, and set layout to component
      * */
-    public static void doLayout(final TemplateViewHolder templateViewHolder){
-        final CSSLayoutContext layoutContext = templateViewHolder.getLayoutContext();
+    public static void doLayoutAsync(final TemplateViewHolder templateViewHolder){
         final WXComponent component = templateViewHolder.getComponent();
-        final WXSDKInstance instance = component.getInstance();
         final  int position = templateViewHolder.getHolderPosition();
-        if(false){
-            WXDomObject domObject = (WXDomObject) component.getDomObject();
-            domObject.traverseTree(new WXDomObject.Consumer() {
-                @Override
-                public void accept(WXDomObject dom) {
-                    if(instance == null || instance.isDestroy()){
-                        return;
-                    }
-                    if(!dom.hasUpdate()){
-                        return;
-                    }
-                    dom.layoutBefore();
-                }
-            });
-            domObject.calculateLayout(layoutContext);
-            domObject.traverseTree( new WXDomObject.Consumer() {
-                @Override
-                public void accept(WXDomObject dom) {
-                    if(instance == null || instance.isDestroy()){
-                        return;
-                    }
-                    if (dom.hasUpdate()) {
-                        dom.layoutAfter();
-                    }
-                }
-            });
-            setLayout(component, false);
-            return;
-        }
         if(templateViewHolder.asyncTask != null){
-            templateViewHolder.asyncTask.cancel(true);
+              templateViewHolder.asyncTask.cancel(true);
         }
         AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 if(templateViewHolder.getHolderPosition() == position){
-
-                    long start = System.currentTimeMillis();
-                    WXDomObject domObject = (WXDomObject) component.getDomObject();
-                    domObject.traverseTree(new WXDomObject.Consumer() {
-                        @Override
-                        public void accept(WXDomObject dom) {
-                            if(instance == null || instance.isDestroy()){
-                                return;
-                            }
-                            if(!dom.hasUpdate()){
-                                return;
-                            }
-                            dom.layoutBefore();
-                        }
-                    });
-                    domObject.calculateLayout(layoutContext);
-                    domObject.traverseTree( new WXDomObject.Consumer() {
-                        @Override
-                        public void accept(WXDomObject dom) {
-                            if(instance == null || instance.isDestroy()){
-                                return;
-                            }
-                            if (dom.hasUpdate()) {
-                                dom.layoutAfter();
-                            }
-                        }
-                    });
-                    if(WXEnvironment.isApkDebugable()){
-                        WXLogUtils.d("weex",  position  + " onBindViewHolder async layout used " + (System.currentTimeMillis() - start));
-                    }
+                    doLayout(component, templateViewHolder.getLayoutContext());
                 }
                 return null;
             }
@@ -122,8 +59,40 @@ public class Layouts {
             }
         };
         templateViewHolder.asyncTask = asyncTask;
-        asyncTask.execute();
+        asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
+
+
+    public static void doLayout(WXComponent component, final  CSSLayoutContext layoutContext){
+        WXDomObject domObject = (WXDomObject) component.getDomObject();
+        final WXSDKInstance instance = component.getInstance();
+        domObject.traverseTree(new WXDomObject.Consumer() {
+            @Override
+            public void accept(WXDomObject dom) {
+                if(instance == null || instance.isDestroy()){
+                    return;
+                }
+                if(!dom.hasUpdate()){
+                    return;
+                }
+                dom.layoutBefore();
+            }
+        });
+        domObject.calculateLayout(layoutContext);
+        domObject.traverseTree( new WXDomObject.Consumer() {
+            @Override
+            public void accept(WXDomObject dom) {
+                if(instance == null || instance.isDestroy()){
+                    return;
+                }
+                if (dom.hasUpdate()) {
+                    dom.layoutAfter();
+                }
+            }
+        });
+    }
+
+
 
 
     /**
@@ -131,7 +100,7 @@ public class Layouts {
      * dom extra will also be updated from dom object to component.
      * if force is true, always set layout
      * */
-    private static final void setLayout(WXComponent component, boolean force){
+    public static final void setLayout(WXComponent component, boolean force){
         WXDomObject domObject = (WXDomObject) component.getDomObject();
         if(domObject.hasUpdate() || force){
             domObject.markUpdateSeen();
