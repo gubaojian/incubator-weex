@@ -44,7 +44,7 @@ public class Layouts {
         final WXComponent component = templateViewHolder.getComponent();
         final WXSDKInstance instance = component.getInstance();
         final  int position = templateViewHolder.getHolderPosition();
-        if(false){
+        if(true){
             WXDomObject domObject = (WXDomObject) component.getDomObject();
             domObject.traverseTree(new WXDomObject.Consumer() {
                 @Override
