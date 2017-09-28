@@ -122,7 +122,7 @@ public class Layouts {
             }
         };
         templateViewHolder.asyncTask = asyncTask;
-        asyncTask.execute();
+        asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
 
 
