@@ -538,7 +538,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 Object templateId = child.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
                 String key = WXUtils.getString(templateId, null);
                 if(key != null){
-                    //set visible false, skip layout in dom thread, set visible in onCreateViewHolder
+                    //set visible false, skip layout in dom thread, set visible true in onCreateViewHolder
                     if(child.getDomObject() != null) {
                         WXDomObject domObject = (WXDomObject) child.getDomObject();
                         domObject.setVisible(false);
