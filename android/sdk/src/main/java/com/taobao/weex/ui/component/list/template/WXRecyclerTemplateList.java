@@ -209,6 +209,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         RecyclerViewBaseAdapter recyclerViewBaseAdapter = new RecyclerViewBaseAdapter<>(this);
         recyclerViewBaseAdapter.setHasStableIds(true);
+        bounceRecyclerView.getInnerView().setItemAnimator(null);
         bounceRecyclerView.getInnerView().setItemViewCacheSize(itemViewCacheSize);
         bounceRecyclerView.getInnerView().setHasFixedSize(hasFixedSize);
         bounceRecyclerView.setRecyclerViewBaseAdapter(recyclerViewBaseAdapter);

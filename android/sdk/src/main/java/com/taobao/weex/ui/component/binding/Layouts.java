@@ -122,7 +122,7 @@ public class Layouts {
             }
         };
         templateViewHolder.asyncTask = asyncTask;
-        asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+        asyncTask.execute();
     }
 
 
@@ -131,7 +131,7 @@ public class Layouts {
      * dom extra will also be updated from dom object to component.
      * if force is true, always set layout
      * */
-    public static final void setLayout(WXComponent component, boolean force){
+    private static final void setLayout(WXComponent component, boolean force){
         WXDomObject domObject = (WXDomObject) component.getDomObject();
         if(domObject.hasUpdate() || force){
             domObject.markUpdateSeen();
