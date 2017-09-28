@@ -44,7 +44,7 @@ public class Layouts {
         final WXComponent component = templateViewHolder.getComponent();
         final WXSDKInstance instance = component.getInstance();
         final  int position = templateViewHolder.getHolderPosition();
-        if(true){
+        if(false){
             WXDomObject domObject = (WXDomObject) component.getDomObject();
             domObject.traverseTree(new WXDomObject.Consumer() {
                 @Override
@@ -74,7 +74,7 @@ public class Layouts {
             return;
         }
         if(templateViewHolder.asyncTask != null){
-            templateViewHolder.asyncTask.cancel(false);
+            templateViewHolder.asyncTask.cancel(true);
         }
         AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
             @Override
