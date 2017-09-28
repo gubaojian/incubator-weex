@@ -1034,14 +1034,17 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             view.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
             return new TemplateViewHolder(view, viewType);
         }
+        long start = System.currentTimeMillis();
         WXCell component = (WXCell) Statements.copyComponentTree(source);
         if(component.getDomObject() instanceof  WXCellDomObject
                 && getDomObject() instanceof  WXRecyclerDomObject){
             WXCellDomObject domObject = (WXCellDomObject) component.getDomObject();
             domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
+            if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.d(TAG, template + " onCreateViewHolder copy used " + (System.currentTimeMillis() - start));
+            }
         }
         component.lazy(false);
-        long start = System.currentTimeMillis();
         component.createView();
         if(WXEnvironment.isApkDebugable()){
             WXLogUtils.d(TAG, template + " onCreateViewHolder view used " + (System.currentTimeMillis() - start));
