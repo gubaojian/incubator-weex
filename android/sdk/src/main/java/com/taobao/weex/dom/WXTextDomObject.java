@@ -394,6 +394,9 @@ public class WXTextDomObject extends WXDomObject {
    * outerWidth in case of outerWidth is defined, in other case, it will be outer width.
    */
    float getTextWidth(TextPaint textPaint,float outerWidth, boolean forceToDesired) {
+     if(mText == null){
+        return  0;
+     }
     float textWidth;
     if (forceToDesired) {
       textWidth = outerWidth;
