@@ -18,6 +18,7 @@
  */
 package com.taobao.weex.ui.component.binding;
 
+import android.os.Looper;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
@@ -202,9 +203,11 @@ public class Statements {
                                 renderNodeDomObject.getAttrs().setStatement(null); // clear node's statement
                                 parentDomObject.add(renderNodeDomObject, renderIndex);
                                 parent.addChild(renderNode, renderIndex);
-                                parent.createChildViewAt(renderIndex);
-                                renderNode.applyLayoutAndEvent(renderNode);
-                                renderNode.bindData(renderNode);
+                                if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
+                                    parent.createChildViewAt(renderIndex);
+                                    renderNode.applyLayoutAndEvent(renderNode);
+                                    renderNode.bindData(renderNode);
+                                }
                             }
                             doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context);
                             renderIndex++;
@@ -316,12 +319,12 @@ public class Statements {
                         && component instanceof WXImage){
                     //for image avoid dirty layout, only update src attrs
                     domObject.getAttrs().put(Constants.Name.SRC, dynamic.get(Constants.Name.SRC));
-                    Log.e("weex",  "async updateAttrs " + domObject.getType() + " " + dynamic + "  " + dynamic.size());
                 }else {
-                    Log.e("weex",  "updateAttrs " + domObject.getType() + " " + dynamic + "  " + dynamic.size());
                     domObject.updateAttr(dynamic); //dirty layout
                 }
-                component.updateProperties(dynamic);
+                if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
+                    component.updateProperties(dynamic);
+                }
             }
         }
         WXEvent event = domObject.getEvents();

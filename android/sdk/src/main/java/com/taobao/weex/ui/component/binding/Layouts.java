@@ -39,7 +39,7 @@ import com.taobao.weex.utils.WXLogUtils;
 public class Layouts {
     /**
      * do dom layout async or sync , and set layout to component on main.
-     * on first screen do sync layout, when compontnet reuse do async layout
+     * on first use do sync layout, when compontnet reuse do async layout
      * */
     public static void doLayoutAsync(final TemplateViewHolder templateViewHolder, boolean async){
         final WXComponent component = templateViewHolder.getComponent();
