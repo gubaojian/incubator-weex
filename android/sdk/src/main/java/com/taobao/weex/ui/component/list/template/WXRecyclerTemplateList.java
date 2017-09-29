@@ -141,7 +141,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
     private Map<String, WXCell> mTemplates;
     private String  listDataTemplateKey = Constants.Name.Recycler.SLOT_TEMPLATE_TYPE;
     private Runnable listUpdateRunnable;
-    private ConcurrentHashMap<String, ConcurrentLinkedQueue<WXCell>> mTemplatesCopyCache;
+    private ConcurrentHashMap<String, PreloadCellCache> mTemplatesCopyCache;
 
     /**
      * sticky helper
@@ -1019,12 +1019,12 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             return new TemplateViewHolder(view, viewType);
         }
         long start = System.currentTimeMillis();
-        ConcurrentLinkedQueue<WXCell> cache = mTemplatesCopyCache.get(template);
+        PreloadCellCache cache = mTemplatesCopyCache.get(template);
         WXCell component =  null;
-        if(cache != null && cache.size() > 0){
-            component = cache.poll();
+        if(cache != null && cache.cells != null && cache.cells.size() > 0){
+            component = cache.cells.poll();
         }
-        if(cache != null && cache.size() == 0){
+        if(cache == null ||  !cache.isPreloadIng){
             asyncPreloadCellCopyCache(template);
         }
         if(component == null) {
@@ -1057,47 +1057,51 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(listData == null || listData.size() == 0){
             return;
         }
-        final WXCell cell = mTemplates.get(template);
-        if(cell == null){
+        final WXCell source = mTemplates.get(template);
+        if(source == null){
             return;
         }
-        if(mTemplatesCopyCache.get(template) != null
-                && mTemplatesCopyCache.get(template).size() > 0){
+        PreloadCellCache cellCache = mTemplatesCopyCache.get(template);
+        if(cellCache == null){
+            cellCache = new PreloadCellCache();
+            mTemplatesCopyCache.put(template, cellCache);
+        }
+        if(cellCache.isPreloadIng){
             return;
         }
+        cellCache.isPreloadIng = true;
+        Log.e("weex", "weex onCreateViewHolder preload cache " + template);
         AsyncTask<Void,Void, Void> preloadTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                ConcurrentLinkedQueue<WXCell> queue = mTemplatesCopyCache.get(template);
-                if(queue == null){
-                    queue = new ConcurrentLinkedQueue<>();
-                    mTemplatesCopyCache.put(template, queue);
+                PreloadCellCache cellCache = mTemplatesCopyCache.get(template);
+                if(cellCache == null || cellCache.cells == null){
+                    return null;
                 }
-                while (queue.size() < 2){
-                    WXCell component = (WXCell) copyCell(cell);
+                while (cellCache.cells.size() < 2){
+                    WXCell component = (WXCell) copyCell(source);
                     if(component == null){
                         return null;
                     }
-                    if(cell.getInstance() == null || cell.getInstance().isDestroy()){
+                    if(source.getInstance() == null || source.getInstance().isDestroy()){
                         return null;
                     }
-                    Log.e("WEEX", "EEEE ADD");
-                    queue.add(component);
+                    cellCache.cells .add(component);
                 }
                 return null;
             }
             @Override
             protected void onPostExecute(Void aVoid) {
-                if(cell.getInstance() == null || cell.getInstance().isDestroy()){
+                if(source.getInstance() == null || source.getInstance().isDestroy()){
                     return;
                 }
-                ConcurrentLinkedQueue<WXCell> queue = mTemplatesCopyCache.get(template);
-                if(queue == null){
+                PreloadCellCache cellCache = mTemplatesCopyCache.get(template);
+                if(cellCache == null || cellCache.cells == null){
                     return;
                 }
+                ConcurrentLinkedQueue<WXCell> queue =  cellCache.cells;
                 Iterator<WXCell> iterator =  queue.iterator();
                 while (iterator.hasNext()){
-                    Log.e("WEEX", "EEEE");
                     WXCell  component =  iterator.next();
                     if(component.isLazy()){
                         long start = System.currentTimeMillis();
