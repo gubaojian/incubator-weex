@@ -1013,7 +1013,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             view.setLayoutParams(new FrameLayout.LayoutParams(0, 0));
             return new TemplateViewHolder(view, viewType);
         }
-        long start = System.currentTimeMillis();
         TemplateCache cache = mTemplatesCache.get(template);
         WXCell component =  null;
         if(cache != null && cache.cells != null && cache.cells.size() > 0){
@@ -1023,28 +1022,17 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             asyncLoadTemplateCache(template);
         }
         if(component == null) {
+            long start = System.currentTimeMillis();
             component = (WXCell) copyCell(source);
             if(WXEnvironment.isApkDebugable()) {
                 WXLogUtils.d(TAG, template + " onCreateViewHolder copy used " + (System.currentTimeMillis() - start));
             }
         }
         if(component.isLazy()) {
-            component.lazy(false);
-            component.createView();
-            if(WXEnvironment.isApkDebugable()){
-                WXLogUtils.d(TAG, template + " onCreateViewHolder view used " + (System.currentTimeMillis() - start));
-            }
-            component.applyLayoutAndEvent(component);
-            if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, template +  " onCreateViewHolder apply layout used " + (System.currentTimeMillis() - start));
-            }
-            component.bindData(component);
-            if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, template + " onCreateViewHolder bindData used " + (System.currentTimeMillis() - start));
-            }
+            doInitLazyCell(component, template, false);
         }else{
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, template + " onCreateViewHolder  hit cache " + (System.currentTimeMillis() - start));
+                WXLogUtils.d(TAG, template + " onCreateViewHolder  hit cache ");
             }
         }
         TemplateViewHolder templateViewHolder = new TemplateViewHolder(component, viewType);
@@ -1543,22 +1531,31 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 while (iterator.hasNext()){
                     WXCell  component =  iterator.next();
                     if(component.isLazy()){
-                        long start = System.currentTimeMillis();
-                        component.lazy(false);
-                        component.createView();
-                        component.applyLayoutAndEvent(component);
-                        if(WXEnvironment.isApkDebugable()) {
-                            WXLogUtils.d(TAG, template +  " asyncLoadTemplateCache apply layout used " + (System.currentTimeMillis() - start));
-                        }
-                        component.bindData(component);
-                        if(WXEnvironment.isApkDebugable()) {
-                            WXLogUtils.d(TAG, template + " asyncLoadTemplateCache pre bindData used " + (System.currentTimeMillis() - start));
-                        }
+                        doInitLazyCell(component, template, true);
                     }
                 }
                 cellCache.isLoadIng = false;
             }
         };
         preloadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void  doInitLazyCell(WXCell component, String template, boolean inPreload){
+        if(component.isLazy()){
+            long start = System.currentTimeMillis();
+            component.lazy(false);
+            component.createView();
+            if(WXEnvironment.isApkDebugable()) {
+                WXLogUtils.d(TAG,  "preload " + inPreload + template +  " createView used " + (System.currentTimeMillis() - start));
+            }
+            component.applyLayoutAndEvent(component);
+            if(WXEnvironment.isApkDebugable()) {
+                WXLogUtils.d(TAG,  "preload " + inPreload  + template +  " apply layout used " + (System.currentTimeMillis() - start));
+            }
+            component.bindData(component);
+            if(WXEnvironment.isApkDebugable()) {
+                WXLogUtils.d(TAG, "preload " + inPreload + template + " bindData used " + (System.currentTimeMillis() - start));
+            }
+        }
     }
 }
