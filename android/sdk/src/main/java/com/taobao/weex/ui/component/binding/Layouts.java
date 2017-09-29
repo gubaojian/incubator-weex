@@ -138,7 +138,6 @@ public class Layouts {
     public static final void setLayout(WXComponent component, boolean force){
         WXDomObject domObject = (WXDomObject) component.getDomObject();
         if(domObject.hasUpdate() || force){
-            Log.e("weex", "weex has update" + domObject.getType());
             domObject.markUpdateSeen();
             component.setLayout(component.getDomObject());
             if(component.getDomObject().getExtra() != null){
