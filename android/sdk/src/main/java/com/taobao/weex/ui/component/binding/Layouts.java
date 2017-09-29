@@ -49,7 +49,6 @@ public class Layouts {
             templateViewHolder.asyncTask = null;
         }
         if(async){
-
             AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
