@@ -139,7 +139,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
     private String  listDataTemplateKey = Constants.Name.Recycler.SLOT_TEMPLATE_TYPE;
     private Runnable listUpdateRunnable;
     private ConcurrentHashMap<String, WXCell> mTemplatesCopyCache;
-    private ConcurrentHashMap<String, Boolean> mTemplateRendered;
 
     /**
      * sticky helper
@@ -194,7 +193,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 listData = array;
             }
         }
-        mTemplateRendered = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -1031,6 +1029,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         cellLifecycleManager.onDetach(templateViewHolder.getHolderPosition(), component);
         long start = System.currentTimeMillis();
+        boolean async = templateViewHolder.getHolderPosition() >= 0;
         templateViewHolder.setHolderPosition(position);
         Statements.doRender(component, getStackContextForPosition(position));
         if(WXEnvironment.isApkDebugable()){
@@ -1054,20 +1053,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         long start = System.currentTimeMillis();
         WXCell component = mTemplatesCopyCache.remove(template);
-        boolean needLayout = false;
-        if(component == null) {
-            component = (WXCell) copyCellAndInitRender(source);
-            needLayout = true;
-        }
         asyncPreloadCellCopyCache(template);
-        CSSLayoutContext layoutContext = null;
-        if(needLayout){
-            layoutContext = new CSSLayoutContext();
-            Layouts.doSafeLayout(component, layoutContext);
-            if(WXEnvironment.isApkDebugable()){
-                WXLogUtils.d(TAG, template + " onCreateViewHolder sync layout used " + (System.currentTimeMillis() - start));
-            }
+        if(component == null) {
+            component = (WXCell) copyCell(source);
         }
+
         component.lazy(false);
         component.createView();
         if(WXEnvironment.isApkDebugable()){
@@ -1082,12 +1072,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             WXLogUtils.d(TAG, template + " onCreateViewHolder bindData used " + (System.currentTimeMillis() - start));
         }
         TemplateViewHolder templateViewHolder = new TemplateViewHolder(component, viewType);
-        templateViewHolder.setLayoutContext(layoutContext);
         return  templateViewHolder;
     }
 
     private void asyncPreloadCellCopyCache(final String template) {
-        if(listData == null){
+        if(listData == null || listData.size() == 0){
             return;
         }
         final WXCell cell = mTemplates.get(template);
@@ -1097,23 +1086,19 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(mTemplatesCopyCache.get(template) != null){
             return;
         }
-        if(listData == null || listData.size() == 0){
-            return;
-        }
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {
                 if(cell.getInstance() == null || cell.getInstance().isDestroy()){
                     return;
                 }
-                WXCell component = (WXCell) copyCellAndInitRender(cell);
+                WXCell component = (WXCell) copyCell(cell);
                 if(component == null){
                     return;
                 }
                 if(cell.getInstance() == null || cell.getInstance().isDestroy()){
                     return;
                 }
-                Layouts.doSafeLayout(component, new CSSLayoutContext());
                 mTemplatesCopyCache.put(template, component);
             }
         });
@@ -1124,25 +1109,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * copy cell component from source, init render data, and return source
      * if none data, return null
      * */
-    private WXComponent copyCellAndInitRender(WXComponent  cell){
-        /** pre render for cell */
-        Boolean rendered = mTemplateRendered.get(cell.getRef());
-        if(rendered == null || !rendered) {
-            if(listData != null){
-                for(int i=0; i<listData.size(); i++){
-                    WXCell source = getSourceTemplate(i);
-                    if(source == cell){
-                        Statements.doRender(cell, getStackContextForPosition(i));
-                        mTemplateRendered.put(source.getRef(), true);
-                        break;
-                    }
-                }
-            }
-            //none data, none need copy
-            if(mTemplateRendered.get(cell.getRef()) == null){
-               return  null;
-            }
-        }
+    private WXComponent copyCell(WXComponent  cell){
         WXCell component = (WXCell) Statements.copyComponentTree(cell);
         if(component.getDomObject() != null){
             ((WXDomObject)component.getDomObject()).setVisible(true);

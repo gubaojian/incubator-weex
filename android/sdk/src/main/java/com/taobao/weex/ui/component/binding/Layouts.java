@@ -41,35 +41,41 @@ public class Layouts {
      * do dom layout async or sync , and set layout to component on main.
      * on first use do sync layout, when compontnet reuse do async layout
      * */
-    public static void doLayoutAsync(final TemplateViewHolder templateViewHolder){
+    public static void doLayoutAsync(final TemplateViewHolder templateViewHolder, boolean async){
         final WXComponent component = templateViewHolder.getComponent();
         final  int position = templateViewHolder.getHolderPosition();
         if(templateViewHolder.asyncTask != null){
             templateViewHolder.asyncTask.cancel(true);
             templateViewHolder.asyncTask = null;
         }
-        AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                if(templateViewHolder.getHolderPosition() == position){
-                    if(component.getInstance() != null && !component.getInstance().isDestroy()) {
-                        doSafeLayout(component, templateViewHolder.getLayoutContext());
-                    }
-                }
-                return null;
-            }
+        if(async){
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                if(position == templateViewHolder.getHolderPosition()) {
-                    if(component.getInstance() != null && !component.getInstance().isDestroy()) {
-                        setLayout(component, false);
+            AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    if(templateViewHolder.getHolderPosition() == position){
+                        if(component.getInstance() != null && !component.getInstance().isDestroy()) {
+                            doSafeLayout(component, templateViewHolder.getLayoutContext());
+                        }
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    if(position == templateViewHolder.getHolderPosition()) {
+                        if(component.getInstance() != null && !component.getInstance().isDestroy()) {
+                            setLayout(component, false);
+                        }
                     }
                 }
-            }
-        };
-        templateViewHolder.asyncTask = asyncTask;
-        asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR); //serial executor is better
+            };
+            templateViewHolder.asyncTask = asyncTask;
+            asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR); //serial executor is better
+        }else{
+            doSafeLayout(component, templateViewHolder.getLayoutContext());
+            setLayout(component, false);
+        }
 
     }
 
