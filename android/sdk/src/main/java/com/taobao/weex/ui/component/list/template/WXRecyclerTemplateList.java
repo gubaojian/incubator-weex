@@ -545,7 +545,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                         domObject.setVisible(false);
                     }
                     mTemplates.put(key, (WXCell) child);
-                    prefetchCellCacheAsync(key);
+                    asyncPreloadCellCopyCache(key);
                     if(mTemplateViewTypes.get(key) == null){
                         mTemplateViewTypes.put(key, mTemplateViewTypes.size());
                     }
@@ -1049,7 +1049,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         long start = System.currentTimeMillis();
         WXCell component = mTemplatesCache.remove(template);
-        prefetchCellCacheAsync(template);
+        asyncPreloadCellCopyCache(template);
         boolean needLayout = false;
         if(component == null) {
             component = (WXCell) copyCell(source);
@@ -1082,7 +1082,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         return  templateViewHolder;
     }
 
-    private void prefetchCellCacheAsync(final String template) {
+    private void asyncPreloadCellCopyCache(final String template) {
         final WXCell cell = mTemplates.get(template);
         if(cell == null){
             return;
