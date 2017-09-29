@@ -337,7 +337,14 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     long startNanos = System.nanoTime();
     if(!isLazy()) {
       if (component == null) {
-        component = this;
+          component = this;
+      }
+
+      if(mDomObj != null && mDomObj instanceof  WXDomObject){
+        WXDomObject domObject = (WXDomObject) mDomObj;
+        if(domObject.hasNewLayout()){
+          domObject.markUpdateSeen();
+        }
       }
       setLayout(component.getDomObject());
       setPadding(component.getDomObject().getPadding(), component.getDomObject().getBorder());

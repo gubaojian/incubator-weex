@@ -1068,7 +1068,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 WXLogUtils.d(TAG, template + " onCreateViewHolder sync layout used " + (System.currentTimeMillis() - start));
             }
         }
-        Layouts.setLayout(component, false);
         component.lazy(false);
         component.createView();
         if(WXEnvironment.isApkDebugable()){
