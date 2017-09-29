@@ -17,16 +17,14 @@
  * under the License.
  */
 package com.taobao.weex.ui.component.list.template;
-
 import com.taobao.weex.ui.component.list.WXCell;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * preload cell cache
  * Created by furture on 2017/9/29.
  */
-public class PreloadCellCache {
+class TemplateCache {
     ConcurrentLinkedQueue<WXCell> cells = new ConcurrentLinkedQueue<>();
-    boolean  isPreloadIng = false;
+    boolean isLoadIng = false;
 }

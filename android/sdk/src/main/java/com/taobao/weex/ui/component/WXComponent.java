@@ -339,13 +339,6 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
       if (component == null) {
           component = this;
       }
-
-      if(mDomObj != null && mDomObj instanceof  WXDomObject){
-        WXDomObject domObject = (WXDomObject) mDomObj;
-        if(domObject.hasNewLayout()){
-          domObject.markUpdateSeen();
-        }
-      }
       setLayout(component.getDomObject());
       setPadding(component.getDomObject().getPadding(), component.getDomObject().getBorder());
       addEvents();
