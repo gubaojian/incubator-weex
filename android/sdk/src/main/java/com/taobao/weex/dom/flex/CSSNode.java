@@ -9,6 +9,9 @@ package com.taobao.weex.dom.flex;
 
 import android.support.annotation.NonNull;
 
+import com.taobao.weex.WXEnvironment;
+import com.taobao.weex.utils.WXLogUtils;
+
 import java.util.ArrayList;
 
 import static com.taobao.weex.dom.flex.CSSLayout.DIMENSION_HEIGHT;
@@ -165,7 +168,10 @@ public class CSSNode {
     if (mLayoutState == LayoutState.DIRTY) {
       return;
     } else if (mLayoutState == LayoutState.HAS_NEW_LAYOUT) {
-      throw new IllegalStateException("Previous csslayout was ignored! markLayoutSeen() never called");
+      if(WXEnvironment.isApkDebugable()){
+          WXLogUtils.e("weex",  new IllegalStateException("Previous csslayout was ignored! markLayoutSeen() never called"));
+      }
+      markLayoutSeen();
     }
 
     mLayoutState = LayoutState.DIRTY;
