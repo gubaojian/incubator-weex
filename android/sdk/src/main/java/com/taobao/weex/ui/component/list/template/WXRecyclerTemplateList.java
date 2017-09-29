@@ -996,6 +996,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(component == null){
             return;
         }
+        if(templateViewHolder.getHolderPosition() == position){
+            return;
+        }
         long start = System.currentTimeMillis();
         boolean async = templateViewHolder.getHolderPosition() >= 0;
         templateViewHolder.setHolderPosition(position);
