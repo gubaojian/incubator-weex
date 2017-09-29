@@ -299,6 +299,19 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                         }
                     }
                 }
+
+                /**check cell copy cache, make sure has one cache */
+                if(listData != null && listData.size() > 0){
+                    if(mTemplates != null && mTemplates.size() > 0
+                            && mTemplatesCopyCache != null){
+                        Set<Map.Entry<String, WXCell>> entries = mTemplates.entrySet();
+                        for(Map.Entry<String, WXCell> entry : entries){
+                            if(mTemplatesCopyCache.get(entry.getKey()) == null) {
+                                doCopyCellToPreloadCacheSync(entry.getKey(), entry.getValue());
+                            }
+                        }
+                    }
+                }
                 if(getHostView() != null && getHostView().getRecyclerViewBaseAdapter() != null){
                     getHostView().getRecyclerViewBaseAdapter().notifyDataSetChanged();
                 }
@@ -1104,21 +1117,29 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {
-                if(cell.getInstance() == null || cell.getInstance().isDestroy()){
-                    return;
-                }
-                WXCell component = (WXCell) copyCell(cell);
-                if(component == null){
-                    return;
-                }
-                if(cell.getInstance() == null || cell.getInstance().isDestroy()){
-                    return;
-                }
-                Layouts.doSafeLayout(component, new CSSLayoutContext());
-                mTemplatesCopyCache.put(template, component);
+                doCopyCellToPreloadCacheSync(template, cell);
             }
         });
     }
+
+    /**
+     * template
+     * */
+    private void doCopyCellToPreloadCacheSync(String template, WXCell cell) {
+        if(cell.getInstance() == null || cell.getInstance().isDestroy()){
+            return;
+        }
+        WXCell component = (WXCell) copyCell(cell);
+        if(component == null){
+            return;
+        }
+        if(cell.getInstance() == null || cell.getInstance().isDestroy()){
+            return;
+        }
+        Layouts.doSafeLayout(component, new CSSLayoutContext());
+        mTemplatesCopyCache.put(template, component);
+    }
+
 
     /**
      * copy cell component from source, and return source
@@ -1437,15 +1458,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 || getHostView().getInnerView() == null
                 || listUpdateRunnable == null){
             return;
-        }
-        if(listData != null && listData.size() > 0){
-            if(mTemplatesCopyCache != null && mTemplatesCopyCache.size() == 0
-                    && mTemplates != null  && mTemplates.size() >0){
-                Set<Map.Entry<String, WXCell>> entries = mTemplates.entrySet();
-                for(Map.Entry<String, WXCell> entry : entries){
-                    asyncPreloadCellCopyCache(entry.getKey());
-                }
-            }
         }
         if(Looper.getMainLooper().getThread().getId() != Thread.currentThread().getId()){
             getHostView().removeCallbacks(listUpdateRunnable);
