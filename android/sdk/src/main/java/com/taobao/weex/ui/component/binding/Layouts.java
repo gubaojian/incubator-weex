@@ -45,7 +45,7 @@ public class Layouts {
         final WXComponent component = templateViewHolder.getComponent();
         final  int position = templateViewHolder.getHolderPosition();
         if(templateViewHolder.asyncTask != null){
-            templateViewHolder.asyncTask.cancel(true);
+            templateViewHolder.asyncTask.cancel(false);
             templateViewHolder.asyncTask = null;
         }
         if(async){
