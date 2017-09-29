@@ -21,53 +21,82 @@ package com.taobao.weex.ui.component.binding;
 
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.CSSLayoutContext;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.component.list.template.TemplateViewHolder;
+import com.taobao.weex.utils.WXLogUtils;
 
 /**
  * Created by furture on 2017/8/21.
  */
 public class Layouts {
     /**
-     * do dom layout, and set layout to component
+     * do dom layout async or sync , and set layout to component on main.
+     * on first screen do sync layout, when compontnet reuse do async layout
      * */
-    public static void doLayoutAsync(final TemplateViewHolder templateViewHolder){
+    public static void doLayoutAsync(final TemplateViewHolder templateViewHolder, boolean async){
         final WXComponent component = templateViewHolder.getComponent();
         final  int position = templateViewHolder.getHolderPosition();
         if(templateViewHolder.asyncTask != null){
-              templateViewHolder.asyncTask.cancel(true);
+            templateViewHolder.asyncTask.cancel(true);
+            templateViewHolder.asyncTask = null;
         }
-        AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                if(templateViewHolder.getHolderPosition() == position){
-                    if(component.getInstance() != null && !component.getInstance().isDestroy()) {
-                        doLayout(component, templateViewHolder.getLayoutContext());
+        if(async) {
+            AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    if(templateViewHolder.getHolderPosition() == position){
+                        if(component.getInstance() != null && !component.getInstance().isDestroy()) {
+                            doSafeLayout(component, templateViewHolder.getLayoutContext());
+                        }
                     }
+                    return null;
                 }
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                if(position == templateViewHolder.getHolderPosition()) {
-                    if(component.getInstance() != null && !component.getInstance().isDestroy()) {
-                        setLayout(component, false);
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    if(position == templateViewHolder.getHolderPosition()) {
+                        if(component.getInstance() != null && !component.getInstance().isDestroy()) {
+                            setLayout(component, false);
+                        }
                     }
                 }
-            }
-        };
-        templateViewHolder.asyncTask = asyncTask;
-        asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+            };
+            templateViewHolder.asyncTask = asyncTask;
+            asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR); //serial executor is better
+        }else{
+            doSafeLayout(component, templateViewHolder.getLayoutContext());
+            setLayout(component, false);
+        }
     }
 
+    /**
+     * safe layout
+     * */
+    public static void doSafeLayout(WXComponent component, final  CSSLayoutContext layoutContext){
+        try{
+            long start = System.currentTimeMillis();
+            doLayout(component, layoutContext);
+            if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.d("WXTemplateList",
+                        component.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE) + Thread.currentThread().getName() +  " doSafeLayout  used " +
+                                (System.currentTimeMillis() - start));
+            }
+        }catch (Exception e){
+            if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.e("WXTemplateListdoSafeLayout",  e);
+            }
+        }
+    }
 
-    public static void doLayout(WXComponent component, final  CSSLayoutContext layoutContext){
+    private static void doLayout(WXComponent component, final  CSSLayoutContext layoutContext){
         WXDomObject domObject = (WXDomObject) component.getDomObject();
         final WXSDKInstance instance = component.getInstance();
         domObject.traverseTree(new WXDomObject.Consumer() {
@@ -109,6 +138,7 @@ public class Layouts {
     public static final void setLayout(WXComponent component, boolean force){
         WXDomObject domObject = (WXDomObject) component.getDomObject();
         if(domObject.hasUpdate() || force){
+            Log.e("weex", "weex has update" + domObject.getType());
             domObject.markUpdateSeen();
             component.setLayout(component.getDomObject());
             if(component.getDomObject().getExtra() != null){

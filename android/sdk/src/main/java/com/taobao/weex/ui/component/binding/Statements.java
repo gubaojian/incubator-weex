@@ -20,6 +20,7 @@ package com.taobao.weex.ui.component.binding;
 
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -29,6 +30,7 @@ import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.WXEvent;
 import com.taobao.weex.dom.binding.ELUtils;
 import com.taobao.weex.dom.binding.WXStatement;
+import com.taobao.weex.dom.flex.CSSLayoutContext;
 import com.taobao.weex.el.parse.ArrayStack;
 import com.taobao.weex.el.parse.Operators;
 import com.taobao.weex.el.parse.Token;
@@ -314,7 +316,9 @@ public class Statements {
                         && component instanceof WXImage){
                     //for image avoid dirty layout, only update src attrs
                     domObject.getAttrs().put(Constants.Name.SRC, dynamic.get(Constants.Name.SRC));
+                    Log.e("weex",  "async updateAttrs " + domObject.getType() + " " + dynamic + "  " + dynamic.size());
                 }else {
+                    Log.e("weex",  "updateAttrs " + domObject.getType() + " " + dynamic + "  " + dynamic.size());
                     domObject.updateAttr(dynamic); //dirty layout
                 }
                 component.updateProperties(dynamic);
