@@ -1088,11 +1088,17 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
     }
 
     private void asyncPreloadCellCopyCache(final String template) {
+        if(listData == null){
+            return;
+        }
         final WXCell cell = mTemplates.get(template);
         if(cell == null){
             return;
         }
         if(mTemplatesCache.get(template) != null){
+            return;
+        }
+        if(listData == null || listData.size() == 0){
             return;
         }
         AsyncTask.THREAD_POOL_EXECUTOR.execute(new Runnable() {
@@ -1102,6 +1108,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     return;
                 }
                 WXCell component = (WXCell) copyCell(cell);
+                if(component == null){
+                    return;
+                }
                 if(cell.getInstance() == null || cell.getInstance().isDestroy()){
                     return;
                 }
@@ -1127,6 +1136,10 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                         break;
                     }
                 }
+            }
+            //none data, none need copy
+            if(mTemplateRendered.get(cell.getRef()) == null){
+               return  null;
             }
         }
         WXCell component = (WXCell) Statements.copyComponentTree(cell);
