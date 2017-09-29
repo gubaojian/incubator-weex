@@ -1029,6 +1029,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         if(component == null) {
             component = (WXCell) copyCell(source);
+            if(WXEnvironment.isApkDebugable()) {
+                WXLogUtils.d(TAG, template + " onCreateViewHolder copy used " + (System.currentTimeMillis() - start));
+            }
         }
         if(component.isLazy()) {
             component.lazy(false);
