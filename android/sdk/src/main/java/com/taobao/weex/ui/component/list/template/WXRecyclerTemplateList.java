@@ -33,6 +33,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -1021,9 +1022,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         ConcurrentLinkedQueue<WXCell> cache = mTemplatesCopyCache.get(template);
         WXCell component =  null;
         if(cache != null && cache.size() > 0){
-            cache.remove(cache.size() - 1);
+            component = cache.poll();
         }
-        asyncPreloadCellCopyCache(template);
+        if(cache != null && cache.size() == 0){
+            asyncPreloadCellCopyCache(template);
+        }
         if(component == null) {
             component = (WXCell) copyCell(source);
         }
@@ -1041,6 +1044,10 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             if(WXEnvironment.isApkDebugable()) {
                 WXLogUtils.d(TAG, template + " onCreateViewHolder bindData used " + (System.currentTimeMillis() - start));
             }
+        }else{
+            if(WXEnvironment.isApkDebugable()) {
+                WXLogUtils.d(TAG, template + " onCreateViewHolder  hit cache " + (System.currentTimeMillis() - start));
+            }
         }
         TemplateViewHolder templateViewHolder = new TemplateViewHolder(component, viewType);
         return  templateViewHolder;
@@ -1054,7 +1061,8 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(cell == null){
             return;
         }
-        if(mTemplatesCopyCache.get(template) != null && mTemplatesCopyCache.get(template).size() > 4){
+        if(mTemplatesCopyCache.get(template) != null
+                && mTemplatesCopyCache.get(template).size() > 0){
             return;
         }
         AsyncTask<Void,Void, Void> preloadTask = new AsyncTask<Void, Void, Void>() {
@@ -1065,7 +1073,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     queue = new ConcurrentLinkedQueue<>();
                     mTemplatesCopyCache.put(template, queue);
                 }
-                while (queue.size() < 4){
+                while (queue.size() < 2){
                     WXCell component = (WXCell) copyCell(cell);
                     if(component == null){
                         return null;
@@ -1073,7 +1081,8 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     if(cell.getInstance() == null || cell.getInstance().isDestroy()){
                         return null;
                     }
-                    queue.add(cell);
+                    Log.e("WEEX", "EEEE ADD");
+                    queue.add(component);
                 }
                 return null;
             }
@@ -1088,6 +1097,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 }
                 Iterator<WXCell> iterator =  queue.iterator();
                 while (iterator.hasNext()){
+                    Log.e("WEEX", "EEEE");
                     WXCell  component =  iterator.next();
                     if(component.isLazy()){
                         long start = System.currentTimeMillis();
@@ -1095,11 +1105,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                         component.createView();
                         component.applyLayoutAndEvent(component);
                         if(WXEnvironment.isApkDebugable()) {
-                            WXLogUtils.d(TAG, template +  " onCreateViewHolder pre apply layout used " + (System.currentTimeMillis() - start));
+                            WXLogUtils.d(TAG, template +  " onCreateViewPreLoadCache apply layout used " + (System.currentTimeMillis() - start));
                         }
                         component.bindData(component);
                         if(WXEnvironment.isApkDebugable()) {
-                            WXLogUtils.d(TAG, template + " onCreateViewHolder pre bindData used " + (System.currentTimeMillis() - start));
+                            WXLogUtils.d(TAG, template + " onCreateViewPreLoadCache pre bindData used " + (System.currentTimeMillis() - start));
                         }
                     }
                 }
