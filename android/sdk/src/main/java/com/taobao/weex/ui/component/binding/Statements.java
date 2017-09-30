@@ -59,7 +59,9 @@ public class Statements {
      * recursive copy component, none parent connect
      * */
     public static WXComponent copyComponentTree(WXComponent component){
+        long start = System.currentTimeMillis();
         WXComponent copy =  copyComponentTree(component, component.getParent());
+        Log.e("weex", "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
         return copy;
     }
 
@@ -198,6 +200,7 @@ public class Statements {
                             }
                             //none resuable render node, create node, add to parent, but clear node's statement
                             if(renderNode == null){
+                                long start = System.currentTimeMillis();
                                 renderNode = copyComponentTree(component, parent);
                                 WXDomObject renderNodeDomObject = (WXDomObject) renderNode.getDomObject();
                                 renderNodeDomObject.getAttrs().setStatement(null); // clear node's statement
@@ -208,6 +211,7 @@ public class Statements {
                                     renderNode.applyLayoutAndEvent(renderNode);
                                     renderNode.bindData(renderNode);
                                 }
+                                Log.e("weex", "statements copy component tree used " + (System.currentTimeMillis() - start));
                             }
                             doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context);
                             renderIndex++;
@@ -325,6 +329,7 @@ public class Statements {
                 if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
                     component.updateProperties(dynamic);
                 }
+                dynamic.clear();
             }
         }
         WXEvent event = domObject.getEvents();
@@ -346,9 +351,16 @@ public class Statements {
      * @param  context  context
      * return binding attrs rended value in context
      * */
+    private static final  ThreadLocal<Map<String, Object>> dynamicLocal = new ThreadLocal<>();
     public static Map<String, Object> renderBindingAttrs(ArrayMap bindAttrs, ArrayStack context){
         Set<Map.Entry<String, Object>> entrySet = bindAttrs.entrySet();
-        Map<String, Object> dynamic = new HashMap<>();
+        Map<String, Object> dynamic = dynamicLocal.get();
+        if(dynamic == null) {
+            dynamic = new HashMap<>();
+        }
+        if(dynamic.size() > 0){
+            dynamic.clear();
+        }
         for(Map.Entry<String, Object> entry : entrySet){
             Object value = entry.getValue();
             String key = entry.getKey();
