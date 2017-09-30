@@ -418,11 +418,11 @@ public class WXBridgeManager implements Callback,BactchExecutor {
    * Dispatch the native task to be executed.
      *
    * @param instanceId {@link WXSDKInstance#mInstanceId}
-   * @param tasks tasks to be executed
+   * @param array tasks to be executed
    * @param callback next tick id
    */
-  public int callNative(String instanceId, String tasks, String callback) {
-    if (TextUtils.isEmpty(tasks)) {
+  public int callNative(String instanceId,  JSONArray array, String callback) {
+    if (array == null) {
       if (WXEnvironment.isApkDebugable()) {
         WXLogUtils.e("[WXBridgeManager] callNative: call Native tasks is null");
       }
@@ -432,7 +432,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
 
     if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("[WXBridgeManager] callNative >>>> instanceId:").append(instanceId)
-          .append(", tasks:").append(tasks).append(", callback:").append(callback);
+          .append(", tasks:").append(array).append(", callback:").append(callback);
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
@@ -444,9 +444,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
 
     long start = System.currentTimeMillis();
     long parseNanos = System.nanoTime();
-    JSONArray array = JSON.parseArray(tasks);
     parseNanos = System.nanoTime() - parseNanos;
-
     if(WXSDKManager.getInstance().getSDKInstance(instanceId)!=null) {
       WXSDKManager.getInstance().getSDKInstance(instanceId).jsonParseTime(System.currentTimeMillis() - start);
     }
@@ -893,11 +891,11 @@ public class WXBridgeManager implements Callback,BactchExecutor {
     return IWXBridge.INSTANCE_RENDERING;
   }
 
-  public int callAddElement(String instanceId, String ref,String dom,String index, String callback){
+  public int callAddElement(String instanceId, String ref,JSONObject domObject,String index, String callback){
 
     if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("[WXBridgeManager] callNative::callAddElement >>>> instanceId:").append(instanceId)
-              .append(", ref:").append(ref).append(", dom:").append(dom).append(", callback:").append(callback);
+              .append(", ref:").append(ref).append(", dom:").append(domObject).append(", callback:").append(callback);
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
@@ -910,7 +908,6 @@ public class WXBridgeManager implements Callback,BactchExecutor {
     if (WXSDKManager.getInstance().getSDKInstance(instanceId) != null) {
       long start = System.currentTimeMillis();
       long nanosTemp = System.nanoTime();
-      JSONObject domObject = JSON.parseObject(dom);
       nanosTemp = System.nanoTime() - nanosTemp;
 
       if (WXSDKManager.getInstance().getSDKInstance(instanceId) != null) {
@@ -923,7 +920,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
       if (WXTracing.isAvailable() && addElementAction instanceof TraceableAction) {
         ((TraceableAction) addElementAction).mParseJsonNanos = nanosTemp;
         ((TraceableAction) addElementAction).mStartMillis = start;
-        ((TraceableAction) addElementAction).onStartDomExecute(instanceId, "addElement", domObject.getString("ref"), domObject.getString("type"), dom);
+        ((TraceableAction) addElementAction).onStartDomExecute(instanceId, "addElement", domObject.getString("ref"), domObject.getString("type"), domObject.toJSONString());
       }
     }
 

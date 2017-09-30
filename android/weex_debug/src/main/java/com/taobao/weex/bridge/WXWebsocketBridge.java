@@ -88,7 +88,7 @@ public class WXWebsocketBridge implements IWXBridge,WXWebSocketManager.JSDebugge
     public int callNative(String instanceId, String tasks, String callback) {
         if (!mInit || mJsManager == null)
             return IWXBridge.INSTANCE_RENDERING_ERROR ;
-        mJsManager.callNative(instanceId, tasks, callback);
+        mJsManager.callNative(instanceId, JSONArray.parseArray(tasks), callback);
         return IWXBridge.INSTANCE_RENDERING;
     }
 
@@ -104,7 +104,7 @@ public class WXWebsocketBridge implements IWXBridge,WXWebSocketManager.JSDebugge
     public int callAddElement(String instanceId, String ref, String dom, String index, String callback) {
         if (!mInit || mJsManager == null)
             return IWXBridge.INSTANCE_RENDERING_ERROR ;
-        mJsManager.callAddElement(instanceId, ref,dom, index,callback);
+        mJsManager.callAddElement(instanceId, ref, JSON.parseObject(dom), index,callback);
         return IWXBridge.INSTANCE_RENDERING;
     }
 
