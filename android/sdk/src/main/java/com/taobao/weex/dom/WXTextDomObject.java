@@ -39,6 +39,8 @@ import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.WXThread;
@@ -98,8 +100,14 @@ public class WXTextDomObject extends WXDomObject {
       if (CSSConstants.isUndefined(width)) {
         width = node.cssstyle.maxWidth;
       }
+      boolean forceWidth = false;
+      if(width > 0){
+         if(node.getParent() != null){
+            forceWidth = FloatUtil.floatsEqual(width, node.getParent().getLayoutWidth())
+         }
+      }
       textDomObject.hasBeenMeasured = true;
-      width = textDomObject.getTextWidth(textDomObject.mTextPaint,width,false);
+      width = textDomObject.getTextWidth(textDomObject.mTextPaint,width, forceWidth);
       if(width > 0) {
         textDomObject.layout = textDomObject.createLayout(width, true, null);
         textDomObject.previousWidth = textDomObject.layout.getWidth();
@@ -309,6 +317,7 @@ public class WXTextDomObject extends WXDomObject {
     if (!FloatUtil.floatsEqual(previousWidth, textWidth) || previousLayout == null) {
       layout = new StaticLayout(spanned, mTextPaint, (int) Math.ceil(textWidth),
           Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
+      Log.e("weex", "dom text createLayout " + getRef() + mText);
     } else {
       layout = previousLayout;
     }
@@ -322,6 +331,7 @@ public class WXTextDomObject extends WXDomObject {
         builder.append(truncate(lastLine, mTextPaint, layout.getWidth(), textOverflow));
         adjustSpansRange(spanned, builder);
         spanned = builder;
+        Log.e("weex", "dom text createLayout " + getRef() + mText);
         return new StaticLayout(spanned, mTextPaint, (int) Math.ceil(textWidth),
             Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
       }
