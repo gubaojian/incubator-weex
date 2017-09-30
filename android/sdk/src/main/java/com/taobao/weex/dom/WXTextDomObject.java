@@ -108,7 +108,7 @@ public class WXTextDomObject extends WXDomObject {
       }
       textDomObject.hasBeenMeasured = true;
       width = textDomObject.getTextWidth(textDomObject.mTextPaint,width, forceWidth);
-      if(width > 0) {
+      if(width > 0 && textDomObject.mText != null) {
         textDomObject.layout = textDomObject.createLayout(width, true, null);
         textDomObject.previousWidth = textDomObject.layout.getWidth();
         measureOutput.height = textDomObject.layout.getHeight();
@@ -250,7 +250,9 @@ public class WXTextDomObject extends WXDomObject {
     float contentWidth = WXDomUtils.getContentWidth(this);
     if (contentWidth > 0) {
       spanned = createSpanned(mText);
-      layout = createLayout(contentWidth, true, layout);
+      if(mText != null){
+         layout = createLayout(contentWidth, true, layout);
+      }
       previousWidth = layout.getWidth();
     }
   }
@@ -406,6 +408,9 @@ public class WXTextDomObject extends WXDomObject {
    */
    float getTextWidth(TextPaint textPaint,float outerWidth, boolean forceToDesired) {
      if(mText == null){
+       if(forceToDesired){
+         return  outerWidth;
+       }
         return  0;
      }
     float textWidth;
