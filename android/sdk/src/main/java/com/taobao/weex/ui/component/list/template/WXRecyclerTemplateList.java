@@ -162,6 +162,12 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * */
     private ArrayMap<Integer, Map<String,Map<Integer, List<Object>>>> mDisAppearWatchList = new ArrayMap<>();
 
+
+
+    private ArrayStack bindIngStackContext = new ArrayStack();
+    private Map bindIngMapContext = new HashMap();
+
+
     public WXRecyclerTemplateList(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
         super(instance, node, parent);
         initRecyclerTemplateList(instance, node, parent);
@@ -1102,8 +1108,14 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * return code context for render component
      * */
     private ArrayStack getStackContextForPosition(int position){
-        ArrayStack stack = new ArrayStack();
-        Map map = new HashMap();
+        if(!bindIngStackContext.isEmpty()){
+            bindIngStackContext.getList().clear();
+        }
+        if(!bindIngMapContext.isEmpty()){
+            bindIngMapContext.clear();
+        }
+        ArrayStack stack = bindIngStackContext;
+        Map map = bindIngMapContext;
         if(listData != null){
             stack.push(listData);
             stack.push(map);
