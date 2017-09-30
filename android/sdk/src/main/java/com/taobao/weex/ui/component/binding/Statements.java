@@ -63,7 +63,7 @@ public class Statements {
     public static WXComponent copyComponentTree(WXComponent component){
         long start = System.currentTimeMillis();
         WXComponent copy =  copyComponentTree(component, component.getParent());
-        Log.e(WXRecyclerTemplateList.TAG, "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
+        Log.e(WXRecyclerTemplateList.TAG, component.getRef() + "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
         return copy;
     }
 
@@ -213,7 +213,7 @@ public class Statements {
                                     renderNode.applyLayoutAndEvent(renderNode);
                                     renderNode.bindData(renderNode);
                                 }
-                                Log.e(WXRecyclerTemplateList.TAG, "statements copy component tree used " + (System.currentTimeMillis() - start));
+                                Log.e(WXRecyclerTemplateList.TAG, renderNode.getRef() + "statements copy component tree used " + (System.currentTimeMillis() - start));
                             }
                             doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context);
                             renderIndex++;
@@ -393,7 +393,7 @@ public class Statements {
                     }
                 }
                 String builderString = builder.toString();
-                if(builderString.length() > 512){
+                if(builderString.length() > 256){
                     if(WXEnvironment.isApkDebugable()){
                         WXLogUtils.w(WXRecyclerTemplateList.TAG, " warn too big string " + builderString);
                     }

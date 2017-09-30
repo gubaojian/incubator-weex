@@ -562,8 +562,8 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                         domObject.setVisible(false);
                     }
                     mTemplates.put(key, (WXCell) child);
-                    ensureExpandRenderCell((WXCell)child);
                     asyncLoadTemplateCache(key);
+                    ensureExpandRenderCell((WXCell)child);
                     if(mTemplateViewTypes.get(key) == null){
                         mTemplateViewTypes.put(key, mTemplateViewTypes.size());
                     }
