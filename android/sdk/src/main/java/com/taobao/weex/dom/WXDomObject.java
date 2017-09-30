@@ -301,6 +301,10 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     }
   }
 
+  public void  setDirty(){
+    this.dirty();
+  }
+
   public boolean isFixed() {
     return mStyles == null ? false : mStyles.isFixed();
   }

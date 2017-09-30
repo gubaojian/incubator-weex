@@ -28,6 +28,7 @@ import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.CSSLayoutContext;
+import com.taobao.weex.dom.flex.CSSNode;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.component.list.template.TemplateViewHolder;
@@ -93,7 +94,7 @@ public class Layouts {
             }
         }catch (Exception e){
             if(WXEnvironment.isApkDebugable()){
-                WXLogUtils.e(WXRecyclerTemplateList.TAG, "WXTemplateList  doSafeLayout" +  e);
+                WXLogUtils.e(WXRecyclerTemplateList.TAG, e);
             }
         }
     }
@@ -141,6 +142,9 @@ public class Layouts {
         WXDomObject domObject = (WXDomObject) component.getDomObject();
         if(domObject.hasUpdate() || force){
             domObject.markUpdateSeen();
+            if(domObject.hasUpdate()){
+                domObject.markLayoutStateUpdated();
+            }
             component.setLayout(component.getDomObject());
             if(component.getDomObject().getExtra() != null){
                 component.updateExtra(component.getDomObject().getExtra());

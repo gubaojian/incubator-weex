@@ -252,8 +252,8 @@ public class WXTextDomObject extends WXDomObject {
       spanned = createSpanned(mText);
       if(mText != null){
          layout = createLayout(contentWidth, true, layout);
+         previousWidth = layout.getWidth();
       }
-      previousWidth = layout.getWidth();
     }
   }
 

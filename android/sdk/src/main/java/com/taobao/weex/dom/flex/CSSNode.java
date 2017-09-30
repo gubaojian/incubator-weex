@@ -57,6 +57,10 @@ public class CSSNode {
     dirty();
   }
 
+  public void markLayoutStateUpdated(){
+     this.mLayoutState = LayoutState.UP_TO_DATE;
+  }
+
   /**
    * whether layout changed when {@link #updateLastLayout(CSSLayout)} invoked last time.
    * @return
@@ -176,7 +180,7 @@ public class CSSNode {
 
     mLayoutState = LayoutState.DIRTY;
 
-    if (mParent != null) {
+    if (mParent != null && !mParent.isDirty()) {
       mParent.dirty();
     }
   }
