@@ -25,6 +25,7 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXAttr;
 import com.taobao.weex.dom.WXDomObject;
@@ -39,6 +40,7 @@ import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentFactory;
 import com.taobao.weex.ui.component.WXImage;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.component.list.template.WXRecyclerTemplateList;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
 
@@ -61,7 +63,7 @@ public class Statements {
     public static WXComponent copyComponentTree(WXComponent component){
         long start = System.currentTimeMillis();
         WXComponent copy =  copyComponentTree(component, component.getParent());
-        Log.e("weex", "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
+        Log.e(WXRecyclerTemplateList.TAG, "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
         return copy;
     }
 
@@ -211,7 +213,7 @@ public class Statements {
                                     renderNode.applyLayoutAndEvent(renderNode);
                                     renderNode.bindData(renderNode);
                                 }
-                                Log.e("weex", "statements copy component tree used " + (System.currentTimeMillis() - start));
+                                Log.e(WXRecyclerTemplateList.TAG, "statements copy component tree used " + (System.currentTimeMillis() - start));
                             }
                             doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context);
                             renderIndex++;
@@ -224,7 +226,7 @@ public class Statements {
                         }
                     }
                 }else{
-                    WXLogUtils.e("StatementsVFor",  vfor.toJSONString() + " not call vfor block, for pre compile");
+                    WXLogUtils.e(WXRecyclerTemplateList.TAG,  vfor.toJSONString() + " not call vfor block, for pre compile");
                 }
                 //after v-for execute, remove component created pre v-for.
                 for(;renderIndex<parent.getChildCount(); renderIndex++){
@@ -390,7 +392,13 @@ public class Statements {
                         builder.append(blockValue);
                     }
                 }
-                dynamic.put(key, builder.toString());
+                String builderString = builder.toString();
+                if(builderString.length() > 512){
+                    if(WXEnvironment.isApkDebugable()){
+                        WXLogUtils.w(WXRecyclerTemplateList.TAG, " warn too big string " + builderString);
+                    }
+                }
+                dynamic.put(key, builderString);
             }
         }
         return  dynamic;

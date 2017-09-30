@@ -96,7 +96,7 @@ import static com.taobao.weex.common.Constants.Name.LOADMOREOFFSET;
 @Component(lazyload = false)
 public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> implements
         IRecyclerAdapterListener<TemplateViewHolder>, IOnLoadMoreListener, Scrollable {
-    private static final String TAG = "WXRecyclerTemplateList";
+    public static final String TAG = "WXRecyclerTemplateList";
 
     private static final String NAME_HAS_FIXED_SIZE = "hasFixedSize";
     private static final String NAME_ITEM_VIEW_CACHE_SIZE = "itemViewCacheSize";
