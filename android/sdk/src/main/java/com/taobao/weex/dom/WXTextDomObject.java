@@ -186,7 +186,7 @@ public class WXTextDomObject extends WXDomObject {
     hasBeenMeasured = false;
     if (layout != null && !layout.equals(atomicReference.get()) &&
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-      if(Thread.currentThread() instanceof WXThread){
+      if(Thread.currentThread() != Looper.getMainLooper().getThread()){
           warmUpTextLayoutCache(layout);
       }
     }
