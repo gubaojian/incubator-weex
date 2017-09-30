@@ -1408,6 +1408,14 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
         view.setVisibility(View.GONE);
       }
     }
+    if(mDomObj != null){
+      WXDomObject domObject = (WXDomObject) mDomObj;
+      if (TextUtils.equals(visibility, Constants.Value.VISIBLE)) {
+          domObject.setVisible(true);
+      } else if (TextUtils.equals(visibility, Constants.Value.HIDDEN)) {
+          domObject.setVisible(false);
+      }
+    }
   }
 
   /**
