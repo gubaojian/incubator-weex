@@ -87,13 +87,13 @@ public class Layouts {
             long start = System.currentTimeMillis();
             doLayout(component, layoutContext);
             if(WXEnvironment.isApkDebugable()){
-                WXLogUtils.d(WXRecyclerTemplateList.TAG, "doSafeLayout" +
+                WXLogUtils.d(WXRecyclerTemplateList.TAG, "WXTemplateList doSafeLayout" +
                         component.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE) + Thread.currentThread().getName() +  " doSafeLayout  used " +
                                 (System.currentTimeMillis() - start));
             }
         }catch (Exception e){
             if(WXEnvironment.isApkDebugable()){
-                WXLogUtils.e(WXRecyclerTemplateList.TAG, "doSafeLayout" +  e);
+                WXLogUtils.e(WXRecyclerTemplateList.TAG, "WXTemplateList  doSafeLayout" +  e);
             }
         }
     }

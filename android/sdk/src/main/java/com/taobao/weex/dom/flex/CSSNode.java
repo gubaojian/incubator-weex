@@ -169,7 +169,7 @@ public class CSSNode {
       return;
     } else if (mLayoutState == LayoutState.HAS_NEW_LAYOUT) {
       if(WXEnvironment.isApkDebugable()){
-          WXLogUtils.e("weex",  new IllegalStateException("Previous csslayout was ignored! markLayoutSeen() never called"));
+          WXLogUtils.w("weex",  new IllegalStateException("Previous csslayout was ignored! markLayoutSeen() never called"));
       }
       markLayoutSeen();
     }
