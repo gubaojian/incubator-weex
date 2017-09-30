@@ -98,9 +98,10 @@ public class WXTextDomObject extends WXDomObject {
       if (CSSConstants.isUndefined(width)) {
         width = node.cssstyle.maxWidth;
       }
-      if(textDomObject.getTextWidth(textDomObject.mTextPaint,width,false)>0) {
-        textDomObject.layout = textDomObject.createLayout(width, false, null);
-        textDomObject.hasBeenMeasured = true;
+      textDomObject.hasBeenMeasured = true;
+      width = textDomObject.getTextWidth(textDomObject.mTextPaint,width,false);
+      if(width > 0) {
+        textDomObject.layout = textDomObject.createLayout(width, true, null);
         textDomObject.previousWidth = textDomObject.layout.getWidth();
         measureOutput.height = textDomObject.layout.getHeight();
         measureOutput.width = textDomObject.previousWidth;
