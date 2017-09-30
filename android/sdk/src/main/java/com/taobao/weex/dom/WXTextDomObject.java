@@ -102,7 +102,7 @@ public class WXTextDomObject extends WXDomObject {
       }
       boolean forceWidth = false;
       if(width > 0){
-         if(node.getParent() != null){
+         if(node.getParent() != null && textDomObject.mAlignment == Layout.Alignment.ALIGN_CENTER){
             forceWidth = FloatUtil.floatsEqual(width, node.getParent().getLayoutWidth());
          }
       }
