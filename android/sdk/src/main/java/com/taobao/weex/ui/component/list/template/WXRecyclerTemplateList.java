@@ -33,7 +33,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -49,7 +48,6 @@ import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.ICheckBindingScroller;
 import com.taobao.weex.common.OnWXScrollListener;
-import com.taobao.weex.dom.ImmutableDomObject;
 import com.taobao.weex.dom.WXAttr;
 import com.taobao.weex.dom.WXCellDomObject;
 import com.taobao.weex.dom.WXDomObject;
@@ -558,6 +556,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                         domObject.setVisible(false);
                     }
                     mTemplates.put(key, (WXCell) child);
+                    ensureExpandRenderCell((WXCell)child);
                     asyncLoadTemplateCache(key);
                     if(mTemplateViewTypes.get(key) == null){
                         mTemplateViewTypes.put(key, mTemplateViewTypes.size());
@@ -1000,7 +999,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         Layouts.doLayoutAsync(templateViewHolder, async);
         if(WXEnvironment.isApkDebugable()){
-            WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start));
+            WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + async);
         }
     }
 
@@ -1047,7 +1046,8 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * copy cell component from source, init render data, and return source
      * if none data, return null
      * */
-    private WXComponent copyCell(WXComponent  cell){
+    private WXComponent copyCell(WXCell cell){
+        ensureExpandRenderCell(cell);
         WXCell component = (WXCell) Statements.copyComponentTree(cell);
         if(component.getDomObject() != null){
             ((WXDomObject)component.getDomObject()).setVisible(true);
@@ -1058,6 +1058,24 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
         }
         return component;
+    }
+
+    private void ensureExpandRenderCell(WXCell cell){
+        if(!cell.isRendered()){
+            if(listData != null && listData.size() > 0){
+                synchronized (cell){
+                    if(!cell.isRendered()){
+                        for(int i=0; i<listData.size(); i++){
+                            if(cell == getSourceTemplate(i)){
+                                Statements.doRender(cell, getStackContextForPosition(i));
+                                cell.setRendered(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
