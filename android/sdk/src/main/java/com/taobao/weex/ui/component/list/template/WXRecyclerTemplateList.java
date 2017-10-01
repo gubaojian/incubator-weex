@@ -1038,11 +1038,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(component.isLazy()) {
             doInitLazyCell(component, template, false);
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, template + " onCreateViewHolder  miss cache ");
+                WXLogUtils.d(TAG, template + " onCreateViewHolder  miss cache " + source.isRendered());
             }
         }else{
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, template + " onCreateViewHolder  hit cache ");
+                WXLogUtils.d(TAG, template + " onCreateViewHolder  hit cache "+ source.isRendered());
             }
         }
         TemplateViewHolder templateViewHolder = new TemplateViewHolder(component, viewType);
