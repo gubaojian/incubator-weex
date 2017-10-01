@@ -63,7 +63,9 @@ public class Statements {
     public static WXComponent copyComponentTree(WXComponent component){
         long start = System.currentTimeMillis();
         WXComponent copy =  copyComponentTree(component, component.getParent());
-        Log.e(WXRecyclerTemplateList.TAG, component.getRef() + "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
+        if(WXEnvironment.isApkDebugable()){
+            WXLogUtils.d(WXRecyclerTemplateList.TAG, component.getRef() + "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
+        }
         return copy;
     }
 
@@ -213,7 +215,9 @@ public class Statements {
                                     renderNode.applyLayoutAndEvent(renderNode);
                                     renderNode.bindData(renderNode);
                                 }
-                                Log.e(WXRecyclerTemplateList.TAG, renderNode.getRef() + "statements copy component tree used " + (System.currentTimeMillis() - start));
+                                if(WXEnvironment.isApkDebugable()){
+                                    WXLogUtils.d(WXRecyclerTemplateList.TAG, renderNode.getRef() + "statements copy component tree used " + (System.currentTimeMillis() - start));
+                                }
                             }
                             doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context);
                             renderIndex++;

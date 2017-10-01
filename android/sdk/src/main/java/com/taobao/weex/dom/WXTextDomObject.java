@@ -253,6 +253,8 @@ public class WXTextDomObject extends WXDomObject {
       if(mText != null){
          layout = createLayout(contentWidth, true, layout);
          previousWidth = layout.getWidth();
+      }else{
+         previousWidth = 0;
       }
     }
   }
@@ -319,7 +321,6 @@ public class WXTextDomObject extends WXDomObject {
     if (!FloatUtil.floatsEqual(previousWidth, textWidth) || previousLayout == null) {
       layout = new StaticLayout(spanned, mTextPaint, (int) Math.ceil(textWidth),
           Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
-      Log.e("weex", "dom text createLayout " + getRef() + mText);
     } else {
       layout = previousLayout;
     }
@@ -333,7 +334,6 @@ public class WXTextDomObject extends WXDomObject {
         builder.append(truncate(lastLine, mTextPaint, layout.getWidth(), textOverflow));
         adjustSpansRange(spanned, builder);
         spanned = builder;
-        Log.e("weex", "dom text createLayout " + getRef() + mText);
         return new StaticLayout(spanned, mTextPaint, (int) Math.ceil(textWidth),
             Layout.Alignment.ALIGN_NORMAL, 1, 0, false);
       }
