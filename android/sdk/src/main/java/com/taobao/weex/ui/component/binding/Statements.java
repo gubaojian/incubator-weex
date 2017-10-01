@@ -248,7 +248,9 @@ public class Statements {
             if(vif != null){
                 if(!Operators.isTrue(vif.execute(context))){
                     component.setWaste(true);
-                    return 1;
+                    if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
+                        return 1;
+                    }
                 }else{
                     component.setWaste(false);
                 }
