@@ -1556,9 +1556,12 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     return;
                 }
                 TemplateCache cellCache = mTemplatesCache.get(template);
-                if(cellCache == null
-                        || cellCache.cells == null
+                if(cellCache == null){
+                    return;
+                }
+                if(cellCache.cells == null
                         || cellCache.cells.size() == 0){
+                    cellCache.isLoadIng = false;
                     return;
                 }
                 ConcurrentLinkedQueue<WXCell> queue =  cellCache.cells;

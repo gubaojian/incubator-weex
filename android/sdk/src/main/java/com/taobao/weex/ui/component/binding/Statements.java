@@ -65,7 +65,7 @@ public class Statements {
         long start = System.currentTimeMillis();
         WXComponent copy =  copyComponentTree(component, component.getParent());
         if(WXEnvironment.isApkDebugable()){
-            WXLogUtils.d(WXRecyclerTemplateList.TAG, component.getRef() + "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
+            WXLogUtils.d(WXRecyclerTemplateList.TAG, Thread.currentThread() + component.getRef() + "copyComponentTree " + "used " + (System.currentTimeMillis() - start));
         }
         return copy;
     }
