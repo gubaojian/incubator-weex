@@ -40,6 +40,7 @@ import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentFactory;
 import com.taobao.weex.ui.component.WXImage;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.component.list.WXCell;
 import com.taobao.weex.ui.component.list.template.WXRecyclerTemplateList;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
@@ -216,7 +217,7 @@ public class Statements {
                                     renderNode.bindData(renderNode);
                                 }
                                 if(WXEnvironment.isApkDebugable()){
-                                    WXLogUtils.d(WXRecyclerTemplateList.TAG, renderNode.getRef() + "statements copy component tree used " + (System.currentTimeMillis() - start));
+                                    WXLogUtils.d(WXRecyclerTemplateList.TAG, Thread.currentThread().getName() +  renderNode.getRef() + renderNode.getDomObject().getType() + "statements copy component tree used " + (System.currentTimeMillis() - start));
                                 }
                             }
                             doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context);
@@ -277,7 +278,11 @@ public class Statements {
         doRenderBindingAttrsAndEvent(component, domObject, context);
         if(component instanceof WXVContainer){
             if(!domObject.isShow()){
-                return;
+                if(!(component instanceof WXCell)){
+                    if(Thread.currentThread() == Looper.getMainLooper().getThread()){
+                        return;
+                    }
+                }
             }
             WXVContainer container = (WXVContainer) component;
             for(int k=0; k<container.getChildCount();){
