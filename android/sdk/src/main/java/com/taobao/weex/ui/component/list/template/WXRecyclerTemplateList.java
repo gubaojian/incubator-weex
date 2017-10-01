@@ -993,13 +993,15 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(component == null){
             return;
         }
-        if(templateViewHolder.getHolderPosition() == position){
+        Object data = listData.get(position);
+        if(templateViewHolder.data == data){
             return;
         }
+        templateViewHolder.data = data;
         long start = System.currentTimeMillis();
         boolean async = templateViewHolder.getHolderPosition() >= 0;
         templateViewHolder.setHolderPosition(position);
-        Statements.doRender(component, getStackContextForPosition(position));
+        Statements.doRender(component, getStackContextForPosition(position, data));
         if(WXEnvironment.isApkDebugable()){
             WXLogUtils.d(TAG, position + getTemplateKey(position) + " onBindViewHolder render used " + (System.currentTimeMillis() - start));
         }
@@ -1073,7 +1075,8 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     if(!cell.isRendered()){
                         for(int i=0; i<listData.size(); i++){
                             if(cell == getSourceTemplate(i)){
-                                Statements.doRender(cell, getStackContextForPosition(i));
+                                Object data = listData.get(i);
+                                Statements.doRender(cell, getStackContextForPosition(i, data));
                                 cell.setRendered(true);
                                 break;
                             }
@@ -1107,7 +1110,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
     /**
      * return code context for render component
      * */
-    private ArrayStack getStackContextForPosition(int position){
+    private ArrayStack getStackContextForPosition(int position,  Object item){
         if(!bindIngStackContext.isEmpty()){
             bindIngStackContext.getList().clear();
         }
@@ -1120,7 +1123,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             stack.push(listData);
             stack.push(map);
             map.put(listDataKey, listData);
-            Object item = listData.get(position);
             if(!TextUtils.isEmpty(listDataIndexKey)) {
                 map.put(listDataIndexKey, position);
             }

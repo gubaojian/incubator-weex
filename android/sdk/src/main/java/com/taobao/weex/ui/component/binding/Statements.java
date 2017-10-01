@@ -272,6 +272,9 @@ public class Statements {
         }
         doRenderBindingAttrsAndEvent(component, domObject, context);
         if(component instanceof WXVContainer){
+            if(!domObject.isShow()){
+                return;
+            }
             WXVContainer container = (WXVContainer) component;
             for(int k=0; k<container.getChildCount();){
                 WXComponent next = container.getChild(k);
