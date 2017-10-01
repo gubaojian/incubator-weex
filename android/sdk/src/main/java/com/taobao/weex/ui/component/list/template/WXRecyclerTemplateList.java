@@ -1071,7 +1071,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
     private void ensureExpandRenderCell(WXCell cell){
         if(!cell.isRendered()){
             if(listData != null && listData.size() > 0){
-                synchronized (cell){
+                synchronized (this){
                     if(!cell.isRendered()){
                         for(int i=0; i<listData.size(); i++){
                             if(cell == getSourceTemplate(i)){
