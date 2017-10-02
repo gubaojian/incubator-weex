@@ -1019,7 +1019,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             if(WXEnvironment.isApkDebugable()){
                 WXLogUtils.d(TAG, position + getTemplateKey(position) + " onBindViewHolder render used " + (System.currentTimeMillis() - start));
             }
-            Layouts.doLayoutAsync(templateViewHolder, false);
+            Layouts.doLayoutAsync(templateViewHolder, async);
             if(WXEnvironment.isApkDebugable()){
                 WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + async);
             }
