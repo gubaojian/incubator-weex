@@ -26,6 +26,7 @@ import android.util.Log;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.WXEnvironment;
+import com.taobao.weex.annotation.Component;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXAttr;
 import com.taobao.weex.dom.WXDomObject;
@@ -103,26 +104,47 @@ public class Statements {
      *  may be next render it can be used.
      *  after statement has executed, render component's binding attrs in context and bind it to component.
      * */
-    public static final void doRender(WXComponent component, ArrayStack stack){
+    public static final List<WXComponent> doRender(WXComponent component, ArrayStack stack){
+        List<WXComponent> updates = new ArrayList<>(4);
         try{
-            doRenderComponent(component, stack);
+            doRenderComponent(component, stack, updates);
         }catch (Exception e){
             WXLogUtils.e("WeexStatementRender", e);
         }
+        return updates;
     }
 
+    public static final void doInitCompontent(List<WXComponent> updates) {
+        if(updates == null || updates.size() == 0){
+            return;
+        }
+        for(WXComponent renderNode : updates){
+            if(renderNode.getParent() == null){
+                throw new IllegalArgumentException("render node parent cann't find");
+            }
+            WXVContainer parent = renderNode.getParent();
+            int renderIndex = parent.indexOf(renderNode);
+            if(renderIndex < 0){
+                throw new IllegalArgumentException("render node cann't find");
+            }
+            parent.createChildViewAt(renderIndex);
+            renderNode.applyLayoutAndEvent(renderNode);
+            renderNode.bindData(renderNode);
+        }
+    }
 
-    /**
-     *  @param component component with v-for statement, v-if statement and bind attrs
-     *  @param context   execute context
-     *  render component in context, the function do the following  work.
-     *  execute component's v-for statement, v-if statement in context,
-     *  and rebuild component's tree with the statement, v-for reuse component execute by pre render.
-     *  if executed, component will be removed, don't remove, just mark it waste;
-     *  may be next render it can be used.
-     *  after statement has executed, render component's binding attrs in context and bind it to component.
-     * */
-    static final int doRenderComponent(WXComponent component, ArrayStack context){
+        /**
+         *  @param component component with v-for statement, v-if statement and bind attrs
+         *  @param context   execute context
+         *  render component in context, the function do the following  work.
+         *  execute component's v-for statement, v-if statement in context,
+         *  and rebuild component's tree with the statement, v-for reuse component execute by pre render.
+         *  if executed, component will be removed, don't remove, just mark it waste;
+         *  may be next render it can be used.
+         *  after statement has executed, render component's binding attrs in context and bind it to component.
+         * */
+    private static final int doRenderComponent(WXComponent component, ArrayStack context,
+                                       List<WXComponent> updates){
         WXVContainer parent = component.getParent();
         WXDomObject domObject = (WXDomObject) component.getDomObject();
         WXAttr attrs = domObject.getAttrs();
@@ -211,16 +233,12 @@ public class Statements {
                                 renderNodeDomObject.getAttrs().setStatement(null); // clear node's statement
                                 parentDomObject.add(renderNodeDomObject, renderIndex);
                                 parent.addChild(renderNode, renderIndex);
-                                if(Thread.currentThread() == Looper.getMainLooper().getThread()) {
-                                    parent.createChildViewAt(renderIndex);
-                                    renderNode.applyLayoutAndEvent(renderNode);
-                                    renderNode.bindData(renderNode);
-                                }
+                                updates.add(renderNode);
                                 if(WXEnvironment.isApkDebugable()){
                                     WXLogUtils.d(WXRecyclerTemplateList.TAG, Thread.currentThread().getName() +  renderNode.getRef() + renderNode.getDomObject().getType() + "statements copy component tree used " + (System.currentTimeMillis() - start));
                                 }
                             }
-                            doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context);
+                            doBindingAttrsEventAndRenderChildNode(renderNode, domObject, context, updates);
                             renderIndex++;
                             if(loop.size() > 0){
                                 context.push(loop);
@@ -256,14 +274,15 @@ public class Statements {
                 }
             }
         }
-        doBindingAttrsEventAndRenderChildNode(component, domObject, context);
+        doBindingAttrsEventAndRenderChildNode(component, domObject, context, updates);
         return  1;
     }
 
     /**
      * bind attrs and doRender component child
      * */
-    private static void doBindingAttrsEventAndRenderChildNode(WXComponent component, WXDomObject domObject, ArrayStack context){
+    private static void doBindingAttrsEventAndRenderChildNode(WXComponent component, WXDomObject domObject, ArrayStack context,
+                                                              List<WXComponent> updates){
        WXAttr attr = component.getDomObject().getAttrs();
         /**
          * sub component supported, sub component new stack
@@ -289,7 +308,7 @@ public class Statements {
             WXVContainer container = (WXVContainer) component;
             for(int k=0; k<container.getChildCount();){
                 WXComponent next = container.getChild(k);
-                k += doRenderComponent(next, context);
+                k += doRenderComponent(next, context, updates);
             }
         }
     }

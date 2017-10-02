@@ -44,13 +44,16 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.annotation.Component;
 import com.taobao.weex.annotation.JSMethod;
+import com.taobao.weex.bridge.WXBridgeManager;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.ICheckBindingScroller;
 import com.taobao.weex.common.OnWXScrollListener;
 import com.taobao.weex.dom.WXAttr;
 import com.taobao.weex.dom.WXCellDomObject;
+import com.taobao.weex.dom.WXDomHandler;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.WXEvent;
 import com.taobao.weex.dom.WXRecyclerDomObject;
@@ -167,7 +170,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
 
     private ArrayStack bindIngStackContext = new ArrayStack();
     private Map bindIngMapContext = new HashMap();
-
 
     public WXRecyclerTemplateList(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
         super(instance, node, parent);
@@ -548,7 +550,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
 
     @Override
     public void addChild(WXComponent child, int index) {
-        super.addChild(child, index);
+        if(!(child instanceof  WXCell)) {
+            super.addChild(child, index);
+        }
         if(child instanceof  WXBaseRefresh){
             return;
         }
@@ -557,9 +561,13 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 Object templateId = child.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
                 String key = WXUtils.getString(templateId, null);
                 if(key != null){
-                    //set visible false, skip layout in dom thread, set visible true in onCreateViewHolder
+                    if(child.getDomObject() instanceof  WXCellDomObject
+                            && getDomObject() instanceof  WXRecyclerDomObject){
+                        WXCellDomObject domObject = (WXCellDomObject) child.getDomObject();
+                        domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
+                    }
                     mTemplateSources.put(key, (WXCell) child);
-                    asyncLoadTemplateCache(key);
+                    //asyncLoadTemplateCache(key);
                     ensureSourceCellRenderWithData((WXCell)child);
                     if(mTemplateViewTypes.get(key) == null){
                         mTemplateViewTypes.put(key, mTemplateViewTypes.size());
@@ -990,23 +998,26 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(component == null){
             return;
         }
-        Object data = listData.get(position);
-        if(component.getRenderData() == data && templateViewHolder.getHolderPosition() == position){
-            return;
-        }
-        component.setRenderData(data);
         long start = System.currentTimeMillis();
         boolean async = templateViewHolder.getHolderPosition() >= 0;
         templateViewHolder.setHolderPosition(position);
-        if(component.getRenderData() != data) {
-            Statements.doRender(component, getStackContextForPosition(position, data));
-        }
-        if(WXEnvironment.isApkDebugable()){
-            WXLogUtils.d(TAG, position + getTemplateKey(position) + " onBindViewHolder render used " + (System.currentTimeMillis() - start));
-        }
-        Layouts.doLayoutAsync(templateViewHolder, async);
-        if(WXEnvironment.isApkDebugable()){
-            WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + async);
+        Object data = listData.get(position);
+        if(component.getRenderData() == data){
+            if(!async){
+                Layouts.doLayoutAsync(templateViewHolder, async);
+            }
+            return;
+        }else{
+            List<WXComponent> updates = Statements.doRender(component, getStackContextForPosition(position, data));
+            Statements.doInitCompontent(updates);
+            component.setRenderData(data);
+            if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.d(TAG, position + getTemplateKey(position) + " onBindViewHolder render used " + (System.currentTimeMillis() - start));
+            }
+            Layouts.doLayoutAsync(templateViewHolder, async);
+            if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + async);
+            }
         }
     }
 
@@ -1021,6 +1032,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         TemplateCache cache = mTemplatesCache.get(template);
         WXCell component =  null;
+        boolean cacheHit = true;
         if(cache != null && cache.cells != null && cache.cells.size() > 0){
             component = cache.cells.poll();
         }
@@ -1028,10 +1040,14 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             asyncLoadTemplateCache(template);
         }
         if(component == null){
+            cacheHit = false;
             if(!source.isSourceUsed()){
                 source.setSourceUsed(true);
                 ensureSourceCellRenderWithData(source);
                 component = source;
+                if(WXEnvironment.isApkDebugable()) {
+                    WXLogUtils.d(TAG, template + " onCreateViewHolder source used ");
+                }
             }
         }
         if(component == null) {
@@ -1044,11 +1060,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(component.isLazy()) {
             doInitLazyCell(component, template, false);
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, template + " onCreateViewHolder  miss cache " + (source.getRenderData() != null));
+                WXLogUtils.d(TAG, template + " onCreateViewHolder  cache hit " + cacheHit   + " idle init false ");
             }
         }else{
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, template + " onCreateViewHolder  hit cache " + (source.getRenderData() != null));
+                WXLogUtils.d(TAG, template + " onCreateViewHolder  cache hit " + cacheHit + " idle init true");
             }
         }
         TemplateViewHolder templateViewHolder = new TemplateViewHolder(component, viewType);
@@ -1081,6 +1097,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                                 Object data = listData.get(i);
                                 Statements.doRender(cell, getStackContextForPosition(i, data));
                                 cell.setRenderData(data);
+                                //WXSDKManager.getInstance().getWXDomManager().postAction(getInstanceId(), new RenderSourceCellAction(cell, null, data), false);
                                 break;
                             }
                         }
@@ -1541,6 +1558,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         AsyncTask<Void,Void, Void> preloadTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 TemplateCache cellCache = mTemplatesCache.get(template);
                 if(cellCache == null || cellCache.cells == null){
                     return null;
