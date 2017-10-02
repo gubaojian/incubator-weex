@@ -25,6 +25,7 @@ import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Looper;
+import android.os.MessageQueue;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
@@ -1527,6 +1528,10 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             cellCache = new TemplateCache();
             mTemplatesCache.put(template, cellCache);
         }
+        if(cellCache.cells.size() >= templateCacheSize){
+            cellCache.isLoadIng = false;
+            return;
+        }
         if(cellCache.isLoadIng){
             return;
         }
@@ -1555,7 +1560,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 if(source.getInstance() == null || source.getInstance().isDestroy()){
                     return;
                 }
-                TemplateCache cellCache = mTemplatesCache.get(template);
+                final TemplateCache cellCache = mTemplatesCache.get(template);
                 if(cellCache == null){
                     return;
                 }
@@ -1564,14 +1569,24 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     cellCache.isLoadIng = false;
                     return;
                 }
-                ConcurrentLinkedQueue<WXCell> queue =  cellCache.cells;
-                Iterator<WXCell> iterator =  queue.iterator();
-                while (iterator.hasNext()){
-                    WXCell  component =  iterator.next();
-                    if(component.isLazy()){
-                        doInitLazyCell(component, template, true);
+                Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+                    @Override
+                    public boolean queueIdle() {
+                        if(source.getInstance() == null || source.getInstance().isDestroy()){
+                            return false;
+                        }
+                        ConcurrentLinkedQueue<WXCell> queue =  cellCache.cells;
+                        Iterator<WXCell> iterator =  queue.iterator();
+                        while (iterator.hasNext()){
+                            WXCell  component =  iterator.next();
+                            if(component.isLazy()){
+                                doInitLazyCell(component, template, true);
+                                return iterator.hasNext();
+                            }
+                        }
+                        return false;
                     }
-                }
+                });
                 cellCache.isLoadIng = false;
             }
         };
