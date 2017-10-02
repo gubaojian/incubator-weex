@@ -1005,6 +1005,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         if(component.getRenderData() == data){
             if(!async){
                 Layouts.doLayoutAsync(templateViewHolder, async);
+                if(WXEnvironment.isApkDebugable()){
+                    WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder source layout used " + (System.currentTimeMillis() - start) + async);
+                }
             }
             return;
         }else{
@@ -1046,7 +1049,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 ensureSourceCellRenderWithData(source);
                 component = source;
                 if(WXEnvironment.isApkDebugable()) {
-                    WXLogUtils.d(TAG, template + " onCreateViewHolder source used ");
+                    WXLogUtils.d(TAG, template + " onCreateViewHolder source");
                 }
             }
         }
