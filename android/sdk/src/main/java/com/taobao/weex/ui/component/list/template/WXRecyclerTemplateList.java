@@ -57,6 +57,7 @@ import com.taobao.weex.dom.WXDomHandler;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.WXEvent;
 import com.taobao.weex.dom.WXRecyclerDomObject;
+import com.taobao.weex.dom.flex.CSSLayoutContext;
 import com.taobao.weex.dom.flex.Spacing;
 import com.taobao.weex.el.parse.ArrayStack;
 import com.taobao.weex.ui.component.AppearanceHelper;
@@ -1007,11 +1008,14 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         Object data = listData.get(position);
         if(component.getRenderData() == data){
             if(!async){
-                Layouts.doLayoutAsync(templateViewHolder, async);
+                if(!component.isHasLayout()) {
+                    Layouts.doLayoutAsync(templateViewHolder, async);
+                }
                 if(WXEnvironment.isApkDebugable()){
                     WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder source layout used " + (System.currentTimeMillis() - start) + async);
                 }
             }
+            component.setHasLayout(true);
         }else{
             List<WXComponent> updates = Statements.doRender(component, getStackContextForPosition(position, data));
             Statements.doInitCompontent(updates);
@@ -1019,7 +1023,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             if(WXEnvironment.isApkDebugable()){
                 WXLogUtils.d(TAG, position + getTemplateKey(position) + " onBindViewHolder render used " + (System.currentTimeMillis() - start));
             }
+            if(component.isHasLayout()){
+                async = true;
+            }
             Layouts.doLayoutAsync(templateViewHolder, async);
+            component.setHasLayout(true);
             if(WXEnvironment.isApkDebugable()){
                 WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + async);
             }
@@ -1611,6 +1619,10 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                             if(component.isLazy()){
                                 doInitLazyCell(component, template, true);
                                 return iterator.hasNext();
+                            }
+                            if(!component.isHasLayout()){
+                                Layouts.doSafeLayout(component, new CSSLayoutContext());
+                                component.setHasLayout(true);
                             }
                         }
                         return false;

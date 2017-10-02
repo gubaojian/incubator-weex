@@ -59,6 +59,8 @@ public class WXCell extends WidgetContainer<WXFrameLayout> {
 
     private boolean isSourceUsed = false;
 
+    private boolean hasLayout = false;
+
     @Deprecated
     public WXCell(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
         super(instance, dom, parent);
@@ -197,5 +199,13 @@ public class WXCell extends WidgetContainer<WXFrameLayout> {
 
     public void setSourceUsed(boolean sourceUsed) {
         isSourceUsed = sourceUsed;
+    }
+
+    public boolean isHasLayout() {
+        return hasLayout;
+    }
+
+    public void setHasLayout(boolean hasLayout) {
+        this.hasLayout = hasLayout;
     }
 }
