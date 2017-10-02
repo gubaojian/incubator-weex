@@ -136,6 +136,10 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     return mRef;
   }
 
+  public void setRef(String ref) {
+    this.mRef = ref;
+  }
+
   public String getType(){
     return mType;
   }
@@ -460,7 +464,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     super.dirty();
   }
 
-  /** package **/ void applyStyleToNode() {
+  /** package **/public void applyStyleToNode() {
     WXStyle stylesMap = getStyles();
     int vp = getViewPortWidth();
     if (!stylesMap.isEmpty()) {

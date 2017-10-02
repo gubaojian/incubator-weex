@@ -166,8 +166,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * */
     private ArrayMap<Integer, Map<String,Map<Integer, List<Object>>>> mDisAppearWatchList = new ArrayMap<>();
 
-
-
     private ArrayStack bindIngStackContext = new ArrayStack();
     private Map bindIngMapContext = new HashMap();
 
@@ -196,6 +194,12 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             JSONArray array = (JSONArray)getDomObject().getAttrs().get(Constants.Name.Recycler.LIST_DATA);
             if(array.size() > 0) {
                 listData = array;
+            }
+        }
+
+        if(mDomObject != null && mDomObject.getCellList() != null){
+            for(int i=0; i<mDomObject.getCellList().size(); i++){
+                addChild(DomTreeBuilder.buildTree(mDomObject.getCellList().get(i),  this));
             }
         }
     }
@@ -567,7 +571,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                         domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
                     }
                     mTemplateSources.put(key, (WXCell) child);
-                    //asyncLoadTemplateCache(key);
                     ensureSourceCellRenderWithData((WXCell)child);
                     if(mTemplateViewTypes.get(key) == null){
                         mTemplateViewTypes.put(key, mTemplateViewTypes.size());
@@ -1009,7 +1012,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder source layout used " + (System.currentTimeMillis() - start) + async);
                 }
             }
-            return;
         }else{
             List<WXComponent> updates = Statements.doRender(component, getStackContextForPosition(position, data));
             Statements.doInitCompontent(updates);
@@ -1017,7 +1019,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             if(WXEnvironment.isApkDebugable()){
                 WXLogUtils.d(TAG, position + getTemplateKey(position) + " onBindViewHolder render used " + (System.currentTimeMillis() - start));
             }
-            Layouts.doLayoutAsync(templateViewHolder, async);
+            Layouts.doLayoutAsync(templateViewHolder, false);
             if(WXEnvironment.isApkDebugable()){
                 WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + async);
             }

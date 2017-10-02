@@ -75,6 +75,7 @@ public class Layouts {
             asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR); //serial executor is better
         }else{
             doSafeLayout(component, templateViewHolder.getLayoutContext());
+            Log.e("weex", "weex" + component.getLayoutHeight() + "  " + component.getLayoutWidth());
             setLayout(component, false);
         }
 
