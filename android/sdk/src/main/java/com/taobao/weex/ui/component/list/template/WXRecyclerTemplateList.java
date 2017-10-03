@@ -1006,14 +1006,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         templateViewHolder.setHolderPosition(position);
         Object data = listData.get(position);
         if(component.getRenderData() == data){
-            if(!resuse){
-                if(!component.isHasLayout()) {
-                    Layouts.doLayoutAsync(templateViewHolder, true);
-                }
-                if(WXEnvironment.isApkDebugable()){
-                    WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder source layout used " + (System.currentTimeMillis() - start) + resuse);
-                }
-            }
             component.setHasLayout(true);
         }else{
             List<WXComponent> updates = Statements.doRender(component, getStackContextForPosition(position, data));
