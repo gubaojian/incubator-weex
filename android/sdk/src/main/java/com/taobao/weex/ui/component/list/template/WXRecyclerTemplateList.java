@@ -197,7 +197,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 listData = array;
             }
         }
-
         if(mDomObject != null && mDomObject.getCellList() != null){
             for(int i=0; i<mDomObject.getCellList().size(); i++){
                 addChild(DomTreeBuilder.buildTree(mDomObject.getCellList().get(i),  this));
