@@ -1623,15 +1623,15 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             component.lazy(false);
             component.createView();
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG,  "doInitLazyCell " + inPreload + template +  " createView used " + (System.currentTimeMillis() - start));
+                WXLogUtils.d(TAG,  "doInitLazyCell idle" + inPreload + template +  " createView used " + (System.currentTimeMillis() - start));
             }
             component.applyLayoutAndEvent(component);
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG,  "doInitLazyCell " + inPreload  + template +  " apply layout used " + (System.currentTimeMillis() - start));
+                WXLogUtils.d(TAG,  "doInitLazyCell idle" + inPreload  + template +  " apply layout used " + (System.currentTimeMillis() - start));
             }
             component.bindData(component);
             if(WXEnvironment.isApkDebugable()) {
-                WXLogUtils.d(TAG, "doInitLazyCell " + inPreload + template + " bindData used " + (System.currentTimeMillis() - start));
+                WXLogUtils.d(TAG, "doInitLazyCell idle" + inPreload + template + " bindData used " + (System.currentTimeMillis() - start));
             }
         }
     }
