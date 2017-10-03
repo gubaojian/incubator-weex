@@ -1002,16 +1002,16 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             return;
         }
         long start = System.currentTimeMillis();
-        boolean async = templateViewHolder.getHolderPosition() >= 0;
+        boolean resuse = templateViewHolder.getHolderPosition() >= 0;
         templateViewHolder.setHolderPosition(position);
         Object data = listData.get(position);
         if(component.getRenderData() == data){
-            if(!async){
+            if(!resuse){
                 if(!component.isHasLayout()) {
-                    Layouts.doLayoutAsync(templateViewHolder, async);
+                    Layouts.doLayoutAsync(templateViewHolder, true);
                 }
                 if(WXEnvironment.isApkDebugable()){
-                    WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder source layout used " + (System.currentTimeMillis() - start) + async);
+                    WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder source layout used " + (System.currentTimeMillis() - start) + resuse);
                 }
             }
             component.setHasLayout(true);
@@ -1023,12 +1023,12 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 WXLogUtils.d(TAG, position + getTemplateKey(position) + " onBindViewHolder render used " + (System.currentTimeMillis() - start));
             }
             if(component.isHasLayout()){
-                async = true;
+                resuse = true;
             }
-            Layouts.doLayoutAsync(templateViewHolder, async);
+            Layouts.doLayoutAsync(templateViewHolder, true);
             component.setHasLayout(true);
             if(WXEnvironment.isApkDebugable()){
-                WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + async);
+                WXLogUtils.d(TAG,  position + getTemplateKey(position) + " onBindViewHolder layout used " + (System.currentTimeMillis() - start) + resuse);
             }
         }
     }
@@ -1109,6 +1109,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                             if(cell == getSourceTemplate(i)){
                                 Object data = listData.get(i);
                                 Statements.doRender(cell, getStackContextForPosition(i, data));
+                                Layouts.doSafeLayout(cell, new CSSLayoutContext());
                                 cell.setRenderData(data);
                                 break;
                             }
@@ -1612,12 +1613,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                             WXCell  component =  iterator.next();
                             if(component.isLazy()){
                                 doInitLazyCell(component, template, true);
-                                return iterator.hasNext();
-                            }
-                            if(!component.isHasLayout()){
-                                Layouts.doSafeLayout(component, new CSSLayoutContext());
-                                Layouts.setLayout(component, true);
-                                component.setHasLayout(true);
                                 return iterator.hasNext();
                             }
                         }
