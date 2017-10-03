@@ -47,7 +47,7 @@ public class Layouts {
         final WXComponent component = templateViewHolder.getComponent();
         final  int position = templateViewHolder.getHolderPosition();
         if(templateViewHolder.asyncTask != null){
-            templateViewHolder.asyncTask.cancel(false);
+            templateViewHolder.asyncTask.cancel(true);
             templateViewHolder.asyncTask = null;
         }
         if(async){
@@ -75,7 +75,6 @@ public class Layouts {
             asyncTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR); //serial executor is better
         }else{
             doSafeLayout(component, templateViewHolder.getLayoutContext());
-            Log.e("weex", "weex" + component.getLayoutHeight() + "  " + component.getLayoutWidth());
             setLayout(component, false);
         }
 

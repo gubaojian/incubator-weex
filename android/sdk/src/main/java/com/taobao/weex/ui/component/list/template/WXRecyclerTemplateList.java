@@ -1096,6 +1096,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             WXCellDomObject domObject = (WXCellDomObject) component.getDomObject();
             domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
         }
+        component.setRenderData(cell.getRenderData());
         return component;
     }
 
@@ -1109,7 +1110,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                                 Object data = listData.get(i);
                                 Statements.doRender(cell, getStackContextForPosition(i, data));
                                 cell.setRenderData(data);
-                                //WXSDKManager.getInstance().getWXDomManager().postAction(getInstanceId(), new RenderSourceCellAction(cell, null, data), false);
                                 break;
                             }
                         }
@@ -1570,11 +1570,6 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         AsyncTask<Void,Void, Void> preloadTask = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 TemplateCache cellCache = mTemplatesCache.get(template);
                 if(cellCache == null || cellCache.cells == null){
                     return null;
@@ -1621,7 +1616,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                             }
                             if(!component.isHasLayout()){
                                 Layouts.doSafeLayout(component, new CSSLayoutContext());
+                                Layouts.setLayout(component, true);
                                 component.setHasLayout(true);
+                                return iterator.hasNext();
                             }
                         }
                         return false;
