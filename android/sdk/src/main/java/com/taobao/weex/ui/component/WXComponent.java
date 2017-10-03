@@ -1408,14 +1408,6 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
         view.setVisibility(View.GONE);
       }
     }
-    if(mDomObj != null){
-      WXDomObject domObject = (WXDomObject) mDomObj;
-      if (TextUtils.equals(visibility, Constants.Value.VISIBLE)) {
-          domObject.setVisible(true);
-      } else if (TextUtils.equals(visibility, Constants.Value.HIDDEN)) {
-          domObject.setVisible(false);
-      }
-    }
   }
 
   /**
@@ -1820,27 +1812,23 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
       WXDomObject domObject = (WXDomObject) getDomObject();
       if(waste){
           if(domObject.getAttrs().getStatement() == null) {
-              domObject.setVisible(false);
               if (getHostView() != null) {
                 getHostView().setVisibility(View.GONE);
               }
               return;
           }
           if(Constants.Value.VISIBLE.equals(domObject.getAttrs().get(Constants.Name.VIF_FALSE))){
-             domObject.setVisible(true);
              if(getHostView() != null){
                getHostView().setVisibility(View.VISIBLE);
              }
           }else{
-            domObject.setVisible(false);
             if(getHostView() != null){
               getHostView().setVisibility(View.GONE);
             }
           }
       }else{
-        domObject.setVisible(true);
         if(getHostView() != null){
-          getHostView().setVisibility(View.VISIBLE);
+           getHostView().setVisibility(View.VISIBLE);
         }
       }
     }
