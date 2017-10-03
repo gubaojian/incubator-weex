@@ -1552,7 +1552,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             cellCache = new TemplateCache();
             mTemplatesCache.put(template, cellCache);
         }
-        if(cellCache.cells.size() >= templateCacheSize){
+        if(cellCache.cells.size() > 0){
             cellCache.isLoadIng = false;
             return;
         }
