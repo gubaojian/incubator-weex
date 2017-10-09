@@ -43,14 +43,12 @@ class DomTreeBuilder extends TraceableAction {
         }
        long startNanos = System.nanoTime();
         dom.setCloneThis(true);
-        dom.applyStyleToNode();
         WXComponent component = WXComponentFactory.newInstance(context.getInstance(), dom, parent);
         if (component != null) {
             component.mTraceInfo.domThreadStart = dom.mDomThreadTimestamp;
             component.mTraceInfo.rootEventId = mTracingEventId;
             component.mTraceInfo.domQueueTime = mDomQueueTime;
         }
-        context.registerDOMObject(dom.getRef(), dom);
         context.registerComponent(dom.getRef(), component);
         if (component instanceof WXVContainer) {
             WXVContainer container = (WXVContainer) component;
@@ -91,6 +89,10 @@ class DomTreeBuilder extends TraceableAction {
             return null;
         }
         DomTreeBuilder builder = new DomTreeBuilder();
+        domObject.traverseTree(
+                domActionContext.getAddDOMConsumer(),
+                domActionContext.getApplyStyleConsumer()
+        );
         return builder.generateComponentTree(domActionContext, domObject, parent);
 
     }
