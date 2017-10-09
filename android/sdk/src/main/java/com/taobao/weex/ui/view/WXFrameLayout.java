@@ -50,19 +50,24 @@ public class WXFrameLayout extends FrameLayout implements WXGestureObservable,IR
     super(context);
   }
 
+
+
   @Override
   public void registerGestureListener(WXGesture wxGesture) {
     this.wxGesture = wxGesture;
   }
 
+
   @Override
-  public boolean onTouchEvent(MotionEvent event) {
-    boolean result = super.onTouchEvent(event);
+  public boolean dispatchTouchEvent(MotionEvent event) {
+    boolean result = super.dispatchTouchEvent(event);
     if (wxGesture != null) {
       result |= wxGesture.onTouch(this, event);
     }
     return result;
   }
+
+
 
   @Override
   public void holdComponent(WXDiv component) {
