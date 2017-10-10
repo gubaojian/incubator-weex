@@ -590,7 +590,18 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     }
                 }
             }
-            notifyUpdateList();
+            boolean needUpdate = false;
+            if(listData != null && listData.size() > 0){
+                for(int i=0; i<listData.size(); i++){
+                    if(child == getSourceTemplate(i)){
+                        needUpdate = true;
+                        break;
+                    }
+                }
+            }
+            if(needUpdate) {
+                notifyUpdateList();
+            }
         }
     }
 
@@ -1315,7 +1326,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     continue;
                 }
                 TemplateViewHolder itemHolder = (TemplateViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-                if(itemHolder == null){
+                if(itemHolder == null || itemHolder.getComponent() == null){
                     break;
                 }
                 List<WXComponent> childListeners = findChildListByRef(itemHolder.getComponent(), helper.getAwareChild().getRef());
@@ -1498,7 +1509,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * find child by ref
      * */
     public WXComponent findChildByRef(WXComponent component, String ref){
-        if(ref == null || component.getRef() == null){
+        if(ref == null || component == null || component.getRef() == null){
             return  null;
         }
         if(ref.equals(component.getRef())){
@@ -1520,7 +1531,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * find child list, has same ref
      * */
     public List<WXComponent> findChildListByRef(WXComponent component, String ref){
-        if(ref == null){
+        if(ref == null || component == null){
             return  null;
         }
         WXComponent child = findChildByRef(component, ref);
