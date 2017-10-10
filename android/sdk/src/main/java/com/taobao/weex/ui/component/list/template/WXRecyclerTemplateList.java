@@ -197,14 +197,23 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                 listData = array;
             }
         }
-        long start = System.currentTimeMillis();
-        if(mDomObject != null && mDomObject.getCellList() != null){
-            for(int i=0; i<mDomObject.getCellList().size(); i++){
-                addChild(DomTreeBuilder.buildTree(mDomObject.getCellList().get(i),  this));
-            }
-        }
-        if(WXEnvironment.isApkDebugable()){
-            WXLogUtils.d(TAG, "TemplateList BuildDomTree Used " + (System.currentTimeMillis() - start));
+        if(mDomObject != null
+                && mDomObject.getCellList() != null
+                && mDomObject.getCellList().size() > 0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    long start = System.currentTimeMillis();
+                    for(int i=0; i<mDomObject.getCellList().size(); i++){
+                        if(getInstance() != null && !getInstance().isDestroy()) {
+                            addChild(DomTreeBuilder.buildTree(mDomObject.getCellList().get(i), WXRecyclerTemplateList.this));
+                        }
+                    }
+                    if(WXEnvironment.isApkDebugable()){
+                        WXLogUtils.d(TAG, "TemplateList BuildDomTree Used " + (System.currentTimeMillis() - start));
+                    }
+                }
+            }).start();
         }
     }
 
@@ -1489,6 +1498,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * find child by ref
      * */
     public WXComponent findChildByRef(WXComponent component, String ref){
+        if(ref == null || component.getRef() == null){
+            return  null;
+        }
         if(ref.equals(component.getRef())){
             return component;
         }
@@ -1508,6 +1520,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * find child list, has same ref
      * */
     public List<WXComponent> findChildListByRef(WXComponent component, String ref){
+        if(ref == null){
+            return  null;
+        }
         WXComponent child = findChildByRef(component, ref);
         if(child == null){
             return  null;
