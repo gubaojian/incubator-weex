@@ -206,7 +206,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
                     long start = System.currentTimeMillis();
                     for(int i=0; i<mDomObject.getCellList().size(); i++){
                         if(getInstance() != null && !getInstance().isDestroy()) {
-                            addChild(DomTreeBuilder.buildTree(mDomObject.getCellList().get(i), WXRecyclerTemplateList.this));
+                            boolean notifyUpdate = (i + 1) == mDomObject.getCellList().size();
+                            addTemplateCell(DomTreeBuilder.buildTree(mDomObject.getCellList().get(i), WXRecyclerTemplateList.this)
+                            , notifyUpdate);
                         }
                     }
                     if(WXEnvironment.isApkDebugable()){
@@ -574,34 +576,30 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             return;
         }
         if(child instanceof WXCell){
-            if(child.getDomObject() != null && child.getDomObject().getAttrs() != null){
-                Object templateId = child.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
-                String key = WXUtils.getString(templateId, null);
-                if(key != null){
-                    if(child.getDomObject() instanceof  WXCellDomObject
-                            && getDomObject() instanceof  WXRecyclerDomObject){
-                        WXCellDomObject domObject = (WXCellDomObject) child.getDomObject();
-                        domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
-                    }
-                    mTemplateSources.put(key, (WXCell) child);
-                    ensureSourceCellRenderWithData((WXCell)child);
-                    if(mTemplateViewTypes.get(key) == null){
-                        mTemplateViewTypes.put(key, mTemplateViewTypes.size());
-                    }
+             addTemplateCell(child, true);
+        }
+    }
+
+
+    private void  addTemplateCell(WXComponent child, boolean  notifyUpdate){
+        if(child.getDomObject() != null && child.getDomObject().getAttrs() != null){
+            Object templateId = child.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
+            String key = WXUtils.getString(templateId, null);
+            if(key != null){
+                if(child.getDomObject() instanceof  WXCellDomObject
+                        && getDomObject() instanceof  WXRecyclerDomObject){
+                    WXCellDomObject domObject = (WXCellDomObject) child.getDomObject();
+                    domObject.setRecyclerDomObject((WXRecyclerDomObject) getDomObject());
+                }
+                mTemplateSources.put(key, (WXCell) child);
+                ensureSourceCellRenderWithData((WXCell)child);
+                if(mTemplateViewTypes.get(key) == null){
+                    mTemplateViewTypes.put(key, mTemplateViewTypes.size());
                 }
             }
-            boolean needUpdate = false;
-            if(listData != null && listData.size() > 0){
-                for(int i=0; i<listData.size(); i++){
-                    if(child == getSourceTemplate(i)){
-                        needUpdate = true;
-                        break;
-                    }
-                }
-            }
-            if(needUpdate) {
-                notifyUpdateList();
-            }
+        }
+        if(notifyUpdate) {
+            notifyUpdateList();
         }
     }
 
