@@ -624,6 +624,10 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       }
     }
     relocateAppearanceHelper();
+
+    if (WXEnvironment.isApkDebugable()) {
+      WXLogUtils.d(TAG, "addChild child at " + index  + " ref " + child.getRef());
+    }
   }
 
 
@@ -687,7 +691,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
     view.getRecyclerViewBaseAdapter().notifyItemRemoved(index);
     if (WXEnvironment.isApkDebugable()) {
-      WXLogUtils.d(TAG, "removeChild child at " + index);
+       WXLogUtils.d(TAG, "removeChild child at " + index  + " " + child.getRef());
     }
     super.remove(child, destroy);
   }
