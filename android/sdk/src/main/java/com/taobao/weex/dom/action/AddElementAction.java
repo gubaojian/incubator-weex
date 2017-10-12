@@ -18,7 +18,10 @@
  */
 package com.taobao.weex.dom.action;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSONObject;
+import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.adapter.IWXUserTrackAdapter;
 import com.taobao.weex.common.WXErrorCode;
@@ -29,6 +32,7 @@ import com.taobao.weex.tracing.Stopwatch;
 import com.taobao.weex.tracing.WXTracing;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.component.list.WXCell;
 import com.taobao.weex.utils.WXLogUtils;
 
 import java.util.List;
@@ -104,6 +108,17 @@ final class AddElementAction extends AbstractAddElementAction {
         return;
       }
 
+      if(WXEnvironment.isApkDebugable()){
+
+
+        WXCell cell = checkCell(parent);
+        if(cell != null){
+          WXLogUtils.e(component.getRef() + "addElement to cell component, is not good design"
+                  + mData.toJSONString() + " cell " +  cell.getRef()
+                  + "  " + cell.getDomObject());
+        }
+      }
+
       Stopwatch.tick();
       parent.addChild(component, mAddIndex);
       parent.createChildViewAt(mAddIndex);
@@ -131,5 +146,15 @@ final class AddElementAction extends AbstractAddElementAction {
     } catch (Exception e) {
       WXLogUtils.e("add component failed.", e);
     }
+  }
+
+  private WXCell checkCell(WXVContainer parent){
+    if(parent == null){
+      return  null;
+    }
+    if(parent instanceof WXCell){
+      return (WXCell)parent;
+    }
+    return checkCell(parent.getParent());
   }
 }

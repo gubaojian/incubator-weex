@@ -24,9 +24,13 @@ import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.utils.WXLogUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -277,6 +281,11 @@ public abstract class WXVContainer<T extends ViewGroup> extends WXComponent<T> {
   }
 
   public void createChildViewAt(int index) {
+    if(getRealView() == null){
+        if(WXEnvironment.isApkDebugable()){
+           WXLogUtils.e(getDomObject().getType()  + " " + getRef() + " createChildViewAt parent view not create, create waste child view ");
+        }
+    }
     long startNanos = System.nanoTime();
     Pair<WXComponent, Integer> ret = rearrangeIndexAndGetChild(index);
     if (ret.first != null) {
