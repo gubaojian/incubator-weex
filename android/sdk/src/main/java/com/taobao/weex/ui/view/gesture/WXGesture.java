@@ -229,7 +229,6 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
    */
   private List<Map<String, Object>> createMultipleFireEventParam(MotionEvent motionEvent,String state) {
     List<Map<String, Object>> list = new ArrayList<>(motionEvent.getHistorySize() + 1);
-    list.addAll(getHistoricalEvents(motionEvent));
     list.add(createFireEventParam(motionEvent, CUR_EVENT, state));
     return list;
   }
