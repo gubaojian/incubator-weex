@@ -726,7 +726,8 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       WXLogUtils.w(TAG, "this holder can not be allowed to  recycled");
     }
     if (WXEnvironment.isApkDebugable()) {
-      WXLogUtils.d(TAG, "Recycle holder " + (System.currentTimeMillis() - begin) + "  Thread:" + Thread.currentThread().getName());
+      WXLogUtils.d(TAG, "Recycle holder " + (System.currentTimeMillis() - begin) + "  Thread:" + Thread.currentThread().getName()
+      + "  " + holder.canRecycled()  + " ref " + (holder.getComponent() != null ? ""  : holder.getComponent().getRef()));
     }
   }
 
@@ -764,8 +765,15 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
     if (holder.getComponent() != null && holder.getComponent() instanceof WXCell) {
       if(holder.isRecycled()) {
+        if(WXEnvironment.isApkDebugable()){
+          WXLogUtils.d(TAG, "onBindViewHolder recycled bind data" + component.getRef());
+        }
         holder.bindData(component);
         component.onRenderFinish(STATE_UI_FINISH);
+      }else{
+        if(WXEnvironment.isApkDebugable()){
+             WXLogUtils.d(TAG, "onBindViewHolder none recycled none bind data" + component.getRef());
+        }
       }
       if (mDragHelper == null || !mDragHelper.isDraggable()) {
         return;
@@ -850,11 +858,17 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         } else {
           if (component instanceof WXCell) {
             if (component.getRealView() != null) {
+              if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.d(TAG, "onCreateViewHolder reuse " + component.getRef());
+              }
               return new ListBaseViewHolder(component, viewType);
             } else {
               ((WXCell) component).lazy(false);
               component.createView();
               component.applyLayoutAndEvent(component);
+              if(WXEnvironment.isApkDebugable()){
+                WXLogUtils.d(TAG, "onCreateViewHolder createview apply event " + component.getRef());
+              }
               return new ListBaseViewHolder(component, viewType);
             }
           } else if (component instanceof WXBaseRefresh) {
