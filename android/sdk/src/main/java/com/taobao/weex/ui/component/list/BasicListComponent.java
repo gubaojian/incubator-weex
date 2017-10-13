@@ -727,7 +727,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     }
     if (WXEnvironment.isApkDebugable()) {
       WXLogUtils.d(TAG, "Recycle holder " + (System.currentTimeMillis() - begin) + "  Thread:" + Thread.currentThread().getName()
-      + "  " + holder.canRecycled()  + " ref " + (holder.getComponent() != null ? ""  : holder.getComponent().getRef()));
+      + "  " + holder.canRecycled()  + " ref " + (holder.getComponent() == null ? ""  : holder.getComponent().getRef()));
     }
   }
 
