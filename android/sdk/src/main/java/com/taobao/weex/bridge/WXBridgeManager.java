@@ -120,6 +120,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
 
   public static final String KEY_METHOD = "method";
   public static final String KEY_ARGS = "args";
+  public static final String KEY_EVENT_CALLBACK = "eventCallback";
 
   // args
   public static final String COMPONENT = "component";
@@ -1086,7 +1087,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
   }
 
 
-  private void addJSEventTask(final String method, final String instanceId, final List<Object> params, final Object... args) {
+  private void addJSEventTask(final EventCallback eventCallback, final String method, final String instanceId, final List<Object> params, final Object... args) {
     post(new Runnable() {
       @Override
       public void run() {
@@ -1107,6 +1108,9 @@ public class WXBridgeManager implements Callback,BactchExecutor {
         WXHashMap<String, Object> task = new WXHashMap<>();
         task.put(KEY_METHOD, method);
         task.put(KEY_ARGS, argsList);
+        if(eventCallback != null){
+            task.put(KEY_EVENT_CALLBACK, eventCallback);
+        }
 
 
         if (mNextTickTasks.get(instanceId) == null) {
@@ -1121,7 +1125,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
   }
 
   private void addJSTask(final String method, final String instanceId, final Object... args) {
-    addJSEventTask(method, instanceId, null, args);
+    addJSEventTask(null, method, instanceId, null, args);
   }
 
   private void sendMessage(String instanceId, int what) {
@@ -1171,12 +1175,22 @@ public class WXBridgeManager implements Callback,BactchExecutor {
       fireEventOnNode(instanceId, ref, type, data, domChanges, null);
   }
 
+
   /**
    * Notify the JavaScript about the event happened on Android
    */
   public void fireEventOnNode(final String instanceId, final String ref,
                               final String type, final Map<String, Object> data,
                               final Map<String, Object> domChanges, List<Object> params) {
+        fireEventOnNode(instanceId, ref, type, data, domChanges, params, null);
+  }
+
+  /**
+   * Notify the JavaScript about the event happened on Android
+   */
+  public void fireEventOnNode(final String instanceId, final String ref,
+                              final String type, final Map<String, Object> data,
+                              final Map<String, Object> domChanges, List<Object> params, EventCallback callback) {
     if (TextUtils.isEmpty(instanceId) || TextUtils.isEmpty(ref)
             || TextUtils.isEmpty(type) || mJSHandler == null) {
       return;
@@ -1185,9 +1199,10 @@ public class WXBridgeManager implements Callback,BactchExecutor {
       throw new WXRuntimeException(
               "fireEvent must be called by main thread");
     }
-    addJSEventTask(METHOD_FIRE_EVENT, instanceId, params, ref, type, data, domChanges);
+    addJSEventTask(callback, METHOD_FIRE_EVENT, instanceId, params, ref, type, data, domChanges);
     sendMessage(instanceId, WXJSBridgeMsgType.CALL_JS_BATCH);
   }
+
 
   private boolean checkMainThread() {
     return Looper.myLooper() == Looper.getMainLooper();
@@ -1226,7 +1241,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
   }
 
   /**
-   * Callback to Javascript function.
+   * EventCallback to Javascript function.
    * @param instanceId Weex Instance Id
    * @param callback  callback referenece handle
    * @param data callback data
@@ -1532,21 +1547,21 @@ public class WXBridgeManager implements Callback,BactchExecutor {
     return false;
   }
 
-  private void invokeExecJS(String instanceId, String namespace, String function, WXJSObject[] args) {
-    invokeExecJS(instanceId, namespace, function, args, true);
+  private Object invokeExecJS(String instanceId, String namespace, String function, WXJSObject[] args) {
+    return  invokeExecJS(instanceId, namespace, function, args, true);
   }
 
-  public void invokeExecJS(String instanceId, String namespace, String function,
+  public Object invokeExecJS(String instanceId, String namespace, String function,
                             WXJSObject[] args,boolean logTaskDetail){
-    // if (WXEnvironment.isApkDebugable()) {
+     if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("callJS >>>> instanceId:").append(instanceId)
               .append("function:").append(function);
       if(logTaskDetail)
         mLodBuilder.append(" tasks:").append(WXJsonUtils.fromObjectToJSONString(args));
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
-    // }
-    mWXBridge.execJS(instanceId, namespace, function, args);
+     }
+    return  mWXBridge.execJS(instanceId, namespace, function, args);
   }
 
   private void invokeInitFramework(Message msg) {
@@ -1657,7 +1672,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
     try {
       Object instanceId = message.obj;
 
-      Object task = null;
+      ArrayList<WXHashMap<String, Object>> task = null;
       Stack<String> instanceStack = mNextTickTasks.getInstanceStack();
       int size = instanceStack.size();
       for (int i = size - 1; i >= 0; i--) {
@@ -1667,15 +1682,23 @@ public class WXBridgeManager implements Callback,BactchExecutor {
           break;
         }
       }
-      task = ((ArrayList) task).toArray();
+      Object[] tasks = task.toArray();
 
       WXJSObject[] args = {
               new WXJSObject(WXJSObject.String, instanceId),
               new WXJSObject(WXJSObject.JSON,
-                      WXJsonUtils.fromObjectToJSONString(task))};
+                      WXJsonUtils.fromObjectToJSONString(tasks))};
 
-      invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
-
+      Object taskResult = invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
+      for(Object taskObject : tasks){
+        if(taskObject instanceof  WXHashMap){
+          WXHashMap<String, Object> map = (WXHashMap<String, Object>) taskObject;
+          if(map.get(KEY_EVENT_CALLBACK) != null && map.get(KEY_EVENT_CALLBACK) instanceof EventCallback){
+            EventCallback callback = (EventCallback) map.get(KEY_EVENT_CALLBACK);
+            callback.onCallback(null);
+          }
+        }
+      }
     } catch (Throwable e) {
       WXLogUtils.e("WXBridgeManager", e);
       String err="invokeCallJSBatch#"+e.toString();

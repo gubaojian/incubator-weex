@@ -28,6 +28,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.alibaba.fastjson.JSONArray;
@@ -45,6 +46,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.taobao.weex.common.Constants.Event.SHOULD_BUBBLE;
 
 public class WXGesture extends GestureDetector.SimpleOnGestureListener implements OnTouchListener {
 
@@ -71,6 +74,8 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
   private int mParentOrientation =-1;
   private boolean mIsPreventMoveEvent = false;
   private boolean mIsTouchEventConsumed = false; //Reset to false when first touch event, set to true when gesture event fired.
+
+  private boolean requestDisallowInterceptTouchEvent = false;
 
   public WXGesture(WXComponent wxComponent, Context context) {
     this.component = wxComponent;
@@ -112,8 +117,27 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     return mIsTouchEventConsumed;
   }
 
+
+  /**
+   * shouldBubbleEvent default true
+   * */
+  private boolean shouldBubbleTouchEvent(MotionEvent event){
+     if(component.containsEvent(SHOULD_BUBBLE)){
+        Object result = component.fireEventWait(SHOULD_BUBBLE, createFireEventParam(event, CUR_EVENT, null));
+        if(result == null){
+          return  true;
+        }else{
+          return  false;
+        }
+     }
+     return  true;
+  }
+
   @Override
   public boolean onTouch(View v, MotionEvent event) {
+    if(requestDisallowInterceptTouchEvent){
+        return  false;
+    }
     try {
       boolean result = mGestureDetector.onTouchEvent(event);
       switch (event.getActionMasked()) {
@@ -146,6 +170,19 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
           result |= handleMotionEvent(LowLevelGesture.ACTION_CANCEL, event);
           result |= handlePanMotionEvent(event);
           break;
+      }
+      if(component.containsEvent(SHOULD_BUBBLE)){
+        ViewGroup parent = (ViewGroup) v.getParent();
+        boolean requestDisallowInterceptTouchEvent = false;
+        if(parent != null){
+          if(!shouldBubbleTouchEvent(event)){
+            requestDisallowInterceptTouchEvent = true;
+          }
+          parent.requestDisallowInterceptTouchEvent(requestDisallowInterceptTouchEvent);
+        }
+        if(component.getParent() != null){
+           component.getParent().requestDisallowInterceptTouchEvent(requestDisallowInterceptTouchEvent);
+        }
       }
       return result;
     } catch (Exception e) {
@@ -523,5 +560,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     return true;
   }
 
-
+  public void setRequestDisallowInterceptTouchEvent(boolean requestDisallowInterceptTouchEvent) {
+    this.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent;
+  }
 }
