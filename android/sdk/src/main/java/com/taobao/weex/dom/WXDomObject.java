@@ -33,6 +33,7 @@ import com.taobao.weex.common.Constants.Name;
 import com.taobao.weex.dom.flex.CSSLayoutContext;
 import com.taobao.weex.dom.flex.CSSNode;
 import com.taobao.weex.dom.flex.Spacing;
+import com.taobao.weex.dom.transition.WXTransition;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXViewUtils;
@@ -221,6 +222,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
       WXStyle styles = new WXStyle();
       styles.putAll((JSONObject) style,false);
       this.mStyles = styles;
+      this.transition = WXTransition.fromMap(styles, this);
     }
     Object attr = map.get("attr");
     if (attr != null && attr instanceof JSONObject) {
@@ -453,11 +455,24 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     if (styles == null || styles.isEmpty()) {
       return;
     }
+    if(transition != null){
+        if(transition.hasTransitionProperty(styles)){
+             transition.startTransition(styles);
+        }
+    }
+
     if (mStyles == null) {
-      mStyles = new WXStyle();
+        mStyles = new WXStyle();
     }
     mStyles.putAll(styles,byPesudo);
     super.dirty();
+  }
+
+  WXTransition transition;
+
+  public void applyStyle(Map<String, Object> styles){
+       updateStyle(styles);
+       applyStyleToNode();
   }
 
   /** package **/ void applyStyleToNode() {
@@ -728,5 +743,9 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
 
   public void setCloneThis(boolean cloneThis) {
     this.cloneThis = cloneThis;
+  }
+
+  public WXTransition getTransition() {
+    return transition;
   }
 }

@@ -316,4 +316,13 @@ public class Constants {
     String BANNER_DIGEST = "digest";
     String SAVE_PATH = "v8";
   }
+
+  public interface  TimeFunction{
+    public final static String LINEAR = "linear";
+    public final static String EASE_IN_OUT = "ease-in-out";
+    public final static String EASE_IN = "ease-in";
+    public final static String EASE_OUT = "ease-out";
+    public final static String EASE = "ease";
+    public final static String CUBIC_BEZIER = "cubic-bezier";
+  }
 }

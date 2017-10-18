@@ -386,6 +386,16 @@ class DOMActionContextImpl implements DOMActionContext {
     return mRegistry.get(ref);
   }
 
+  @Override
+  public void forceBatch() {
+     if(!mDestroy){
+       if(!mDirty){
+         mDirty = true;
+       }
+       batch();
+     }
+  }
+
   private WXAnimationBean createAnimationBean(String ref,Map<String, Object> style){
     if (style != null) {
       try {

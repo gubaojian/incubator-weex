@@ -61,6 +61,12 @@ import com.taobao.weex.utils.WXViewUtils;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.taobao.weex.common.Constants.TimeFunction.CUBIC_BEZIER;
+import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN;
+import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN_OUT;
+import static com.taobao.weex.common.Constants.TimeFunction.EASE_OUT;
+import static com.taobao.weex.common.Constants.TimeFunction.LINEAR;
+
 
 class AnimationAction implements DOMAction, RenderAction {
 
@@ -245,13 +251,13 @@ class AnimationAction implements DOMAction, RenderAction {
     String interpolator = mAnimationBean.timingFunction;
     if (!TextUtils.isEmpty(interpolator)) {
       switch (interpolator) {
-        case WXAnimationBean.EASE_IN:
+        case EASE_IN:
           return new AccelerateInterpolator();
-        case WXAnimationBean.EASE_OUT:
+        case EASE_OUT:
           return new DecelerateInterpolator();
-        case WXAnimationBean.EASE_IN_OUT:
+        case EASE_IN_OUT:
           return new AccelerateDecelerateInterpolator();
-        case WXAnimationBean.LINEAR:
+        case LINEAR:
           return new LinearInterpolator();
         default:
           //Parse cubic-bezier
@@ -264,7 +270,7 @@ class AnimationAction implements DOMAction, RenderAction {
                     return Float.parseFloat(raw);
                   }
                 });
-            List<Float> params = parser.parse(WXAnimationBean.CUBIC_BEZIER);
+            List<Float> params = parser.parse(CUBIC_BEZIER);
             if (params != null && params.size() == WXAnimationBean.NUM_CUBIC_PARAM) {
               return PathInterpolatorCompat.create(
                   params.get(0), params.get(1), params.get(2), params.get(3));

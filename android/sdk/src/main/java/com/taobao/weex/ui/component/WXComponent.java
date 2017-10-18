@@ -410,11 +410,17 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     mTraceInfo.uiThreadNanos += (System.nanoTime() - startNanos);
   }
 
-  public void updateStyle(WXComponent component){
+  protected void updateStyle(WXComponent component){
     ImmutableDomObject domObject = component.getDomObject();
     if(domObject !=null){
-      updateProperties(domObject.getStyles());
+        updateStyle(domObject.getStyles());
     }
+  }
+
+  public void updateStyle(Map<String, Object> props){
+     if(props != null){
+        updateProperties(props);
+     }
   }
 
   public void updateAttrs(WXComponent component){
