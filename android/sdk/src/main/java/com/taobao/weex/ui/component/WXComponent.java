@@ -1298,9 +1298,13 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
   public void setBackgroundColor(String color) {
     if (!TextUtils.isEmpty(color)) {
       int colorInt = WXResourceUtils.getColor(color);
-      if (!(colorInt == Color.TRANSPARENT && mBackgroundDrawable == null)){
-          getOrCreateBorder().setColor(colorInt);
-      }
+      setBackgroundColor(colorInt);
+    }
+  }
+
+  public void setBackgroundColor(int colorInt) {
+    if (!(colorInt == Color.TRANSPARENT && mBackgroundDrawable == null)){
+      getOrCreateBorder().setColor(colorInt);
     }
   }
 

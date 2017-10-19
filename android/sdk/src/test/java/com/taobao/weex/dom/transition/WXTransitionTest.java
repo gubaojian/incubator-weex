@@ -35,6 +35,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,5 +81,17 @@ public class WXTransitionTest  extends Application{
         transition.startTransition(updates);
 
 
+
+    }
+
+    @Test
+    public void testSplit(){
+
+        Assert.assertTrue(Arrays.equals(new String[]{"height", "width"}, WXTransition.PROPERTY_SPLIT_PATTERN.split("height|width")));
+        Assert.assertTrue(Arrays.equals(new String[]{"height", "width"}, WXTransition.PROPERTY_SPLIT_PATTERN.split("height,width")));
+
+
+        System.out.println(Arrays.toString(WXTransition.PROPERTY_SPLIT_PATTERN.split("height|width")));
+        System.out.println(Arrays.toString(WXTransition.PROPERTY_SPLIT_PATTERN.split("height,width")));
     }
 }

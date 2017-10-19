@@ -387,12 +387,11 @@ class DOMActionContextImpl implements DOMActionContext {
   }
 
   @Override
-  public void forceBatch() {
+  public void markDirty() {
      if(!mDestroy){
        if(!mDirty){
          mDirty = true;
        }
-       batch();
      }
   }
 

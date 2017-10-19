@@ -324,6 +324,7 @@ public class WXSwipeLayout extends FrameLayout implements NestedScrollingParent 
         lp.height = 0;
       }
 
+
       if (lp.height == 0) {
         isConfirm = false;
         mCurrentAction = INVALID;

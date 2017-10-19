@@ -65,7 +65,7 @@ public interface DOMActionContext {
   WXDomObject getDomByRef(String ref);
 
 
-  void forceBatch();
+  void markDirty();
 
   @Deprecated
   WXDomObject.Consumer getRemoveElementConsumer();

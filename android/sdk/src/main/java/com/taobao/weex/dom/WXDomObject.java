@@ -470,16 +470,20 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
 
   WXTransition transition;
 
-  public void applyStyle(Map<String, Object> styles){
+  public void updateApplyStyles(Map<String, Object> styles){
        updateStyle(styles);
-       applyStyleToNode();
+       applyStyleUpdates(styles);
   }
 
-  /** package **/ void applyStyleToNode() {
+
+  void applyStyleUpdates(Map<String, Object> updates) {
+    if(updates.size() == 0){
+      return;
+    }
     WXStyle stylesMap = getStyles();
     int vp = getViewPortWidth();
     if (!stylesMap.isEmpty()) {
-      for(Map.Entry<String,Object> item:stylesMap.entrySet()) {
+      for(Map.Entry<String,Object> item: updates.entrySet()) {
         switch (item.getKey()) {
           case Constants.Name.ALIGN_ITEMS:
             setAlignItems(stylesMap.getAlignItems());
@@ -582,6 +586,10 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
         }
       }
     }
+  }
+
+  /** package **/ void applyStyleToNode() {
+    applyStyleUpdates(getStyles());
   }
 
   public int childCount() {
