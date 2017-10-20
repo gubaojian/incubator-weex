@@ -29,6 +29,7 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
@@ -1302,9 +1303,21 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  public void setBackgroundColor(int colorInt) {
+  public void setBackgroundColor(final int colorInt) {
+    if(getHostView() == null){
+      return;
+    }
     if (!(colorInt == Color.TRANSPARENT && mBackgroundDrawable == null)){
-      getOrCreateBorder().setColor(colorInt);
+      if(Thread.currentThread() != Looper.getMainLooper().getThread()){
+         getHostView().post(new Runnable() {
+           @Override
+           public void run() {
+             getOrCreateBorder().setColor(colorInt);
+           }
+         });
+      }else{
+        getOrCreateBorder().setColor(colorInt);
+      }
     }
   }
 

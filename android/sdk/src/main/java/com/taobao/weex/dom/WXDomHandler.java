@@ -59,9 +59,13 @@ public class WXDomHandler implements Handler.Callback {
       }
     }
 
+
+
     if (!mHasBatch) {
       mHasBatch = true;
-      mWXDomManager.sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_BATCH, DELAY_TIME);
+      if(what != WXDomHandler.MsgType.WX_DOM_BATCH) {
+          mWXDomManager.sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_BATCH, DELAY_TIME);
+      }
     }
     switch (what) {
       case MsgType.WX_EXECUTE_ACTION:
@@ -124,6 +128,8 @@ public class WXDomHandler implements Handler.Callback {
     public static final int WX_EXECUTE_ACTION = 0xfe;
     public static final int WX_DOM_BATCH = 0xff;
     public static final int WX_CONSUME_RENDER_TASKS = 0xfa;
+
+    public static final int WX_DOM_START_BATCH = 0xfb;
 
     @Deprecated
     public static final int WX_COMPONENT_SIZE= 0xff1;

@@ -23,6 +23,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.text.TextUtils;
@@ -39,6 +41,7 @@ import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.DOMActionContext;
+import com.taobao.weex.dom.WXDomHandler;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.Spacing;
 import com.taobao.weex.ui.component.WXComponent;
@@ -59,6 +62,7 @@ import static com.taobao.weex.common.Constants.TimeFunction.EASE_OUT;
 import static com.taobao.weex.common.Constants.TimeFunction.LINEAR;
 
 /**
+ *   transition on dom thread
  *   transition-property: height;
  *   transition-duration: .3s;
  *   transition-delay: .05s;
@@ -94,11 +98,14 @@ public class WXTransition {
     private Map<String, Object> targetStyles;
     private Map<String, ValueAnimator> propertyAnimatorMap;
     private WXDomObject domObject;
+    private Handler handler;
+    private Runnable animationRunnable;
 
     public WXTransition() {
         this.properties = new ArrayList<>(4);
         this.targetStyles = new ArrayMap<>();
         this.propertyAnimatorMap = new ArrayMap<>();
+        this.handler = new Handler();
     }
 
 
@@ -118,127 +125,14 @@ public class WXTransition {
                 targetStyles.put(property, targetValue);
                 startValueAnimation(property, targetValue);
             }else{
+                if(propertyAnimatorMap.get(property) != null){
+
+                }
                 if(targetStyles.containsKey(property)){
                     domObject.getStyles().put(property, targetStyles.remove(property));
                 }
             }
         }
-
-        /**
-        if(targetStyles.size() == 0){
-            return;
-        }
-
-        PropertyValuesHolder[] holders = new  PropertyValuesHolder[targetStyles.size()];
-        Set<Map.Entry<String, Object>> styleEntries = targetStyles.entrySet();
-        WXStyle style = domObject.getStyles();
-        int index = 0 ;
-        for(Map.Entry<String, Object> entry : styleEntries){
-              String property =  entry.getKey();
-              switch (property){
-                   case Constants.Name.WIDTH:{
-                       holders[index] = PropertyValuesHolder.ofFloat(Constants.Name.WIDTH, domObject.getLayoutWidth(),
-                               WXViewUtils.getRealPxByWidth(WXUtils.getFloat(entry.getValue()), domObject.getViewPortWidth()));
-                   }
-                   break;
-                   case Constants.Name.HEIGHT:{
-                      holders[index] = PropertyValuesHolder.ofFloat(Constants.Name.HEIGHT, domObject.getLayoutHeight(),
-                              WXViewUtils.getRealPxByWidth(WXUtils.getFloat(entry.getValue()), domObject.getViewPortWidth()));
-                   }
-                   break;
-                  case Constants.Name.MARGIN_TOP:{
-                      holders[index] = PropertyValuesHolder.ofFloat(Constants.Name.MARGIN_TOP,  domObject.getMargin().get(Spacing.TOP),
-                              WXViewUtils.getRealPxByWidth(WXUtils.getFloatByViewport(entry.getValue(), domObject.getViewPortWidth()), domObject.getViewPortWidth()));
-                  }
-                  break;
-                  case Constants.Name.MARGIN_LEFT:{
-                      holders[index] = PropertyValuesHolder.ofFloat(Constants.Name.MARGIN_LEFT,  domObject.getMargin().get(Spacing.LEFT),
-                              WXViewUtils.getRealPxByWidth(WXUtils.getFloatByViewport(entry.getValue(), domObject.getViewPortWidth()), domObject.getViewPortWidth()));
-                  }
-                  break;
-                  case Constants.Name.MARGIN_RIGHT:{
-                      holders[index] = PropertyValuesHolder.ofFloat(Constants.Name.MARGIN_RIGHT,  domObject.getMargin().get(Spacing.RIGHT),
-                              WXViewUtils.getRealPxByWidth(WXUtils.getFloatByViewport(entry.getValue(), domObject.getViewPortWidth()), domObject.getViewPortWidth()));
-                  }
-                  break;
-                  case Constants.Name.MARGIN_BOTTOM:{
-                      holders[index] = PropertyValuesHolder.ofFloat(Constants.Name.MARGIN_BOTTOM,  domObject.getMargin().get(Spacing.BOTTOM),
-                              WXViewUtils.getRealPxByWidth(WXUtils.getFloatByViewport(entry.getValue(), domObject.getViewPortWidth()), domObject.getViewPortWidth()));
-                  }
-                  break;
-                  default:
-                      holders[index] = PropertyValuesHolder.ofFloat(property, 1, 1);
-                      break;
-              }
-        }
-        if(valueAnimator != null){
-            valueAnimator.cancel();
-        }
-        valueAnimator = ValueAnimator.ofPropertyValuesHolder(holders);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                PropertyValuesHolder holders[] = animation.getValues();
-                for(PropertyValuesHolder holder : holders){
-                    String property =  holder.getPropertyName();
-                    Log.e("weex", "work used " + property  + "   " + animation.getAnimatedValue(property));
-                    switch (property){
-                        case Constants.Name.WIDTH:{
-                            domObject.setStyleWidth((Float) animation.getAnimatedValue(property));
-                        }
-                        break;
-                        case Constants.Name.HEIGHT:{
-                            domObject.setStyleHeight((Float) animation.getAnimatedValue(property));
-                        }
-                        break;
-                        case Constants.Name.MARGIN_TOP:{
-                            domObject.setMargin(Spacing.TOP, (Float) animation.getAnimatedValue(property));
-                        }
-                        break;
-                        case Constants.Name.MARGIN_LEFT:{
-                            domObject.setMargin(Spacing.LEFT, (Float) animation.getAnimatedValue(property));
-                        }
-                        break;
-                        case Constants.Name.MARGIN_RIGHT:{
-                            domObject.setMargin(Spacing.RIGHT, (Float) animation.getAnimatedValue(property));
-                        }
-                        break;
-                        case Constants.Name.MARGIN_BOTTOM:{
-                            domObject.setMargin(Spacing.BOTTOM, (Float) animation.getAnimatedValue(property));
-                        }
-                        break;
-                        default:
-                            break;
-                    }
-                }
-
-                DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(domObject.getDomContext().getInstanceId());
-                if(domActionContext == null){
-                    return;
-                }
-                long start = System.currentTimeMillis();
-                domActionContext.markDirty();
-                WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(100, 0);
-                Log.e("weex", "work used " +  domObject.getRef() + "  " + (System.currentTimeMillis() - start));
-            }
-        });
-        valueAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                Log.e("weex", "animation end used " + domObject.getRef());
-                for(String property : properties){
-                    if(targetStyles.containsKey(property)){
-                        domObject.getStyles().put(property, targetStyles.remove(property));
-                    }
-                }
-            }
-        });
-        valueAnimator.setInterpolator(interpolator);
-        valueAnimator.setStartDelay((long) (delay));
-        valueAnimator.setDuration((long) (duration));
-        valueAnimator.start();
-         */
     }
 
     private void startValueAnimation(String property, Object value){
@@ -297,7 +191,6 @@ public class WXTransition {
             }
             break;
             default:
-                holder = PropertyValuesHolder.ofFloat(property, 1, 1);
                 break;
         }
         if(holder == null){
@@ -315,6 +208,10 @@ public class WXTransition {
                 PropertyValuesHolder holders[] = animation.getValues();
                 for(PropertyValuesHolder holder : holders){
                     String property =  holder.getPropertyName();
+                    if(WXEnvironment.isApkDebugable()){
+                        WXLogUtils.d("WXTransition on property  " + property + animation.getAnimatedValue(property)
+                        + " node ref " + domObject.getRef());
+                    }
                     Log.e("weex", "work used " + property  + "   " + animation.getAnimatedValue(property));
                     switch (property){
                         case Constants.Name.WIDTH:{
@@ -370,10 +267,11 @@ public class WXTransition {
                 if(domActionContext == null){
                     return;
                 }
-                long start = System.currentTimeMillis();
                 domActionContext.markDirty();
-                WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(100, 0);
-                Log.e("weex", "work used " +  domObject.getRef() + "  " + (System.currentTimeMillis() - start));
+                WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_BATCH, 0);
+                if(WXEnvironment.isApkDebugable()){
+                    WXLogUtils.d("WXTransition on property notify batch " +  domObject.getRef());
+                }
             }
         });
         valueAnimator.addListener(new AnimatorListenerAdapter() {
@@ -381,7 +279,9 @@ public class WXTransition {
             public void onAnimationEnd(Animator animationEnd) {
                 ValueAnimator  animation = (ValueAnimator) animationEnd;
                 super.onAnimationEnd(animation);
-                Log.e("weex", "animation end used " + domObject.getRef());
+                if(WXEnvironment.isApkDebugable()){
+                    WXLogUtils.d("WXTransition onAnimationEnd " +  domObject.getRef());
+                }
                 PropertyValuesHolder holders[] = animation.getValues();
                 for(PropertyValuesHolder holder : holders){
                     String property =  holder.getPropertyName();

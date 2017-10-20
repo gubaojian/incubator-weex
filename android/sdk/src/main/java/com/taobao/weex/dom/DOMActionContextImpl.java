@@ -19,6 +19,7 @@
 package com.taobao.weex.dom;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 
 import com.taobao.weex.WXEnvironment;
@@ -184,6 +185,9 @@ class DOMActionContextImpl implements DOMActionContext {
       batchEvent.ts = start;
       batchEvent.ph = "X";
       WXTracing.submit(batchEvent);
+    }
+    if(WXEnvironment.isApkDebugable()){
+        WXLogUtils.d("mInstanceId  " + mInstanceId  + " batch used " + (System.currentTimeMillis() - start));
     }
   }
 
