@@ -24,9 +24,9 @@ import android.animation.ArgbEvaluator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
+import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -36,8 +36,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.taobao.weex.WXEnvironment;
-import com.taobao.weex.WXSDKEngine;
-import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.DOMActionContext;
@@ -45,17 +43,20 @@ import com.taobao.weex.dom.WXDomHandler;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.Spacing;
 import com.taobao.weex.ui.component.WXComponent;
+import com.taobao.weex.utils.SingleFunctionParser;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXResourceUtils;
 import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static com.taobao.weex.common.Constants.TimeFunction.CUBIC_BEZIER;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN_OUT;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_OUT;
@@ -96,16 +97,17 @@ public class WXTransition {
     private float  duration;
     private float delay;
     private Map<String, Object> targetStyles;
-    private Map<String, ValueAnimator> propertyAnimatorMap;
     private WXDomObject domObject;
+    private Map<String, Object> pendingUpdates;
     private Handler handler;
     private Runnable animationRunnable;
+    private ValueAnimator valueAnimator;
 
     public WXTransition() {
         this.properties = new ArrayList<>(4);
         this.targetStyles = new ArrayMap<>();
-        this.propertyAnimatorMap = new ArrayMap<>();
         this.handler = new Handler();
+        this.pendingUpdates = new HashMap<>(8);
     }
 
 
@@ -117,25 +119,49 @@ public class WXTransition {
         }
         return false;
     }
-
     public void  startTransition(Map<String, Object> updates){
+          pendingUpdates.putAll(updates);
+          if(animationRunnable != null) {
+             handler.removeCallbacks(animationRunnable);
+          }
+          animationRunnable = new Runnable() {
+            @Override
+            public void run() {
+                doPendingTransitionAnimation();
+            }
+        };
+        handler.postDelayed(animationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), 15));
+
+    }
+
+    public void doPendingTransitionAnimation(){
+        if(pendingUpdates.size() == 0){
+            return;
+        }
+        if(valueAnimator != null){
+            valueAnimator.cancel();
+        }
+        Map<String, Object> updates = pendingUpdates;
+        PropertyValuesHolder[] holders = new PropertyValuesHolder[updates.size()];
+        int index = 0;
         for(String property : properties){
             if(updates.containsKey(property)){
                 Object targetValue = updates.remove(property);
                 targetStyles.put(property, targetValue);
-                startValueAnimation(property, targetValue);
+                holders[index] = createPropertyValueHolder(property, targetValue);
+                index++;
             }else{
-                if(propertyAnimatorMap.get(property) != null){
-
-                }
                 if(targetStyles.containsKey(property)){
                     domObject.getStyles().put(property, targetStyles.remove(property));
                 }
             }
         }
+        pendingUpdates.clear();
+        doPropertyValuesHolderAnimation(holders);
     }
 
-    private void startValueAnimation(String property, Object value){
+
+    private PropertyValuesHolder createPropertyValueHolder(String property, Object value){
         PropertyValuesHolder holder = null;
         switch (property){
             case Constants.Name.WIDTH:{
@@ -194,14 +220,15 @@ public class WXTransition {
                 break;
         }
         if(holder == null){
-            return;
+            holder  = PropertyValuesHolder.ofFloat(property, 1, 1);
         }
-        ValueAnimator valueAnimator = propertyAnimatorMap.get(property);
-        if(valueAnimator != null){
-            valueAnimator.cancel();
-        }
-        valueAnimator = ValueAnimator.ofPropertyValuesHolder(holder);
-        propertyAnimatorMap.put(property, valueAnimator);
+        return  holder;
+    }
+
+
+
+    private void doPropertyValuesHolderAnimation(PropertyValuesHolder[] holders){
+        valueAnimator = ValueAnimator.ofPropertyValuesHolder(holders);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -243,7 +270,7 @@ public class WXTransition {
                             if(domActionContext != null){
                                 WXComponent component = domActionContext.getCompByRef(domObject.getRef());
                                 if(component != null && component.getHostView() != null){
-                                    component.getHostView().setAlpha((Float) animation.getAnimatedValue(property));
+                                    component.setAlpha((Float) animation.getAnimatedValue(property));
                                 }
                             }
                         }
@@ -268,7 +295,7 @@ public class WXTransition {
                     return;
                 }
                 domActionContext.markDirty();
-                WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_BATCH, 0);
+                WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_TRANSITION_BATCH, 0);
                 if(WXEnvironment.isApkDebugable()){
                     WXLogUtils.d("WXTransition on property notify batch " +  domObject.getRef());
                 }
@@ -288,11 +315,12 @@ public class WXTransition {
                     if(targetStyles.containsKey(property)){
                         domObject.getStyles().put(property, targetStyles.remove(property));
                     }
-                    propertyAnimatorMap.remove(property);
                 }
             }
         });
-        valueAnimator.setInterpolator(interpolator);
+        if(interpolator != null) {
+            valueAnimator.setInterpolator(interpolator);
+        }
         valueAnimator.setStartDelay((long) (delay));
         valueAnimator.setDuration((long) (duration));
         valueAnimator.start();
@@ -327,18 +355,15 @@ public class WXTransition {
         if(transition.properties.isEmpty()){
             return  null;
         }
-        transition.duration = getSecond(style, TRANSITION_DURATION, 1);
-        transition.delay =  getSecond(style, TRANSITION_DELAY, 0);
+        transition.duration = parseTimeMillis(style, TRANSITION_DURATION, 1);
+        transition.delay =  parseTimeMillis(style, TRANSITION_DELAY, 0);
         transition.interpolator = createTimeInterpolator(WXUtils.getString(style.get(TRANSITION_TIMING_FUNCTION), null));
         transition.domObject = domObject;
         return  transition;
     }
 
-
-
-
-
-    private static float getSecond(Map<String, Object> style, String key, float defaultValue){
+    
+    private static float parseTimeMillis(Map<String, Object> style, String key, float defaultValue){
         String  duration = WXUtils.getString(style.get(key), null);
         if(duration != null){
             duration = duration.replaceAll("s", "");
@@ -366,11 +391,10 @@ public class WXTransition {
                 case LINEAR:
                     return new LinearInterpolator();
                 default:
-                    /**
                     //Parse cubic-bezier
                     try {
                         SingleFunctionParser<Float> parser = new SingleFunctionParser<>(
-                                mAnimationBean.timingFunction,
+                                interpolator,
                                 new SingleFunctionParser.FlatMapper<Float>() {
                                     @Override
                                     public Float map(String raw) {
@@ -378,15 +402,11 @@ public class WXTransition {
                                     }
                                 });
                         List<Float> params = parser.parse(CUBIC_BEZIER);
-                        if (params != null && params.size() == WXAnimationBean.NUM_CUBIC_PARAM) {
+                        if (params != null && params.size() == 4) {
                             return PathInterpolatorCompat.create(
                                     params.get(0), params.get(1), params.get(2), params.get(3));
-                        } else {
-                            return null;
                         }
-                    } catch (RuntimeException e) {
-                        return null;
-                    }*/
+                    } catch (RuntimeException e) {}
             }
         }
         return new LinearInterpolator();

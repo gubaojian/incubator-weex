@@ -1295,6 +1295,26 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
       }
     }
   }
+  public void setAlpha(final float alpha) {
+    if(getHostView() == null){
+      return;
+    }
+    if(Thread.currentThread() != Looper.getMainLooper().getThread()){
+      getHostView().post(new Runnable() {
+        @Override
+        public void run() {
+          if(getHostView() != null) {
+            getHostView().setAlpha(alpha);
+          }
+        }
+      });
+    }else{
+      if(getHostView() != null) {
+        getHostView().setAlpha(alpha);
+      }
+    }
+  }
+
 
   public void setBackgroundColor(String color) {
     if (!TextUtils.isEmpty(color)) {
@@ -1302,6 +1322,8 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
       setBackgroundColor(colorInt);
     }
   }
+
+
 
   public void setBackgroundColor(final int colorInt) {
     if(getHostView() == null){
