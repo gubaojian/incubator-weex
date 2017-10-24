@@ -29,11 +29,7 @@ import android.support.v4.util.ArraySet;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKManager;
@@ -120,11 +116,16 @@ public class WXTransition {
         return false;
     }
     public void  startTransition(Map<String, Object> updates){
-          pendingUpdates.putAll(updates);
-          if(animationRunnable != null) {
+        for(String property : properties){
+            if(updates.containsKey(property)){
+                Object targetValue = updates.remove(property);
+                pendingUpdates.put(property, targetValue);
+            }
+        }
+        if(animationRunnable != null) {
              handler.removeCallbacks(animationRunnable);
-          }
-          animationRunnable = new Runnable() {
+        }
+        animationRunnable = new Runnable() {
             @Override
             public void run() {
                 doPendingTransitionAnimation();
@@ -296,6 +297,7 @@ public class WXTransition {
                 }
                 domActionContext.markDirty();
                 WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_TRANSITION_BATCH, 0);
+
                 if(WXEnvironment.isApkDebugable()){
                     WXLogUtils.d("WXTransition on property notify batch " +  domObject.getRef());
                 }
@@ -383,13 +385,13 @@ public class WXTransition {
         if (!TextUtils.isEmpty(interpolator)) {
             switch (interpolator) {
                 case EASE_IN:
-                    return new AccelerateInterpolator();
+                    return PathInterpolatorCompat.create(0.42f,0f, 1f,1f);
                 case EASE_OUT:
-                    return new DecelerateInterpolator();
+                    return PathInterpolatorCompat.create(0f,0f, 0.58f,1f);
                 case EASE_IN_OUT:
-                    return new AccelerateDecelerateInterpolator();
+                    return PathInterpolatorCompat.create(0.42f,0f, 0.58f,1f);
                 case LINEAR:
-                    return new LinearInterpolator();
+                    return PathInterpolatorCompat.create(0.0f,0f, 1f,1f);
                 default:
                     //Parse cubic-bezier
                     try {
@@ -406,10 +408,12 @@ public class WXTransition {
                             return PathInterpolatorCompat.create(
                                     params.get(0), params.get(1), params.get(2), params.get(3));
                         }
-                    } catch (RuntimeException e) {}
+                    } catch (RuntimeException e) {
+                        WXLogUtils.e("WXTransition", e);
+                    }
             }
         }
-        return new LinearInterpolator();
+        return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
     }
 
 }
