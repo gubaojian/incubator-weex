@@ -21,14 +21,18 @@ package com.taobao.weex.dom.transition;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Property;
+import android.view.View;
 import android.view.animation.Interpolator;
 
 import com.taobao.weex.WXEnvironment;
@@ -38,6 +42,7 @@ import com.taobao.weex.dom.DOMActionContext;
 import com.taobao.weex.dom.WXDomHandler;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.Spacing;
+import com.taobao.weex.ui.animation.TransformParser;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.utils.SingleFunctionParser;
 import com.taobao.weex.utils.WXLogUtils;
@@ -86,6 +91,7 @@ public class WXTransition {
         SUPPORTED_PROPERTIES.add(Constants.Name.MARGIN_RIGHT);
         SUPPORTED_PROPERTIES.add(Constants.Name.OPACITY);
         SUPPORTED_PROPERTIES.add(Constants.Name.BACKGROUND_COLOR);
+        SUPPORTED_PROPERTIES.add(Constants.Name.TRANSFORM);
     }
 
     private List<String> properties;
@@ -98,6 +104,8 @@ public class WXTransition {
     private Handler handler;
     private Runnable animationRunnable;
     private ValueAnimator valueAnimator;
+    private Runnable transformRunnable;
+
 
     public WXTransition() {
         this.properties = new ArrayList<>(4);
@@ -122,6 +130,23 @@ public class WXTransition {
                 pendingUpdates.put(property, targetValue);
             }
         }
+        final  int delay = 15;
+        final String transform  = WXUtils.getString(pendingUpdates.remove(Constants.Name.TRANSFORM), null);
+        View targetView = getTargetView();
+        if(targetView != null){
+            if(!TextUtils.isEmpty(transform)){
+                transformRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        doTransformAnimation(transform);
+                    }
+                };
+            }
+            if(transformRunnable != null){
+                targetView.removeCallbacks(transformRunnable);
+                targetView.postDelayed(transformRunnable, delay);
+            }
+        }
         if(animationRunnable != null) {
              handler.removeCallbacks(animationRunnable);
         }
@@ -131,9 +156,24 @@ public class WXTransition {
                 doPendingTransitionAnimation();
             }
         };
-        handler.postDelayed(animationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), 15));
+        handler.postDelayed(animationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
 
     }
+
+    private void doTransformAnimation(String transform) {
+        Map<Property<View,Float>, Float>  properties = TransformParser.parseTransForm(transform, (int)domObject.getLayoutWidth(), (int)domObject.getLayoutHeight(), domObject.getViewPortWidth());
+        PropertyValuesHolder[]  holders = TransformParser.toHolders(properties);
+        View taregtView = getTargetView();
+        if(taregtView == null){
+            return;
+        }
+        ObjectAnimator animator =  ObjectAnimator.ofPropertyValuesHolder(taregtView, holders);
+        animator.setDuration((long) duration);
+        animator.setStartDelay((long) delay);
+        animator.setInterpolator(interpolator);
+        animator.start();
+    }
+
 
     public void doPendingTransitionAnimation(){
         if(pendingUpdates.size() == 0){
@@ -409,11 +449,25 @@ public class WXTransition {
                                     params.get(0), params.get(1), params.get(2), params.get(3));
                         }
                     } catch (RuntimeException e) {
-                        WXLogUtils.e("WXTransition", e);
+                        if(WXEnvironment.isApkDebugable()) {
+                            WXLogUtils.e("WXTransition", e);
+                        }
                     }
             }
         }
         return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
+    }
+
+
+    private View getTargetView(){
+        DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(domObject.getDomContext().getInstanceId());
+        if(domActionContext != null){
+            WXComponent component = domActionContext.getCompByRef(domObject.getRef());
+            if(component != null && component.getHostView() != null) {
+                return  component.getHostView();
+            }
+        }
+        return null;
     }
 
 }
