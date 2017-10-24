@@ -285,6 +285,8 @@ public class Constants {
     String UNSTICKY = "unsticky";
     String STICKY = "sticky";
 
+    String ON_TRANSITION_END = "transitionEnd";
+
     interface SLOT_LIFECYCLE{
       String CREATE = "create";
       String ATTACH = "attach";

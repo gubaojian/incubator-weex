@@ -74,10 +74,12 @@ class UpdateStyleAction extends TraceableAction implements DOMAction, RenderActi
     mBorder = domObject.getBorder();
 
     if(mData.get(WXDomObject.TRANSFORM) != null || mData.get(WXDomObject.TRANSFORM_ORIGIN) != null){
-      Map<String, Object> animationMap = new ArrayMap<>(2);
-      animationMap.put(WXDomObject.TRANSFORM, mData.get(WXDomObject.TRANSFORM));
-      animationMap.put(WXDomObject.TRANSFORM_ORIGIN, mData.get(WXDomObject.TRANSFORM_ORIGIN));
-      context.addAnimationForElement(mRef, animationMap);
+      if(domObject.getTransition() == null) {
+         Map<String, Object> animationMap = new ArrayMap<>(2);
+         animationMap.put(WXDomObject.TRANSFORM, mData.get(WXDomObject.TRANSFORM));
+         animationMap.put(WXDomObject.TRANSFORM_ORIGIN, mData.get(WXDomObject.TRANSFORM_ORIGIN));
+         context.addAnimationForElement(mRef, animationMap);
+      }
     }
 
 

@@ -25,12 +25,10 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.os.Handler;
-import android.os.Looper;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -102,9 +100,10 @@ public class WXTransition {
     private WXDomObject domObject;
     private Map<String, Object> pendingUpdates;
     private Handler handler;
-    private Runnable animationRunnable;
-    private ValueAnimator valueAnimator;
+    private Runnable transitionRunnable;
+    private ValueAnimator transitionValueAnimator;
     private Runnable transformRunnable;
+    private Runnable notifyTransitionEndRunnable;
 
 
     public WXTransition() {
@@ -130,6 +129,17 @@ public class WXTransition {
                 pendingUpdates.put(property, targetValue);
             }
         }
+        if(notifyTransitionEndRunnable == null){
+            notifyTransitionEndRunnable = new Runnable(){
+                @Override
+                public void run() {
+                    WXComponent component = getComponent();
+                    if(component != null && domObject.getEvents().contains(Constants.Event.ON_TRANSITION_END)){
+                        component.fireEvent(Constants.Event.ON_TRANSITION_END);
+                    }
+                }
+            };
+        }
         final  int delay = 15;
         final String transform  = WXUtils.getString(pendingUpdates.remove(Constants.Name.TRANSFORM), null);
         View targetView = getTargetView();
@@ -147,16 +157,17 @@ public class WXTransition {
                 targetView.postDelayed(transformRunnable, delay);
             }
         }
-        if(animationRunnable != null) {
-             handler.removeCallbacks(animationRunnable);
+
+        if(transitionRunnable != null) {
+             handler.removeCallbacks(transitionRunnable);
         }
-        animationRunnable = new Runnable() {
+        transitionRunnable = new Runnable() {
             @Override
             public void run() {
                 doPendingTransitionAnimation();
             }
         };
-        handler.postDelayed(animationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
+        handler.postDelayed(transitionRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
 
     }
 
@@ -171,16 +182,25 @@ public class WXTransition {
         animator.setDuration((long) duration);
         animator.setStartDelay((long) delay);
         animator.setInterpolator(interpolator);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                notifyTansitionEndEvent();
+            }
+        });
         animator.start();
     }
 
 
     public void doPendingTransitionAnimation(){
-        if(pendingUpdates.size() == 0){
-            return;
+        if(transitionValueAnimator != null){
+            transitionValueAnimator.cancel();
+            transitionValueAnimator = null;
         }
-        if(valueAnimator != null){
-            valueAnimator.cancel();
+        if(pendingUpdates.size() == 0){
+            transformRunnable = null;
+            return;
         }
         Map<String, Object> updates = pendingUpdates;
         PropertyValuesHolder[] holders = new PropertyValuesHolder[updates.size()];
@@ -198,7 +218,7 @@ public class WXTransition {
             }
         }
         pendingUpdates.clear();
-        doPropertyValuesHolderAnimation(holders);
+        doTransitionPropertyValuesHolderAnimation(holders);
     }
 
 
@@ -268,19 +288,14 @@ public class WXTransition {
 
 
 
-    private void doPropertyValuesHolderAnimation(PropertyValuesHolder[] holders){
-        valueAnimator = ValueAnimator.ofPropertyValuesHolder(holders);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    private void doTransitionPropertyValuesHolderAnimation(PropertyValuesHolder[] holders){
+        transitionValueAnimator = ValueAnimator.ofPropertyValuesHolder(holders);
+        transitionValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 PropertyValuesHolder holders[] = animation.getValues();
                 for(PropertyValuesHolder holder : holders){
                     String property =  holder.getPropertyName();
-                    if(WXEnvironment.isApkDebugable()){
-                        WXLogUtils.d("WXTransition on property  " + property + animation.getAnimatedValue(property)
-                        + " node ref " + domObject.getRef());
-                    }
-                    Log.e("weex", "work used " + property  + "   " + animation.getAnimatedValue(property));
                     switch (property){
                         case Constants.Name.WIDTH:{
                             domObject.setStyleWidth((Float) animation.getAnimatedValue(property));
@@ -337,13 +352,9 @@ public class WXTransition {
                 }
                 domActionContext.markDirty();
                 WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_TRANSITION_BATCH, 0);
-
-                if(WXEnvironment.isApkDebugable()){
-                    WXLogUtils.d("WXTransition on property notify batch " +  domObject.getRef());
-                }
             }
         });
-        valueAnimator.addListener(new AnimatorListenerAdapter() {
+        transitionValueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animationEnd) {
                 ValueAnimator  animation = (ValueAnimator) animationEnd;
@@ -358,14 +369,15 @@ public class WXTransition {
                         domObject.getStyles().put(property, targetStyles.remove(property));
                     }
                 }
+                notifyTansitionEndEvent();
             }
         });
         if(interpolator != null) {
-            valueAnimator.setInterpolator(interpolator);
+            transitionValueAnimator.setInterpolator(interpolator);
         }
-        valueAnimator.setStartDelay((long) (delay));
-        valueAnimator.setDuration((long) (duration));
-        valueAnimator.start();
+        transitionValueAnimator.setStartDelay((long) (delay));
+        transitionValueAnimator.setDuration((long) (duration));
+        transitionValueAnimator.start();
     }
 
     /**
@@ -456,6 +468,25 @@ public class WXTransition {
             }
         }
         return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
+    }
+
+    private void notifyTansitionEndEvent(){
+        if(notifyTransitionEndRunnable != null){
+            View view = getTargetView();
+            if(view != null){
+                view.post(notifyTransitionEndRunnable);
+            }
+            notifyTransitionEndRunnable = null;
+        }
+    }
+
+    private WXComponent getComponent(){
+        DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(domObject.getDomContext().getInstanceId());
+        if(domActionContext != null){
+            WXComponent component = domActionContext.getCompByRef(domObject.getRef());
+            return  component;
+        }
+        return null;
     }
 
 
