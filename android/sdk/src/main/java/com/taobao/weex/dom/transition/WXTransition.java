@@ -470,10 +470,10 @@ public class WXTransition {
         return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
     }
 
-    private void notifyTansitionEndEvent(){
+    private synchronized void notifyTansitionEndEvent(){
         if(notifyTransitionEndRunnable != null){
             View view = getTargetView();
-            if(view != null){
+            if(view != null &&  notifyTransitionEndRunnable != null){
                 view.post(notifyTransitionEndRunnable);
             }
             notifyTransitionEndRunnable = null;
