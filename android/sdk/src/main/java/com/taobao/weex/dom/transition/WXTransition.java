@@ -24,6 +24,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
@@ -40,6 +41,7 @@ import com.taobao.weex.dom.DOMActionContext;
 import com.taobao.weex.dom.WXDomHandler;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.Spacing;
+import com.taobao.weex.ui.animation.BackgroundColorProperty;
 import com.taobao.weex.ui.animation.TransformParser;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.utils.SingleFunctionParser;
@@ -49,7 +51,6 @@ import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -79,41 +80,93 @@ public class WXTransition {
     public static final  Pattern PROPERTY_SPLIT_PATTERN = Pattern.compile("\\||,");
 
 
-    public static final Set<String> SUPPORTED_PROPERTIES = new ArraySet<>();
+    /**
+     * layout animation property
+     * */
+    private static final Set<String> LAYOUT_PROPERTIES = new ArraySet<>();
     static {
-        SUPPORTED_PROPERTIES.add(Constants.Name.WIDTH);
-        SUPPORTED_PROPERTIES.add(Constants.Name.HEIGHT);
-        SUPPORTED_PROPERTIES.add(Constants.Name.MARGIN_TOP);
-        SUPPORTED_PROPERTIES.add(Constants.Name.MARGIN_BOTTOM);
-        SUPPORTED_PROPERTIES.add(Constants.Name.MARGIN_LEFT);
-        SUPPORTED_PROPERTIES.add(Constants.Name.MARGIN_RIGHT);
-        SUPPORTED_PROPERTIES.add(Constants.Name.OPACITY);
-        SUPPORTED_PROPERTIES.add(Constants.Name.BACKGROUND_COLOR);
-        SUPPORTED_PROPERTIES.add(Constants.Name.TRANSFORM);
+        LAYOUT_PROPERTIES.add(Constants.Name.WIDTH);
+        LAYOUT_PROPERTIES.add(Constants.Name.HEIGHT);
+        LAYOUT_PROPERTIES.add(Constants.Name.MARGIN_TOP);
+        LAYOUT_PROPERTIES.add(Constants.Name.MARGIN_BOTTOM);
+        LAYOUT_PROPERTIES.add(Constants.Name.MARGIN_LEFT);
+        LAYOUT_PROPERTIES.add(Constants.Name.MARGIN_RIGHT);
+    }
+
+    /**
+     * transform animation property, use android system animaton ability
+     * */
+    private static final Set<String> TRANSFORM_PROPERTIES = new ArraySet<>();
+    static {
+        TRANSFORM_PROPERTIES.add(Constants.Name.OPACITY);
+        TRANSFORM_PROPERTIES.add(Constants.Name.BACKGROUND_COLOR);
+        TRANSFORM_PROPERTIES.add(Constants.Name.TRANSFORM);
     }
 
     private List<String> properties;
     private Interpolator  interpolator;
     private float  duration;
     private float delay;
-    private Map<String, Object> targetStyles;
     private WXDomObject domObject;
-    private Map<String, Object> pendingUpdates;
     private Handler handler;
-    private Runnable transitionRunnable;
-    private ValueAnimator transitionValueAnimator;
-    private Runnable transformRunnable;
+    private Runnable layoutAnimationRunnable;
+    private ValueAnimator layoutValueAnimator;
+    private Map<String, Object> layoutPendingUpdates;
+    private ObjectAnimator transformAnimator;
+    private Runnable transformAnimationRunnable;
+    private Map<String, Object> transformPendingUpdates;
     private Runnable notifyTransitionEndRunnable;
+    private Map<String, Object> targetStyles;
 
 
     public WXTransition() {
         this.properties = new ArrayList<>(4);
-        this.targetStyles = new ArrayMap<>();
         this.handler = new Handler();
-        this.pendingUpdates = new HashMap<>(8);
+        this.layoutPendingUpdates = new ArrayMap<>();
+        this.transformPendingUpdates = new ArrayMap<>();
+        this.targetStyles = new ArrayMap<>();
+    }
+
+    /**
+     * create transition from map styles if style contains transitionProperty
+     * */
+    public static WXTransition fromMap(Map<String, Object> style, WXDomObject domObject){
+        if(style.get(TRANSITION_PROPERTY) == null){
+            return  null;
+        }
+        String propertyString = WXUtils.getString(style.get(TRANSITION_PROPERTY), null);
+        if(propertyString == null){
+            return null;
+        }
+        WXTransition transition  = new WXTransition();
+        String[] propertiesArray = PROPERTY_SPLIT_PATTERN.split(propertyString);
+        for(String property : propertiesArray){
+            String trim = property.trim();
+            if(TextUtils.isEmpty(trim)){
+                continue;
+            }
+            if(!(LAYOUT_PROPERTIES.contains(trim) || TRANSFORM_PROPERTIES.contains(trim))){
+                if(WXEnvironment.isApkDebugable()){
+                    WXLogUtils.e("WXTransition Property Not Supported" + trim + " in " + propertyString);
+                }
+                continue;
+            }
+            transition.properties.add(trim);
+        }
+        if(transition.properties.isEmpty()){
+            return  null;
+        }
+        transition.duration = parseTimeMillis(style, TRANSITION_DURATION, 1);
+        transition.delay =  parseTimeMillis(style, TRANSITION_DELAY, 0);
+        transition.interpolator = createTimeInterpolator(WXUtils.getString(style.get(TRANSITION_TIMING_FUNCTION), null));
+        transition.domObject = domObject;
+        return  transition;
     }
 
 
+    /**
+     * check updates has transition property
+     * */
     public boolean hasTransitionProperty(Map<String, Object> styles){
         for(String property : properties){
             if(styles.containsKey(property)){
@@ -122,11 +175,24 @@ public class WXTransition {
         }
         return false;
     }
+
+
+    /**
+     * start transition animation
+     * */
     public void  startTransition(Map<String, Object> updates){
+        View taregtView = getTargetView();
+        if(taregtView == null){
+            return;
+        }
         for(String property : properties){
             if(updates.containsKey(property)){
                 Object targetValue = updates.remove(property);
-                pendingUpdates.put(property, targetValue);
+                if(LAYOUT_PROPERTIES.contains(property)) {
+                    layoutPendingUpdates.put(property, targetValue);
+                }else if(TRANSFORM_PROPERTIES.contains(property)){
+                    transformPendingUpdates.put(property, targetValue);
+                }
             }
         }
         if(notifyTransitionEndRunnable == null){
@@ -141,75 +207,130 @@ public class WXTransition {
             };
         }
         final  int delay = 15;
-        final String transform  = WXUtils.getString(pendingUpdates.remove(Constants.Name.TRANSFORM), null);
         View targetView = getTargetView();
         if(targetView != null){
-            if(!TextUtils.isEmpty(transform)){
-                transformRunnable = new Runnable() {
+            if(transformAnimationRunnable != null){
+                targetView.removeCallbacks(transformAnimationRunnable);
+            }
+            if(transformPendingUpdates.size() > 0){
+                transformAnimationRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        doTransformAnimation(transform);
+                        doTransformAnimation();
                     }
                 };
             }
-            if(transformRunnable != null){
-                targetView.removeCallbacks(transformRunnable);
-                targetView.postDelayed(transformRunnable, delay);
+            if(transformAnimationRunnable != null){
+                targetView.postDelayed(transformAnimationRunnable, delay);
             }
         }
 
-        if(transitionRunnable != null) {
-             handler.removeCallbacks(transitionRunnable);
+        if(layoutAnimationRunnable != null) {
+             handler.removeCallbacks(layoutAnimationRunnable);
         }
-        transitionRunnable = new Runnable() {
+        layoutAnimationRunnable = new Runnable() {
             @Override
             public void run() {
-                doPendingTransitionAnimation();
+                doPendingLayoutAnimation();
             }
         };
-        handler.postDelayed(transitionRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
+        handler.postDelayed(layoutAnimationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
 
     }
 
-    private void doTransformAnimation(String transform) {
-        Map<Property<View,Float>, Float>  properties = TransformParser.parseTransForm(transform, (int)domObject.getLayoutWidth(), (int)domObject.getLayoutHeight(), domObject.getViewPortWidth());
-        PropertyValuesHolder[]  holders = TransformParser.toHolders(properties);
-        View taregtView = getTargetView();
+
+    /**
+     *  transform, opacity, backgroundcolor use android system animation in main thread
+     * */
+    private void doTransformAnimation() {
+        if(transformAnimator != null){
+            transformAnimator.cancel();
+        }
+        transformAnimationRunnable = null;
+        layoutAnimationRunnable = null;
+        final View taregtView = getTargetView();
         if(taregtView == null){
             return;
         }
-        ObjectAnimator animator =  ObjectAnimator.ofPropertyValuesHolder(taregtView, holders);
-        animator.setDuration((long) duration);
-        animator.setStartDelay((long) delay);
-        animator.setInterpolator(interpolator);
-        animator.addListener(new AnimatorListenerAdapter() {
+        List<PropertyValuesHolder> holders = new ArrayList<>(8);
+        String transform  = WXUtils.getString(transformPendingUpdates.remove(Constants.Name.TRANSFORM), null);
+        if(TextUtils.isEmpty(transform)){
+            Map<Property<View,Float>, Float>  properties = TransformParser.parseTransForm(transform, (int)domObject.getLayoutWidth(), (int)domObject.getLayoutHeight(), domObject.getViewPortWidth());
+            PropertyValuesHolder[]  transformHolders = TransformParser.toHolders(properties);
+            for(PropertyValuesHolder holder : transformHolders){
+                holders.add(holder);
+            }
+        }
+
+        for(String property : properties){
+            if(!TRANSFORM_PROPERTIES.contains(property)){
+                continue;
+            }
+            if(!transformPendingUpdates.containsKey(property)){
+                if(targetStyles.containsKey(property)){
+                    domObject.getStyles().put(property, targetStyles.remove(property));
+                }
+                continue;
+            }
+            Object value = transformPendingUpdates.remove(property);
+            targetStyles.put(property, value);
+            switch (property){
+                case Constants.Name.OPACITY:{
+                    holders.add(PropertyValuesHolder.ofFloat(View.ALPHA, taregtView.getAlpha(), WXUtils.getFloat(value, 1.0f)));
+                }
+                break;
+                case Constants.Name.BACKGROUND_COLOR:{
+                    int fromColor = WXResourceUtils.getColor(WXUtils.getString(domObject.getStyles().getBackgroundColor(), null), 0);
+                    int toColor = WXResourceUtils.getColor(WXUtils.getString(value, null), 0);
+                    holders.add(PropertyValuesHolder.ofObject(new BackgroundColorProperty(), new ArgbEvaluator(), fromColor,toColor));
+                }
+                break;
+                default:break;
+            }
+        }
+        if(taregtView.getLayerType() != View.LAYER_TYPE_HARDWARE) {
+            taregtView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        }
+        transformAnimator =  ObjectAnimator.ofPropertyValuesHolder(taregtView, holders.toArray(new PropertyValuesHolder[holders.size()]));
+        transformAnimator.setDuration((long) duration);
+        transformAnimator.setStartDelay((long) delay);
+        transformAnimator.setInterpolator(interpolator);
+        transformAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 notifyTansitionEndEvent();
+                ObjectAnimator animator = (ObjectAnimator) animation;
+                moveTargetStyleToDom(animator.getValues());
             }
         });
-        animator.start();
+        transformAnimator.start();
     }
 
 
-    public void doPendingTransitionAnimation(){
-        if(transitionValueAnimator != null){
-            transitionValueAnimator.cancel();
-            transitionValueAnimator = null;
+    public void doPendingLayoutAnimation(){
+        if(layoutValueAnimator != null){
+            layoutValueAnimator.cancel();
+            layoutValueAnimator = null;
         }
-        if(pendingUpdates.size() == 0){
-            transformRunnable = null;
-            return;
-        }
-        Map<String, Object> updates = pendingUpdates;
+        transformAnimationRunnable = null;
+        layoutAnimationRunnable = null;
+        Map<String, Object> updates = layoutPendingUpdates;
         PropertyValuesHolder[] holders = new PropertyValuesHolder[updates.size()];
         int index = 0;
         for(String property : properties){
+            if(!LAYOUT_PROPERTIES.contains(property)){
+                continue;
+            }
             if(updates.containsKey(property)){
                 Object targetValue = updates.remove(property);
                 targetStyles.put(property, targetValue);
-                holders[index] = createPropertyValueHolder(property, targetValue);
+                holders[index] = createLayoutPropertyValueHolder(property, targetValue);
                 index++;
             }else{
                 if(targetStyles.containsKey(property)){
@@ -217,12 +338,12 @@ public class WXTransition {
                 }
             }
         }
-        pendingUpdates.clear();
-        doTransitionPropertyValuesHolderAnimation(holders);
+        layoutPendingUpdates.clear();
+        doLayoutPropertyValuesHolderAnimation(holders);
     }
 
 
-    private PropertyValuesHolder createPropertyValueHolder(String property, Object value){
+    private PropertyValuesHolder createLayoutPropertyValueHolder(String property, Object value){
         PropertyValuesHolder holder = null;
         switch (property){
             case Constants.Name.WIDTH:{
@@ -255,28 +376,6 @@ public class WXTransition {
                         WXViewUtils.getRealPxByWidth(WXUtils.getFloatByViewport(value, domObject.getViewPortWidth()), domObject.getViewPortWidth()));
             }
             break;
-            case Constants.Name.OPACITY:{
-                DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(domObject.getDomContext().getInstanceId());
-                if(domActionContext != null){
-                    WXComponent component = domActionContext.getCompByRef(domObject.getRef());
-                    if(component != null && component.getHostView() != null){
-                        holder = PropertyValuesHolder.ofFloat(Constants.Name.OPACITY,  component.getHostView().getAlpha(), WXUtils.getFloat(value, 0.0f));
-                    }
-                }
-            }
-            break;
-            case Constants.Name.BACKGROUND_COLOR:{
-                DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(domObject.getDomContext().getInstanceId());
-                if(domActionContext != null){
-                    WXComponent component = domActionContext.getCompByRef(domObject.getRef());
-                    if(component != null && component.getHostView() != null){
-                        int color = WXResourceUtils.getColor(WXUtils.getString(domObject.getStyles().getBackgroundColor(), null), 0);
-                        holder = PropertyValuesHolder.ofInt(Constants.Name.BACKGROUND_COLOR, color, WXResourceUtils.getColor(WXUtils.getString(value, null), 0));
-                        holder.setEvaluator(new ArgbEvaluator());
-                    }
-                }
-            }
-            break;
             default:
                 break;
         }
@@ -286,11 +385,9 @@ public class WXTransition {
         return  holder;
     }
 
-
-
-    private void doTransitionPropertyValuesHolderAnimation(PropertyValuesHolder[] holders){
-        transitionValueAnimator = ValueAnimator.ofPropertyValuesHolder(holders);
-        transitionValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    private void doLayoutPropertyValuesHolderAnimation(PropertyValuesHolder[] holders){
+        layoutValueAnimator = ValueAnimator.ofPropertyValuesHolder(holders);
+        layoutValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 PropertyValuesHolder holders[] = animation.getValues();
@@ -321,26 +418,6 @@ public class WXTransition {
                             domObject.setMargin(Spacing.BOTTOM, (Float) animation.getAnimatedValue(property));
                         }
                         break;
-                        case Constants.Name.OPACITY:{
-                            DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(domObject.getDomContext().getInstanceId());
-                            if(domActionContext != null){
-                                WXComponent component = domActionContext.getCompByRef(domObject.getRef());
-                                if(component != null && component.getHostView() != null){
-                                    component.setAlpha((Float) animation.getAnimatedValue(property));
-                                }
-                            }
-                        }
-                        break;
-                        case Constants.Name.BACKGROUND_COLOR:{
-                            DOMActionContext domActionContext = WXSDKManager.getInstance().getWXDomManager().getDomContext(domObject.getDomContext().getInstanceId());
-                            if(domActionContext != null){
-                                WXComponent component = domActionContext.getCompByRef(domObject.getRef());
-                                if(component != null && component.getHostView() != null){
-                                    component.setBackgroundColor((Integer) animation.getAnimatedValue(property));
-                                }
-                            }
-                        }
-                        break;
                         default:
                             break;
                     }
@@ -354,7 +431,7 @@ public class WXTransition {
                 WXSDKManager.getInstance().getWXDomManager().sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_TRANSITION_BATCH, 0);
             }
         });
-        transitionValueAnimator.addListener(new AnimatorListenerAdapter() {
+        layoutValueAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animationEnd) {
                 ValueAnimator  animation = (ValueAnimator) animationEnd;
@@ -363,112 +440,18 @@ public class WXTransition {
                     WXLogUtils.d("WXTransition onAnimationEnd " +  domObject.getRef());
                 }
                 PropertyValuesHolder holders[] = animation.getValues();
-                for(PropertyValuesHolder holder : holders){
-                    String property =  holder.getPropertyName();
-                    if(targetStyles.containsKey(property)){
-                        domObject.getStyles().put(property, targetStyles.remove(property));
-                    }
-                }
+                moveTargetStyleToDom(holders);
                 notifyTansitionEndEvent();
             }
         });
         if(interpolator != null) {
-            transitionValueAnimator.setInterpolator(interpolator);
+            layoutValueAnimator.setInterpolator(interpolator);
         }
-        transitionValueAnimator.setStartDelay((long) (delay));
-        transitionValueAnimator.setDuration((long) (duration));
-        transitionValueAnimator.start();
+        layoutValueAnimator.setStartDelay((long) (delay));
+        layoutValueAnimator.setDuration((long) (duration));
+        layoutValueAnimator.start();
     }
 
-    /**
-     * create transition from map, update map properties.
-     * */
-    public static WXTransition fromMap(Map<String, Object> style, WXDomObject domObject){
-        if(style.get(TRANSITION_PROPERTY) == null){
-            return  null;
-        }
-        String propertyString = WXUtils.getString(style.get(TRANSITION_PROPERTY), null);
-        if(propertyString == null){
-            return null;
-        }
-        WXTransition transition  = new WXTransition();
-        String[] propertiesArray = PROPERTY_SPLIT_PATTERN.split(propertyString);
-        for(String property : propertiesArray){
-            String trim = property.trim();
-            if(TextUtils.isEmpty(trim)){
-                continue;
-            }
-            if(!SUPPORTED_PROPERTIES.contains(trim)){
-                if(WXEnvironment.isApkDebugable()){
-                    WXLogUtils.e("WXTransition Property Not Supported" + trim + " in " + propertyString);
-                }
-                continue;
-            }
-            transition.properties.add(trim);
-        }
-        if(transition.properties.isEmpty()){
-            return  null;
-        }
-        transition.duration = parseTimeMillis(style, TRANSITION_DURATION, 1);
-        transition.delay =  parseTimeMillis(style, TRANSITION_DELAY, 0);
-        transition.interpolator = createTimeInterpolator(WXUtils.getString(style.get(TRANSITION_TIMING_FUNCTION), null));
-        transition.domObject = domObject;
-        return  transition;
-    }
-
-    
-    private static float parseTimeMillis(Map<String, Object> style, String key, float defaultValue){
-        String  duration = WXUtils.getString(style.get(key), null);
-        if(duration != null){
-            duration = duration.replaceAll("s", "");
-        }
-        if(TextUtils.isEmpty(duration)){
-            return  defaultValue;
-        }
-        try{
-           return Float.parseFloat(duration);
-        }catch (NumberFormatException e){
-            return  defaultValue;
-        }
-    }
-
-
-    private static Interpolator createTimeInterpolator(String interpolator) {
-        if (!TextUtils.isEmpty(interpolator)) {
-            switch (interpolator) {
-                case EASE_IN:
-                    return PathInterpolatorCompat.create(0.42f,0f, 1f,1f);
-                case EASE_OUT:
-                    return PathInterpolatorCompat.create(0f,0f, 0.58f,1f);
-                case EASE_IN_OUT:
-                    return PathInterpolatorCompat.create(0.42f,0f, 0.58f,1f);
-                case LINEAR:
-                    return PathInterpolatorCompat.create(0.0f,0f, 1f,1f);
-                default:
-                    //Parse cubic-bezier
-                    try {
-                        SingleFunctionParser<Float> parser = new SingleFunctionParser<>(
-                                interpolator,
-                                new SingleFunctionParser.FlatMapper<Float>() {
-                                    @Override
-                                    public Float map(String raw) {
-                                        return Float.parseFloat(raw);
-                                    }
-                                });
-                        List<Float> params = parser.parse(CUBIC_BEZIER);
-                        if (params != null && params.size() == 4) {
-                            return PathInterpolatorCompat.create(
-                                    params.get(0), params.get(1), params.get(2), params.get(3));
-                        }
-                    } catch (RuntimeException e) {
-                        if(WXEnvironment.isApkDebugable()) {
-                            WXLogUtils.e("WXTransition", e);
-                        }
-                    }
-            }
-        }
-        return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
-    }
 
     private synchronized void notifyTansitionEndEvent(){
         if(notifyTransitionEndRunnable != null){
@@ -499,6 +482,82 @@ public class WXTransition {
             }
         }
         return null;
+    }
+
+
+    /**
+     * move styles to dom
+     * */
+    private void moveTargetStyleToDom(PropertyValuesHolder holders[]){
+        for(PropertyValuesHolder holder : holders){
+            String property =  holder.getPropertyName();
+            if(View.ALPHA.getName().equals(property)){
+                property = Constants.Name.OPACITY;
+            }
+            if(targetStyles.containsKey(property)){
+                domObject.getStyles().put(property, targetStyles.remove(property));
+            }
+        }
+    }
+
+
+    /**
+     * get time millis
+     * */
+    private static float parseTimeMillis(Map<String, Object> style, String key, float defaultValue){
+        String  duration = WXUtils.getString(style.get(key), null);
+        if(duration != null){
+            duration = duration.replaceAll("s", "");
+        }
+        if(TextUtils.isEmpty(duration)){
+            return  defaultValue;
+        }
+        try{
+           return Float.parseFloat(duration);
+        }catch (NumberFormatException e){
+            return  defaultValue;
+        }
+    }
+
+    /**
+     * create interpolcator same with web
+     * http://www.w3school.com.cn/cssref/pr_transition-timing-function.asp
+     * */
+    private static Interpolator createTimeInterpolator(String interpolator) {
+        if (!TextUtils.isEmpty(interpolator)) {
+            switch (interpolator) {
+                case EASE_IN:
+                    return PathInterpolatorCompat.create(0.42f,0f, 1f,1f);
+                case EASE_OUT:
+                    return PathInterpolatorCompat.create(0f,0f, 0.58f,1f);
+                case EASE_IN_OUT:
+                    return PathInterpolatorCompat.create(0.42f,0f, 0.58f,1f);
+                case LINEAR:
+                    return PathInterpolatorCompat.create(0.0f,0f, 1f,1f);
+                default:
+                    try {
+                        //Parse cubic-bezier
+                        SingleFunctionParser<Float> parser = new SingleFunctionParser<>(
+                                interpolator,
+                                new SingleFunctionParser.FlatMapper<Float>() {
+                                    @Override
+                                    public Float map(String raw) {
+                                        return Float.parseFloat(raw);
+                                    }
+                                });
+                        List<Float> params = parser.parse(CUBIC_BEZIER);
+                        if (params != null && params.size() == 4) {
+                            return PathInterpolatorCompat.create(
+                                    params.get(0), params.get(1), params.get(2), params.get(3));
+                        }
+                    } catch (RuntimeException e) {
+                        if(WXEnvironment.isApkDebugable()) {
+                            WXLogUtils.e("WXTransition", e);
+                        }
+                    }
+            }
+        }
+        return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
     }
 
 }
