@@ -30,7 +30,6 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -211,7 +210,7 @@ public class WXTransition {
                 }
             };
         }
-        final  int delay = 12;
+        int delay = WXUtils.getNumberInt(domObject.getAttrs().get("runDelay"), 12);
         if(animationRunnable != null) {
             handler.removeCallbacks(animationRunnable);
         }
