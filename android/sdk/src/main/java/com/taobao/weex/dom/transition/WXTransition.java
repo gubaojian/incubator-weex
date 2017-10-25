@@ -24,7 +24,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
-import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
@@ -109,14 +109,13 @@ public class WXTransition {
     private float delay;
     private WXDomObject domObject;
     private Handler handler;
-    private Runnable layoutAnimationRunnable;
     private ValueAnimator layoutValueAnimator;
     private Map<String, Object> layoutPendingUpdates;
     private ObjectAnimator transformAnimator;
-    private Runnable transformAnimationRunnable;
     private Map<String, Object> transformPendingUpdates;
-    private Runnable notifyTransitionEndRunnable;
+    private Runnable animationEndEventRunnable;
     private Map<String, Object> targetStyles;
+    private Runnable animationRunnable;
 
 
     public WXTransition() {
@@ -178,10 +177,11 @@ public class WXTransition {
 
 
     /**
-     * start transition animation
+     * start transition animation, updates maybe split two different updates,
+     * we assume that updates in 15ms is one transition
      * */
     public void  startTransition(Map<String, Object> updates){
-        View taregtView = getTargetView();
+        final View taregtView = getTargetView();
         if(taregtView == null){
             return;
         }
@@ -195,10 +195,14 @@ public class WXTransition {
                 }
             }
         }
-        if(notifyTransitionEndRunnable == null){
-            notifyTransitionEndRunnable = new Runnable(){
+        if(animationEndEventRunnable != null){
+            taregtView.removeCallbacks(animationEndEventRunnable);
+        }
+        if(animationEndEventRunnable == null){
+            animationEndEventRunnable = new Runnable(){
                 @Override
                 public void run() {
+                    animationEndEventRunnable = null;
                     WXComponent component = getComponent();
                     if(component != null && domObject.getEvents().contains(Constants.Event.ON_TRANSITION_END)){
                         component.fireEvent(Constants.Event.ON_TRANSITION_END);
@@ -207,47 +211,74 @@ public class WXTransition {
             };
         }
         final  int delay = 15;
-        View targetView = getTargetView();
-        if(targetView != null){
-            if(transformAnimationRunnable != null){
-                targetView.removeCallbacks(transformAnimationRunnable);
-            }
-            if(transformPendingUpdates.size() > 0){
-                transformAnimationRunnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        doTransformAnimation();
-                    }
-                };
-            }
-            if(transformAnimationRunnable != null){
-                targetView.postDelayed(transformAnimationRunnable, delay);
-            }
+        if(animationRunnable != null) {
+            handler.removeCallbacks(animationRunnable);
         }
+        if(animationRunnable == null){
+            animationRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    doTransitionAnimation();
+                    animationRunnable = null;
+                }
+            };
+        }
+        handler.postDelayed(animationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
+    }
 
-        if(layoutAnimationRunnable != null) {
-             handler.removeCallbacks(layoutAnimationRunnable);
+    /**
+     * doAnimation include transform and layout animation.
+     * 1. put pre transition updates from target style to dom style
+     * 2. do transform animation and layout animation
+     * */
+    private void  doTransitionAnimation(){
+        for(String property : properties){
+            if(!(LAYOUT_PROPERTIES.contains(property) || TRANSFORM_PROPERTIES.contains(property))){
+                continue;
+            }
+            if(layoutPendingUpdates.containsKey(property)){
+                continue;
+            }
+            if(transformPendingUpdates.containsKey(property)){
+                continue;
+            }
+            synchronized (targetStyles){
+                if(targetStyles.containsKey(property)){
+                    Object targetValue = targetStyles.remove(property);
+                    domObject.getStyles().put(property, targetValue);
+                    WXComponent component = getComponent();
+                    if(component != null
+                            && component.getDomObject() != null){
+                        component.getDomObject().getStyles().put(property, targetValue);
+                    }
+                }
+            }
         }
-        layoutAnimationRunnable = new Runnable() {
+        final View taregtView = getTargetView();
+        if(taregtView == null){
+            return;
+        }
+        taregtView.post(new Runnable() {
             @Override
             public void run() {
-                doPendingLayoutAnimation();
+                doPendingTransformAnimation();
             }
-        };
-        handler.postDelayed(layoutAnimationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
-
+        });
+        doPendingLayoutAnimation();
     }
 
 
     /**
      *  transform, opacity, backgroundcolor use android system animation in main thread
      * */
-    private void doTransformAnimation() {
+    private void doPendingTransformAnimation() {
         if(transformAnimator != null){
             transformAnimator.cancel();
+            transformAnimator = null;
         }
-        transformAnimationRunnable = null;
-        layoutAnimationRunnable = null;
+        if(transformPendingUpdates.size() == 0){
+            return;
+        }
         final View taregtView = getTargetView();
         if(taregtView == null){
             return;
@@ -267,13 +298,12 @@ public class WXTransition {
                 continue;
             }
             if(!transformPendingUpdates.containsKey(property)){
-                if(targetStyles.containsKey(property)){
-                    domObject.getStyles().put(property, targetStyles.remove(property));
-                }
                 continue;
             }
             Object value = transformPendingUpdates.remove(property);
-            targetStyles.put(property, value);
+            synchronized (targetStyles) {
+                targetStyles.put(property, value);
+            }
             switch (property){
                 case Constants.Name.OPACITY:{
                     holders.add(PropertyValuesHolder.ofFloat(View.ALPHA, taregtView.getAlpha(), WXUtils.getFloat(value, 1.0f)));
@@ -282,12 +312,18 @@ public class WXTransition {
                 case Constants.Name.BACKGROUND_COLOR:{
                     int fromColor = WXResourceUtils.getColor(WXUtils.getString(domObject.getStyles().getBackgroundColor(), null), 0);
                     int toColor = WXResourceUtils.getColor(WXUtils.getString(value, null), 0);
+                    if(WXViewUtils.getBorderDrawable(taregtView) != null){
+                        fromColor = WXViewUtils.getBorderDrawable(taregtView).getColor();
+                    }else if (taregtView.getBackground() instanceof ColorDrawable) {
+                        fromColor = ((ColorDrawable) taregtView.getBackground()).getColor();
+                    }
                     holders.add(PropertyValuesHolder.ofObject(new BackgroundColorProperty(), new ArgbEvaluator(), fromColor,toColor));
                 }
                 break;
                 default:break;
             }
         }
+        transformPendingUpdates.clear();
         if(taregtView.getLayerType() != View.LAYER_TYPE_HARDWARE) {
             taregtView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
@@ -304,9 +340,7 @@ public class WXTransition {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                notifyTansitionEndEvent();
-                ObjectAnimator animator = (ObjectAnimator) animation;
-                moveTargetStyleToDom(animator.getValues());
+                WXTransition.this.onAnimationEnd();
             }
         });
         transformAnimator.start();
@@ -318,24 +352,22 @@ public class WXTransition {
             layoutValueAnimator.cancel();
             layoutValueAnimator = null;
         }
-        transformAnimationRunnable = null;
-        layoutAnimationRunnable = null;
-        Map<String, Object> updates = layoutPendingUpdates;
-        PropertyValuesHolder[] holders = new PropertyValuesHolder[updates.size()];
+        if(layoutPendingUpdates.size() == 0){
+            return;
+        }
+        PropertyValuesHolder[] holders = new PropertyValuesHolder[layoutPendingUpdates.size()];
         int index = 0;
         for(String property : properties){
             if(!LAYOUT_PROPERTIES.contains(property)){
                 continue;
             }
-            if(updates.containsKey(property)){
-                Object targetValue = updates.remove(property);
-                targetStyles.put(property, targetValue);
+            if(layoutPendingUpdates.containsKey(property)){
+                Object targetValue = layoutPendingUpdates.remove(property);
+                synchronized (targetStyles) {
+                    targetStyles.put(property, targetValue);
+                }
                 holders[index] = createLayoutPropertyValueHolder(property, targetValue);
                 index++;
-            }else{
-                if(targetStyles.containsKey(property)){
-                    domObject.getStyles().put(property, targetStyles.remove(property));
-                }
             }
         }
         layoutPendingUpdates.clear();
@@ -439,9 +471,7 @@ public class WXTransition {
                 if(WXEnvironment.isApkDebugable()){
                     WXLogUtils.d("WXTransition onAnimationEnd " +  domObject.getRef());
                 }
-                PropertyValuesHolder holders[] = animation.getValues();
-                moveTargetStyleToDom(holders);
-                notifyTansitionEndEvent();
+                WXTransition.this.onAnimationEnd();
             }
         });
         if(interpolator != null) {
@@ -452,14 +482,28 @@ public class WXTransition {
         layoutValueAnimator.start();
     }
 
-
-    private synchronized void notifyTansitionEndEvent(){
-        if(notifyTransitionEndRunnable != null){
+    private synchronized void onAnimationEnd(){
+        if(animationEndEventRunnable != null){
             View view = getTargetView();
-            if(view != null &&  notifyTransitionEndRunnable != null){
-                view.post(notifyTransitionEndRunnable);
+            if(view != null &&  animationEndEventRunnable != null){
+                view.post(animationEndEventRunnable);
             }
-            notifyTransitionEndRunnable = null;
+            animationEndEventRunnable = null;
+        }
+        synchronized (targetStyles){
+            if(targetStyles.size() > 0){
+                WXComponent component = getComponent();
+                for(String property : properties) {
+                    if(targetStyles.containsKey(property)){
+                        Object targetValue = targetStyles.remove(property);
+                        domObject.getStyles().put(property, targetValue);
+                        if(component != null && component.getDomObject() != null){
+                            component.getDomObject().getStyles().put(property, targetValue);
+                        }
+                    }
+                }
+                targetStyles.clear();
+            }
         }
     }
 
@@ -485,20 +529,6 @@ public class WXTransition {
     }
 
 
-    /**
-     * move styles to dom
-     * */
-    private void moveTargetStyleToDom(PropertyValuesHolder holders[]){
-        for(PropertyValuesHolder holder : holders){
-            String property =  holder.getPropertyName();
-            if(View.ALPHA.getName().equals(property)){
-                property = Constants.Name.OPACITY;
-            }
-            if(targetStyles.containsKey(property)){
-                domObject.getStyles().put(property, targetStyles.remove(property));
-            }
-        }
-    }
 
 
     /**
