@@ -285,7 +285,7 @@ public class WXTransition {
         }
         List<PropertyValuesHolder> holders = new ArrayList<>(8);
         String transform  = WXUtils.getString(transformPendingUpdates.remove(Constants.Name.TRANSFORM), null);
-        if(TextUtils.isEmpty(transform)){
+        if(!TextUtils.isEmpty(transform)){
             Map<Property<View,Float>, Float>  properties = TransformParser.parseTransForm(transform, (int)domObject.getLayoutWidth(), (int)domObject.getLayoutHeight(), domObject.getViewPortWidth());
             PropertyValuesHolder[]  transformHolders = TransformParser.toHolders(properties);
             for(PropertyValuesHolder holder : transformHolders){
