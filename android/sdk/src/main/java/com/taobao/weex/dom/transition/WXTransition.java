@@ -340,7 +340,10 @@ public class WXTransition {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                WXTransition.this.onAnimationEnd();
+                WXTransition.this.onTransitionAnimationEnd();
+                if(WXEnvironment.isApkDebugable()){
+                    WXLogUtils.d("WXTransition transform onTransitionAnimationEnd " +  domObject.getRef());
+                }
             }
         });
         transformAnimator.start();
@@ -469,9 +472,9 @@ public class WXTransition {
                 ValueAnimator  animation = (ValueAnimator) animationEnd;
                 super.onAnimationEnd(animation);
                 if(WXEnvironment.isApkDebugable()){
-                    WXLogUtils.d("WXTransition onAnimationEnd " +  domObject.getRef());
+                    WXLogUtils.d("WXTransition layout onTransitionAnimationEnd " +  domObject.getRef());
                 }
-                WXTransition.this.onAnimationEnd();
+                WXTransition.this.onTransitionAnimationEnd();
             }
         });
         if(interpolator != null) {
@@ -482,7 +485,7 @@ public class WXTransition {
         layoutValueAnimator.start();
     }
 
-    private synchronized void onAnimationEnd(){
+    private synchronized void onTransitionAnimationEnd(){
         if(animationEndEventRunnable != null){
             View view = getTargetView();
             if(view != null &&  animationEndEventRunnable != null){
