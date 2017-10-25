@@ -30,6 +30,7 @@ import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -178,7 +179,7 @@ public class WXTransition {
 
     /**
      * start transition animation, updates maybe split two different updates,
-     * we assume that updates in 15ms is one transition
+     * we assume that updates in 12ms is one transition
      * */
     public void  startTransition(Map<String, Object> updates){
         final View taregtView = getTargetView();
@@ -210,7 +211,7 @@ public class WXTransition {
                 }
             };
         }
-        final  int delay = 15;
+        final  int delay = 12;
         if(animationRunnable != null) {
             handler.removeCallbacks(animationRunnable);
         }
@@ -332,13 +333,18 @@ public class WXTransition {
         transformAnimator.setStartDelay((long) delay);
         transformAnimator.setInterpolator(interpolator);
         transformAnimator.addListener(new AnimatorListenerAdapter() {
+            boolean  hasCancel = false;
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
+                hasCancel = true;
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                if(hasCancel){
+                    return;
+                }
                 super.onAnimationEnd(animation);
                 WXTransition.this.onTransitionAnimationEnd();
                 if(WXEnvironment.isApkDebugable()){
@@ -467,9 +473,19 @@ public class WXTransition {
             }
         });
         layoutValueAnimator.addListener(new AnimatorListenerAdapter() {
+
+            boolean  hasCancel = false;
             @Override
-            public void onAnimationEnd(Animator animationEnd) {
-                ValueAnimator  animation = (ValueAnimator) animationEnd;
+            public void onAnimationCancel(Animator animation) {
+                super.onAnimationCancel(animation);
+                hasCancel = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if(hasCancel){
+                    return;
+                }
                 super.onAnimationEnd(animation);
                 if(WXEnvironment.isApkDebugable()){
                     WXLogUtils.d("WXTransition layout onTransitionAnimationEnd " +  domObject.getRef());
