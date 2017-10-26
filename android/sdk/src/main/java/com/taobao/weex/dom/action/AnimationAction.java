@@ -62,6 +62,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.taobao.weex.common.Constants.TimeFunction.CUBIC_BEZIER;
+import static com.taobao.weex.common.Constants.TimeFunction.EASE;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN_OUT;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_OUT;
@@ -252,13 +253,15 @@ class AnimationAction implements DOMAction, RenderAction {
     if (!TextUtils.isEmpty(interpolator)) {
       switch (interpolator) {
         case EASE_IN:
-          return new AccelerateInterpolator();
+          return PathInterpolatorCompat.create(0.42f,0f, 1f,1f);
         case EASE_OUT:
-          return new DecelerateInterpolator();
+          return PathInterpolatorCompat.create(0f,0f, 0.58f,1f);
         case EASE_IN_OUT:
-          return new AccelerateDecelerateInterpolator();
+          return PathInterpolatorCompat.create(0.42f,0f, 0.58f,1f);
+        case EASE:
+          return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
         case LINEAR:
-          return new LinearInterpolator();
+          return PathInterpolatorCompat.create(0.0f,0f, 1f,1f);
         default:
           //Parse cubic-bezier
           try {

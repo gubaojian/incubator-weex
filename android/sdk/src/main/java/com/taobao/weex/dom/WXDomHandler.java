@@ -35,6 +35,10 @@ public class WXDomHandler implements Handler.Callback {
    * The batch operation in dom thread will run at most once in 16ms.
    */
   public static final int DELAY_TIME = 16;//ms
+
+
+  public static final int TRANSITION_DELAY_TIME = 4;//4ms, start transition as soon as possible
+
   private WXDomManager mWXDomManager;
   private boolean mHasBatch = false;
 
@@ -64,7 +68,11 @@ public class WXDomHandler implements Handler.Callback {
     if (!mHasBatch) {
       mHasBatch = true;
       if(what != WXDomHandler.MsgType.WX_DOM_BATCH) {
-          mWXDomManager.sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_BATCH, DELAY_TIME);
+          int delayTime = DELAY_TIME;
+          if(what == MsgType.WX_DOM_TRANSITION_BATCH){
+              delayTime = TRANSITION_DELAY_TIME;
+          }
+          mWXDomManager.sendEmptyMessageDelayed(WXDomHandler.MsgType.WX_DOM_BATCH, delayTime);
       }
     }
     switch (what) {
@@ -130,6 +138,7 @@ public class WXDomHandler implements Handler.Callback {
     public static final int WX_CONSUME_RENDER_TASKS = 0xfa;
 
     public static final int WX_DOM_TRANSITION_BATCH = 0xfb;
+
 
     @Deprecated
     public static final int WX_COMPONENT_SIZE= 0xff1;

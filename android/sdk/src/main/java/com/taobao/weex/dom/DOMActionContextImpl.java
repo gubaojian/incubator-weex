@@ -216,6 +216,8 @@ class DOMActionContextImpl implements DOMActionContext {
       instance.cssLayoutTime(System.currentTimeMillis() - start);
     }
 
+
+    start = System.currentTimeMillis();
     rootDom.traverseTree( new WXDomObject.Consumer() {
       @Override
       public void accept(WXDomObject dom) {
@@ -224,10 +226,7 @@ class DOMActionContextImpl implements DOMActionContext {
         }
         dom.layoutAfter();
       }
-    });
-
-    start = System.currentTimeMillis();
-    rootDom.traverseTree(new ApplyUpdateConsumer());
+    }, new ApplyUpdateConsumer());
 
     if (instance != null) {
       instance.applyUpdateTime(System.currentTimeMillis() - start);

@@ -108,7 +108,6 @@ public class TransformParser {
                     (rawTransform, new FunctionParser.Mapper<Property<View,Float>, Float>() {
                         @Override
                         public Map<Property<View,Float>, Float> map(String functionName, List<String> raw) {
-                            System.out.println(functionName + "  " + raw);
                             if (raw != null && !raw.isEmpty()) {
                                 if (wxToAndroidMap.containsKey(functionName)) {
                                     return convertParam(width, height,viewportW, wxToAndroidMap.get(functionName), raw);

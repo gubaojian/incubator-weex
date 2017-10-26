@@ -25,11 +25,14 @@ import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.ArraySet;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.view.animation.PathInterpolatorCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Property;
 import android.view.View;
 import android.view.animation.Interpolator;
@@ -57,6 +60,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.taobao.weex.common.Constants.TimeFunction.CUBIC_BEZIER;
+import static com.taobao.weex.common.Constants.TimeFunction.EASE;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_IN_OUT;
 import static com.taobao.weex.common.Constants.TimeFunction.EASE_OUT;
@@ -113,7 +117,7 @@ public class WXTransition {
     private Map<String, Object> layoutPendingUpdates;
     private ObjectAnimator transformAnimator;
     private Map<String, Object> transformPendingUpdates;
-    private Runnable animationEndEventRunnable;
+    private Runnable transitionEndEvent;
     private Map<String, Object> targetStyles;
     private Runnable animationRunnable;
 
@@ -178,7 +182,7 @@ public class WXTransition {
 
     /**
      * start transition animation, updates maybe split two different updates,
-     * we assume that updates in 12ms is one transition
+     * because javascript will send multi update on same transition, we assume that updates in 8ms is one transition
      * */
     public void  startTransition(Map<String, Object> updates){
         final View taregtView = getTargetView();
@@ -195,22 +199,7 @@ public class WXTransition {
                 }
             }
         }
-        if(animationEndEventRunnable != null){
-            taregtView.removeCallbacks(animationEndEventRunnable);
-        }
-        if(animationEndEventRunnable == null){
-            animationEndEventRunnable = new Runnable(){
-                @Override
-                public void run() {
-                    animationEndEventRunnable = null;
-                    WXComponent component = getComponent();
-                    if(component != null && domObject.getEvents().contains(Constants.Event.ON_TRANSITION_END)){
-                        component.fireEvent(Constants.Event.ON_TRANSITION_END);
-                    }
-                }
-            };
-        }
-        int delay = WXUtils.getNumberInt(domObject.getAttrs().get("runDelay"), 12);
+        int delay = WXUtils.getNumberInt(domObject.getAttrs().get("actionDelay"), 16);
         if(animationRunnable != null) {
             handler.removeCallbacks(animationRunnable);
         }
@@ -223,41 +212,63 @@ public class WXTransition {
                 }
             };
         }
-        handler.postDelayed(animationRunnable, WXUtils.getNumberInt(domObject.getAttrs().get("layoutAnimationDelay"), delay));
+        handler.postDelayed(animationRunnable, delay);
     }
 
     /**
-     * doAnimation include transform and layout animation.
+     * doTransitionAnimation include transform and layout animation.
      * 1. put pre transition updates from target style to dom style
      * 2. do transform animation and layout animation
      * */
     private void  doTransitionAnimation(){
-        for(String property : properties){
-            if(!(LAYOUT_PROPERTIES.contains(property) || TRANSFORM_PROPERTIES.contains(property))){
-                continue;
-            }
-            if(layoutPendingUpdates.containsKey(property)){
-                continue;
-            }
-            if(transformPendingUpdates.containsKey(property)){
-                continue;
-            }
-            synchronized (targetStyles){
-                if(targetStyles.containsKey(property)){
-                    Object targetValue = targetStyles.remove(property);
-                    domObject.getStyles().put(property, targetValue);
-                    WXComponent component = getComponent();
-                    if(component != null
-                            && component.getDomObject() != null){
-                        component.getDomObject().getStyles().put(property, targetValue);
-                    }
-                }
-            }
-        }
         final View taregtView = getTargetView();
         if(taregtView == null){
             return;
         }
+        if(targetStyles.size() > 0){
+            for(String property : properties){
+                if(!(LAYOUT_PROPERTIES.contains(property) || TRANSFORM_PROPERTIES.contains(property))){
+                    continue;
+                }
+                if(layoutPendingUpdates.containsKey(property)){
+                    continue;
+                }
+                if(transformPendingUpdates.containsKey(property)){
+                    continue;
+                }
+                synchronized (targetStyles){
+                    if(targetStyles.containsKey(property)){
+                        //reset pre transition style
+                        Object targetValue = targetStyles.remove(property);
+                        domObject.getStyles().put(property, targetValue);
+                        WXComponent component = getComponent();
+                        if(component != null
+                                && component.getDomObject() != null){
+                            component.getDomObject().getStyles().put(property, targetValue);
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        if(transitionEndEvent != null){
+            taregtView.removeCallbacks(transitionEndEvent);
+        }
+        if(transitionEndEvent == null){
+            transitionEndEvent = new Runnable(){
+                @Override
+                public void run() {
+                    transitionEndEvent = null;
+                    WXComponent component = getComponent();
+                    if(component != null && domObject.getEvents().contains(Constants.Event.ON_TRANSITION_END)){
+                        component.fireEvent(Constants.Event.ON_TRANSITION_END);
+                    }
+                }
+            };
+        }
+
         taregtView.post(new Runnable() {
             @Override
             public void run() {
@@ -269,7 +280,7 @@ public class WXTransition {
 
 
     /**
-     *  transform, opacity, backgroundcolor use android system animation in main thread
+     *  transform, opacity, backgroundcolor which not effect layout use android system animation in main thread.
      * */
     private void doPendingTransformAnimation() {
         if(transformAnimator != null){
@@ -324,13 +335,12 @@ public class WXTransition {
             }
         }
         transformPendingUpdates.clear();
-        if(taregtView.getLayerType() != View.LAYER_TYPE_HARDWARE) {
-            taregtView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }
         transformAnimator =  ObjectAnimator.ofPropertyValuesHolder(taregtView, holders.toArray(new PropertyValuesHolder[holders.size()]));
         transformAnimator.setDuration((long) duration);
         transformAnimator.setStartDelay((long) delay);
-        transformAnimator.setInterpolator(interpolator);
+        if(interpolator != null) {
+            transformAnimator.setInterpolator(interpolator);
+        }
         transformAnimator.addListener(new AnimatorListenerAdapter() {
             boolean  hasCancel = false;
             @Override
@@ -501,12 +511,12 @@ public class WXTransition {
     }
 
     private synchronized void onTransitionAnimationEnd(){
-        if(animationEndEventRunnable != null){
+        if(transitionEndEvent != null){
             View view = getTargetView();
-            if(view != null &&  animationEndEventRunnable != null){
-                view.post(animationEndEventRunnable);
+            if(view != null &&  transitionEndEvent != null){
+                view.post(transitionEndEvent);
             }
-            animationEndEventRunnable = null;
+            transitionEndEvent = null;
         }
         synchronized (targetStyles){
             if(targetStyles.size() > 0){
@@ -580,6 +590,8 @@ public class WXTransition {
                     return PathInterpolatorCompat.create(0f,0f, 0.58f,1f);
                 case EASE_IN_OUT:
                     return PathInterpolatorCompat.create(0.42f,0f, 0.58f,1f);
+                case EASE:
+                    return PathInterpolatorCompat.create(0.25f,0.1f, 0.25f,1f);
                 case LINEAR:
                     return PathInterpolatorCompat.create(0.0f,0f, 1f,1f);
                 default:
