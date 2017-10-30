@@ -20,7 +20,10 @@ package com.taobao.weex.bridge;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
+import com.taobao.weex.common.WXModule;
+import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXReflectionUtils;
 
 import java.lang.reflect.Type;
@@ -45,14 +48,42 @@ public final class NativeInvokeHelper {
         @Override
         public void run() {
           try {
+            if(target instanceof WXModule){
+              WXModule module = (WXModule) target;
+              WXSDKInstance instance = WXSDKManager.getInstance().getSDKInstance(mInstanceId);
+              if(instance == null || instance.isDestroy()){
+                WXLogUtils.e("WXSDKInstance not exist " + mInstanceId);
+              }
+              module.mWXSDKInstance = instance;
+            }
             invoker.invoke(target, params);
           } catch (Exception e) {
             throw new RuntimeException(target + "Invoker " + invoker.toString() ,e);
+          }finally {
+            if(target instanceof WXModule){
+              WXModule module = (WXModule) target;
+              module.mWXSDKInstance = null;
+            }
           }
         }
       }, 0);
     } else {
-      return invoker.invoke(target, params);
+      try {
+        if(target instanceof WXModule){
+          WXModule module = (WXModule) target;
+          WXSDKInstance instance = WXSDKManager.getInstance().getSDKInstance(mInstanceId);
+          if(instance == null || instance.isDestroy()){
+            WXLogUtils.e("WXSDKInstance not exist " + mInstanceId);
+          }
+          module.mWXSDKInstance = instance;
+        }
+        return invoker.invoke(target, params);
+      }finally {
+        if(target instanceof WXModule){
+          WXModule module = (WXModule) target;
+          module.mWXSDKInstance = null;
+        }
+      }
     }
     return null;
   }

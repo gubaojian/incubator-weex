@@ -148,6 +148,14 @@ public class WXModuleManager {
       return null;
     }
     WXSDKInstance instance = WXSDKManager.getInstance().getSDKInstance(instanceId);
+    if(instance == null){
+      WXLogUtils.e("[WXModuleManager] instance not exist");
+      return  null;
+    }
+    if(instance.isDestroy()){
+      WXLogUtils.e("[WXModuleManager] instance is destroy");
+      return  null;
+    }
     wxModule.mWXSDKInstance = instance;
 
     final Invoker invoker = factory.getMethodInvoker(methodStr);
@@ -170,8 +178,8 @@ public class WXModuleManager {
       WXLogUtils.e("callModuleMethod >>> invoke module:" + moduleStr + ", method:" + methodStr + " failed. ", e);
       return null;
     } finally {
-      if (wxModule instanceof WXDomModule || wxModule instanceof WXTimerModule) {
-        wxModule.mWXSDKInstance = null;
+      if(!invoker.isRunOnUIThread()){
+         wxModule.mWXSDKInstance = null;
       }
     }
   }
