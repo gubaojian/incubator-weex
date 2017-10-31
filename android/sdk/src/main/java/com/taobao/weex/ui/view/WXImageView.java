@@ -186,7 +186,7 @@ public class WXImageView extends ImageView implements WXGestureObservable,
   protected void onWindowVisibilityChanged(int visibility) {
     super.onWindowVisibilityChanged(visibility);
     if(mOutWindowVisibilityChangedReally){
-      if(getVisibility() == View.VISIBLE){
+      if(visibility == View.VISIBLE){
          autoRecoverImage();
       }else{
          autoReleaseImage();
@@ -198,7 +198,7 @@ public class WXImageView extends ImageView implements WXGestureObservable,
   protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
     super.onVisibilityChanged(changedView, visibility);
     if(changedView == this){
-        if(visibility == View.VISIBLE){
+        if(getVisibility() == View.VISIBLE){
           autoRecoverImage();
         }else{
           autoReleaseImage();
