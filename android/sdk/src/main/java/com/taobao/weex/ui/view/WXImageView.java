@@ -25,6 +25,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,7 @@ public class WXImageView extends ImageView implements WXGestureObservable,
   private float[] borderRadius;
   private boolean gif;
   private boolean isBitmapReleased = false;
-  private boolean enableBitmapAutoManage = false;
+  private boolean enableBitmapAutoManage = true;
 
 
   public WXImageView(Context context) {
@@ -235,15 +236,20 @@ public class WXImageView extends ImageView implements WXGestureObservable,
 
 
   protected void setEnableBitmapAutoManage(boolean enableBitmapAutoManage) {
-     this.enableBitmapAutoManage = enableBitmapAutoManage;
+     //this.enableBitmapAutoManage = enableBitmapAutoManage;
   }
 
   protected void autoReleaseImage(){
+       Log.e("weex", "autoReleaseImage");
       if(enableBitmapAutoManage) {
+
+        Log.e("weex", "autoReleaseImage isBitmapReleased" +isBitmapReleased );
         if (!isBitmapReleased) {
           isBitmapReleased = true;
           WXImage image = getComponent();
+          Log.e("weex", "autoReleaseImage image " +  image);
           if (image != null) {
+            Log.e("weex", "autoReleaseImage image  ref " +  image.getRef() + " " + image.getDomObject().getAttrs().get("src"));
             image.autoReleaseImage();
           }
         }
@@ -251,10 +257,14 @@ public class WXImageView extends ImageView implements WXGestureObservable,
   }
 
   protected void autoRecoverImage(){
+    Log.e("weex", "autoRecoverImage");
     if(enableBitmapAutoManage){
+      Log.e("weex", "autoRecoverImage isBitmapReleased" +isBitmapReleased );
       if(isBitmapReleased){
         WXImage image = getComponent();
+        Log.e("weex", "autoRecoverImage image " +  image);
         if(image != null){
+          Log.e("weex", "autoRecoverImage image  ref " +  image.getRef() + " " + image.getDomObject().getAttrs().get("src"));
           image.autoRecoverImage();
         }
         isBitmapReleased = false;

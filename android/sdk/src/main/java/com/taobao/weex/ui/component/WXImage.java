@@ -31,6 +31,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
@@ -277,6 +278,7 @@ public class WXImage extends WXComponent<ImageView> {
   }
 
   public void autoReleaseImage(){
+    Log.e("weex", "autoReleaseImage image " + getRef()  +  mSrc);
     if(mAutoRecycle){
       if(getHostView() != null){
         if (getInstance().getImgLoaderAdapter() != null) {
@@ -287,6 +289,7 @@ public class WXImage extends WXComponent<ImageView> {
   }
 
   public void autoRecoverImage() {
+    Log.e("weex", "autoRecoverImage image " + getRef()  +  mSrc);
     if(mAutoRecycle) {
       setSrc(mSrc);
     }
