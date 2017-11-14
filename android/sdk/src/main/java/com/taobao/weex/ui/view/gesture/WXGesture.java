@@ -33,6 +33,7 @@ import android.view.ViewParent;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.taobao.weex.bridge.EventResult;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.ui.component.Scrollable;
 import com.taobao.weex.ui.component.WXComponent;
@@ -40,6 +41,7 @@ import com.taobao.weex.ui.view.gesture.WXGestureType.GestureInfo;
 import com.taobao.weex.ui.view.gesture.WXGestureType.HighLevelGesture;
 import com.taobao.weex.ui.view.gesture.WXGestureType.LowLevelGesture;
 import com.taobao.weex.utils.WXLogUtils;
+import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
 import java.util.ArrayList;
@@ -77,6 +79,8 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
 
   private boolean requestDisallowInterceptTouchEvent = false;
 
+  private boolean shouldBubbleResult = true;
+
   public WXGesture(WXComponent wxComponent, Context context) {
     this.component = wxComponent;
     globalRect = new Rect();
@@ -89,6 +93,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     if(parentScrollable != null) {
       mParentOrientation = parentScrollable.getOrientation();
     }
+    shouldBubbleResult =  WXUtils.getBoolean(wxComponent.getDomObject().getAttrs().get("shouldBubbleResult"), true);
   }
 
   private boolean isParentScrollable() {
@@ -123,12 +128,11 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
    * */
   private boolean shouldBubbleTouchEvent(MotionEvent event){
      if(component.containsEvent(SHOULD_BUBBLE)){
-        Object result = component.fireEventWait(SHOULD_BUBBLE, createFireEventParam(event, CUR_EVENT, null));
-        if(result == null){
-          return  true;
-        }else{
-          return  false;
+        EventResult result = component.fireEventWait(SHOULD_BUBBLE, createFireEventParam(event, CUR_EVENT, null));
+        if(result.isSuccess()){
+          shouldBubbleResult = WXUtils.getBoolean(result.getResult(), true);
         }
+        return shouldBubbleResult;
      }
      return  true;
   }

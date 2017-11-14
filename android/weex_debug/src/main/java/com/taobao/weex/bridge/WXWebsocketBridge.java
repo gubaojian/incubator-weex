@@ -55,11 +55,11 @@ public class WXWebsocketBridge implements IWXBridge,WXWebSocketManager.JSDebugge
     }
 
     @Override
-    public int execJS(String instanceId, String namespace, String function,
+    public byte[] execJS(String instanceId, String namespace, String function,
                       WXJSObject[] args) {
         if (!mInit || TextUtils.isEmpty(instanceId)
                 || TextUtils.isEmpty(function)) {
-            return -1;
+            return null;
         }
 
         Map<String, Object> map = new HashMap<>();
@@ -76,7 +76,7 @@ public class WXWebsocketBridge implements IWXBridge,WXWebSocketManager.JSDebugge
         }
         map.put("arguments", array);
         WXWebSocketManager.getInstance().sendMessage(JSON.toJSONString(map));
-        return 0;
+        return null;
     }
 
     @Override

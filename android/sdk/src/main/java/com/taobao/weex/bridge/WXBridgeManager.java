@@ -1087,7 +1087,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
   }
 
 
-  private void addJSEventTask(final EventCallback eventCallback, final String method, final String instanceId, final List<Object> params, final Object... args) {
+  private void addJSEventTask(final EventResult eventCallback, final String method, final String instanceId, final List<Object> params, final Object... args) {
     post(new Runnable() {
       @Override
       public void run() {
@@ -1190,7 +1190,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
    */
   public void fireEventOnNode(final String instanceId, final String ref,
                               final String type, final Map<String, Object> data,
-                              final Map<String, Object> domChanges, List<Object> params, EventCallback callback) {
+                              final Map<String, Object> domChanges, List<Object> params, EventResult callback) {
     if (TextUtils.isEmpty(instanceId) || TextUtils.isEmpty(ref)
             || TextUtils.isEmpty(type) || mJSHandler == null) {
       return;
@@ -1241,7 +1241,7 @@ public class WXBridgeManager implements Callback,BactchExecutor {
   }
 
   /**
-   * EventCallback to Javascript function.
+   * EventResult to Javascript function.
    * @param instanceId Weex Instance Id
    * @param callback  callback referenece handle
    * @param data callback data
@@ -1690,14 +1690,25 @@ public class WXBridgeManager implements Callback,BactchExecutor {
                       WXJsonUtils.fromObjectToJSONString(tasks))};
 
       Object taskResult = invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
+      JSONArray arrayResult =  null;
+      int index = 0;
       for(Object taskObject : tasks){
         if(taskObject instanceof  WXHashMap){
           WXHashMap<String, Object> map = (WXHashMap<String, Object>) taskObject;
-          if(map.get(KEY_EVENT_CALLBACK) != null && map.get(KEY_EVENT_CALLBACK) instanceof EventCallback){
-            EventCallback callback = (EventCallback) map.get(KEY_EVENT_CALLBACK);
-            callback.onCallback(null);
+          if(map.get(KEY_EVENT_CALLBACK) != null && map.get(KEY_EVENT_CALLBACK) instanceof EventResult){
+            EventResult callback = (EventResult) map.get(KEY_EVENT_CALLBACK);
+            if(arrayResult == null && taskResult instanceof  byte[]){
+              byte[] bts = (byte[]) taskResult;
+              arrayResult  = JSONArray.parseArray(new String(bts, "UTF-8"));
+            }
+            Object result = null;
+            if(arrayResult != null && index < arrayResult.size()){
+              result = arrayResult.get(index);
+            }
+            callback.onCallback(result);
           }
         }
+        index++;
       }
     } catch (Throwable e) {
       WXLogUtils.e("WXBridgeManager", e);

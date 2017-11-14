@@ -61,7 +61,7 @@ class WXBridge implements IWXBridge {
    * @param function   function string name
    * @param args       WXJSObject array
    */
-  public native int execJS(String instanceId, String namespace, String function, WXJSObject[] args);
+  public native byte[] execJS(String instanceId, String namespace, String function, WXJSObject[] args);
 
 
   /**

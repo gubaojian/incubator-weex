@@ -22,15 +22,21 @@ package com.taobao.weex.bridge;
  * Created by furture on 2017/10/17.
  */
 
-public class EventCallback {
+public class EventResult {
 
     private Object result;
+    private boolean success = false;
     /**
      * onCallback javascript event callback method
-     * @param data
+     * @param result
      */
-    public void onCallback(Object data){
+    public void onCallback(Object result){
+        this.success = true;
         this.result = result;
+    }
+
+    public boolean isSuccess() {
+        return success;
     }
 
     public Object getResult(){

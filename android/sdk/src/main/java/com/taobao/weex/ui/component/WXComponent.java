@@ -53,7 +53,7 @@ import com.taobao.weex.IWXActivityStateListener;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
-import com.taobao.weex.bridge.EventCallback;
+import com.taobao.weex.bridge.EventResult;
 import com.taobao.weex.bridge.Invoker;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.IWXObject;
@@ -309,27 +309,29 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
      fireEvent(type, params, domChanges, null);
   }
 
-  public final Object fireEventWait(String type, Map<String, Object> params){
+  public final EventResult fireEventWait(String type, Map<String, Object> params){
         long start = System.currentTimeMillis();
         final CountDownLatch waitLatch = new CountDownLatch(1);
-        EventCallback callback = new EventCallback(){
+        EventResult callback = new EventResult(){
             @Override
-            public void onCallback(Object data) {
-                super.onCallback(data);
+            public void onCallback(Object result) {
+                super.onCallback(result);
                 waitLatch.countDown();
             }
         };
         try{
             fireEvent(type, params, null, callback);
             waitLatch.await(10, TimeUnit.MILLISECONDS);
-          Log.e("weex", "used " + (System.currentTimeMillis() - start));
-            return  callback.getResult();
+            return  callback;
         }catch (Exception e){
-            return  callback.getResult();
+            if(WXEnvironment.isApkDebugable()){
+               WXLogUtils.e("fireEventWait", e);
+            }
+            return  callback;
         }
     }
 
-    protected final void fireEvent(String type, Map<String, Object> params, Map<String, Object> domChanges, EventCallback callback){
+    protected final void fireEvent(String type, Map<String, Object> params, Map<String, Object> domChanges, EventResult callback){
         if(mInstance != null && mDomObj != null) {
             List<Object> eventArgsValues = null;
             if(mDomObj.getEvents() != null && mDomObj.getEvents().getEventBindingArgsValues() != null){

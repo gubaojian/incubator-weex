@@ -48,9 +48,9 @@ public interface IWXBridge extends IWXObject {
   int initFrameworkEnv(String framework, WXParams params, String cacheDir, boolean onSdcard);
 
   /**
-   * execute javascript function
+   * execute javascript function, return execute result as json array
    */
-  int execJS(String instanceId, String namespace, String function, WXJSObject[] args);
+  byte[] execJS(String instanceId, String namespace, String function, WXJSObject[] args);
 
   int execJSService(String javascript);
 
