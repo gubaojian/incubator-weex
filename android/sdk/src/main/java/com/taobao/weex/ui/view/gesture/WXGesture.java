@@ -80,6 +80,8 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
   private boolean requestDisallowInterceptTouchEvent = false;
 
   private boolean shouldBubbleResult = true;
+  private int     shouldBubbleInterval = 0; //every times try
+  private int     shouldBubbleCallTimes = 0;
 
   public WXGesture(WXComponent wxComponent, Context context) {
     this.component = wxComponent;
@@ -94,6 +96,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
       mParentOrientation = parentScrollable.getOrientation();
     }
     shouldBubbleResult =  WXUtils.getBoolean(wxComponent.getDomObject().getAttrs().get("shouldBubbleResult"), true);
+    shouldBubbleInterval = WXUtils.getNumberInt(wxComponent.getDomObject().getAttrs().get("shouldBubbleInterval"), 0);
   }
 
   private boolean isParentScrollable() {
@@ -128,10 +131,15 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
    * */
   private boolean shouldBubbleTouchEvent(MotionEvent event){
      if(component.containsEvent(SHOULD_BUBBLE)){
+        if(shouldBubbleCallTimes >= shouldBubbleInterval && shouldBubbleInterval > 0){
+          shouldBubbleCallTimes = 0;
+          return  shouldBubbleResult;
+        }
         EventResult result = component.fireEventWait(SHOULD_BUBBLE, createFireEventParam(event, CUR_EVENT, null));
         if(result.isSuccess()){
           shouldBubbleResult = WXUtils.getBoolean(result.getResult(), true);
         }
+        shouldBubbleCallTimes++;
         return shouldBubbleResult;
      }
      return  true;
