@@ -350,6 +350,9 @@ public class WXUtils {
 
     if (value == null)
       return df;
+    if(value instanceof Boolean){
+      return (Boolean) value;
+    }
     if (TextUtils.equals("false",value.toString())) {
       return false;
     } else if (TextUtils.equals("true",value.toString())) {

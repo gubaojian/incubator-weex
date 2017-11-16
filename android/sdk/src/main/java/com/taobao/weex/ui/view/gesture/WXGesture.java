@@ -28,10 +28,12 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.taobao.weex.bridge.EventResult;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.ui.component.Scrollable;
 import com.taobao.weex.ui.component.WXComponent;
@@ -39,12 +41,15 @@ import com.taobao.weex.ui.view.gesture.WXGestureType.GestureInfo;
 import com.taobao.weex.ui.view.gesture.WXGestureType.HighLevelGesture;
 import com.taobao.weex.ui.view.gesture.WXGestureType.LowLevelGesture;
 import com.taobao.weex.utils.WXLogUtils;
+import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.taobao.weex.common.Constants.Event.SHOULD_BUBBLE;
 
 public class WXGesture extends GestureDetector.SimpleOnGestureListener implements OnTouchListener {
 
@@ -72,6 +77,10 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
   private boolean mIsPreventMoveEvent = false;
   private boolean mIsTouchEventConsumed = false; //Reset to false when first touch event, set to true when gesture event fired.
 
+  private boolean requestDisallowInterceptTouchEvent = false;
+
+  private boolean shouldBubbleResult = true;
+
   public WXGesture(WXComponent wxComponent, Context context) {
     this.component = wxComponent;
     globalRect = new Rect();
@@ -84,6 +93,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     if(parentScrollable != null) {
       mParentOrientation = parentScrollable.getOrientation();
     }
+    shouldBubbleResult =  WXUtils.getBoolean(wxComponent.getDomObject().getAttrs().get("shouldBubbleResult"), true);
   }
 
   private boolean isParentScrollable() {
@@ -112,8 +122,26 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     return mIsTouchEventConsumed;
   }
 
+
+  /**
+   * shouldBubbleEvent default true
+   * */
+  private boolean shouldBubbleTouchEvent(MotionEvent event){
+     if(component.containsEvent(SHOULD_BUBBLE)){
+        EventResult result = component.fireEventWait(SHOULD_BUBBLE, createFireEventParam(event, CUR_EVENT, null));
+        if(result.isSuccess()){
+          shouldBubbleResult = WXUtils.getBoolean(result.getResult(), true);
+        }
+        return shouldBubbleResult;
+     }
+     return  true;
+  }
+
   @Override
   public boolean onTouch(View v, MotionEvent event) {
+    if(requestDisallowInterceptTouchEvent){
+        return  false;
+    }
     try {
       boolean result = mGestureDetector.onTouchEvent(event);
       switch (event.getActionMasked()) {
@@ -146,6 +174,19 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
           result |= handleMotionEvent(LowLevelGesture.ACTION_CANCEL, event);
           result |= handlePanMotionEvent(event);
           break;
+      }
+      if(component.containsEvent(SHOULD_BUBBLE)){
+        ViewGroup parent = (ViewGroup) v.getParent();
+        boolean requestDisallowInterceptTouchEvent = false;
+        if(parent != null){
+          if(!shouldBubbleTouchEvent(event)){
+            requestDisallowInterceptTouchEvent = true;
+          }
+          parent.requestDisallowInterceptTouchEvent(requestDisallowInterceptTouchEvent);
+        }
+        if(component.getParent() != null){
+           component.getParent().requestDisallowInterceptTouchEvent(requestDisallowInterceptTouchEvent);
+        }
       }
       return result;
     } catch (Exception e) {
@@ -229,7 +270,6 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
    */
   private List<Map<String, Object>> createMultipleFireEventParam(MotionEvent motionEvent,String state) {
     List<Map<String, Object>> list = new ArrayList<>(motionEvent.getHistorySize() + 1);
-    list.addAll(getHistoricalEvents(motionEvent));
     list.add(createFireEventParam(motionEvent, CUR_EVENT, state));
     return list;
   }
@@ -524,5 +564,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     return true;
   }
 
-
+  public void setRequestDisallowInterceptTouchEvent(boolean requestDisallowInterceptTouchEvent) {
+    this.requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent;
+  }
 }

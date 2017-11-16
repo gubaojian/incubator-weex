@@ -294,6 +294,7 @@ public class Constants {
     String STICKY = "sticky";
 
     String ON_TRANSITION_END = "transitionEnd";
+    String SHOULD_BUBBLE = "shouldBubble";
 
     interface SLOT_LIFECYCLE{
       String CREATE = "create";
