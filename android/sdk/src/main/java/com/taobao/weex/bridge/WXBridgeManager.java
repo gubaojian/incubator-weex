@@ -64,6 +64,7 @@ import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 import com.taobao.weex.utils.batch.BactchExecutor;
 import com.taobao.weex.utils.batch.Interceptor;
+import com.taobao.weex.wson.Wson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -348,7 +349,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
     if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("[WXBridgeManager] callNativeModule >>>> instanceId:").append(instanceId)
-          .append(", module:").append(module).append(", method:").append(method).append(", arguments:").append(arguments);
+          .append(", module:").append(module).append(", method:").append(method).append(", arguments:").append(arguments.toJSONString());
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
@@ -373,7 +374,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
     if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("[WXBridgeManager] callNativeModule >>>> instanceId:").append(instanceId)
-          .append(", module:").append(module).append(", method:").append(method).append(", arguments:").append(arguments);
+          .append(", module:").append(module).append(", method:").append(method).append(", arguments:").append(arguments.toJSONString());
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
@@ -397,7 +398,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
   public Object callNativeComponent(String instanceId, String componentRef, String method, JSONArray arguments, Object options) {
     if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("[WXBridgeManager] callNativeComponent >>>> instanceId:").append(instanceId)
-          .append(", componentRef:").append(componentRef).append(", method:").append(method).append(", arguments:").append(arguments);
+          .append(", componentRef:").append(componentRef).append(", method:").append(method).append(", arguments:").append(arguments.toJSONString());
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
@@ -420,8 +421,8 @@ public class WXBridgeManager implements Callback, BactchExecutor {
    * @param tasks      tasks to be executed
    * @param callback   next tick id
    */
-  public int callNative(String instanceId, String tasks, String callback) {
-    if (TextUtils.isEmpty(tasks)) {
+  public int callNative(String instanceId, JSONArray tasks, String callback) {
+    if (tasks == null) {
       WXLogUtils.e("[WXBridgeManager] callNative: call Native tasks is null");
       commitJSBridgeAlarmMonitor(instanceId, WXErrorCode.WX_ERR_INVOKE_NATIVE, "[WXBridgeManager] callNative: call Native tasks is null");
       return IWXBridge.INSTANCE_RENDERING_ERROR;
@@ -429,7 +430,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
     if (WXEnvironment.isApkDebugable()) {
     mLodBuilder.append("[WXBridgeManager] callNative >>>> instanceId:").append(instanceId)
-        .append(", tasks:").append(tasks).append(", callback:").append(callback);
+        .append(", tasks:").append(tasks.toJSONString()).append(", callback:").append(callback);
     WXLogUtils.d(mLodBuilder.substring(0));
     mLodBuilder.setLength(0);
     }
@@ -441,13 +442,12 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
     long start = System.currentTimeMillis();
     long parseNanos = System.nanoTime();
-    JSONArray array = JSON.parseArray(tasks);
+    JSONArray array = tasks;
     parseNanos = System.nanoTime() - parseNanos;
 
     if (WXSDKManager.getInstance().getSDKInstance(instanceId) != null) {
       WXSDKManager.getInstance().getSDKInstance(instanceId).jsonParseTime(System.currentTimeMillis() - start);
     }
-
     int size = array.size();
     if (size > 0) {
       try {
@@ -491,19 +491,19 @@ public class WXBridgeManager implements Callback, BactchExecutor {
   // callCreateBody
   public int callCreateBody(String instanceId, String tasks, String callback) {
     if (TextUtils.isEmpty(tasks)) {
-      // if (WXEnvironment.isApkDebugable()) {
+       if (WXEnvironment.isApkDebugable()) {
       WXLogUtils.d("[WXBridgeManager] callCreateBody: call CreateBody tasks is null");
-      // }
+       }
       commitJSBridgeAlarmMonitor(instanceId, WXErrorCode.WX_ERR_DOM_CREATEBODY, "[WXBridgeManager] callCreateBody: call CreateBody tasks is null");
       return IWXBridge.INSTANCE_RENDERING_ERROR;
     }
 
-    // if (WXEnvironment.isApkDebugable()) {
+     if (WXEnvironment.isApkDebugable()) {
     mLodBuilder.append("[WXBridgeManager] callCreateBody >>>> instanceId:").append(instanceId)
         .append(", tasks:").append(tasks).append(", callback:").append(callback);
     WXLogUtils.d(mLodBuilder.substring(0));
     mLodBuilder.setLength(0);
-    // }
+     }
 
 
     if (mDestroyedInstanceId != null && mDestroyedInstanceId.contains(instanceId)) {
@@ -575,12 +575,12 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
   // callCreateFinish
   public int callCreateFinish(String instanceId, String callback) {
-    // if (WXEnvironment.isApkDebugable()) {
+     if (WXEnvironment.isApkDebugable()) {
     mLodBuilder.append("[WXBridgeManager] callCreateFinish >>>> instanceId:").append(instanceId)
         .append(", callback:").append(callback);
     WXLogUtils.d(mLodBuilder.substring(0));
     mLodBuilder.setLength(0);
-    // }
+     }
 
     if (mDestroyedInstanceId != null && mDestroyedInstanceId.contains(instanceId)) {
       return IWXBridge.DESTROY_INSTANCE;
@@ -814,13 +814,13 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
   public int callAddEvent(String instanceId, String ref, String event, String callback) {
 
-//    if (WXEnvironment.isApkDebugable()) {
+    if (WXEnvironment.isApkDebugable()) {
     mLodBuilder.append("[WXBridgeManager] callAddEvent >>>> instanceId:").append(instanceId)
         .append(", ref:").append(ref)
         .append(", event:").append(event);
     WXLogUtils.d(mLodBuilder.substring(0));
     mLodBuilder.setLength(0);
-//    }
+    }
 
     if (mDestroyedInstanceId != null && mDestroyedInstanceId.contains(instanceId)) {
       return IWXBridge.DESTROY_INSTANCE;
@@ -886,11 +886,11 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     return IWXBridge.INSTANCE_RENDERING;
   }
 
-  public int callAddElement(String instanceId, String ref, String dom, String index, String callback) {
+  public int callAddElement(String instanceId, String ref, JSONObject dom, String index, String callback) {
 
     if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("[WXBridgeManager] callNative::callAddElement >>>> instanceId:").append(instanceId)
-          .append(", ref:").append(ref).append(", dom:").append(dom).append(", callback:").append(callback);
+          .append(", ref:").append(ref).append(", dom:").append(dom.toJSONString()).append(", callback:").append(callback);
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
@@ -903,7 +903,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     if (WXSDKManager.getInstance().getSDKInstance(instanceId) != null) {
       long start = System.currentTimeMillis();
       long nanosTemp = System.nanoTime();
-      JSONObject domObject = JSON.parseObject(dom);
+      JSONObject domObject = dom;
       nanosTemp = System.nanoTime() - nanosTemp;
 
       if (WXSDKManager.getInstance().getSDKInstance(instanceId) != null) {
@@ -916,7 +916,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
       if (WXTracing.isAvailable() && addElementAction instanceof TraceableAction) {
         ((TraceableAction) addElementAction).mParseJsonNanos = nanosTemp;
         ((TraceableAction) addElementAction).mStartMillis = start;
-        ((TraceableAction) addElementAction).onStartDomExecute(instanceId, "addElement", domObject.getString("ref"), domObject.getString("type"), dom);
+        ((TraceableAction) addElementAction).onStartDomExecute(instanceId, "addElement", domObject.getString("ref"), domObject.getString("type"), dom.toJSONString());
       }
     }
 
@@ -1538,12 +1538,12 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     return false;
   }
 
-  private Object invokeExecJS(String instanceId, String namespace, String function, WXJSObject[] args) {
+  private byte[] invokeExecJS(String instanceId, String namespace, String function, WXJSObject[] args) {
     return  invokeExecJS(instanceId, namespace, function, args, true);
   }
 
 
-  public Object invokeExecJS(String instanceId, String namespace, String function,
+  public byte[] invokeExecJS(String instanceId, String namespace, String function,
                             WXJSObject[] args,boolean logTaskDetail){
      if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("callJS >>>> instanceId:").append(instanceId)
@@ -1676,7 +1676,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
               new WXJSObject(WXJSObject.JSON,
                       WXJsonUtils.fromObjectToJSONString(tasks))};
 
-      Object taskResult = invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
+      byte[] taskResult = invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
       JSONArray arrayResult =  null;
       int index = 0;
       for(Object taskObject : tasks){
@@ -1684,9 +1684,11 @@ public class WXBridgeManager implements Callback, BactchExecutor {
           WXHashMap<String, Object> map = (WXHashMap<String, Object>) taskObject;
           if(map.get(KEY_EVENT_CALLBACK) != null && map.get(KEY_EVENT_CALLBACK) instanceof EventResult){
             EventResult callback = (EventResult) map.get(KEY_EVENT_CALLBACK);
-            if(arrayResult == null && taskResult instanceof  byte[]){
-              byte[] bts = (byte[]) taskResult;
-              arrayResult  = JSONArray.parseArray(new String(bts, "UTF-8"));
+            if(arrayResult == null && taskResult != null){
+              Object object = Wson.parse(taskResult);
+              if(object instanceof  JSONArray) {
+                arrayResult = (JSONArray) object;
+              }
             }
             Object result = null;
             if(arrayResult != null && index < arrayResult.size()){

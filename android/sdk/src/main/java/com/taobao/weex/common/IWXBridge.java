@@ -18,8 +18,11 @@
  */
 package com.taobao.weex.common;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.bridge.WXJSObject;
 import com.taobao.weex.bridge.WXParams;
+
 
 /**
  * Bridge interface, native bridge and debug bridge both need to implement this interface
@@ -55,7 +58,7 @@ public interface IWXBridge extends IWXObject {
   int execJS(String instanceId, String namespace, String function, WXJSObject[] args);
 
   /**
-   * execute javascript function, return execute result as json array
+   * execute javascript function, return execute result as wson array
    */
   byte[] execJSWithResult(String instanceId, String namespace, String function, WXJSObject[] args);
 
@@ -72,9 +75,9 @@ public interface IWXBridge extends IWXObject {
    * js call native
 
    */
-  int callNative(String instanceId, String tasks, String callback);
+  int callNative(String instanceId, JSONArray tasks, String callback);
 
-  int callAddElement(String instanceId, String ref,String dom,String index, String callback);
+  int callAddElement(String instanceId, String ref, JSONObject dom, String index, String callback);
 
   void reportJSException(String instanceId, String func, String exception);
 
