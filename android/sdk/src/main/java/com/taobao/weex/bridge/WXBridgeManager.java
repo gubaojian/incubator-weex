@@ -64,7 +64,6 @@ import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 import com.taobao.weex.utils.batch.BactchExecutor;
 import com.taobao.weex.utils.batch.Interceptor;
-import com.taobao.weex.wson.Wson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1685,7 +1684,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
           if(map.get(KEY_EVENT_CALLBACK) != null && map.get(KEY_EVENT_CALLBACK) instanceof EventResult){
             EventResult callback = (EventResult) map.get(KEY_EVENT_CALLBACK);
             if(arrayResult == null && taskResult != null){
-              Object object = Wson.parse(taskResult);
+              Object object = JSON.parse(taskResult);
               if(object instanceof  JSONArray) {
                 arrayResult = (JSONArray) object;
               }
