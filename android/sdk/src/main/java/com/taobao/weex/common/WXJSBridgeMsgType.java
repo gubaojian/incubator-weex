@@ -35,4 +35,5 @@ public class WXJSBridgeMsgType {
   public static final int TAKE_HEAP_SNAPSHOT = 0x0d;
 
   public static final int RELOAD_PAGE_NATIVE = 0x0e;
+
 }

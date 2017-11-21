@@ -1119,6 +1119,9 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
           return true;
         }
       }
+      if(Constants.Event.SHOULD_STOP_PROPAGATION.equals(type)){
+        return  true;
+      }
     }
     return false;
   }

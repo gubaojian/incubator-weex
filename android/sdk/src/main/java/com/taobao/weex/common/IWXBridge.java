@@ -51,7 +51,6 @@ public interface IWXBridge extends IWXObject {
   /**
    * use execJSWithResult
    */
-  @Deprecated
   int execJS(String instanceId, String namespace, String function, WXJSObject[] args);
 
   /**
