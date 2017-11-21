@@ -235,6 +235,7 @@ class WXBridge implements IWXBridge {
       optionsObj = (JSONObject) Wson.parse(options);
     }
     Object object =  WXBridgeManager.getInstance().callNativeModule(instanceId,module,method,argArray,optionsObj);
+
     return new WXJSObject(object);
   }
 

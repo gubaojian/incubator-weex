@@ -20,13 +20,14 @@ package com.taobao.weex.bridge;
 
 
 import com.taobao.weex.utils.WXJsonUtils;
+import com.taobao.weex.wson.Wson;
 
 public class WXJSObject {
 
     public static final int NUMBER = 1;
     public static final int String = 2;
     public static final int JSON = 3;
-    public static final int TSON = 4; //binary json format
+    public static final int WSON = 4; //binary json format
 
     public Object data;
     public int type;
@@ -55,6 +56,9 @@ public class WXJSObject {
             data = new Double(((Float) object).intValue());
         } else if (object instanceof String) {
             type = String;
+        } else if (object instanceof Object) {
+            type = WSON;
+            data = Wson.toWson(object);
         } else if (object instanceof Object) {
             type = JSON;
             data = WXJsonUtils.fromObjectToJSONString(object,true);
