@@ -25,7 +25,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.taobao.weex.WXEnvironment;
+import com.taobao.weex.bridge.WXJSObject;
 import com.taobao.weex.common.WXRuntimeException;
+import com.taobao.weex.wson.Wson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,21 @@ public class WXJsonUtils {
   public @NonNull static String fromObjectToJSONString(Object obj) {
 
     return fromObjectToJSONString(obj,false);
+  }
+
+
+  public @NonNull static String fromArgs(WXJSObject[] args) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("[");
+    for(WXJSObject object : args){
+      if(object.type == WXJSObject.WSON){
+         object = new WXJSObject(WXJSObject.WSON, Wson.parse((byte[]) object.data));
+      }
+      builder.append(fromObjectToJSONString(object));
+      builder.append(",");
+    }
+    builder.append("]");
+    return  builder.toString();
   }
 
   /**

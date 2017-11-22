@@ -64,6 +64,7 @@ import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 import com.taobao.weex.utils.batch.BactchExecutor;
 import com.taobao.weex.utils.batch.Interceptor;
+import com.taobao.weex.wson.Wson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1547,8 +1548,9 @@ public class WXBridgeManager implements Callback, BactchExecutor {
      if (WXEnvironment.isApkDebugable()) {
       mLodBuilder.append("callJS >>>> instanceId:").append(instanceId)
               .append("function:").append(function);
-      if(logTaskDetail)
-        mLodBuilder.append(" tasks:").append(WXJsonUtils.fromObjectToJSONString(args));
+      if(logTaskDetail) {
+         mLodBuilder.append(" tasks:").append(WXJsonUtils.fromArgs(args));
+      }
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
      }
@@ -1672,8 +1674,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
       WXJSObject[] args = {
               new WXJSObject(WXJSObject.String, instanceId),
-              new WXJSObject(WXJSObject.JSON,
-                      WXJsonUtils.fromObjectToJSONString(tasks))};
+              new WXJSObject(WXJSObject.WSON, Wson.toWson(tasks))};
 
       byte[] taskResult = invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
       JSONArray arrayResult =  null;
