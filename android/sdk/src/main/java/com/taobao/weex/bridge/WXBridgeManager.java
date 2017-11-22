@@ -1674,7 +1674,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
       WXJSObject[] args = {
               new WXJSObject(WXJSObject.String, instanceId),
-              new WXJSObject(WXJSObject.JSON, WXJsonUtils.fromObjectToJSONString(tasks))};
+              new WXJSObject(WXJSObject.WSON, Wson.toWson(tasks))};
 
       byte[] taskResult = invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
       JSONArray arrayResult =  null;
