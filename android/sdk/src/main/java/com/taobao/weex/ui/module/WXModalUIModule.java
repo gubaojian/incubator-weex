@@ -61,6 +61,9 @@ public class WXModalUIModule extends WXSDKEngine.DestroyableModule {
 
   @JSMethod(uiThread = true)
   public void toast(String param) {
+    if(mWXSDKInstance != null && mWXSDKInstance.isDestroy()){
+         return;
+    }
 
     String message = "";
     int duration = Toast.LENGTH_SHORT;
