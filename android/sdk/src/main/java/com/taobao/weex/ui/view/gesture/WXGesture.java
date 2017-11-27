@@ -49,7 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.taobao.weex.common.Constants.Event.SHOULD_BUBBLE;
+import static com.taobao.weex.common.Constants.Event.SHOULD_STOP_PROPAGATION;
 
 public class WXGesture extends GestureDetector.SimpleOnGestureListener implements OnTouchListener {
 
@@ -81,7 +81,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
 
   private boolean shouldBubbleResult = true;
   private int     shouldBubbleInterval = 0; //every times try
-  private int     shouldBubbleCallTimes = 0;
+  private int     shouldBubbleCallRemainTimes = 0;
 
   public WXGesture(WXComponent wxComponent, Context context) {
     this.component = wxComponent;
@@ -95,8 +95,8 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     if(parentScrollable != null) {
       mParentOrientation = parentScrollable.getOrientation();
     }
-    shouldBubbleResult =  WXUtils.getBoolean(wxComponent.getDomObject().getAttrs().get("shouldBubbleResult"), true);
-    shouldBubbleInterval = WXUtils.getNumberInt(wxComponent.getDomObject().getAttrs().get("shouldBubbleInterval"), 0);
+    shouldBubbleResult =  WXUtils.getBoolean(wxComponent.getDomObject().getAttrs().get(Constants.Name.SHOULD_STOP_PROPAGATION_INIT_RESULT), true);
+    shouldBubbleInterval = WXUtils.getNumberInt(wxComponent.getDomObject().getAttrs().get(Constants.Name.SHOULD_STOP_PROPAGATION_INTERVAL), 0);
   }
 
   private boolean isParentScrollable() {
@@ -130,17 +130,20 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
    * shouldBubbleEvent default true
    * */
   private boolean shouldBubbleTouchEvent(MotionEvent event){
-     if(component.containsEvent(SHOULD_BUBBLE)){
-        if(shouldBubbleCallTimes >= shouldBubbleInterval && shouldBubbleInterval > 0){
-          shouldBubbleCallTimes = 0;
-          return  shouldBubbleResult;
-        }
-        EventResult result = component.fireEventWait(SHOULD_BUBBLE, createFireEventParam(event, CUR_EVENT, null));
-        if(result.isSuccess()){
-          shouldBubbleResult = WXUtils.getBoolean(result.getResult(), true);
-        }
-        shouldBubbleCallTimes++;
-        return shouldBubbleResult;
+     if(component.containsEvent(SHOULD_STOP_PROPAGATION)){
+         if(shouldBubbleInterval > 0 && shouldBubbleCallRemainTimes > 0){
+           shouldBubbleCallRemainTimes--;
+           return  shouldBubbleResult;
+         }
+         Map<String, Object> eventMap = createFireEventParam(event, CUR_EVENT, null);
+         eventMap.put("type", "touch");
+         EventResult result = component.fireEventWait(SHOULD_STOP_PROPAGATION, eventMap);
+         if(result.isSuccess()){
+           shouldBubbleResult = WXUtils.getBoolean(result.getResult(), true);
+         }
+         shouldBubbleCallRemainTimes = shouldBubbleInterval;
+         return shouldBubbleResult;
+
      }
      return  true;
   }
@@ -148,7 +151,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
   @Override
   public boolean onTouch(View v, MotionEvent event) {
     if(requestDisallowInterceptTouchEvent){
-        return  false;
+       return false;
     }
     try {
       boolean result = mGestureDetector.onTouchEvent(event);
@@ -183,7 +186,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
           result |= handlePanMotionEvent(event);
           break;
       }
-      if(component.containsEvent(SHOULD_BUBBLE)){
+      if(component.containsEvent(SHOULD_STOP_PROPAGATION)){
         ViewGroup parent = (ViewGroup) v.getParent();
         boolean requestDisallowInterceptTouchEvent = false;
         if(parent != null){
@@ -195,6 +198,9 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
         if(component.getParent() != null){
            component.getParent().requestDisallowInterceptTouchEvent(requestDisallowInterceptTouchEvent);
         }
+      }
+      if(mIsTouchEventConsumed){//when touch event consumed by one gesture, other component should not consumed
+          event.setAction(MotionEvent.ACTION_CANCEL);
       }
       return result;
     } catch (Exception e) {
@@ -523,8 +529,7 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
     }
     if (mPendingPan == HighLevelGesture.HORIZONTALPAN || mPendingPan == HighLevelGesture.VERTICALPAN) {
       //already during directional-pan
-      handlePanMotionEvent(e2);
-      result = true;
+      result = handlePanMotionEvent(e2);
     } else if (component.containsGesture(possiblePan)) {
       ViewParent p;
       if ((p = component.getRealView().getParent()) != null) {

@@ -208,6 +208,12 @@ public class Constants {
     String UNDEFINED = "undefined";
     String FLAT = "flat";
     String RIPPLE_ENABLED = "rippleEnabled";
+
+
+
+    String SHOULD_STOP_PROPAGATION_INIT_RESULT = "shouldStopPropagationInitResult";
+
+    String SHOULD_STOP_PROPAGATION_INTERVAL = "shouldStopPropagationInterval";
   }
 
   public interface Value {
@@ -293,8 +299,11 @@ public class Constants {
     String UNSTICKY = "unsticky";
     String STICKY = "sticky";
 
-    String ON_TRANSITION_END = "transitionEnd";
-    String SHOULD_BUBBLE = "shouldBubble";
+    String ON_TRANSITION_END = "transitionend";
+
+
+    String SHOULD_STOP_PROPAGATION = "shouldStopPropagation";
+
 
     interface SLOT_LIFECYCLE{
       String CREATE = "create";
