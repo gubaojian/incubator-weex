@@ -125,6 +125,8 @@ class WXBridge implements IWXBridge {
     }
 
     if(instance != null) {
+
+
       instance.callNativeTime(System.currentTimeMillis() - start);
     }
     if(WXEnvironment.isApkDebugable()){

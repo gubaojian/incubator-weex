@@ -18,6 +18,7 @@
  */
 package com.taobao.weex.wson;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
@@ -54,13 +55,20 @@ public class Wson {
 
     private static final String STRING_UTF8_CHARSET_NAME = "UTF-8";
 
+
+    public static Object parse(byte[] data){
+        return  parse(data, true);
+    }
     /**
      * parse wson data  to object
      * @param  data  byte array
      * */
-    public static Object parse(byte[] data){
+    public static Object parse(byte[] data, boolean degrade){
         if(data == null){
             return  null;
+        }
+        if(degrade){
+            return JSON.parse(new String(data));
         }
         Parser parser =  new Parser(data);
         Object object = parser.parse();
