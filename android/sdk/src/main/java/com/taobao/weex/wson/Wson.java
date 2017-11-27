@@ -88,6 +88,7 @@ public class Wson {
 
 
         }
+        Log.e("weex", "weex json " + JSON.toJSONString(object));
         return  two;
     }
     /**
