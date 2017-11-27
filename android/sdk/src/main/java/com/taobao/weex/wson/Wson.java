@@ -18,6 +18,8 @@
  */
 package com.taobao.weex.wson;
 
+import android.util.Log;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -76,6 +78,18 @@ public class Wson {
         return object;
     }
 
+    public static byte[] toWsonDebug(Object object){
+        byte[] src = toWson(object);
+        byte[] two = toWson(JSON.toJSON(object));
+        if(!JSON.toJSONString(Wson.parse(src)).equals(JSON.toJSONString(Wson.parse(two)))
+                || !JSON.toJSONString(object).equals(JSON.toJSONString(Wson.parse(src)))){
+            Log.e("weex", object + "weex illegal " + JSON.toJSON(object)
+            + "  " + JSON.toJSONString(Wson.parse(src)));
+
+
+        }
+        return  two;
+    }
     /**
      * serialize object to wson data
      * */
@@ -261,7 +275,7 @@ public class Wson {
         }
 
         private final long readLong(){
-            long number = (((buffer[position + 7] & 0xFFL)      ) +
+            long number = (((buffer[position + 7] & 0xFFL)) +
                     ((buffer[position + 6] & 0xFFL) <<  8) +
                     ((buffer[position + 5] & 0xFFL) << 16) +
                     ((buffer[position + 4] & 0xFFL) << 24) +
@@ -387,7 +401,11 @@ public class Wson {
                     writeVarInt(number.intValue());
                 }else{
                     writeByte(NUMBER_DOUBLE_TYPE);
-                    writeDouble(number.doubleValue());
+                    if(number instanceof  Float){
+                        writeDouble(Double.parseDouble(number.toString()));
+                    }else{
+                        writeDouble(number.doubleValue());
+                    }
                 }
                 return;
             }else if (object instanceof  Boolean){

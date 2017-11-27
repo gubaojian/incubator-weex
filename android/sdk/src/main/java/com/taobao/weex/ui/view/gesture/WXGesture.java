@@ -24,6 +24,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -135,12 +136,16 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
            shouldBubbleCallRemainTimes--;
            return  shouldBubbleResult;
          }
-         Map<String, Object> eventMap = createFireEventParam(event, CUR_EVENT, null);
-         eventMap.put("type", "touch");
-         EventResult result = component.fireEventWait(SHOULD_STOP_PROPAGATION, eventMap);
-         if(result.isSuccess()){
-           shouldBubbleResult = WXUtils.getBoolean(result.getResult(), true);
+         long start = System.currentTimeMillis();
+         for(int i=0;i<100; i++) {
+           Map<String, Object> eventMap = createFireEventParam(event, CUR_EVENT, null);
+           eventMap.put("type", "touch");
+           EventResult result = component.fireEventWait(SHOULD_STOP_PROPAGATION, eventMap);
+           if (result.isSuccess()) {
+             shouldBubbleResult = WXUtils.getBoolean(result.getResult(), true);
+           }
          }
+         Log.e("weex", "weex used " + (System.currentTimeMillis() - start));
          shouldBubbleCallRemainTimes = shouldBubbleInterval;
          return shouldBubbleResult;
 
