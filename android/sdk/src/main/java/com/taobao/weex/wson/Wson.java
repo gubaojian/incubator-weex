@@ -57,7 +57,7 @@ public class Wson {
 
 
     public static Object parse(byte[] data){
-        return  parse(data, true);
+        return  parse(data, false);
     }
     /**
      * parse wson data  to object
