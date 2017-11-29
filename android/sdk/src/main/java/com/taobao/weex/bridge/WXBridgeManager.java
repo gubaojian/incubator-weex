@@ -28,6 +28,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -1099,7 +1100,9 @@ public class WXBridgeManager implements Callback, BactchExecutor {
           Object[] tasks = {task};
           WXJSObject[] jsArgs = {
                   new WXJSObject(WXJSObject.String, instanceId),
-                  new WXJSObject(WXJSObject.JSON, WXJsonUtils.fromObjectToJSONString(tasks))};
+                  new WXJSObject(WXJSObject.WSON, Wson.toWson(
+                          tasks))};
+          Log.e("weex", "weex java json :" + WXJsonUtils.fromObjectToJSONString(tasks));
           byte[] taskResult = invokeExecJSWithResult(String.valueOf(instanceId), null, METHOD_CALL_JS, jsArgs, true);
           if(eventCallback == null){
             return;
@@ -1111,6 +1114,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
             }
           }
           eventCallback.onCallback(result);
+          jsArgs = null;
         }catch (Exception e){
           WXLogUtils.e("asyncCallJSEventWithResult", e);
         }
@@ -1736,6 +1740,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
       WXJSObject[] args = {
               new WXJSObject(WXJSObject.String, instanceId),
               new WXJSObject(WXJSObject.WSON, Wson.toWson(tasks))};
+      Log.e("weex", "weex java json :" + WXJsonUtils.fromObjectToJSONString(tasks));
       invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
       args = null;
     } catch (Throwable e) {

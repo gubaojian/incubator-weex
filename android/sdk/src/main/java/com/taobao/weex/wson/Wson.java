@@ -395,7 +395,7 @@ public class Wson {
                     writeVarInt(number.intValue());
                 }else{
                     writeByte(NUMBER_DOUBLE_TYPE);
-                    writeDouble(number.doubleValue());
+                    writeDouble(Double.parseDouble(number.toString()));
                 }
                 return;
             }else if (object instanceof  Boolean){
