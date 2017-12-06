@@ -27,6 +27,7 @@ import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.IWXBridge;
+import com.taobao.weex.utils.WXJsonUtils;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.wson.Wson;
 
@@ -105,7 +106,7 @@ class WXBridge implements IWXBridge {
    */
 
   public int callNative(String instanceId, byte [] tasks, String callback) {
-     return callNative(instanceId, (JSONArray)Wson.parse(tasks),callback);
+     return callNative(instanceId, (JSONArray)WXJsonUtils.parseWson(tasks),callback);
   }
 
   public int callNative(String instanceId, JSONArray tasks, String callback) {
@@ -137,7 +138,7 @@ class WXBridge implements IWXBridge {
     return errorCode;
   }
   public int callAddElement(String instanceId, String ref,byte[] dom,String index, String callback) {
-    return callAddElement(instanceId,ref, (JSONObject)Wson.parse(dom),index,callback);
+    return callAddElement(instanceId,ref, (JSONObject) WXJsonUtils.parseWson(dom),index,callback);
   }
 
   /**
@@ -231,10 +232,10 @@ class WXBridge implements IWXBridge {
   @Override
   public Object callNativeModule(String instanceId, String module, String method, byte [] arguments, byte [] options) {
 
-    JSONArray argArray = (JSONArray) Wson.parse(arguments);
+    JSONArray argArray = (JSONArray) WXJsonUtils.parseWson(arguments);
     JSONObject optionsObj = null;
     if (options != null) {
-      optionsObj = (JSONObject) Wson.parse(options);
+      optionsObj = (JSONObject) WXJsonUtils.parseWson(options);
     }
     Object object =  WXBridgeManager.getInstance().callNativeModule(instanceId,module,method,argArray,optionsObj);
 
@@ -251,7 +252,7 @@ class WXBridge implements IWXBridge {
    */
   @Override
   public void callNativeComponent(String instanceId, String componentRef, String method, byte [] arguments, byte [] options) {
-    JSONArray argArray = (JSONArray)Wson.parse(arguments);
+    JSONArray argArray = (JSONArray)WXJsonUtils.parseWson(arguments);
      WXBridgeManager.getInstance().callNativeComponent(instanceId,componentRef,method,argArray,options);
   }
 

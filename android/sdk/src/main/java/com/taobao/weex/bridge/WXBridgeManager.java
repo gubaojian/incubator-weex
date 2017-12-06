@@ -1100,20 +1100,20 @@ public class WXBridgeManager implements Callback, BactchExecutor {
           Object[] tasks = {task};
           WXJSObject[] jsArgs = {
                   new WXJSObject(WXJSObject.String, instanceId),
-                  new WXJSObject(WXJSObject.WSON, Wson.toWson(
-                          tasks))};
-          Log.e("weex", "weex java json :" + WXJsonUtils.fromObjectToJSONString(tasks));
+                  WXJsonUtils.wsonWXJSObject(tasks)};
           byte[] taskResult = invokeExecJSWithResult(String.valueOf(instanceId), null, METHOD_CALL_JS, jsArgs, true);
           if(eventCallback == null){
             return;
           }
           if(taskResult != null){
-            JSONArray arrayResult = (JSONArray) Wson.parse(taskResult);
+            JSONArray arrayResult = (JSONArray) WXJsonUtils.parseWson(taskResult);
             if(arrayResult != null && arrayResult.size() > 0){
               result = arrayResult.get(0);
             }
           }
           eventCallback.onCallback(result);
+          jsArgs[0] = null;
+          taskResult = null;
           jsArgs = null;
         }catch (Exception e){
           WXLogUtils.e("asyncCallJSEventWithResult", e);
@@ -1739,9 +1739,12 @@ public class WXBridgeManager implements Callback, BactchExecutor {
 
       WXJSObject[] args = {
               new WXJSObject(WXJSObject.String, instanceId),
-              new WXJSObject(WXJSObject.WSON, Wson.toWson(tasks))};
-      Log.e("weex", "weex java json :" + WXJsonUtils.fromObjectToJSONString(tasks));
+              WXJsonUtils.wsonWXJSObject(tasks)};
       invokeExecJS(String.valueOf(instanceId), null, METHOD_CALL_JS, args);
+      task.clear();
+      for(int i=0; i<tasks.length; i++){
+        args[i] = null;
+      }
       args = null;
     } catch (Throwable e) {
       WXLogUtils.e("WXBridgeManager", e);

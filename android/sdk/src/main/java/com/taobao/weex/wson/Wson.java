@@ -19,21 +19,30 @@
 package com.taobao.weex.wson;
 
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.nio.ByteOrder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * fast binary json format for parse map and serialize map
  * Created by efurture on 2017/8/16.
  */
 public class Wson {
+
+    /**
+     * skip map null values
+     * */
+    public static final boolean WriteMapNullValue = false;
     /**
      * wson data type
      * */
@@ -49,6 +58,8 @@ public class Wson {
 
     private static final byte NUMBER_DOUBLE_TYPE = 'd';
 
+    private static final byte NUMBER_FLOAT_TYPE = 'F';
+
     private static final byte ARRAY_TYPE = '[';
 
     private static final byte MAP_TYPE = '{';
@@ -60,28 +71,22 @@ public class Wson {
 
 
     /**
-     * parse wson data  to object
+     * parse wson data  to object, please use WXJsonUtils.parseWson
      * @param  data  byte array
      * */
     public static Object parse(byte[] data){
         if(data == null){
             return  null;
         }
-        try{
-
-            Parser parser =  new Parser(data);
-            Object object = parser.parse();
-            parser.close();
-            return object;
-        }catch (Exception e){
-            Log.e("weex", "weex parse exception", e);
-            return  null;
-        }
+        Parser parser =  new Parser(data);
+        Object object = parser.parse();
+        parser.close();
+        return object;
     }
 
 
     /**
-     * serialize object to wson data
+     * serialize object to wson data, please use WXJsonUtils.wsonWXJSObject
      * */
     public static byte[] toWson(Object object){
         if(object == null){
@@ -134,6 +139,8 @@ public class Wson {
                     return readUTF16String();
                 case NUMBER_INT_TYPE :
                     return  readVarInt();
+                case NUMBER_FLOAT_TYPE :
+                    return  readFloat();
                 case MAP_TYPE:
                     return readMap();
                 case ARRAY_TYPE:
@@ -147,10 +154,12 @@ public class Wson {
                 case NULL_TYPE:
                     return  null;
                 default:
-                    break;
+                    throw new RuntimeException("wson unhandled type " + type + " " +
+                     position  +  " length " + buffer.length);
             }
-            return  null;
         }
+
+
 
         private final Object readMap(){
             int size = readUInt();
@@ -295,6 +304,15 @@ public class Wson {
             double number = Double.longBitsToDouble(readLong());
             return  number;
         }
+
+        private Object readFloat() {
+            int number = (((buffer[position + 3] & 0xFF)      ) +
+                    ((buffer[position + 2] & 0xFF) <<  8) +
+                    ((buffer[position + 1] & 0xFF) << 16) +
+                    ((buffer[position  ] & 0xFF) << 24));
+            position +=4;
+            return  Float.intBitsToFloat(number);
+        }
     }
 
     /**
@@ -361,14 +379,7 @@ public class Wson {
                 }
                 refs.add(object);
                 Map map = (Map) object;
-                ensureCapacity(8);
-                writeByte(MAP_TYPE);
-                writeUInt(map.size());
-                Set<Map.Entry<Object,Object>>  entries = map.entrySet();
-                for(Map.Entry<Object,Object> entry : entries){
-                    writeMapKeyUTF16(entry.getKey().toString());
-                    writeObject(entry.getValue());
-                }
+                writeMap(map);
                 refs.remove(refs.size()-1);
                 return;
             }else if (object instanceof List){
@@ -388,15 +399,8 @@ public class Wson {
                 refs.remove(refs.size()-1);
                 return;
             }else if (object instanceof Number){
-                ensureCapacity(12);
                 Number number = (Number) object;
-                if(object instanceof  Integer || object instanceof  Short){
-                    writeByte(NUMBER_INT_TYPE);
-                    writeVarInt(number.intValue());
-                }else{
-                    writeByte(NUMBER_DOUBLE_TYPE);
-                    writeDouble(Double.parseDouble(number.toString()));
-                }
+                writeNumber(number);
                 return;
             }else if (object instanceof  Boolean){
                 ensureCapacity(2);
@@ -459,14 +463,74 @@ public class Wson {
                     writeByte(NULL_TYPE);
                 }else {
                     refs.add(object);
-                    writeObject(toMap(object));
+                    writeMap(toMap(object));
                     refs.remove(refs.size()-1);
                 }
                 return;
             }
         }
 
+        private final void writeNumber(Number number) {
+            ensureCapacity(12);
+            if(number instanceof  Integer){
+                writeByte(NUMBER_INT_TYPE);
+                writeVarInt(number.intValue());
+                return;
+            }
 
+            if(number instanceof Float){
+                writeByte(NUMBER_FLOAT_TYPE);
+                writeFloat(number.floatValue());
+                return;
+            }
+            if(number instanceof  Double){
+                writeByte(NUMBER_DOUBLE_TYPE);
+                writeDouble(number.doubleValue());
+                return;
+            }
+
+            if(number instanceof  Short
+                    || number instanceof  Byte){
+                writeByte(NUMBER_INT_TYPE);
+                writeVarInt(number.intValue());
+                return;
+            }
+
+            writeByte(NUMBER_DOUBLE_TYPE);
+            writeDouble(number.doubleValue());
+        }
+
+        private final  void writeMap(Map map) {
+            if(WriteMapNullValue){
+                ensureCapacity(8);
+                writeByte(MAP_TYPE);
+                writeUInt(map.size());
+                Set<Map.Entry<Object,Object>>  entries = map.entrySet();
+                for(Map.Entry<Object,Object> entry : entries){
+                    writeMapKeyUTF16(entry.getKey().toString());
+                    writeObject(entry.getValue());
+                }
+            }else{
+                Set<Map.Entry<Object,Object>>  entries = map.entrySet();
+                int nullValueSize = 0;
+                for(Map.Entry<Object,Object> entry : entries){
+                    if(entry.getValue() == null){
+                        nullValueSize++;
+                    }
+                }
+
+                ensureCapacity(8);
+                writeByte(MAP_TYPE);
+                writeUInt(map.size()-nullValueSize);
+                for(Map.Entry<Object,Object> entry : entries){
+                    if(entry.getValue() == null){
+                        continue;
+                    }
+                    writeMapKeyUTF16(entry.getKey().toString());
+                    writeObject(entry.getValue());
+                }
+            }
+        }
 
 
         private final void writeByte(byte type){
@@ -512,6 +576,15 @@ public class Wson {
 
         private final void writeDouble(double value){
             writeLong(Double.doubleToLongBits(value));
+        }
+
+        private final void writeFloat(float value){
+            int val = Float.floatToIntBits(value);
+            buffer[position + 3] = (byte) (val       );
+            buffer[position + 2] = (byte) (val >>>  8);
+            buffer[position + 1] = (byte) (val >>> 16);
+            buffer[position ] = (byte) (val >>> 24);
+            position += 4;
         }
 
         private final void writeLong(long val){

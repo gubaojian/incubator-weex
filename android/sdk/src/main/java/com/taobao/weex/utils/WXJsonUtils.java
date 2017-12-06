@@ -77,7 +77,7 @@ public class WXJsonUtils {
     builder.append("[");
     for(WXJSObject object : args){
       if(object.type == WXJSObject.WSON){
-         object = new WXJSObject(WXJSObject.WSON, Wson.parse((byte[]) object.data));
+         object = new WXJSObject(WXJSObject.WSON, WXJsonUtils.parseWson((byte[]) object.data));
       }
       builder.append(fromObjectToJSONString(object));
       builder.append(",");
@@ -107,4 +107,37 @@ public class WXJsonUtils {
       }
     }
   }
+
+
+
+  /**
+   * total entry, with wson support, and  can degrade to json
+   * */
+  public static Object parseWson(byte[] data){
+    if(data == null){
+      return  null;
+    }
+    try{
+      if(USE_WSON){
+        return  Wson.parse(data);
+      }else{
+        return  JSON.parse(new String(data, "UTF-8"));
+      }
+    }catch (Exception e){
+      WXLogUtils.d("weex wson parse error ", e);
+      return  null;
+    }
+  }
+
+
+  public static WXJSObject wsonWXJSObject(Object tasks){
+    //CompatibleUtils.checkDiff(tasks);
+    if(USE_WSON) {
+      return new WXJSObject(WXJSObject.WSON, Wson.toWson(tasks));
+    }else{
+      return new WXJSObject(WXJSObject.JSON, WXJsonUtils.fromObjectToJSONString(tasks));
+    }
+  }
+
+  private static final  boolean USE_WSON = true;
 }
