@@ -186,7 +186,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       return;
     }
 
-    mDragHelper = new DefaultDragHelper(mChildren, recyclerView, new EventTrigger() {
+    mDragHelper = new DragHelper(mChildren, recyclerView, new EventTrigger() {
       @Override
       public void triggerEvent(String type, Map<String, Object> args) {
         fireEvent(type, args);

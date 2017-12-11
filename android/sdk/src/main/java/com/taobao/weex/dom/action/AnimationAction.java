@@ -150,7 +150,7 @@ class AnimationAction implements DOMAction, RenderAction {
       }
       if (component.getHostView() == null) {
         WXAnimationModule.AnimationHolder holder = new WXAnimationModule.AnimationHolder(mAnimationBean, callback);
-        component.postAnimation(holder);
+        component.setAnimationHolder(holder);
       } else {
         try {
           Animator animator = createAnimator(component.getHostView(), instance

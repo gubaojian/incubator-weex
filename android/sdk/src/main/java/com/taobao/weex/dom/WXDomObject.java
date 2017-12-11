@@ -488,10 +488,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
      * filter transform property
      * */
     if(transition != null){
-      transition.updateTranstionParams(updates);
-      if(transition.hasTransitionProperty(updates)){
-        transition.startTransition(updates);
-      }
+      transition.doTransitionForUpdates(updates);
     }
     /**
      * diff styles
@@ -513,15 +510,8 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
   }
 
 
-  public void applyStyle(Map<String, Object> styles){
-     applyStyleToNode(styles);
-  }
-
-  void applyStyleToNode() {
-    applyStyleToNode(getStyles());
-  }
-
-  /** package **/ void applyStyleToNode(Map<String, Object> updates) {
+  /** package **/
+  public void applyStyleToNode(Map<String, Object> updates) {
     if(updates.size() == 0){
       return;
     }
@@ -715,9 +705,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     fixedStyleRefs.add(ref);
   }
 
-  public String dumpDomTree() {
-    return mRef + ": " + toString();
-  }
+
 
   /**
    * Parse the jsonObject to {@link WXDomObject} recursively
@@ -897,7 +885,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
 
   }
 
-  public static void addDirtyKey(String key){
+  private  static final void addDirtyKey(String key){
     dirtyStyle.add(key);
   }
 }

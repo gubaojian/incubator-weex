@@ -53,7 +53,7 @@ class ApplyStyleConsumer implements WXDomObject.Consumer {
     }
 
     if (dom.getStyles().size() > 0) {
-      dom.applyStyleToNode();
+      dom.applyStyleToNode(dom.getStyles());
     }
   }
 }

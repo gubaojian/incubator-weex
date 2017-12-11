@@ -63,23 +63,23 @@ abstract class BorderCorner {
     return getOuterCornerRadius() > 0 && !FloatUtil.floatsEqual(0, getOuterCornerRadius());
   }
 
-  protected final float getPreBorderWidth() {
+  final float getPreBorderWidth() {
     return mPreBorderWidth;
   }
 
-  protected final float getPostBorderWidth() {
+  final float getPostBorderWidth() {
     return mPostBorderWidth;
   }
 
-  protected final float getOuterCornerRadius() {
+  final float getOuterCornerRadius() {
     return mCornerRadius;
   }
 
-  protected final float getAngleBisectorDegree(){
+  final float getAngleBisectorDegree(){
     return mAngleBisector;
   }
 
-  protected final RectF getBorderBox() {
+  final RectF getBorderBox() {
     return mBorderBox;
   }
 

@@ -19,39 +19,146 @@
 package com.taobao.weex.ui.component.list;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
+import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.ui.component.WXComponent;
+import com.taobao.weex.utils.WXLogUtils;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Description:
- *
- * interface for drag&drop support
- *
+ * Drag-drop support for list
  * <p>
  * Created by rowandjj(chuyi)<br/>
- * Date: 16/4/5<br/>
- * Time: 上午11:34<br/>
  */
-interface DragHelper {
 
-    void onDragStart(@NonNull WXComponent component, int from);
+class DragHelper{
 
-    void onDragEnd(@NonNull WXComponent component, int from, int to);
+    private boolean mLongPressEnabled;
 
-    void onDragging(int fromPos, int toPos);
+    @NonNull
+    private final EventTrigger mEventTrigger;
+    @NonNull
+    private final RecyclerView mRecyclerView;
+    @NonNull
+    private final List<WXComponent> mDataSource;
+    @NonNull
+    private ItemTouchHelper mItemTouchHelper;
 
-    boolean isLongPressDragEnabled();
+    private static final String EVENT_START_DRAG = "dragstart";
+    private static final String EVENT_END_DRAG = "dragend";
 
-    void setLongPressDragEnabled(boolean enabled);
+    private static final String TAG_EXCLUDED = "drag_excluded";
 
-    void startDrag(@NonNull RecyclerView.ViewHolder viewHolder);
+    private static final String TAG = "WXListExComponent";
 
-    boolean isDraggable();
+    private boolean isDraggable = false;
 
-    void setDraggable(boolean draggable);
+    DragHelper(@NonNull List<WXComponent> dataSource, @NonNull RecyclerView recyclerView, @NonNull EventTrigger trigger) {
+        this.mDataSource = dataSource;
+        this.mEventTrigger = trigger;
+        this.mRecyclerView = recyclerView;
 
-    void setDragExcluded(@NonNull RecyclerView.ViewHolder viewHolder, boolean isExcluded);
+        //attach
+        this.mItemTouchHelper = new ItemTouchHelper(new DragSupportCallback(this, true));
+        try {
+            mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+        }catch (Throwable e) {
+            //ignore
+        }
+    }
 
-    boolean isDragExcluded(@NonNull RecyclerView.ViewHolder viewHolder);
+    public void onDragStart(@NonNull WXComponent component, int from) {
+        if (WXEnvironment.isApkDebugable()) {
+            WXLogUtils.d(TAG, "list on drag start : from index " + from);
+        }
+        mEventTrigger.triggerEvent(EVENT_START_DRAG, buildEvent(component.getRef(), from, -1));
+    }
+
+    public void onDragEnd(@NonNull WXComponent component, int from, int to) {
+        if (WXEnvironment.isApkDebugable()) {
+            WXLogUtils.d(TAG, "list on drag end : " + "from index " + from + " to index " + to);
+        }
+        mEventTrigger.triggerEvent(EVENT_END_DRAG, buildEvent(component.getRef(), from, to));
+    }
+
+    public void onDragging(int fromPos, int toPos) {
+        if (WXEnvironment.isApkDebugable()) {
+            WXLogUtils.d(TAG, "list on dragging : from index " + fromPos + " to index " + toPos);
+        }
+
+        RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+        if (adapter == null) {
+            WXLogUtils.e(TAG, "drag failed because of RecyclerView#Adapter is not bound");
+            return;
+        }
+
+        if (fromPos >= 0 && fromPos <= mDataSource.size() - 1 && toPos >= 0 && toPos <= mDataSource.size() - 1) {
+            Collections.swap(mDataSource, fromPos, toPos);
+            adapter.notifyItemMoved(fromPos, toPos);
+        }
+    }
+
+    public boolean isLongPressDragEnabled() {
+        return mLongPressEnabled;
+    }
+
+    public void setLongPressDragEnabled(boolean enabled) {
+        this.mLongPressEnabled = enabled;
+    }
+
+
+    public void startDrag(@NonNull RecyclerView.ViewHolder viewHolder) {
+        if (isDraggable) {
+            mItemTouchHelper.startDrag(viewHolder);
+        }
+    }
+
+    public boolean isDraggable() {
+        return this.isDraggable;
+    }
+
+    public void setDraggable(boolean draggable) {
+        this.isDraggable = draggable;
+    }
+
+    public void setDragExcluded(@NonNull RecyclerView.ViewHolder viewHolder, boolean isExcluded) {
+        if (viewHolder.itemView == null) {
+            if (WXEnvironment.isApkDebugable()) {
+                WXLogUtils.e(TAG, "[error] viewHolder.itemView is null");
+            }
+            return;
+        }
+        if (isExcluded) {
+            viewHolder.itemView.setTag(TAG_EXCLUDED);
+        } else {
+            viewHolder.itemView.setTag(null);
+        }
+    }
+
+    public boolean isDragExcluded(@NonNull RecyclerView.ViewHolder viewHolder) {
+        if (viewHolder.itemView == null) {
+            if (WXEnvironment.isApkDebugable()) {
+                WXLogUtils.e(TAG, "[error] viewHolder.itemView is null");
+            }
+            return false;
+        }
+        return viewHolder.itemView.getTag() != null && TAG_EXCLUDED.equals(viewHolder.itemView.getTag());
+    }
+
+    private Map<String, Object> buildEvent(@Nullable String target, int fromIndex, int toIndex) {
+        Map<String, Object> args = new HashMap<>(4);
+        args.put("target", target == null ? "unknown" : target);
+        args.put("fromIndex", fromIndex);
+        args.put("toIndex", toIndex);
+        args.put("timestamp", System.currentTimeMillis());
+        return args;
+    }
 }

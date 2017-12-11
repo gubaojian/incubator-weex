@@ -166,7 +166,7 @@ public class WXTransition {
     /**
      * check updates has transition property
      * */
-    public boolean hasTransitionProperty(Map<String, Object> styles){
+    private final boolean hasTransitionProperty(Map<String, Object> styles){
         for(String property : properties){
             if(styles.containsKey(property)){
                 return  true;
@@ -175,7 +175,15 @@ public class WXTransition {
         return false;
     }
 
-    public void updateTranstionParams(Map<String, Object> updates){
+    public final void doTransitionForUpdates(Map<String, Object> updates){
+        updateTranstionParams(updates);
+        if(hasTransitionProperty(updates)){
+            startTransition(updates);
+        }
+    }
+
+
+    private final void updateTranstionParams(Map<String, Object> updates){
         if(updates.containsKey(TRANSITION_DELAY)){
             domObject.getStyles().put(TRANSITION_DELAY, updates.remove(TRANSITION_DELAY));
             this.delay = parseTimeMillis(domObject.getStyles(), TRANSITION_DELAY, 0);
@@ -201,7 +209,7 @@ public class WXTransition {
      * start transition animation, updates maybe split two different updates,
      * because javascript will send multi update on same transition, we assume that updates in 8ms is one transition
      * */
-    public void  startTransition(Map<String, Object> updates){
+    private final void  startTransition(Map<String, Object> updates){
         synchronized (lockToken){
             final View taregtView = getTargetView();
             if(taregtView == null){
@@ -412,7 +420,7 @@ public class WXTransition {
     }
 
 
-    public void doPendingLayoutAnimation(){
+    private final void doPendingLayoutAnimation(){
         if(layoutValueAnimator != null){
             layoutValueAnimator.cancel();
             layoutValueAnimator = null;

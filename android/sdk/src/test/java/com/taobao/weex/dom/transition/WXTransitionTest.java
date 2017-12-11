@@ -76,8 +76,7 @@ public class WXTransitionTest extends Application{
         WXTransition transition = domObject.getTransition();
         Map<String, Object> updates = new HashMap();
         updates.put("height", "1000");
-        Assert.assertTrue(transition.hasTransitionProperty(updates));
-        transition.startTransition(updates);
+        transition.doTransitionForUpdates(updates);
 
 
 

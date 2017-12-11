@@ -1802,7 +1802,7 @@ public class WXSDKInstance implements IWXActivityStateListener,DomContext, View.
 
   }
 
-  public String getTemplate() {
+  private String getTemplate() {
     if(templateRef == null){
       return  null;
     }

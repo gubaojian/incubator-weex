@@ -57,7 +57,7 @@ public class WXDomObjectTest {
     assertEquals(dom.getRef(),"100");
     assertEquals(dom.getType(),"div");
 
-    dom.applyStyleToNode();
+    dom.applyStyleToNode(dom.getStyles());
   }
 
   @Test

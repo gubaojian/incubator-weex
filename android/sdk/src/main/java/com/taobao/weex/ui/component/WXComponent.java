@@ -166,7 +166,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
   private boolean waste = false;
 
   //Holding the animation bean when component is uninitialized
-  public void postAnimation(WXAnimationModule.AnimationHolder holder) {
+  public void setAnimationHolder(WXAnimationModule.AnimationHolder holder) {
     this.mAnimationHolder = holder;
   }
 
@@ -353,18 +353,6 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
   }
 
 
-  /**
-   * find certain class type parent
-   * */
-  public  Object findTypeParent(WXComponent component, Class type){
-    if(component.getClass() == type){
-      return component;
-    }
-    if(component.getParent() != null) {
-        findTypeParent(component.getParent(), type);
-    }
-    return  null;
-  }
 
   /**
    * The view is created as needed
@@ -2012,7 +2000,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  protected boolean isRippleEnabled() {
+  private final boolean isRippleEnabled() {
     try {
       Object obj = getDomObject().getAttrs().get(Constants.Name.RIPPLE_ENABLED);
       return WXUtils.getBoolean(obj, false);

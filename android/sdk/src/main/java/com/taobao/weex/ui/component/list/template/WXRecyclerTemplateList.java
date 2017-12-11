@@ -1503,7 +1503,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             return component;
         }
         if(component.getParent() != null) {
-            findTypeParent(component.getParent(), type);
+            findParentType(component.getParent(), type);
         }
         return  null;
     }

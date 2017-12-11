@@ -95,7 +95,7 @@ public class DefaultDragHelperTest {
 
         mockedEventTrigger = mock(EventTrigger.class);
 
-        mFakeDragHelper = new DefaultDragHelper(mFakeDataSource,listComponent.getHostView().getInnerView(), mockedEventTrigger);
+        mFakeDragHelper = new DragHelper(mFakeDataSource,listComponent.getHostView().getInnerView(), mockedEventTrigger);
     }
 
     @After
