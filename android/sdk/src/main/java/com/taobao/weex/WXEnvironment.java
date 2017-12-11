@@ -81,7 +81,7 @@ public class WXEnvironment {
   public static long sSDKInitTime =0;
 
   public static LogLevel sLogLevel = LogLevel.DEBUG;
-  private static boolean isApkDebug = true;
+  private static boolean isApkDebug = false;
   public static boolean isPerf = false;
 
   private static Map<String, String> options = new HashMap<>();
@@ -280,6 +280,10 @@ public class WXEnvironment {
     }
 
     return path;
+  }
+
+  public static void  setApkDebugable(boolean debugable){
+      isApkDebug  = debugable;
   }
 
 }
