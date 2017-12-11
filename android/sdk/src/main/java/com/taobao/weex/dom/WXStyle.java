@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -22,6 +22,7 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
+import android.support.v4.util.SimpleArrayMap;
 import android.text.Layout;
 import android.text.TextUtils;
 
@@ -45,18 +46,16 @@ import java.util.Set;
  * Store value of component style
  *
  */
-public class WXStyle implements Map<String, Object>,Cloneable {
+public class WXStyle extends ArrayMap implements Cloneable {
 
   private static final long serialVersionUID = 611132641365274134L;
   public static final int UNSET = -1;
 
-  private @NonNull final Map<String,Object> mStyles;
   private Map<String,Map<String,Object>> mPesudoStyleMap = new ArrayMap<>();// clz_group:{styleMap}
   private Map<String,Object> mPesudoResetStyleMap = new ArrayMap<>();
 
 
   public WXStyle(){
-    mStyles = new ArrayMap<>();
   }
 
   @Nullable
@@ -620,62 +619,7 @@ public class WXStyle implements Map<String, Object>,Cloneable {
     return obj == null ? Constants.Value.VISIBLE : obj.toString();
   }
 
-  @Override
-  public boolean equals(Object o) {
-    return mStyles.equals(o);
-  }
 
-  @Override
-  public int hashCode() {
-    return mStyles.hashCode();
-  }
-
-  @Override
-  public void clear() {
-    mStyles.clear();
-  }
-
-  @Override
-  public boolean containsKey(Object key) {
-    return mStyles.containsKey(key);
-  }
-
-  @Override
-  public boolean containsValue(Object value) {
-    return mStyles.containsValue(value);
-  }
-
-  @NonNull
-  @Override
-  public Set<Entry<String, Object>> entrySet() {
-    return mStyles.entrySet();
-  }
-
-  @Override
-  public Object get(Object key) {
-    return mStyles.get(key);
-  }
-
-  @Override
-  public boolean isEmpty() {
-    return mStyles.isEmpty();
-  }
-
-  @NonNull
-  @Override
-  public Set<String> keySet() {
-    return mStyles.keySet();
-  }
-
-  @Override
-  public Object put(String key, Object value) {
-    return mStyles.put(key,value);
-  }
-
-  @Override
-  public void putAll(Map<? extends String, ?> map) {
-    this.mStyles.putAll(map);
-  }
 
   /**
    * Used by Dom Thread， new and update styles.
@@ -683,7 +627,7 @@ public class WXStyle implements Map<String, Object>,Cloneable {
    * @param byPesudo
    */
   public void putAll(Map<? extends String, ?> map, boolean byPesudo) {
-    this.mStyles.putAll(map);
+    super.putAll(map);
     if (!byPesudo) {
       this.mPesudoResetStyleMap.putAll(map);
       processPesudoClasses(map);
@@ -712,7 +656,7 @@ public class WXStyle implements Map<String, Object>,Cloneable {
         if (clzName.equals(Constants.PSEUDO.ENABLED)) {
           //enabled, use as regular style
           String styleKey = key.substring(0, i);
-          this.mStyles.put(styleKey, entry.getValue());
+          this.put(styleKey, entry.getValue());
           this.mPesudoResetStyleMap.put(styleKey, entry.getValue());
           continue;
         } else {
@@ -729,27 +673,13 @@ public class WXStyle implements Map<String, Object>,Cloneable {
     }
   }
 
-  @Override
-  public Object remove(Object key) {
-    return mStyles.remove(key);
-  }
 
-  @Override
-  public int size() {
-    return mStyles.size();
-  }
 
-  @NonNull
-  @Override
-  public Collection<Object> values() {
-    return mStyles.values();
-  }
 
   @Override
   protected WXStyle clone(){
     WXStyle style = new WXStyle();
-    style.mStyles.putAll(this.mStyles);
-
+    style.putAll((SimpleArrayMap) this);
     for(Entry<String,Map<String,Object>> entry:this.mPesudoStyleMap.entrySet()){
       Map<String,Object> valueClone = new ArrayMap<>();
       valueClone.putAll(entry.getValue());
