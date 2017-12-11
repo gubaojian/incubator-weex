@@ -135,16 +135,6 @@ public class WXFileUtils {
     return false;
   }
 
-  public static String md5(String  template){
-    try {
-      if(template == null){
-        return  "";
-      }
-      return  md5(template.getBytes("UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      return  "";
-    }
-  }
 
   public static String md5(byte[] bts){
     try {

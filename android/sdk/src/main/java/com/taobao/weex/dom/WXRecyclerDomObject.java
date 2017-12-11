@@ -163,7 +163,7 @@ public class WXRecyclerDomObject extends WXDomObject{
         return mIsPreCalculateCellWidth;
     }
 
-    public void updateRecyclerAttr(){
+    private void updateRecyclerAttr(){
         preCalculateCellWidth();
         if(mColumnWidth ==0 && mColumnWidth == Float.NaN){
             WXLogUtils.w("preCalculateCellWidth mColumnGap :" + mColumnGap + " mColumnWidth:" + mColumnWidth + " mColumnCount:" + mColumnCount);

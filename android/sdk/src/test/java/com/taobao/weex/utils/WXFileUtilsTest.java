@@ -20,6 +20,7 @@ package com.taobao.weex.utils;
 
 import com.taobao.weappplus_sdk.BuildConfig;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 import org.junit.Assert;
 import org.junit.Rule;
@@ -67,7 +68,7 @@ public class WXFileUtilsTest {
 
 
   @Test
-  public void  testMd5(){
-    Assert.assertEquals("77963b7a931377ad4ab5ad6a9cd718aa", WXFileUtils.md5("ddd"));
+  public void  testMd5() throws UnsupportedEncodingException {
+    Assert.assertEquals("77963b7a931377ad4ab5ad6a9cd718aa", WXFileUtils.md5("ddd".getBytes("UTF-8")));
   }
 }

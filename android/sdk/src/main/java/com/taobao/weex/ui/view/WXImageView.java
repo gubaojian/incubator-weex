@@ -227,7 +227,7 @@ public class WXImageView extends ImageView implements WXGestureObservable,
      this.enableBitmapAutoManage = enableBitmapAutoManage;
   }
 
-  protected void autoReleaseImage(){
+  private void autoReleaseImage(){
       if(enableBitmapAutoManage) {
         if (!isBitmapReleased) {
           isBitmapReleased = true;
@@ -239,7 +239,7 @@ public class WXImageView extends ImageView implements WXGestureObservable,
       }
   }
 
-  protected void autoRecoverImage(){
+  private void autoRecoverImage(){
     if(enableBitmapAutoManage){
       if(isBitmapReleased){
         WXImage image = getComponent();
