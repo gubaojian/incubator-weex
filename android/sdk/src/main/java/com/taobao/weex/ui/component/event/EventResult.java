@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.taobao.weex.bridge;
+package com.taobao.weex.ui.component.event;
 
 /**
  * Created by furture on 2017/10/17.

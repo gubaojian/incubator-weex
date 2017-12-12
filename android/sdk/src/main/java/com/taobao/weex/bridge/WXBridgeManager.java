@@ -54,6 +54,7 @@ import com.taobao.weex.dom.action.Action;
 import com.taobao.weex.dom.action.Actions;
 import com.taobao.weex.dom.action.TraceableAction;
 import com.taobao.weex.tracing.WXTracing;
+import com.taobao.weex.ui.component.event.EventResult;
 import com.taobao.weex.utils.WXExceptionUtils;
 import com.taobao.weex.utils.WXFileUtils;
 import com.taobao.weex.utils.WXJsonUtils;
@@ -1662,7 +1663,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     return  mWXBridge.execJSWithResult(instanceId, namespace, function, args);
   }
 
-  public @NonNull static String argsToJSON(WXJSObject[] args) {
+  private  @NonNull static String argsToJSON(WXJSObject[] args) {
     StringBuilder builder = new StringBuilder();
     builder.append("[");
     for(WXJSObject object : args){

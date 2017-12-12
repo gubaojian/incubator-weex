@@ -33,7 +33,7 @@ import android.view.ViewParent;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.taobao.weex.bridge.EventResult;
+import com.taobao.weex.ui.component.event.EventResult;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.ui.component.Scrollable;
 import com.taobao.weex.ui.component.WXComponent;
