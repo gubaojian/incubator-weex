@@ -142,7 +142,7 @@ class DOMActionContextImpl implements DOMActionContext {
    * This method will be called when {@link #batch()} is executed.
    * @param root root dom
    */
-  void rebuildingFixedDomTree(WXDomObject root) {
+  private  final void rebuildingFixedDomTree(WXDomObject root) {
     if (root != null && root.getFixedStyleRefs() != null) {
       int size = root.getFixedStyleRefs().size();
       for (int i = 0; i < size; i++) {
@@ -270,18 +270,12 @@ class DOMActionContextImpl implements DOMActionContext {
             return;
           }
           mNormalTasks.add(new IWXRenderTask() {
-
             @Override
             public void execute() {
               mWXRenderManager.setLayout(mInstanceId, copy.getRef(), copy);
               if(copy.getExtra() != null) {
                 mWXRenderManager.setExtra(mInstanceId, copy.getRef(), copy.getExtra());
               }
-            }
-
-            @Override
-            public String toString() {
-              return "setLayout & setExtra";
             }
           });
         }

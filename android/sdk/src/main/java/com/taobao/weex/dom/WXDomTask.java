@@ -30,5 +30,4 @@ public class WXDomTask implements IWXTask {
 
   public String instanceId;
   public List<Object> args;
-  public long startTime = System.nanoTime();
 }

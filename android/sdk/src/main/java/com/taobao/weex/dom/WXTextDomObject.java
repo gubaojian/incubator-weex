@@ -93,7 +93,8 @@ public class WXTextDomObject extends WXDomObject {
    * Object for calculating text's width and height. This class is an anonymous class of
    * implementing {@link com.taobao.weex.dom.flex.CSSNode.MeasureFunction}
    */
-  /** package **/ static final CSSNode.MeasureFunction TEXT_MEASURE_FUNCTION = new CSSNode.MeasureFunction() {
+  /** package **/
+  static final CSSNode.MeasureFunction TEXT_MEASURE_FUNCTION = new CSSNode.MeasureFunction() {
     @Override
     public void measure(CSSNode node, float width, @NonNull MeasureOutput measureOutput) {
       WXTextDomObject textDomObject = (WXTextDomObject) node;
