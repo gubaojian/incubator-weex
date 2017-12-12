@@ -457,7 +457,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
 
   }
 
-  protected BorderDrawable getOrCreateBorder() {
+  private BorderDrawable getOrCreateBorder() {
     if (mBackgroundDrawable == null) {
       mBackgroundDrawable = new BorderDrawable();
       if (mHost != null) {
@@ -887,7 +887,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  protected void updateBoxShadow() {
+  private final void updateBoxShadow() {
     if (!BoxShadowUtil.isBoxShadowEnabled()) {
       WXLogUtils.w("BoxShadow", "box-shadow disabled");
       return;
@@ -955,7 +955,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  protected void clearBoxShadow() {
+  private final void clearBoxShadow() {
     if (!BoxShadowUtil.isBoxShadowEnabled()) {
       WXLogUtils.w("BoxShadow", "box-shadow disabled");
       return;
@@ -983,21 +983,21 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
   }
 
   @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-  protected void setAriaHidden(boolean isHidden) {
+  private final void setAriaHidden(boolean isHidden) {
     View host = getHostView();
     if(host != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
       host.setImportantForAccessibility(isHidden?View.IMPORTANT_FOR_ACCESSIBILITY_NO:View.IMPORTANT_FOR_ACCESSIBILITY_YES);
     }
   }
 
-  protected void setAriaLabel(String label) {
+  private final void setAriaLabel(String label) {
     View host = getHostView();
     if(host != null){
       host.setContentDescription(label);
     }
   }
 
-  protected void setRole(String roleKey) {
+  private final void setRole(String roleKey) {
     View host = getHostView();
     String role = roleKey;
     if (host != null && !TextUtils.isEmpty(roleKey)) {
@@ -1040,13 +1040,6 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  /**
-   * Add new event to component,this will post a task to DOM thread to add event.
-   * @param type
-   */
-  protected void appendEventToDOM(String type){
-    WXSDKManager.getInstance().getWXDomManager().postAction(getInstanceId(), Actions.getAddEvent(getRef(),type),false);
-  }
 
 
   public void addEvent(Object type) {
