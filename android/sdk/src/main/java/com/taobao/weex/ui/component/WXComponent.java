@@ -990,7 +990,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  private final void setAriaLabel(String label) {
+  protected void setAriaLabel(String label) {
     View host = getHostView();
     if(host != null){
       host.setContentDescription(label);
