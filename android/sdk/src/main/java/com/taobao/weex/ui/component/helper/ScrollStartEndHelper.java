@@ -103,7 +103,7 @@ public class ScrollStartEndHelper  implements Runnable{
     }
 
 
-    public static boolean isScrollEvent(String type){
+    public static  final  boolean isScrollEvent(String type){
         if(Constants.Event.SCROLL.equals(type)){
             return  true;
         }else if(Constants.Event.SCROLL_START.equals(type)){

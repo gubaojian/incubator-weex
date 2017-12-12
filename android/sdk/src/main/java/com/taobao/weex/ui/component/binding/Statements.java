@@ -387,7 +387,7 @@ public class Statements {
      * return binding attrs rended value in context
      * */
     private static final  ThreadLocal<Map<String, Object>> dynamicLocal = new ThreadLocal<>();
-    public static Map<String, Object> renderBindingAttrs(ArrayMap bindAttrs, ArrayStack context){
+    private final static Map<String, Object> renderBindingAttrs(ArrayMap bindAttrs, ArrayStack context){
         Set<Map.Entry<String, Object>> entrySet = bindAttrs.entrySet();
         Map<String, Object> dynamic = dynamicLocal.get();
         if(dynamic == null) {
@@ -439,7 +439,7 @@ public class Statements {
     }
 
 
-    public static Map<String, Object> renderProps(JSONObject props, ArrayStack context){
+    private final static Map<String, Object> renderProps(JSONObject props, ArrayStack context){
         Set<Map.Entry<String, Object>> entrySet = props.entrySet();
         Map<String, Object> renderProps = new ArrayMap<>(4);
         for(Map.Entry<String, Object> entry : entrySet){
@@ -458,7 +458,7 @@ public class Statements {
         return  renderProps;
     }
 
-    public static List<Object> getBindingEventArgs(ArrayStack context, Object bindings){
+   private final static List<Object> getBindingEventArgs(ArrayStack context, Object bindings){
           List<Object>  params = new ArrayList<>(4);
           if(bindings instanceof  JSONArray){
               JSONArray array = (JSONArray) bindings;

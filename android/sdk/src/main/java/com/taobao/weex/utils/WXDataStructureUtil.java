@@ -55,7 +55,7 @@ public class WXDataStructureUtil {
    * without resizing
    * @throws IllegalArgumentException if {@code expectedSize} is negative
    */
-  public static <K, V> HashMap<K, V> newHashMapWithExpectedSize(int expectedSize) {
+  public static final  <K, V> HashMap<K, V> newHashMapWithExpectedSize(int expectedSize) {
     return new HashMap<>(capacity(expectedSize));
   }
 

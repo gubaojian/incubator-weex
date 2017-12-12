@@ -39,7 +39,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class WXClipboardModule extends WXModule implements IWXClipboard {
+public class WXClipboardModule extends WXModule{
 
     private final String CLIP_KEY = "WEEX_CLIP_KEY_MAIN";
 
@@ -49,7 +49,6 @@ public class WXClipboardModule extends WXModule implements IWXClipboard {
     private static final String RESULT_OK = "success";
     private static final String RESULT_FAILED = "failed";
 
-    @Override
     @JSMethod
     public void setString(String text) {
         if(null == text) {
@@ -62,7 +61,6 @@ public class WXClipboardModule extends WXModule implements IWXClipboard {
         clipboard.setPrimaryClip(clip);
     }
 
-    @Override
     @JSMethod
     public void getString(@Nullable JSCallback callback) {
         Context context = mWXSDKInstance.getContext();
