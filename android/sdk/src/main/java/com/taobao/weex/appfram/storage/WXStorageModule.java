@@ -27,7 +27,7 @@ import com.taobao.weex.annotation.JSMethod;
 
 import java.util.Map;
 
-public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IWXStorage {
+public class WXStorageModule extends WXSDKEngine.DestroyableModule{
 
     IWXStorageAdapter mStorageAdapter;
 
@@ -40,7 +40,6 @@ public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IW
     }
 
 
-    @Override
     @JSMethod(uiThread = false)
     public void setItem(String key, String value, @Nullable final JSCallback callback) {
         if (TextUtils.isEmpty(key) || value == null) {
@@ -65,7 +64,6 @@ public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IW
 
     }
 
-    @Override
     @JSMethod(uiThread = false)
     public void getItem(String key, @Nullable final JSCallback callback) {
         if (TextUtils.isEmpty(key)) {
@@ -88,7 +86,6 @@ public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IW
         });
     }
 
-    @Override
     @JSMethod(uiThread = false)
     public void removeItem(String key, @Nullable final JSCallback callback) {
         if (TextUtils.isEmpty(key)) {
@@ -111,7 +108,6 @@ public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IW
         });
     }
 
-    @Override
     @JSMethod(uiThread = false)
     public void length(@Nullable final JSCallback callback) {
         IWXStorageAdapter adapter = ability();
@@ -129,7 +125,6 @@ public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IW
         });
     }
 
-    @Override
     @JSMethod(uiThread = false)
     public void getAllKeys(@Nullable final JSCallback callback) {
         IWXStorageAdapter adapter = ability();
@@ -147,7 +142,7 @@ public class WXStorageModule extends WXSDKEngine.DestroyableModule implements IW
         });
     }
 
-    @Override
+    
     @JSMethod(uiThread = false)
     public void setItemPersistent(String key, String value, @Nullable final JSCallback callback) {
         if (TextUtils.isEmpty(key) || value == null) {
