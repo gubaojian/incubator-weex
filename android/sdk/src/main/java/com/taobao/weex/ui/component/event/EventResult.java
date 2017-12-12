@@ -24,8 +24,8 @@ package com.taobao.weex.ui.component.event;
 
 public class EventResult {
 
-    private Object result;
-    private boolean success = false;
+    public Object result;
+    public boolean success = false;
     /**
      * onCallback javascript event callback method
      * @param result
@@ -34,13 +34,4 @@ public class EventResult {
         this.success = true;
         this.result = result;
     }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public Object getResult(){
-        return  result;
-    }
-
 }
