@@ -35,7 +35,7 @@ import java.util.List;
  * StickyHelper For Template List
  * Created by furture on 2017/8/24.
  */
-public class TemplateStickyHelper {
+class TemplateStickyHelper {
     private WXRecyclerTemplateList recyclerTemplateList;
     private List<Integer> stickyPositions;
     private ArrayMap<Integer, TemplateViewHolder>   stickyHolderCache;

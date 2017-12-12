@@ -61,7 +61,7 @@ public class WXCell extends WidgetContainer<WXFrameLayout> {
 
     private Object  renderData;
 
-    private boolean isSourceUsed = false;
+    public boolean isSourceUsed = false;
 
     private boolean hasLayout = false;
 
@@ -224,14 +224,6 @@ public class WXCell extends WidgetContainer<WXFrameLayout> {
 
     public void setRenderData(Object renderData) {
         this.renderData = renderData;
-    }
-
-    public boolean isSourceUsed() {
-        return isSourceUsed;
-    }
-
-    public void setSourceUsed(boolean sourceUsed) {
-        isSourceUsed = sourceUsed;
     }
 
     public boolean isHasLayout() {

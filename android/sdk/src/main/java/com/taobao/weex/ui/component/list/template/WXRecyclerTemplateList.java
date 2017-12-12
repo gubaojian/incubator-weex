@@ -1073,8 +1073,8 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         }
         if(component == null){
             cacheHit = false;
-            if(!source.isSourceUsed()){
-                source.setSourceUsed(true);
+            if(!source.isSourceUsed){
+                source.isSourceUsed = true;
                 ensureSourceCellRenderWithData(source);
                 component = source;
                 if(WXEnvironment.isApkDebugable()) {
