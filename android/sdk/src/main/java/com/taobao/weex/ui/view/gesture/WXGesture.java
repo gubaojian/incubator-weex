@@ -138,8 +138,8 @@ public class WXGesture extends GestureDetector.SimpleOnGestureListener implement
       Map<String, Object> eventMap = createFireEventParam(event, CUR_EVENT, null);
       eventMap.put("type", "touch");
       EventResult result = component.fireEventWait(SHOULD_STOP_PROPAGATION, eventMap);
-      if(result.isSuccess() && result.getResult() != null){
-        shouldBubbleResult = WXUtils.getBoolean(result.getResult(), shouldBubbleResult);
+      if(result.success && result.result != null){
+        shouldBubbleResult = WXUtils.getBoolean(result.result, shouldBubbleResult);
       }
       shouldBubbleCallRemainTimes = shouldBubbleInterval;
       return shouldBubbleResult;
