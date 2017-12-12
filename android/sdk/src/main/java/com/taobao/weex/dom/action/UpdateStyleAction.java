@@ -22,7 +22,6 @@ import android.support.v4.util.ArrayMap;
 
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.adapter.IWXUserTrackAdapter;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.WXErrorCode;
 import com.taobao.weex.dom.DOMAction;
@@ -40,7 +39,7 @@ import java.util.Map;
  * Created by sospartan on 28/02/2017.
  */
 
-class UpdateStyleAction extends TraceableAction implements DOMAction, RenderAction {
+class UpdateStyleAction extends Traceable implements DOMAction, RenderAction {
   private final String mRef;
   private final JSONObject mData;
   private final boolean mIsCausedByPesudo;

@@ -29,7 +29,7 @@ import com.taobao.weex.dom.RenderAction;
 import com.taobao.weex.dom.RenderActionContext;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.action.AbstractAddElementAction;
-import com.taobao.weex.dom.action.TraceableAction;
+import com.taobao.weex.dom.action.Traceable;
 import com.taobao.weex.tracing.Stopwatch;
 import com.taobao.weex.tracing.WXTracing;
 import com.taobao.weex.ui.component.WXComponent;
@@ -114,8 +114,8 @@ public class WXRenderManager {
         if (mRegistries.get(instanceId) == null) {
           return;
         }
-        if (WXTracing.isAvailable() && action instanceof TraceableAction) {
-          ((TraceableAction) action).mUIQueueTime = SystemClock.uptimeMillis() - start;
+        if (WXTracing.isAvailable() && action instanceof Traceable) {
+          ((Traceable) action).traceAction.mUIQueueTime = SystemClock.uptimeMillis() - start;
         }
 
         long start = System.currentTimeMillis();
@@ -124,14 +124,14 @@ public class WXRenderManager {
 
         if (WXTracing.isAvailable()) {
           uiNanos = System.nanoTime() - uiNanos;
-          if (action instanceof TraceableAction) {
+          if (action instanceof Traceable) {
             if (!(action instanceof AbstractAddElementAction)) {
-              WXTracing.TraceEvent uiExecuteEvent = WXTracing.newEvent("UIExecute", instanceId, ((TraceableAction) action).mTracingEventId);
+              WXTracing.TraceEvent uiExecuteEvent = WXTracing.newEvent("UIExecute", instanceId, ((Traceable) action).traceAction.mTracingEventId);
               uiExecuteEvent.duration = Stopwatch.nanosToMillis(uiNanos);
               uiExecuteEvent.ts = start;
               uiExecuteEvent.submit();
             }
-            ((TraceableAction) action).onFinishUIExecute();
+            ((Traceable) action).traceAction.onFinishUIExecute();
           }
         }
       }

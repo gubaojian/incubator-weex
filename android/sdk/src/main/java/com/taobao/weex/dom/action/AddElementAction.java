@@ -131,10 +131,10 @@ final class AddElementAction extends AbstractAddElementAction {
         String instanceId = context.getInstance().getInstanceId();
         List<Stopwatch.ProcessEvent> splits = Stopwatch.getProcessEvents();
         for (Stopwatch.ProcessEvent event : splits) {
-          submitPerformance(event.fname, "X", instanceId, event.duration, event.startMillis, true);
+          traceAction.submitPerformance(event.fname, "X", instanceId, event.duration, event.startMillis, true);
         }
+        component.mTraceInfo.uiQueueTime = traceAction.mUIQueueTime;
       }
-      component.mTraceInfo.uiQueueTime = mUIQueueTime;
       if (component.isLazy()) {
         component.onRenderFinish(WXComponent.STATE_DOM_FINISH);
       } else {

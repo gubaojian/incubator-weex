@@ -108,19 +108,21 @@ class CreateBodyAction extends AbstractAddElementAction {
       component.createView();
       if (WXEnvironment.isApkDebugable()) {
         WXLogUtils.renderPerformanceLog("createView", (System.currentTimeMillis() - start));
-        submitPerformance("createView", "X", instance.getInstanceId(), Stopwatch.tackAndTick(), start, true);
+        traceAction.submitPerformance("createView", "X", instance.getInstanceId(), Stopwatch.tackAndTick(), start, true);
       }
       start = System.currentTimeMillis();
       component.applyLayoutAndEvent(component);
       if (WXTracing.isAvailable()) {
-        submitPerformance("applyLayoutAndEvent", "X", instance.getInstanceId(), Stopwatch.tackAndTick(), start, true);
+        traceAction.submitPerformance("applyLayoutAndEvent", "X", instance.getInstanceId(), Stopwatch.tackAndTick(), start, true);
       }
       start = System.currentTimeMillis();
       component.bindData(component);
 
       if (WXEnvironment.isApkDebugable()) {
         WXLogUtils.renderPerformanceLog("bind", (System.currentTimeMillis() - start));
-        submitPerformance("bindData", "X", instance.getInstanceId(), Stopwatch.tack(), start, true);
+        if(WXTracing.isAvailable()) {
+          traceAction.submitPerformance("bindData", "X", instance.getInstanceId(), Stopwatch.tack(), start, true);
+        }
       }
 
       if (component instanceof WXScroller) {
@@ -133,7 +135,9 @@ class CreateBodyAction extends AbstractAddElementAction {
       if (instance.getRenderStrategy() != WXRenderStrategy.APPEND_ONCE) {
         instance.onCreateFinish();
       }
-      component.mTraceInfo.uiQueueTime = mUIQueueTime;
+      if(WXTracing.isAvailable()) {
+        component.mTraceInfo.uiQueueTime = traceAction.mUIQueueTime;
+      }
       component.onRenderFinish(WXComponent.STATE_ALL_FINISH);
     } catch (Exception e) {
       WXLogUtils.e("create body failed.", e);

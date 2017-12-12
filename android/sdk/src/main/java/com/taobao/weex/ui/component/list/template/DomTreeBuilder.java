@@ -22,7 +22,8 @@ import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.dom.DOMActionContext;
 import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.dom.action.TraceableAction;
+import com.taobao.weex.dom.action.Traceable;
+import com.taobao.weex.tracing.WXTracing;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentFactory;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -32,7 +33,7 @@ import com.taobao.weex.utils.WXLogUtils;
  * Created by furture on 2017/10/2.
  */
 
-class DomTreeBuilder extends TraceableAction {
+class DomTreeBuilder extends Traceable {
 
 
 
@@ -46,8 +47,10 @@ class DomTreeBuilder extends TraceableAction {
         WXComponent component = WXComponentFactory.newInstance(context.getInstance(), dom, parent);
         if (component != null) {
             component.mTraceInfo.domThreadStart = dom.mDomThreadTimestamp;
-            component.mTraceInfo.rootEventId = mTracingEventId;
-            component.mTraceInfo.domQueueTime = mDomQueueTime;
+            if(WXTracing.isAvailable()) {
+                component.mTraceInfo.rootEventId = traceAction.mTracingEventId;
+                component.mTraceInfo.domQueueTime = traceAction.mDomQueueTime;
+            }
         }
         context.registerComponent(dom.getRef(), component);
         if (component instanceof WXVContainer) {

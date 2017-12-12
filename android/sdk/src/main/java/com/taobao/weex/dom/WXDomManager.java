@@ -29,7 +29,7 @@ import com.taobao.weex.common.WXErrorCode;
 import com.taobao.weex.common.WXRuntimeException;
 import com.taobao.weex.common.WXThread;
 import com.taobao.weex.dom.action.AbstractAddElementAction;
-import com.taobao.weex.dom.action.TraceableAction;
+import com.taobao.weex.dom.action.Traceable;
 import com.taobao.weex.tracing.Stopwatch;
 import com.taobao.weex.tracing.WXTracing;
 import com.taobao.weex.ui.WXRenderManager;
@@ -184,8 +184,8 @@ public final class WXDomManager {
     action.executeDom(context);
     if (WXTracing.isAvailable()) {
       domNanos = System.nanoTime() - domNanos;
-      if (!(action instanceof AbstractAddElementAction) && action instanceof TraceableAction) {
-        WXTracing.TraceEvent domExecuteEvent = WXTracing.newEvent("DomExecute", context.getInstanceId(), ((TraceableAction) action).mTracingEventId);
+      if (!(action instanceof AbstractAddElementAction) && action instanceof Traceable) {
+        WXTracing.TraceEvent domExecuteEvent = WXTracing.newEvent("DomExecute", context.getInstanceId(), ((Traceable) action).traceAction.mTracingEventId);
         domExecuteEvent.duration = Stopwatch.nanosToMillis(domNanos);
         domExecuteEvent.ts = domStart;
         domExecuteEvent.submit();

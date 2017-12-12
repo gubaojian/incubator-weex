@@ -20,14 +20,12 @@ package com.taobao.weex.dom.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.adapter.IWXUserTrackAdapter;
 import com.taobao.weex.common.WXErrorCode;
 import com.taobao.weex.dom.DOMAction;
 import com.taobao.weex.dom.DOMActionContext;
 import com.taobao.weex.dom.RenderAction;
 import com.taobao.weex.dom.RenderActionContext;
 import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.dom.WXEvent;
 import com.taobao.weex.tracing.Stopwatch;
 import com.taobao.weex.tracing.WXTracing;
 import com.taobao.weex.ui.component.WXComponent;
@@ -38,7 +36,7 @@ import java.util.List;
 /**
  * Created by sospartan on 01/03/2017.
  */
-class AddEventAction extends TraceableAction implements DOMAction, RenderAction {
+class AddEventAction extends Traceable implements DOMAction, RenderAction {
   private final String mRef;
   private final Object mEvent;
 
@@ -80,8 +78,8 @@ class AddEventAction extends TraceableAction implements DOMAction, RenderAction 
 
     domObject.getEvents().addEvent(mEvent);
     mUpdatedDom = domObject;
-    if (WXTracing.isAvailable() && mBeginEvent != null) {
-      submitPerformance("addEventToDom", "X", instance.getInstanceId(), Stopwatch.tack(), Stopwatch.lastTickStamp(), true);
+    if (WXTracing.isAvailable() && traceAction.mBeginEvent != null) {
+      traceAction.submitPerformance("addEventToDom", "X", instance.getInstanceId(), Stopwatch.tack(), Stopwatch.lastTickStamp(), true);
     }
 
     context.postRenderTask(this);
@@ -98,10 +96,10 @@ class AddEventAction extends TraceableAction implements DOMAction, RenderAction 
       comp.addEvent(mEvent);
       Stopwatch.split("addEventToComponent");
 
-      if (WXTracing.isAvailable() && mBeginEvent != null) {
+      if (WXTracing.isAvailable() && traceAction.mBeginEvent != null) {
         List<Stopwatch.ProcessEvent> events = Stopwatch.getProcessEvents();
         for (Stopwatch.ProcessEvent event : events) {
-          submitPerformance(event.fname, "X", comp.getInstanceId(), event.duration, event.startMillis, true);
+            traceAction.submitPerformance(event.fname, "X", comp.getInstanceId(), event.duration, event.startMillis, true);
         }
       }
     }

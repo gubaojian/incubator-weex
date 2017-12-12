@@ -20,7 +20,6 @@ package com.taobao.weex.dom.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.adapter.IWXUserTrackAdapter;
 import com.taobao.weex.common.WXErrorCode;
 import com.taobao.weex.dom.DOMAction;
 import com.taobao.weex.dom.DOMActionContext;
@@ -34,7 +33,7 @@ import com.taobao.weex.utils.WXExceptionUtils;
  * Created by sospartan on 28/02/2017.
  */
 
-class UpdateAttributeAction extends TraceableAction implements DOMAction, RenderAction {
+class UpdateAttributeAction extends Traceable implements DOMAction, RenderAction {
   private final String mRef;
   private final JSONObject mData;
 

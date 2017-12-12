@@ -52,7 +52,7 @@ import com.taobao.weex.dom.DOMAction;
 import com.taobao.weex.dom.WXDomModule;
 import com.taobao.weex.dom.action.Action;
 import com.taobao.weex.dom.action.Actions;
-import com.taobao.weex.dom.action.TraceableAction;
+import com.taobao.weex.dom.action.Traceable;
 import com.taobao.weex.tracing.WXTracing;
 import com.taobao.weex.ui.component.event.EventResult;
 import com.taobao.weex.utils.WXExceptionUtils;
@@ -552,10 +552,10 @@ public class WXBridgeManager implements Callback, BactchExecutor {
         Action action = Actions.getCreateBody(domObject);
         domModule.postAction((DOMAction) action, true);
 
-        if (WXTracing.isAvailable() && action instanceof TraceableAction) {
-          ((TraceableAction) action).mParseJsonNanos = nanosTemp;
-          ((TraceableAction) action).mStartMillis = start;
-          ((TraceableAction) action).onStartDomExecute(instanceId, "createBody", "_root", domObject.getString("type"), tasks);
+        if (WXTracing.isAvailable() && action instanceof Traceable) {
+          ((Traceable) action).traceAction.mParseJsonNanos = nanosTemp;
+          ((Traceable) action).traceAction.mStartMillis = start;
+          ((Traceable) action).traceAction.onStartDomExecute(instanceId, "createBody", "_root", domObject.getString("type"), tasks);
         }
       }
     } catch (Exception e) {
@@ -712,10 +712,10 @@ public class WXBridgeManager implements Callback, BactchExecutor {
         Action action = Actions.getUpdateAttrs(ref, domObject);
         domModule.postAction((DOMAction) action, false);
 
-        if (WXTracing.isAvailable() && action instanceof TraceableAction) {
-          ((TraceableAction) action).mStartMillis = start;
-          ((TraceableAction) action).mParseJsonNanos = parseNanos;
-          ((TraceableAction) action).onStartDomExecute(instanceId, "updateAttrs", domObject.getString("ref"), domObject.getString("type"), task);
+        if (WXTracing.isAvailable() && action instanceof Traceable) {
+          ((Traceable) action).traceAction.mStartMillis = start;
+          ((Traceable) action).traceAction.mParseJsonNanos = parseNanos;
+          ((Traceable) action).traceAction.onStartDomExecute(instanceId, "updateAttrs", domObject.getString("ref"), domObject.getString("type"), task);
         }
       }
     } catch (Exception e) {
@@ -767,10 +767,10 @@ public class WXBridgeManager implements Callback, BactchExecutor {
         Action action = Actions.getUpdateStyle(ref, domObject, false);
         domModule.postAction((DOMAction) action, false);
 
-        if (WXTracing.isAvailable() && action instanceof TraceableAction) {
-          ((TraceableAction) action).mParseJsonNanos = nanosTemp;
-          ((TraceableAction) action).mStartMillis = start;
-          ((TraceableAction) action).onStartDomExecute(instanceId, "updateStyle", ref, domObject.getString("type"), domObject.toJSONString());
+        if (WXTracing.isAvailable() && action instanceof Traceable) {
+          ((Traceable) action).traceAction.mParseJsonNanos = nanosTemp;
+          ((Traceable) action).traceAction.mStartMillis = start;
+          ((Traceable) action).traceAction.onStartDomExecute(instanceId, "updateStyle", ref, domObject.getString("type"), domObject.toJSONString());
         }
       }
     } catch (Exception e) {
@@ -808,8 +808,8 @@ public class WXBridgeManager implements Callback, BactchExecutor {
         Action action = Actions.getRemoveElement(ref);
         domModule.postAction((DOMAction) action, false);
 
-        if (WXTracing.isAvailable() && action instanceof TraceableAction) {
-          ((TraceableAction) action).onStartDomExecute(instanceId, "removeElement", ref, null, ref);
+        if (WXTracing.isAvailable() && action instanceof Traceable) {
+          ((Traceable) action).traceAction.onStartDomExecute(instanceId, "removeElement", ref, null, ref);
         }
       }
     } catch (Exception e) {
@@ -885,8 +885,8 @@ public class WXBridgeManager implements Callback, BactchExecutor {
         Action action = Actions.getAddEvent(ref, event);
         domModule.postAction((DOMAction) action, false);
 
-        if (WXTracing.isAvailable() && action instanceof TraceableAction) {
-          ((TraceableAction) action).onStartDomExecute(instanceId, "addEvent", ref, null, event);
+        if (WXTracing.isAvailable() && action instanceof Traceable) {
+          ((Traceable) action).traceAction.onStartDomExecute(instanceId, "addEvent", ref, null, event);
         }
       }
     } catch (Exception e) {
@@ -924,8 +924,8 @@ public class WXBridgeManager implements Callback, BactchExecutor {
         Action action = Actions.getRemoveEvent(ref, event);
         domModule.postAction((DOMAction) action, false);
 
-        if (WXTracing.isAvailable() && action instanceof TraceableAction) {
-          ((TraceableAction) action).onStartDomExecute(instanceId, "removeEvent", ref, null, event);
+        if (WXTracing.isAvailable() && action instanceof Traceable) {
+          ((Traceable) action).traceAction.onStartDomExecute(instanceId, "removeEvent", ref, null, event);
         }
       }
     } catch (Exception e) {
@@ -970,10 +970,10 @@ public class WXBridgeManager implements Callback, BactchExecutor {
       DOMAction addElementAction = Actions.getAddElement(domObject, ref, Integer.parseInt(index));
       domModule.postAction(addElementAction, false);
 
-      if (WXTracing.isAvailable() && addElementAction instanceof TraceableAction) {
-        ((TraceableAction) addElementAction).mParseJsonNanos = nanosTemp;
-        ((TraceableAction) addElementAction).mStartMillis = start;
-        ((TraceableAction) addElementAction).onStartDomExecute(instanceId, "addElement", domObject.getString("ref"), domObject.getString("type"), dom.toString());
+      if (WXTracing.isAvailable() && addElementAction instanceof Traceable) {
+        ((Traceable) addElementAction).traceAction.mParseJsonNanos = nanosTemp;
+        ((Traceable) addElementAction).traceAction.mStartMillis = start;
+        ((Traceable) addElementAction).traceAction.onStartDomExecute(instanceId, "addElement", domObject.getString("ref"), domObject.getString("type"), dom.toString());
       }
     }
 

@@ -26,7 +26,7 @@ import com.taobao.weex.bridge.WXBridgeManager;
 import com.taobao.weex.common.WXModule;
 import com.taobao.weex.dom.action.Action;
 import com.taobao.weex.dom.action.Actions;
-import com.taobao.weex.dom.action.TraceableAction;
+import com.taobao.weex.dom.action.Traceable;
 import com.taobao.weex.tracing.Stopwatch;
 import com.taobao.weex.tracing.WXTracing;
 import com.taobao.weex.utils.WXLogUtils;
@@ -105,7 +105,7 @@ public final class WXDomModule extends WXModule {
         postAction((RenderAction)action);
       }
 
-      if (WXTracing.isAvailable() && action instanceof TraceableAction) {
+      if (WXTracing.isAvailable() && action instanceof Traceable) {
         //TODO: CHECK AGAIN
         String ref = null;
         String type = null;
@@ -127,10 +127,10 @@ public final class WXDomModule extends WXModule {
           }
         }
         if (parseNanos != null && parseNanos.length == 1) {
-          ((TraceableAction) action).mParseJsonNanos = parseNanos[0];
-          ((TraceableAction) action).mStartMillis -= Stopwatch.nanosToMillis(parseNanos[0]);
+          ((Traceable) action).traceAction.mParseJsonNanos = parseNanos[0];
+          ((Traceable) action).traceAction.mStartMillis -= Stopwatch.nanosToMillis(parseNanos[0]);
         }
-        ((TraceableAction) action).onStartDomExecute(mWXSDKInstance.getInstanceId(), method, ref, type, args.toJSONString());
+        ((Traceable) action).traceAction.onStartDomExecute(mWXSDKInstance.getInstanceId(), method, ref, type, args.toJSONString());
       }
     } catch (IndexOutOfBoundsException e) {
       // no enougn args

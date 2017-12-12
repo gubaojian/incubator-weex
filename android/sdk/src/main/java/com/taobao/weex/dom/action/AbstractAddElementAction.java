@@ -20,9 +20,7 @@ package com.taobao.weex.dom.action;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.adapter.IWXUserTrackAdapter;
 import com.taobao.weex.common.WXErrorCode;
 import com.taobao.weex.dom.DOMAction;
 import com.taobao.weex.dom.DOMActionContext;
@@ -42,7 +40,7 @@ import java.util.List;
  * Created by sospartan on 22/02/2017.
  */
 
-public abstract class AbstractAddElementAction extends TraceableAction implements DOMAction, RenderAction {
+public abstract class AbstractAddElementAction extends Traceable implements DOMAction, RenderAction {
 
   protected WXComponent generateComponentTree(DOMActionContext context, WXDomObject dom, WXVContainer parent) {
     if (dom == null) {
@@ -52,8 +50,10 @@ public abstract class AbstractAddElementAction extends TraceableAction implement
     WXComponent component = WXComponentFactory.newInstance(context.getInstance(), dom, parent);
     if (component != null) {
       component.mTraceInfo.domThreadStart = dom.mDomThreadTimestamp;
-      component.mTraceInfo.rootEventId = mTracingEventId;
-      component.mTraceInfo.domQueueTime = mDomQueueTime;
+      if(WXTracing.isAvailable()) {
+        component.mTraceInfo.rootEventId = traceAction.mTracingEventId;
+        component.mTraceInfo.domQueueTime = traceAction.mDomQueueTime;
+      }
     }
 
     context.registerComponent(dom.getRef(), component);
@@ -134,7 +134,7 @@ public abstract class AbstractAddElementAction extends TraceableAction implement
     if (WXTracing.isAvailable()) {
       List<Stopwatch.ProcessEvent> events = Stopwatch.getProcessEvents();
       for (Stopwatch.ProcessEvent event : events) {
-        submitPerformance(event.fname, "X", context.getInstanceId(), event.duration, event.startMillis, true);
+        traceAction.submitPerformance(event.fname, "X", context.getInstanceId(), event.duration, event.startMillis, true);
       }
     }
   }

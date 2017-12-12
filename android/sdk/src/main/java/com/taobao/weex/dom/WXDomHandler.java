@@ -24,7 +24,8 @@ import android.os.SystemClock;
 
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.dom.action.Actions;
-import com.taobao.weex.dom.action.TraceableAction;
+import com.taobao.weex.dom.action.Traceable;
+import com.taobao.weex.tracing.WXTracing;
 
 /**
  * Handler for dom operations.
@@ -56,8 +57,10 @@ public class WXDomHandler implements Handler.Callback {
     if (obj != null && obj instanceof WXDomTask) {
       task = (WXDomTask) obj;
       Object action = ((WXDomTask) obj).args.get(0);
-      if (action != null && action instanceof TraceableAction) {
-        ((TraceableAction) action).mDomQueueTime = SystemClock.uptimeMillis() - msg.getWhen();
+      if(WXTracing.isAvailable()) {
+        if (action != null && action instanceof Traceable) {
+          ((Traceable) action).traceAction.mDomQueueTime = SystemClock.uptimeMillis() - msg.getWhen();
+        }
       }
     }
 

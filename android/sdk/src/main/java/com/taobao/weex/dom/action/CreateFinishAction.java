@@ -58,7 +58,7 @@ final class CreateFinishAction extends AbstractLayoutFinishAction {
     instance.onRenderSuccess(mLayoutWidth, mLayoutHeight);
     if (WXTracing.isAvailable()) {
       double renderTime = Stopwatch.millisUntilNow(context.getInstance().mRenderStartNanos);
-      submitPerformance("renderFinish", "X", instance.getInstanceId(), renderTime, System.currentTimeMillis());
+      traceAction.submitPerformance("renderFinish", "X", instance.getInstanceId(), renderTime, System.currentTimeMillis());
     }
   }
 }
