@@ -45,8 +45,4 @@ public class WXInput extends AbstractEditComponent{
     editText.setSingleLine();//default use single line , same to ios
   }
 
-  @Override
-  protected MeasureOutput measure(int width, int height) {
-    return super.measure(width, height);
-  }
 }

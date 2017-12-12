@@ -182,11 +182,7 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     return mDomContext;
   }
 
-  public void clearEvents(){
-    if(mEvents != null){
-      mEvents.clear();
-    }
-  }
+
 
   public static void prepareRoot(WXDomObject domObj,float defaultHeight,float defaultWidth) {
     domObj.mRef = WXDomObject.ROOT;
@@ -340,9 +336,6 @@ public class WXDomObject extends CSSNode implements Cloneable,ImmutableDomObject
     return mStyles == null ? false : mStyles.isFixed();
   }
 
-  public boolean canRecycled() {
-    return mAttributes == null ? false : mAttributes.canRecycled();
-  }
 
   public Object getExtra() {
     return null;

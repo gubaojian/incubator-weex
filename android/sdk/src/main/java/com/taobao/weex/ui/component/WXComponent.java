@@ -438,14 +438,14 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     mTraceInfo.uiThreadNanos += (System.nanoTime() - startNanos);
   }
 
-  public void updateStyle(WXComponent component){
+  private final void updateStyle(WXComponent component){
     ImmutableDomObject domObject = component.getDomObject();
     if(domObject !=null){
       updateProperties(domObject.getStyles());
     }
   }
 
-  public void updateAttrs(WXComponent component){
+  private final void updateAttrs(WXComponent component){
     ImmutableDomObject domObject = component.getDomObject();
     if(domObject !=null){
       updateProperties(domObject.getAttrs());
@@ -1428,7 +1428,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     return null;
   }
 
-  public void setBackgroundImage(@NonNull String bgImage) {
+  private void setBackgroundImage(@NonNull String bgImage) {
     if ("".equals(bgImage.trim())) {
       getOrCreateBorder().setImage(null);
     } else {
@@ -1446,7 +1446,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  public void setBorderRadius(String key, float borderRadius) {
+  private void setBorderRadius(String key, float borderRadius) {
     if (borderRadius >= 0) {
       switch (key) {
         case Constants.Name.BORDER_RADIUS:
@@ -1468,7 +1468,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  public void setBorderWidth(String key, float borderWidth) {
+  private final void setBorderWidth(String key, float borderWidth) {
     if (borderWidth >= 0) {
       switch (key) {
         case Constants.Name.BORDER_WIDTH:
@@ -1490,7 +1490,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  public void setBorderStyle(String key, String borderStyle) {
+  private final void setBorderStyle(String key, String borderStyle) {
     if(!TextUtils.isEmpty(borderStyle)){
       switch (key){
         case Constants.Name.BORDER_STYLE:
@@ -1512,7 +1512,7 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
-  public void setBorderColor(String key, String borderColor) {
+  private void setBorderColor(String key, String borderColor) {
     if (!TextUtils.isEmpty(borderColor)) {
       int colorInt = WXResourceUtils.getColor(borderColor);
       if (colorInt != Integer.MIN_VALUE) {
@@ -1743,15 +1743,6 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     mType = type;
   }
 
-  public boolean hasScrollParent(WXComponent component) {
-    if (component.getParent() == null) {
-      return true;
-    } else if (component.getParent() instanceof WXScroller) {
-      return false;
-    } else {
-      return hasScrollParent(component.getParent());
-    }
-  }
 
   /**
    * Called when property has empty value
