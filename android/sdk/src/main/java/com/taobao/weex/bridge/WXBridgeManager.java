@@ -63,7 +63,6 @@ import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 import com.taobao.weex.utils.batch.BactchExecutor;
 import com.taobao.weex.utils.batch.Interceptor;
-import com.taobao.weex.wson.Wson;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -1668,7 +1667,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     builder.append("[");
     for(WXJSObject object : args){
       if(object.type == WXJSObject.WSON){
-        object = new WXJSObject(WXJSObject.WSON, Wson.parse((byte[]) object.data));
+        object = new WXJSObject(WXJSObject.WSON, WXJsonUtils.parseWson((byte[]) object.data));
       }
       builder.append(WXJsonUtils.fromObjectToJSONString(object));
       builder.append(",");

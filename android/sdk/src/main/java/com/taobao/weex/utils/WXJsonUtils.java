@@ -27,7 +27,6 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.bridge.WXJSObject;
 import com.taobao.weex.common.WXRuntimeException;
-import com.taobao.weex.wson.Wson;
 
 import java.util.ArrayList;
 import java.util.List;

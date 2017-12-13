@@ -16,14 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.taobao.weex.wson;
+package com.taobao.weex.utils;
 
 
 import android.support.v4.util.LruCache;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.taobao.weex.utils.WXLogUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -43,7 +42,7 @@ import java.util.Set;
  * fast binary json format for parse map and serialize map
  * Created by efurture on 2017/8/16.
  */
-public class Wson {
+class Wson {
 
     /**
      * skip map null values
@@ -80,7 +79,7 @@ public class Wson {
      * parse wson data  to object, please use WXJsonUtils.parseWson
      * @param  data  byte array
      * */
-    public static final Object parse(byte[] data){
+    static final Object parse(byte[] data){
         if(data == null){
             return  null;
         }
@@ -99,7 +98,7 @@ public class Wson {
     /**
      * serialize object to wson data, please use WXJsonUtils.wsonWXJSObject
      * */
-    public static final byte[] toWson(Object object){
+    static final byte[] toWson(Object object){
         if(object == null){
             return  null;
         }
