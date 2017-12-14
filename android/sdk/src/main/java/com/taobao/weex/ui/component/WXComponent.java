@@ -62,6 +62,7 @@ import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.adapter.IWXAccessibilityRoleAdapter;
+import com.taobao.weex.dom.action.Actions;
 import com.taobao.weex.ui.component.event.EventResult;
 import com.taobao.weex.bridge.Invoker;
 import com.taobao.weex.common.Constants;
@@ -886,6 +887,9 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
+
+
+
   private final void updateBoxShadow() {
     if (!BoxShadowUtil.isBoxShadowEnabled()) {
       WXLogUtils.w("BoxShadow", "box-shadow disabled");
@@ -1039,6 +1043,13 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     }
   }
 
+  /**
+   * Add new event to component,this will post a task to DOM thread to add event.
+   * @param type
+   */
+  protected void appendEventToDOM(String type){
+    WXSDKManager.getInstance().getWXDomManager().postAction(getInstanceId(), Actions.getAddEvent(getRef(),type),false);
+  }
 
 
   public void addEvent(Object type) {
