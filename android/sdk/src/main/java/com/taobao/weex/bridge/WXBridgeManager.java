@@ -78,6 +78,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static com.taobao.weex.bridge.WXModuleManager.getDomModule;
 import static com.taobao.weex.bridge.WXModuleManager.createDomModule;
@@ -115,6 +117,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
   public static final String METHOD_REGISTER_COMPONENTS = "registerComponents";
   public static final String METHOD_FIRE_EVENT = "fireEvent";
   public static final String METHD_FIRE_EVENT_SYNC = "fireEventSync";
+  public static final String METHD_COMPONENT_HOOK_SYNC = "componentHook";
   public static final String METHOD_CALLBACK = "callback";
   public static final String METHOD_REFRESH_INSTANCE = "refreshInstance";
   public static final String METHOD_NOTIFY_TRIM_MEMORY = "notifyTrimMemory";
@@ -1102,9 +1105,34 @@ public class WXBridgeManager implements Callback, BactchExecutor {
   }
 
 
+
   /**
-   * aync call js event and return result in eventResult callback
+   * ref, type, data, domChanges
    * */
+  public EventResult syncCallJSEventWithResult(final String method, final String instanceId, final List<Object> params, final Object... args) {
+    final CountDownLatch waitLatch = new CountDownLatch(1);
+    EventResult callback = new EventResult(){
+      @Override
+      public void onCallback(Object result) {
+        super.onCallback(result);
+        waitLatch.countDown();
+      }
+    };
+    try{
+      asyncCallJSEventWithResult(callback, method, instanceId, params, args);
+      waitLatch.await(100, TimeUnit.MILLISECONDS);
+      return  callback;
+    }catch (Exception e){
+      if(WXEnvironment.isApkDebugable()){
+        WXLogUtils.e("fireEventWait", e);
+      }
+      return  callback;
+    }
+  }
+
+    /**
+     * aync call js event and return result in eventResult callback
+     * */
   private void asyncCallJSEventWithResult(final EventResult eventCallback, final String method, final String instanceId, final List<Object> params, final Object... args) {
     post(new Runnable() {
       @Override

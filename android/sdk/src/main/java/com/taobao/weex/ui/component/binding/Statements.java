@@ -27,6 +27,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.annotation.Component;
+import com.taobao.weex.bridge.EventResult;
+import com.taobao.weex.bridge.WXBridgeManager;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXAttr;
 import com.taobao.weex.dom.WXDomObject;
@@ -278,6 +280,8 @@ public class Statements {
         return  1;
     }
 
+
+    //public static final int
     /**
      * bind attrs and doRender component child
      * */
@@ -291,9 +295,15 @@ public class Statements {
                 && WXUtils.getBoolean(attr.get(ELUtils.IS_COMPONENT_ROOT), false)){
             if(attr.get(ELUtils.COMPONENT_PROPS) != null
                     && attr.get(ELUtils.COMPONENT_PROPS) instanceof  JSONObject){
+
                 Map<String, Object>  props  = renderProps((JSONObject) attr.get(ELUtils.COMPONENT_PROPS), context);
+                //
+                EventResult result = WXBridgeManager.getInstance().syncCallJSEventWithResult(WXBridgeManager.METHD_COMPONENT_HOOK_SYNC, component.getInstanceId(), null, component.getRef() + "0", "lifecycle", "create", props, null);
+                Log.e("weex", "weex result " + result.getResult());
+                //// fixme store context
                 context = new ArrayStack();
                 context.push(props);
+
             }
         }
         doRenderBindingAttrsAndEvent(component, domObject, context);
