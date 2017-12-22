@@ -28,6 +28,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +62,12 @@ class Wson {
     private static final byte BOOLEAN_TYPE_FALSE = 'f';
 
     private static final byte NUMBER_INT_TYPE = 'i';
+
+    private static final byte NUMBER_LONG_TYPE = 'l';
+
+    private static final byte NUMBER_BIG_INTEGER_TYPE = 'g';
+
+    private static final byte NUMBER_BIG_DECIMAL_TYPE = 'e';
 
     private static final byte NUMBER_DOUBLE_TYPE = 'd';
 
@@ -157,6 +165,12 @@ class Wson {
                     return readArray();
                 case NUMBER_DOUBLE_TYPE :
                     return readDouble();
+                case NUMBER_LONG_TYPE :
+                    return  readLong();
+                case NUMBER_BIG_INTEGER_TYPE :
+                    return  new BigInteger(readUTF16String());
+                case NUMBER_BIG_DECIMAL_TYPE :
+                    return  new BigDecimal(readUTF16String());
                 case BOOLEAN_TYPE_FALSE:
                     return  Boolean.FALSE;
                 case BOOLEAN_TYPE_TRUE:
@@ -499,6 +513,12 @@ class Wson {
                 return;
             }
 
+            if(number instanceof  Long){
+                writeByte(NUMBER_LONG_TYPE);
+                writeLong(number.longValue());
+                return;
+            }
+
             if(number instanceof  Short
                     || number instanceof  Byte){
                 writeByte(NUMBER_INT_TYPE);
@@ -506,8 +526,20 @@ class Wson {
                 return;
             }
 
-            writeByte(NUMBER_DOUBLE_TYPE);
-            writeDouble(number.doubleValue());
+            if(number instanceof BigInteger){
+                writeByte(NUMBER_BIG_INTEGER_TYPE);
+                writeUTF16String(number.toString());
+                return;
+            }
+
+            if(number instanceof BigDecimal){
+                writeByte(NUMBER_BIG_DECIMAL_TYPE);
+                writeUTF16String(number.toString());
+                return;
+            }
+            writeByte(STRING_TYPE);
+            writeUTF16String(number.toString());
+
         }
 
         private final  void writeMap(Map map) {
