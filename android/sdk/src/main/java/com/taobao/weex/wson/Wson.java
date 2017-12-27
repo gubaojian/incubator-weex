@@ -29,6 +29,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,6 +63,12 @@ public class Wson {
     private static final byte BOOLEAN_TYPE_FALSE = 'f';
 
     private static final byte NUMBER_INT_TYPE = 'i';
+
+    private static final byte NUMBER_LONG_TYPE = 'l';
+
+    private static final byte NUMBER_BIG_INTEGER_TYPE = 'g';
+
+    private static final byte NUMBER_BIG_DECIMAL_TYPE = 'e';
 
     private static final byte NUMBER_DOUBLE_TYPE = 'd';
 
@@ -158,6 +166,12 @@ public class Wson {
                     return readArray();
                 case NUMBER_DOUBLE_TYPE :
                     return readDouble();
+                case NUMBER_LONG_TYPE :
+                    return  readLong();
+                case NUMBER_BIG_INTEGER_TYPE :
+                    return  new BigInteger(readUTF16String());
+                case NUMBER_BIG_DECIMAL_TYPE :
+                    return  new BigDecimal(readUTF16String());
                 case BOOLEAN_TYPE_FALSE:
                     return  Boolean.FALSE;
                 case BOOLEAN_TYPE_TRUE:
@@ -166,7 +180,7 @@ public class Wson {
                     return  null;
                 default:
                     throw new RuntimeException("wson unhandled type " + type + " " +
-                     position  +  " length " + buffer.length);
+                            position  +  " length " + buffer.length);
             }
         }
 
@@ -200,49 +214,49 @@ public class Wson {
 
 
         private final String readMapKeyUTF16() {
-                int length = readUInt();
-                length = length/2;
-                if(charsBuffer.length < length){
-                    charsBuffer = new char[length];
+            int length = readUInt();
+            length = length/2;
+            if(charsBuffer.length < length){
+                charsBuffer = new char[length];
+            }
+            int hash = 5381;
+            if(IS_NATIVE_LITTLE_ENDIAN){
+                for(int i=0; i<length; i++){
+                    char ch = (char) ((buffer[position] & 0xFF) +
+                            (buffer[position + 1] << 8));
+                    charsBuffer[i] = (ch);
+                    hash = ((hash << 5) + hash)  + ch;
+                    position+=2;
                 }
-                int hash = 5381;
-                if(IS_NATIVE_LITTLE_ENDIAN){
-                    for(int i=0; i<length; i++){
-                        char ch = (char) ((buffer[position] & 0xFF) +
-                                (buffer[position + 1] << 8));
-                        charsBuffer[i] = (ch);
-                        hash = ((hash << 5) + hash)  + ch;
-                        position+=2;
-                    }
-                }else{
-                    for(int i=0; i<length; i++){
-                        char ch = (char) ((buffer[position + 1] & 0xFF) +
-                                (buffer[position] << 8));
-                        charsBuffer[i] = (ch);
-                        hash = ((hash << 5) + hash)  + ch;
-                        position+=2;
-                    }
+            }else{
+                for(int i=0; i<length; i++){
+                    char ch = (char) ((buffer[position + 1] & 0xFF) +
+                            (buffer[position] << 8));
+                    charsBuffer[i] = (ch);
+                    hash = ((hash << 5) + hash)  + ch;
+                    position+=2;
                 }
-                int globalIndex = (globalStringBytesCache.length - 1)&hash;
-               String cache = globalStringBytesCache[globalIndex];
-                if(cache != null
-                        && cache.length() == length){
-                    boolean isStringEqual  = true;
-                    for(int i=0; i<length; i++){
-                        if(charsBuffer[i] != cache.charAt(i)){
-                            isStringEqual = false;
-                            break;
-                        }
-                    }
-                    if(isStringEqual) {
-                        return cache;
+            }
+            int globalIndex = (globalStringBytesCache.length - 1)&hash;
+            String cache = globalStringBytesCache[globalIndex];
+            if(cache != null
+                    && cache.length() == length){
+                boolean isStringEqual  = true;
+                for(int i=0; i<length; i++){
+                    if(charsBuffer[i] != cache.charAt(i)){
+                        isStringEqual = false;
+                        break;
                     }
                 }
-                cache = new String(charsBuffer, 0, length);
-                if(length < 64) {
-                    globalStringBytesCache[globalIndex] = cache;
+                if(isStringEqual) {
+                    return cache;
                 }
-                return  cache;
+            }
+            cache = new String(charsBuffer, 0, length);
+            if(length < 64) {
+                globalStringBytesCache[globalIndex] = cache;
+            }
+            return  cache;
         }
 
         private final String readUTF16String(){
@@ -342,7 +356,7 @@ public class Wson {
         private Builder(){
             buffer =  bufLocal.get();
             if(buffer != null) {
-                 bufLocal.set(null);
+                bufLocal.set(null);
             }else{
                 buffer = new byte[1024];
             }
@@ -500,6 +514,12 @@ public class Wson {
                 return;
             }
 
+            if(number instanceof  Long){
+                writeByte(NUMBER_LONG_TYPE);
+                writeLong(number.longValue());
+                return;
+            }
+
             if(number instanceof  Short
                     || number instanceof  Byte){
                 writeByte(NUMBER_INT_TYPE);
@@ -507,8 +527,20 @@ public class Wson {
                 return;
             }
 
-            writeByte(NUMBER_DOUBLE_TYPE);
-            writeDouble(number.doubleValue());
+            if(number instanceof BigInteger){
+                writeByte(NUMBER_BIG_INTEGER_TYPE);
+                writeUTF16String(number.toString());
+                return;
+            }
+
+            if(number instanceof BigDecimal){
+                writeByte(NUMBER_BIG_DECIMAL_TYPE);
+                writeUTF16String(number.toString());
+                return;
+            }
+            writeByte(STRING_TYPE);
+            writeUTF16String(number.toString());
+
         }
 
         private final  void writeMap(Map map) {
