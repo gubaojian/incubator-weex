@@ -21,14 +21,12 @@ package com.taobao.weex.ui.component.binding;
 
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.dom.flex.CSSLayoutContext;
-import com.taobao.weex.dom.flex.CSSNode;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.component.list.template.TemplateViewHolder;
@@ -89,7 +87,7 @@ public class Layouts {
             doLayout(component, layoutContext);
             if(WXEnvironment.isApkDebugable()){
                 WXLogUtils.d(WXRecyclerTemplateList.TAG, "WXTemplateList doSafeLayout" +
-                        component.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE) + Thread.currentThread().getName() +  " doSafeLayout  used " +
+                        component.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_CASE) + Thread.currentThread().getName() +  " doSafeLayout  used " +
                                 (System.currentTimeMillis() - start));
             }
         }catch (Exception e){

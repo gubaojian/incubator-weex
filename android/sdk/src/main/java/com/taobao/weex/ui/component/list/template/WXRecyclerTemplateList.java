@@ -143,11 +143,14 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
 
 
     private Map<String, WXCell> mTemplateSources;
-    private String  listDataTemplateKey = Constants.Name.Recycler.SLOT_TEMPLATE_TYPE;
+    private String  listDataTemplateKey = Constants.Name.Recycler.SLOT_TEMPLATE_CASE;
     private Runnable listUpdateRunnable;
     private ConcurrentHashMap<String, TemplateCache> mTemplatesCache;
     private int templateCacheSize = 2;
 
+    private WXCell defaultTemplateCell;
+
+    private static  final  String  DEFAULT_TEMPLATE_KEY = "@__default_template_cell_weex";
 
     /**
      * scroll start and scroll end event
@@ -197,7 +200,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         mTemplatesCache = new ConcurrentHashMap<>();
         mStickyHelper = new TemplateStickyHelper(this);
         orientation = mDomObject.getOrientation();
-        listDataTemplateKey = WXUtils.getString(getDomObject().getAttrs().get(Constants.Name.Recycler.LIST_DATA_TEMPLATE_KEY), Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
+        listDataTemplateKey = WXUtils.getString(getDomObject().getAttrs().get(Constants.Name.Recycler.LIST_DATA_TEMPLATE_SWITCH_KEY), Constants.Name.Recycler.SLOT_TEMPLATE_CASE);
         listDataItemKey = WXUtils.getString(getDomObject().getAttrs().get(Constants.Name.Recycler.LIST_DATA_ITEM), listDataItemKey);
         listDataIndexKey = WXUtils.getString(getDomObject().getAttrs().get(Constants.Name.Recycler.LIST_DATA_ITEM_INDEX), listDataIndexKey);
         if( getDomObject().getAttrs().get(Constants.Name.Recycler.LIST_DATA) instanceof  JSONArray) {
@@ -592,9 +595,29 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             return;
         }
         if(child instanceof WXCell){
+            if(getDomObject().getAttrs().get(Constants.Name.Recycler.LIST_DATA_TEMPLATE_SWITCH_KEY) == null){
+                 if(defaultTemplateCell == null){
+
+                 }
+            }else{
+
+            }
             if(child.getDomObject() != null && child.getDomObject().getAttrs() != null){
-                Object templateId = child.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
+                Object templateId = child.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_CASE);
                 String key = WXUtils.getString(templateId, null);
+                if(getDomObject().getAttrs().containsKey(Constants.Name.Recycler.LIST_DATA_TEMPLATE_SWITCH_KEY)){
+                    if(defaultTemplateCell == null){
+                        key = DEFAULT_TEMPLATE_KEY;
+                        defaultTemplateCell = (WXCell) child;
+                        child.getDomObject().getAttrs().put(Constants.Name.Recycler.SLOT_TEMPLATE_CASE, key);
+                    }
+                }else{
+                    if(child.getDomObject().getAttrs().containsKey("default") && defaultTemplateCell == null){
+                        key = DEFAULT_TEMPLATE_KEY;
+                        defaultTemplateCell = (WXCell) child;
+                        child.getDomObject().getAttrs().put(Constants.Name.Recycler.SLOT_TEMPLATE_CASE, key);
+                    }
+                }
                 if(key != null){
                     if(child.getDomObject() instanceof  WXCellDomObject
                             && getDomObject() instanceof  WXRecyclerDomObject){
@@ -671,9 +694,9 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             case Constants.Name.Recycler.LIST_DATA_ITEM_INDEX:
                 listDataIndexKey = WXUtils.getString(param, listDataIndexKey);
                 return true;
-            case Constants.Name.Recycler.LIST_DATA_TEMPLATE_KEY:
-            case Constants.Name.Recycler.SLOT_TEMPLATE_TYPE:
-                listDataTemplateKey = WXUtils.getString(param, Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
+            case Constants.Name.Recycler.LIST_DATA_TEMPLATE_SWITCH_KEY:
+            case Constants.Name.Recycler.SLOT_TEMPLATE_CASE:
+                listDataTemplateKey = WXUtils.getString(param, Constants.Name.Recycler.SLOT_TEMPLATE_CASE);
                 return true;
             case LOADMOREOFFSET:
                 return true;
@@ -1162,11 +1185,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
      * */
     @Override
     public int getItemViewType(int position) {
-        JSONObject data = safeGetListData(position);
-        String template = data.getString(listDataTemplateKey);
-        if(TextUtils.isEmpty(template)){
-            template = "";
-        }
+        String template = getTemplateKey(position);
         int type =  mTemplateViewTypes.indexOfKey(template);
         if(type < 0){
             type = 0;
@@ -1210,7 +1229,11 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
         JSONObject data =  safeGetListData(position);
         String template = data.getString(listDataTemplateKey);
         if(TextUtils.isEmpty(template)){
-            template = "";
+            if(defaultTemplateCell != null){
+                template  = DEFAULT_TEMPLATE_KEY;
+            }else {
+                template = "";
+            }
         }
         return  template;
     }
@@ -1233,7 +1256,7 @@ public class WXRecyclerTemplateList extends WXVContainer<BounceRecyclerView> imp
             return  -1;
         }
         if(cell.getDomObject() != null && cell.getDomObject().getAttrs() != null){
-            Object templateId = cell.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_TYPE);
+            Object templateId = cell.getDomObject().getAttrs().get(Constants.Name.Recycler.SLOT_TEMPLATE_CASE);
             String template = WXUtils.getString(templateId, null);
             if(template == null){
                 return  0;
