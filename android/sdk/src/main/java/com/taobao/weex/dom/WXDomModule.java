@@ -97,7 +97,8 @@ public final class WXDomModule extends WXModule {
     try {
       Action action = Actions.get(method,args);
       if(action == null){
-        WXLogUtils.e("Unknown dom action.");
+         WXLogUtils.e("Unknown dom action.");
+         return null;
       }
       if(action instanceof DOMAction){
         postAction((DOMAction)action, CREATE_BODY.equals(method) || ADD_RULE.equals(method));

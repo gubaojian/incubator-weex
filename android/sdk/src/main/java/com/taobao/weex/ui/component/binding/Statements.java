@@ -303,7 +303,8 @@ public class Statements {
                 }
 
                 Map<String, Object>  props  = renderProps((JSONObject) attr.get(ELUtils.COMPONENT_PROPS), context);
-                //
+                props.put("compoentId", compoentId + "" + componentIdNext);
+                componentIdNext++;
                 EventResult result = WXBridgeManager.getInstance().syncCallJSEventWithResult(WXBridgeManager.METHD_COMPONENT_HOOK_SYNC, component.getInstanceId(), null, compoentId, "lifecycle", "create", props, null);
                 Log.e("weex", "weex result " + result.getResult());
                 //// fixme store context
@@ -506,4 +507,6 @@ public class Statements {
           }
           return  params;
     }
+
+    private static volatile int componentIdNext = 0;
 }
