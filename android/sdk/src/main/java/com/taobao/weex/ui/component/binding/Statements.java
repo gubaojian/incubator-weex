@@ -296,9 +296,15 @@ public class Statements {
             if(attr.get(ELUtils.COMPONENT_PROPS) != null
                     && attr.get(ELUtils.COMPONENT_PROPS) instanceof  JSONObject){
 
+                String compoentId = (String) attr.get("@componentId");
+                Log.e("weex", "weex compoentId " + compoentId);
+                if(compoentId == null){
+                    compoentId = component.getRef();
+                }
+
                 Map<String, Object>  props  = renderProps((JSONObject) attr.get(ELUtils.COMPONENT_PROPS), context);
                 //
-                EventResult result = WXBridgeManager.getInstance().syncCallJSEventWithResult(WXBridgeManager.METHD_COMPONENT_HOOK_SYNC, component.getInstanceId(), null, component.getRef() + "0", "lifecycle", "create", props, null);
+                EventResult result = WXBridgeManager.getInstance().syncCallJSEventWithResult(WXBridgeManager.METHD_COMPONENT_HOOK_SYNC, component.getInstanceId(), null, compoentId, "lifecycle", "create", props, null);
                 Log.e("weex", "weex result " + result.getResult());
                 //// fixme store context
                 context = new ArrayStack();
