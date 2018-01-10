@@ -303,9 +303,12 @@ public class Statements {
                 }
 
                 Map<String, Object>  props  = renderProps((JSONObject) attr.get(ELUtils.COMPONENT_PROPS), context);
-                props.put("compoentId", compoentId + "" + componentIdNext);
+                String dataCompoentId = compoentId + "_" + componentIdNext;
                 componentIdNext++;
-                EventResult result = WXBridgeManager.getInstance().syncCallJSEventWithResult(WXBridgeManager.METHD_COMPONENT_HOOK_SYNC, component.getInstanceId(), null, compoentId, "lifecycle", "create", props, null);
+                EventResult result = WXBridgeManager.getInstance().syncCallJSEventWithResult(WXBridgeManager.METHD_COMPONENT_HOOK_SYNC, component.getInstanceId(), null, compoentId, "lifecycle", "create",  new Object[]{
+                        dataCompoentId,
+                        props
+                }, null);
                 Log.e("weex", "weex result " + result.getResult());
                 //// fixme store context
                 context = new ArrayStack();
