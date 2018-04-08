@@ -18,6 +18,8 @@
  */
 package com.taobao.weex.dom;
 
+import static com.taobao.weex.common.Constants.Name.CLIP_CHILD;
+import static com.taobao.weex.common.Constants.Name.Z_INDEX;
 import static com.taobao.weex.dom.binding.ELUtils.COMPONENT_PROPS;
 import static com.taobao.weex.dom.binding.ELUtils.EXCLUDES_BINDING;
 import static java.lang.Boolean.parseBoolean;
@@ -264,6 +266,19 @@ public class WXAttr implements Map<String, Object>,Cloneable {
       }
     }
     return ret;
+  }
+
+  public int getZIndex(){
+    Object index = get(Z_INDEX);
+    if(index == null){
+      return -1;
+    }
+    return WXUtils.getInteger(index, -1);
+  }
+
+  public boolean getClipChild(){
+    Object clip = get(CLIP_CHILD);
+    return WXUtils.getBoolean(clip, true);
   }
 
   public float getColumnWidth(){

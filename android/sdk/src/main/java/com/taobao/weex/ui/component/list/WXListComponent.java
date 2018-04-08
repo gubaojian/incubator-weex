@@ -19,6 +19,8 @@
 package com.taobao.weex.ui.component.list;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.v4.view.ViewCompat;
 import android.util.Pair;
 
 import com.taobao.weex.WXSDKInstance;
@@ -35,10 +37,12 @@ import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXLoading;
 import com.taobao.weex.ui.component.WXRefresh;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.view.listview.ExtendedLinearLayoutManager;
 import com.taobao.weex.ui.view.listview.WXRecyclerView;
 import com.taobao.weex.ui.view.listview.adapter.ListBaseViewHolder;
 import com.taobao.weex.ui.view.refresh.wrapper.BounceRecyclerView;
 import com.taobao.weex.utils.WXUtils;
+import com.taobao.weex.utils.WXViewUtils;
 
 import java.util.Map;
 
@@ -89,6 +93,25 @@ public class WXListComponent extends BasicListComponent<BounceRecyclerView> {
     }
     if(mRecyclerDom != null && mRecyclerDom.getSpanOffsets() != null){
        bounceRecyclerView.getInnerView().addItemDecoration(new GapItemDecoration(this));
+    }
+    if(getDomObject() != null){
+      if(!getDomObject().getAttrs().getClipChild()){
+        bounceRecyclerView.getInnerView().setClipChildren(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+          bounceRecyclerView.getInnerView().setClipToOutline(false);
+        }
+        bounceRecyclerView.getInnerView().setClipToPadding(false);
+      }
+    }
+
+    if(bounceRecyclerView.getInnerView().getLayoutManager() instanceof ExtendedLinearLayoutManager){
+      if(getDomObject().getAttrs().containsKey(Constants.Name.RENDER_OFFSET)){
+        WXDomObject domObject = (WXDomObject) getDomObject();
+        ExtendedLinearLayoutManager extendedLinearLayoutManager = (ExtendedLinearLayoutManager) bounceRecyclerView.getInnerView().getLayoutManager();
+        float layoutSpace =  WXUtils.getFloat(domObject.getAttrs().get(Constants.Name.RENDER_OFFSET),0.0f);
+        float layoutSpacePx = WXViewUtils.getRealPxByWidth(layoutSpace, domObject.getViewPortWidth());
+        extendedLinearLayoutManager.setExtraLayoutSpace((int) layoutSpacePx);
+      }
     }
     return  bounceRecyclerView;
   }

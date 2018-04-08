@@ -34,6 +34,7 @@ public class ExtendedLinearLayoutManager extends LinearLayoutManager{
 
 
     private OnSmoothScrollEndListener onScrollEndListener;
+    private int extraLayoutSpace;
 
     public ExtendedLinearLayoutManager(Context context) {
         super(context, VERTICAL, false);
@@ -111,5 +112,15 @@ public class ExtendedLinearLayoutManager extends LinearLayoutManager{
 
     public interface OnSmoothScrollEndListener {
         void  onStop();
+    }
+
+    @Override
+    protected int getExtraLayoutSpace(RecyclerView.State state) {
+        int space = super.getExtraLayoutSpace(state);
+        return space + extraLayoutSpace;
+    }
+
+    public void setExtraLayoutSpace(int extraLayoutSpace) {
+        this.extraLayoutSpace = extraLayoutSpace;
     }
 }

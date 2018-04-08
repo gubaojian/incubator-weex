@@ -158,6 +158,9 @@ public class Constants {
     String OFFSET_X_ACCURACY = "offsetXAccuracy";
     String OFFSET_X_RATIO = "offsetXRatio";
     String ELEVATION = "elevation";
+    String Z_INDEX = "zIndex";
+    String RENDER_OFFSET = "renderOffset";
+    String CLIP_CHILD = "clipChild";
     String PERSPECTIVE = "perspective";
     String SCROLLABLE = "scrollable";
     String DRAGGABLE = "draggable";

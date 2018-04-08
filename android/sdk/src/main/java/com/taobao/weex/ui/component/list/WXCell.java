@@ -24,11 +24,13 @@ import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.RestrictTo.Scope;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.Component;
+import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.Constants.Name;
 import com.taobao.weex.dom.WXAttr;
 import com.taobao.weex.dom.WXDomObject;
@@ -103,23 +105,27 @@ public class WXCell extends WidgetContainer<WXFrameLayout> {
      */
     @Override
     protected WXFrameLayout initComponentHostView(@NonNull Context context) {
+        WXFrameLayout view;
         if (isSticky()) {
-            WXFrameLayout view = new WXFrameLayout(context);
+            view = new WXFrameLayout(context);
             mRealView = new WXFrameLayout(context);
             view.addView(mRealView);
             //TODO Maybe there is a better solution for hardware-acceleration view's display list.
             if (isFlatUIEnabled()) {
                 view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             }
-            return view;
         } else {
-            WXFrameLayout view = new WXFrameLayout(context);
+            view = new WXFrameLayout(context);
             mRealView = view;
             if (isFlatUIEnabled()) {
                 view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
             }
-            return view;
         }
+        if(getDomObject().getAttrs().containsKey(Name.Z_INDEX)){
+            int zIndex = getDomObject().getAttrs().getZIndex();
+            ViewCompat.setElevation(view, zIndex);
+        }
+        return view;
     }
 
     public int getLocationFromStart(){

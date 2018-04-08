@@ -870,6 +870,11 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
           updateElevation();
         }
         return true;
+      case Constants.Name.Z_INDEX:
+        if(param!=null) {
+           updateZIndex();
+        }
+        return true;
       case PROP_FIXED_SIZE:
         String fixedSize = WXUtils.getString(param, PROP_FS_MATCH_PARENT);
         setFixedSize(fixedSize);
@@ -1610,6 +1615,13 @@ public abstract class  WXComponent<T extends View> implements IWXObject, IWXActi
     float elevation = getDomObject().getAttrs().getElevation(getInstance().getInstanceViewPortWidth());
     if (!Float.isNaN(elevation)) {
       ViewCompat.setElevation(getHostView(), elevation);
+    }
+  }
+
+  private void updateZIndex() {
+    int zIndex = getDomObject().getAttrs().getZIndex();
+    if (zIndex >= 0) {
+      ViewCompat.setElevation(getHostView(), zIndex);
     }
   }
 
