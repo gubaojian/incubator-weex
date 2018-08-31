@@ -131,13 +131,15 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionCreateBody(String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+        Log.e("Weex", documentView.hashCode() + "documentActionCreateBody;" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
+                + ";" + JSON.toJSONString(events));
         documentView.actionCreateBody(ref, style, attrs, events);
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
-        Log.e("Weex", "actionAddElement " + ref + "," + componentType + " " + parentRef + " " + index + " "
-        + JSON.toJSONString(style) + "  " + JSON.toJSONString(attrs)
-        + "  " + JSON.toJSONString(events));
+        Log.e("Weex", documentView.hashCode() + "documentActionAddElement;" + ref + ";" + componentType + ";" + parentRef + ";" + index + ";"
+        + JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
+        + ";" + JSON.toJSONString(events));
         documentView.actionAddElement(ref, componentType, parentRef, index, style, attrs, events);
     }
 
