@@ -21,9 +21,11 @@ package com.taobao.weex.ui.component.document;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
@@ -133,6 +135,9 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+        Log.e("Weex", "actionAddElement " + ref + "," + componentType + " " + parentRef + " " + index + " "
+        + JSON.toJSONString(style) + "  " + JSON.toJSONString(attrs)
+        + "  " + JSON.toJSONString(events));
         documentView.actionAddElement(ref, componentType, parentRef, index, style, attrs, events);
     }
 
