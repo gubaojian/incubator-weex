@@ -192,7 +192,10 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         documentView.actionUpdateAttrs(getRef(),toMap(attrs));
     }
 
-
+    @Override
+    public void onActivityResume() {
+        super.onActivityResume();
+    }
 
     @Override
     public void updateProperties(Map<String, Object> props) {}
