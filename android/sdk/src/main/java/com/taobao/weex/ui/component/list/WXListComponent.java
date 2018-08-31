@@ -19,6 +19,7 @@
 package com.taobao.weex.ui.component.list;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.PagerSnapHelper;
 import android.text.TextUtils;
@@ -101,6 +102,14 @@ public class WXListComponent extends BasicListComponent<BounceRecyclerView> {
       PagerSnapHelper snapHelper = new PagerSnapHelper();
       snapHelper.attachToRecyclerView(bounceRecyclerView.getInnerView());
     }
+
+    bounceRecyclerView.getInnerView().setClipChildren(false);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      bounceRecyclerView.getInnerView().setClipToOutline(false);
+    }
+    bounceRecyclerView.getInnerView().setClipToPadding(false);
+
+
 
     return bounceRecyclerView;
   }

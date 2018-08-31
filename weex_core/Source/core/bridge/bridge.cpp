@@ -129,6 +129,7 @@ namespace WeexCore {
             if (render == nullptr)
                 return;
             render->markDirty();
+            page->set_is_dirty(true);
         }
     }
 

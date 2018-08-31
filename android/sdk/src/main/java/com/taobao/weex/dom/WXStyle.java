@@ -522,6 +522,11 @@ public class WXStyle implements Map<String, Object>,Cloneable {
     return mBindingStyle;
   }
 
+  @NonNull
+  public Map<String, Object> getStyles() {
+    return mStyles;
+  }
+
   @Override
   public WXStyle clone(){
     WXStyle style = new WXStyle();

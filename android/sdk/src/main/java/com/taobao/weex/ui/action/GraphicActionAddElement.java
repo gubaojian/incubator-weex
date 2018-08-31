@@ -29,6 +29,7 @@ import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.WXErrorCode;
 import com.taobao.weex.dom.transition.WXTransition;
 import com.taobao.weex.ui.component.WXComponent;
+import com.taobao.weex.ui.component.document.WXDocumentComponent;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXExceptionUtils;
 import com.taobao.weex.utils.WXLogUtils;
@@ -43,6 +44,7 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
   private WXComponent child;
   private GraphicPosition layoutPosition;
   private GraphicSize layoutSize;
+  private WXDocumentComponent documentComponent;
 
   public GraphicActionAddElement(@NonNull WXSDKInstance instance, String ref,
                                  String componentType, String parentRef,
@@ -135,6 +137,10 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
           ext);
     }
 
+    documentComponent = WXDocumentComponent.getDocument(parent);
+    if(documentComponent != null){
+      documentComponent.actionAddElement(ref, componentType,parentRef, index, style, attributes, events);
+    }
   }
 
   @RestrictTo(Scope.LIBRARY)
@@ -170,6 +176,9 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
       }
       child.applyLayoutAndEvent(child);
       child.bindData(child);
+      if(documentComponent != null){
+        documentComponent.updateWatchComponentStatus();
+      }
     } catch (Exception e) {
       WXLogUtils.e("add component failed.", e);
     }
