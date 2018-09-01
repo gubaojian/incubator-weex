@@ -39,6 +39,7 @@ import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.ui.ComponentCreator;
 import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXA;
+import com.taobao.weex.ui.component.WXBasicComponentType;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXImage;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -284,6 +285,12 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         }
         if(DOCUMENT_COMPONENT.equals(parent.getComponentType())){
             return (WXDocumentComponent) parent;
+        }
+        if(WXBasicComponentType.CELL.equals(parent.getComponentType())){
+            return null;
+        }
+        if(WXBasicComponentType.LIST.equals(parent.getComponentType())){
+            return null;
         }
         return getDocument(parent.getParent());
     }

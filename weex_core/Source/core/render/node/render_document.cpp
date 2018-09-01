@@ -31,10 +31,16 @@ namespace WeexCore {
         if(node == nullptr){
             return false;
         }
+        if(node->isSegmentChild()){
+            return true;
+        }
         if(node->type() == kRenderDocument){
             return true;
         }
         if(node->type() == kRenderCell || node->type() == kRenderList){
+            return false;
+        }
+        if(node->is_root_render()){
             return false;
         }
         node = (RenderObject *) node->getParent();

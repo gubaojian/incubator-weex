@@ -475,7 +475,7 @@ void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
 
   if(WeexCore::isRenderDocumentChild(parent)){
       will_layout = false;
-      child->AddAttr("is_document", "true");
+      child->setIsSegmentChild(true);
   }
 
   RenderAction *action =
