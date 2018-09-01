@@ -139,7 +139,7 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
 
     documentComponent = WXDocumentComponent.getDocument(parent);
     if(documentComponent != null){
-      documentComponent.actionAddElement(ref, componentType,parentRef, index, style, attributes, events);
+      documentComponent.actionAddElement(ref, componentType, parentRef, index, style, attributes, events);
     }
   }
 

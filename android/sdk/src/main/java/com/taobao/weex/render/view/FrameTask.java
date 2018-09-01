@@ -24,7 +24,7 @@ package com.taobao.weex.render.view;
  */
 
 public abstract class FrameTask implements Runnable {
-    public static final long FRAME_TIME = 16;
+    public static final long FRAME_TIME = 32;
     private long start = System.currentTimeMillis();
 
     public long frameTime(){
