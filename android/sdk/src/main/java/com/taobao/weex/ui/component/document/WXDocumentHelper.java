@@ -18,6 +18,8 @@
  */
 package com.taobao.weex.ui.component.document;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.taobao.weex.common.Constants;
@@ -32,15 +34,31 @@ public class WXDocumentHelper {
 
     private WXDocumentComponent documentComponent;
     private boolean isAppear;
+    private Handler mainHandler;
+    private Runnable updateWatchEventsRunnable;
 
 
     public WXDocumentHelper(WXDocumentComponent documentComponent) {
         this.documentComponent = documentComponent;
         this.isAppear = false;
+        this.mainHandler = new Handler(Looper.getMainLooper());
     }
 
-
     public void updateWatchEvents(){
+        if(updateWatchEventsRunnable == null){
+            updateWatchEventsRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    updateElementsWatchEvents();
+                    updateWatchEventsRunnable = null;
+                }
+            };
+        }
+        mainHandler.removeCallbacks(updateWatchEventsRunnable);
+        mainHandler.postDelayed(updateWatchEventsRunnable, 60);
+    }
+
+    private void updateElementsWatchEvents(){
         if(documentComponent.containsEvent(Constants.Event.APPEAR) || documentComponent.containsEvent(Constants.Event.DISAPPEAR)){
             notifyDocumentNodeAppearEvent(documentComponent, "none");
             return;
