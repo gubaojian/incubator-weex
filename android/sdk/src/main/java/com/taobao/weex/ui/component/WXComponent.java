@@ -1890,7 +1890,7 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
   }
 
   public void documentNodeAppearChange(String wxEventType, String direction) {
-    if(containsEvent(wxEventType)){
+    if(containsEvent(Constants.Event.APPEAR) || containsEvent(Constants.Event.DISAPPEAR) ){
         boolean appearChanged = false;
         if(Constants.Event.APPEAR.equals(wxEventType)){
           if(!documentNodeHasAppear){
