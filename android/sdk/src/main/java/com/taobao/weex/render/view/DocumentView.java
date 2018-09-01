@@ -307,7 +307,7 @@ public class DocumentView implements Handler.Callback {
                 };
             }
             gpuHandler.removeCallbacks(layoutTask);
-            gpuHandler.postDelayed(layoutTask, layoutTask.frameTime());
+            gpuHandler.postDelayed(layoutTask, FrameTask.FRAME_TIME);
         }
     }
 

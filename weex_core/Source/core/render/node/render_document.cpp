@@ -24,12 +24,18 @@
 #include "render_document.h"
 namespace WeexCore {
 
+    /**
+     * should set on flag on page, when have the flag fillter the page
+     * */
     bool isRenderDocumentChild(RenderObject *node){
         if(node == nullptr){
             return false;
         }
         if(node->type() == kRenderDocument){
             return true;
+        }
+        if(node->type() == kRenderCell || node->type() == kRenderList){
+            return false;
         }
         node = (RenderObject *) node->getParent();
         return isRenderDocumentChild(node);
