@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
@@ -149,10 +150,12 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         for(Map.Entry<String, Object> entry : entries){
             stylesStrs.put(entry.getKey(), entry.getValue().toString());
         }
+        Log.e("Weex", documentView.hashCode() + "documentActionUpdateStyle;" + ref + ";" + JSON.toJSONString(stylesStrs));
         documentView.actionUpdateStyles(ref, stylesStrs);
     }
 
     public void actionUpdateAttrs(String ref, Map<String, String> attrs){
+        Log.e("Weex", documentView.hashCode() + "documentActionUpdateAttrs;" + ref + ";" + JSON.toJSONString(attrs));
         documentView.actionUpdateAttrs(ref, attrs);
     }
 
