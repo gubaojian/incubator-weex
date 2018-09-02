@@ -161,20 +161,24 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionAddEvent(String ref, Object event){
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddEvent;" + ref);
         documentView.actionAddEvent(ref, event.toString());
 
     }
 
     public void actionRemoveEvent(String ref, Object event) {
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveEvent;" + ref);
         documentView.actionRemoveEvent(ref, event.toString());
     }
 
 
     public void actionMoveElement(String ref, String parentRef, int index){
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionMoveElement;" + ref);
         documentView.actionMoveElement(ref, parentRef, index);
     }
 
     public void actionRemoveElement(String ref) {
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveElement;" + ref);
         documentView.actionRemoveElement(ref);
     }
 

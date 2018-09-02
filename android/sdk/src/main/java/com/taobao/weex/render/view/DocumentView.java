@@ -302,11 +302,11 @@ public class DocumentView implements Handler.Callback {
                     @Override
                     public void run() {
                         synchronized (DocumentView.this.lock){
-                            Log.e("weex", "Weex Request Layout send message " + hashCode());
+                            Log.e("weex", "Weex Request Layout send message " + DocumentView.this.hashCode());
                             Message message = Message.obtain(gpuHandler, MSG_RENDER_LAYOUT);
                             message.sendToTarget();
                             layoutTask = null;
-                            Log.e("weex", "Weex Request Layout task set null " + hashCode());
+                            Log.e("weex", "Weex Request Layout task set null " + DocumentView.this.hashCode());
                         }
                     }
                 };
