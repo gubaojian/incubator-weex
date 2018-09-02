@@ -420,6 +420,13 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     mJSHandler.postDelayed(WXThread.secure(r),delayMillis);
   }
 
+  public void removeCallback(Runnable r){
+    if (mJSHandler == null) {
+      return;
+    }
+    mJSHandler.removeCallbacks(r);
+  }
+
   void setTimeout(String callbackId, String time) {
     Message message = Message.obtain();
     message.what = WXJSBridgeMsgType.SET_TIMEOUT;
@@ -2263,6 +2270,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     }
 
     if (mDestroyedInstanceId != null && mDestroyedInstanceId.contains(pageId)) {
+      Log.e("Weex", "mDestroyedInstanceId.contains(pageId)" + pageId);
       return IWXBridge.DESTROY_INSTANCE;
     }
 

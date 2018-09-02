@@ -38,7 +38,7 @@ import java.util.Map;
  * Created by furture on 2018/8/23.
  */
 
-public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDocumentSizeChangedListener {
+public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDocumentSizeChangedListener, Runnable {
 
 
     private WXDocumentComponent documentComponent;
@@ -169,18 +169,18 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
                 && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
             return;
         }
-        WXSDKManager.getInstance().getWXBridgeManager().post(new Runnable() {
-            @Override
-            public void run() {
-                if(documentComponent.isDestoryed()){
-                    return;
-                }
-                if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
-                    return;
-                }
-                WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
-            }
-        });
+        if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
+            return;
+        }
+        WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
+        WXSDKManager.getInstance().getWXBridgeManager().postDelay(this, 16);
     }
 
+    @Override
+    public void run() {
+        if(documentComponent.isDestoryed()){
+            return;
+        }
+        WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
+    }
 }

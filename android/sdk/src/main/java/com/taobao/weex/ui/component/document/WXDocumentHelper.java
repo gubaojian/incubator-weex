@@ -78,8 +78,14 @@ public class WXDocumentHelper {
 
     public void notifyAppearStateChange(String wxEventType, String direction) {
         if(Constants.Event.APPEAR.equals(wxEventType)){
+            if(isAppear){
+                return;
+            }
             isAppear = true;
         }else if(Constants.Event.DISAPPEAR.equals(wxEventType)){
+            if(!isAppear){
+                return;
+            }
             isAppear = false;
         }
         updateWatchEvents();
