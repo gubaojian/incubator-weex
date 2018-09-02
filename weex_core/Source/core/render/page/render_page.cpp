@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <android/base/log_utils.h>
 #include "core/render/page/render_page.h"
 #include "core/render/node/render_document.h"
 #include "base/TimeUtils.h"
@@ -139,12 +140,14 @@ void RenderPage::SetRootRenderObject(RenderObject *root) {
 bool RenderPage::AddRenderObject(const std::string &parent_ref,
                                  int insert_posiotn, RenderObject *child) {
   RenderObject *parent = GetRenderObject(parent_ref);
+  LOGD("[RenderManager] AddRenderObject >>>> child GetRenderObject parent %p", parent);
   if (parent == nullptr || child == nullptr) {
     return false;
   }
 
   // add child to Render Tree
   insert_posiotn = parent->AddRenderObject(insert_posiotn, child);
+  LOGD("[RenderManager] AddRenderObject >>>> child insert_posiotn %d ", insert_posiotn);
   if (insert_posiotn < -1) {
     return false;
   }

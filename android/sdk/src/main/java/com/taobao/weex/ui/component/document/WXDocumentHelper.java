@@ -73,6 +73,7 @@ public class WXDocumentHelper {
             documentComponent.addEvent(Constants.Event.APPEAR);
             documentComponent.addEvent(Constants.Event.DISAPPEAR);
         }
+        notifyDocumentNodeAppearEvent(documentComponent, "none");
     }
 
     public void notifyAppearStateChange(String wxEventType, String direction) {
@@ -81,7 +82,7 @@ public class WXDocumentHelper {
         }else if(Constants.Event.DISAPPEAR.equals(wxEventType)){
             isAppear = false;
         }
-        notifyDocumentNodeAppearEvent(documentComponent, direction);
+        updateWatchEvents();
     }
 
     private void notifyDocumentNodeAppearEvent(WXComponent component, String direction){

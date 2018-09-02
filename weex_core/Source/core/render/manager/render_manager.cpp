@@ -98,6 +98,7 @@ bool RenderManager::AddRenderObject(const std::string &page_id,
   page->ParseJsonTime(getCurrentTime() - start_time);
 
   if (child == nullptr) return false;
+  LOGD("[RenderManager] AddRenderObject >>>> child is not null");
 
   page->set_is_dirty(true);
   return page->AddRenderObject(parent_ref, index, child);
