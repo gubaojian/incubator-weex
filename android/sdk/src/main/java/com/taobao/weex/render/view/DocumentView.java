@@ -23,6 +23,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.taobao.weex.render.RenderSDK;
 import com.taobao.weex.render.action.AddElementAction;
@@ -293,20 +294,25 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void requestLayout(){
+        Log.e("weex", "Weex Request Layout " + hashCode());
         synchronized (DocumentView.this.lock){
             if(layoutTask == null){
+                Log.e("weex", "Weex Request Layout new  task  " + hashCode());
                 layoutTask = new FrameTask() {
                     @Override
                     public void run() {
                         synchronized (DocumentView.this.lock){
+                            Log.e("weex", "Weex Request Layout send message " + hashCode());
                             Message message = Message.obtain(gpuHandler, MSG_RENDER_LAYOUT);
                             message.sendToTarget();
                             layoutTask = null;
+                            Log.e("weex", "Weex Request Layout task set null " + hashCode());
                         }
                     }
                 };
             }
             gpuHandler.removeCallbacks(layoutTask);
+            Log.e("weex", "Weex Request Layout frame time " + hashCode());
             gpuHandler.postDelayed(layoutTask, FrameTask.FRAME_TIME);
         }
     }
@@ -512,11 +518,14 @@ public class DocumentView implements Handler.Callback {
                 break;
                 case MSG_RENDER_LAYOUT:{
                     if(mNativeDocument != 0){
+                        Log.e("weex", "Weex Request Layout execute " + hashCode());
                         RenderBridge.getInstance().layoutIfNeed(mNativeDocument);
                         int height = RenderBridge.getInstance().documentHeight(mNativeDocument);
                         int width = RenderBridge.getInstance().documentWidth(mNativeDocument);
                         setSize(width, height);
                         invalidate();
+                    }else{
+                        Log.e("weex", "Weex Request Layout execute none " + hashCode());
                     }
                 }
                 break;
