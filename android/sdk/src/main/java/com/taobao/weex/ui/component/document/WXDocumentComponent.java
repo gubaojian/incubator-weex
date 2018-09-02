@@ -280,19 +280,19 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
 
     public static WXDocumentComponent getDocument(WXComponent parent){
-        if(parent == null){
-            return null;
+        while (parent != null){
+            if(DOCUMENT_COMPONENT.equals(parent.getComponentType())){
+                return (WXDocumentComponent) parent;
+            }
+            if(WXBasicComponentType.CELL.equals(parent.getComponentType())){
+                return null;
+            }
+            if(WXBasicComponentType.LIST.equals(parent.getComponentType())){
+                return null;
+            }
+            parent = parent.getParent();
         }
-        if(DOCUMENT_COMPONENT.equals(parent.getComponentType())){
-            return (WXDocumentComponent) parent;
-        }
-        if(WXBasicComponentType.CELL.equals(parent.getComponentType())){
-            return null;
-        }
-        if(WXBasicComponentType.LIST.equals(parent.getComponentType())){
-            return null;
-        }
-        return getDocument(parent.getParent());
+        return null;
     }
 
     @Override
