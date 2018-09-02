@@ -133,7 +133,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionCreateBody(String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
-        Log.e("Weex", documentView.getDocumentKey() + "documentActionCreateBody;" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
+        Log.e("Weex", documentView.getDocumentKey() + "documentActionCreateBody"+ documentView.getNativeDocument() + "+;" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
                 + ";" + JSON.toJSONString(events));
         documentView.actionCreateBody(ref, style, attrs, events);
     }
