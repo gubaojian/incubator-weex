@@ -86,7 +86,6 @@ public class WXDocumentHelper {
     }
 
     private void notifyDocumentNodeAppearEvent(WXComponent component, String direction){
-        Log.e("Weex", "weex fire appear notifyDocumentNodeAppearEvent "+ component.getComponentType() + "   " + component.getAttrs().get("value") + "  " + component.getRef());
         if(isAppear){
             component.documentNodeAppearChange(Constants.Event.APPEAR, direction);
         }else{

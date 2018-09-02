@@ -139,7 +139,7 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
               WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), mParentRef).getComponentType()),
           ext);
     }
-    Log.e("Weex", "WXDocumentComponent.getDocument " + ref + " parent " + parentRef);
+    Log.e("Weex", "WXDocumentComponent.getDocument try " + ref + " parent " + parentRef);
     documentComponent = WXDocumentComponent.getDocument(parent);
     if(documentComponent != null){
       Log.e("Weex", "WXDocumentComponent.getDocument  find" + ref + " parent " + parentRef);
@@ -147,7 +147,7 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
         documentComponent.actionAddElement(ref, componentType, parentRef, index, style, attributes, events);
       }catch (Exception e){
         Log.e("Weex", "WXDocumentComponent.getDocument actionAddElement exception");
-        Log.e("Weex", "WXDocumentComponent.getDocument actionAddElement exception", e);
+        Log.e("Weex", "WXDocumentComponent.getDocument actionAddElement exception account", e);
       }
       Log.e("Weex", "WXDocumentComponent.getDocument  find actionAddElement done" + ref + " parent " + parentRef);
     }else{

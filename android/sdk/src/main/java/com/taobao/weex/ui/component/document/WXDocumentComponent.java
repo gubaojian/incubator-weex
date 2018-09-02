@@ -279,7 +279,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
 
 
-    public static WXDocumentComponent getDocument(WXComponent parent){
+    public static synchronized WXDocumentComponent getDocument(WXComponent parent){
         while (parent != null){
             if(DOCUMENT_COMPONENT.equals(parent.getComponentType())){
                 return (WXDocumentComponent) parent;
