@@ -293,12 +293,12 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void requestLayout(){
-        synchronized (this){
+        synchronized (DocumentView.this.lock){
             if(layoutTask == null){
                 layoutTask = new FrameTask() {
                     @Override
                     public void run() {
-                        synchronized (DocumentView.this){
+                        synchronized (DocumentView.this.lock){
                             Message message = Message.obtain(gpuHandler, MSG_RENDER_LAYOUT);
                             message.sendToTarget();
                             layoutTask = null;
