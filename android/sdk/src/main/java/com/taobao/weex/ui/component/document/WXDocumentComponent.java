@@ -133,13 +133,13 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionCreateBody(String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
-        Log.e("Weex", documentView.hashCode() + "documentActionCreateBody;" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
+        Log.e("Weex", documentView.getDocumentKey() + "documentActionCreateBody;" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
                 + ";" + JSON.toJSONString(events));
         documentView.actionCreateBody(ref, style, attrs, events);
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
-        Log.e("Weex", documentView.hashCode() + "documentActionAddElement;" + ref + ";" + componentType + ";" + parentRef + ";" + index + ";"
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddElement;" + ref + ";" + componentType + ";" + parentRef + ";" + index + ";"
         + JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
         + ";" + JSON.toJSONString(events));
         documentView.actionAddElement(ref, componentType, parentRef, index, style, attrs, events);
@@ -151,12 +151,12 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         for(Map.Entry<String, Object> entry : entries){
             stylesStrs.put(entry.getKey(), entry.getValue().toString());
         }
-        Log.e("Weex", documentView.hashCode() + "documentActionUpdateStyle;" + ref + ";" + JSON.toJSONString(stylesStrs));
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateStyle;" + ref + ";" + JSON.toJSONString(stylesStrs));
         documentView.actionUpdateStyles(ref, stylesStrs);
     }
 
     public void actionUpdateAttrs(String ref, Map<String, String> attrs){
-        Log.e("Weex", documentView.hashCode() + "documentActionUpdateAttrs;" + ref + ";" + JSON.toJSONString(attrs));
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateAttrs;" + ref + ";" + JSON.toJSONString(attrs));
         documentView.actionUpdateAttrs(ref, attrs);
     }
 
