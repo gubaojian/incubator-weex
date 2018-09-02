@@ -471,6 +471,8 @@ void RenderPage::SendCreateBodyAction(RenderObject *render) {
 void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
                                       int index, bool is_recursion,
                                       bool will_layout) {
+    LOGE("SendAddElementAction", "SendAddElementAction enter %d", will_layout);
+
   if (child == nullptr || parent == nullptr) return;
   if (parent != nullptr && parent->type() == WeexCore::kRenderRecycleList) {
     will_layout = false;
@@ -481,6 +483,7 @@ void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
       child->setIsSegmentChild(true);
   }
 
+  LOGE("SendAddElementAction", "SendAddElementAction post %d", will_layout);
   RenderAction *action =
       new RenderActionAddElement(page_id(), child, parent, index, will_layout);
   PostRenderAction(action);

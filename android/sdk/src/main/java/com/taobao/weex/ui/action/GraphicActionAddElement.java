@@ -24,6 +24,8 @@ import android.support.annotation.RestrictTo.Scope;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.WXErrorCode;
@@ -66,6 +68,7 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
     this.mMargins = margins;
     this.mBorders = borders;
 
+    Log.e("Weex", "GraphicActionAddElement " + ref + " parent " + parentRef);
     if (instance.getContext() == null) {
       return;
     }
@@ -136,10 +139,13 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
               WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), mParentRef).getComponentType()),
           ext);
     }
-
+    Log.e("Weex", "WXDocumentComponent.getDocument " + ref + " parent " + parentRef);
     documentComponent = WXDocumentComponent.getDocument(parent);
     if(documentComponent != null){
+      Log.e("Weex", "WXDocumentComponent.getDocument  find" + ref + " parent " + parentRef);
       documentComponent.actionAddElement(ref, componentType, parentRef, index, style, attributes, events);
+    }else{
+      Log.e("Weex", "WXDocumentComponent.getDocument  none " + ref + " parent " + parentRef);
     }
   }
 

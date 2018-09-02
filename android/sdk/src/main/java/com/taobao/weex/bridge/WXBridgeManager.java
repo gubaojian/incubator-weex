@@ -2256,7 +2256,8 @@ public class WXBridgeManager implements Callback, BactchExecutor {
               .append(", parentRef:").append(parentRef)
               .append(", styles:").append(styles)
               .append(", attributes:").append(attributes)
-              .append(", events:").append(events);
+              .append(", events:").append(events)
+              .append(", willLayout").append(willLayout);
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
