@@ -162,15 +162,6 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
-        if(style != null){
-            style = new HashMap<String, String>(style);
-        }
-        if(attrs != null){
-            attrs = new HashMap<String, String>(attrs);
-        }
-        if(events != null){
-           events =  new ArrayList<String>(events);
-        }
         AddElementAction addElementAction = new AddElementAction(this, ref, componentType, parentRef, index, style, attrs, events);
         if(gpuHandler != null){
             gpuHandler.post(addElementAction);
@@ -294,25 +285,20 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void requestLayout(){
-        Log.e("weex", "Weex Request Layout " + hashCode());
         synchronized (DocumentView.this.lock){
             if(layoutTask == null){
-                Log.e("weex", "Weex Request Layout new  task  " + hashCode());
                 layoutTask = new FrameTask() {
                     @Override
                     public void run() {
                         synchronized (DocumentView.this.lock){
-                            Log.e("weex", "Weex Request Layout send message " + DocumentView.this.hashCode());
                             Message message = Message.obtain(gpuHandler, MSG_RENDER_LAYOUT);
                             message.sendToTarget();
                             layoutTask = null;
-                            Log.e("weex", "Weex Request Layout task set null " + DocumentView.this.hashCode());
                         }
                     }
                 };
             }
             gpuHandler.removeCallbacks(layoutTask);
-            Log.e("weex", "Weex Request Layout frame time " + hashCode());
             gpuHandler.postDelayed(layoutTask, FrameTask.FRAME_TIME);
         }
     }
@@ -518,14 +504,11 @@ public class DocumentView implements Handler.Callback {
                 break;
                 case MSG_RENDER_LAYOUT:{
                     if(mNativeDocument != 0){
-                        Log.e("weex", "Weex Request Layout execute " + hashCode());
                         RenderBridge.getInstance().layoutIfNeed(mNativeDocument);
                         int height = RenderBridge.getInstance().documentHeight(mNativeDocument);
                         int width = RenderBridge.getInstance().documentWidth(mNativeDocument);
                         setSize(width, height);
                         invalidate();
-                    }else{
-                        Log.e("weex", "Weex Request Layout execute none " + hashCode());
                     }
                 }
                 break;
