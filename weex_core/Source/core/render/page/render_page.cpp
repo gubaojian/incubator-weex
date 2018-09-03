@@ -140,14 +140,12 @@ void RenderPage::SetRootRenderObject(RenderObject *root) {
 bool RenderPage::AddRenderObject(const std::string &parent_ref,
                                  int insert_posiotn, RenderObject *child) {
   RenderObject *parent = GetRenderObject(parent_ref);
-  LOGD("[RenderManager] AddRenderObject >>>> child GetRenderObject parent %p", parent);
   if (parent == nullptr || child == nullptr) {
     return false;
   }
 
   // add child to Render Tree
   insert_posiotn = parent->AddRenderObject(insert_posiotn, child);
-  LOGD("[RenderManager] AddRenderObject >>>> child insert_posiotn %d ", insert_posiotn);
   if (insert_posiotn < -1) {
     return false;
   }
@@ -471,7 +469,6 @@ void RenderPage::SendCreateBodyAction(RenderObject *render) {
 void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
                                       int index, bool is_recursion,
                                       bool will_layout) {
-    LOGE("SendAddElementAction", "SendAddElementAction enter %d", will_layout);
 
   if (child == nullptr || parent == nullptr) return;
   if (parent != nullptr && parent->type() == WeexCore::kRenderRecycleList) {
@@ -483,7 +480,6 @@ void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
       child->setIsSegmentChild(true);
   }
 
-  LOGE("SendAddElementAction", "SendAddElementAction post %d", will_layout);
   RenderAction *action =
       new RenderActionAddElement(page_id(), child, parent, index, will_layout);
   PostRenderAction(action);

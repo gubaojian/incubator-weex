@@ -78,6 +78,7 @@ public class WXAttr implements Map<String, Object>,Cloneable {
     attr = standardMap;
   }
 
+  @Deprecated
   public WXAttr(@NonNull Map<String,Object> standardMap, int extra){
     attr = standardMap;
   }

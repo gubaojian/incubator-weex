@@ -89,16 +89,12 @@ bool RenderManager::AddRenderObject(const std::string &page_id,
   RenderPage *page = GetPage(page_id);
   if (page == nullptr) return false;
 
-  wson_parser parser(data);
-  LOGD("[RenderManager] AddRenderObject >>>> pageId: %s, parentRef: %s, index: "
-      "%d, dom data: %s", page_id.c_str(), parent_ref.c_str(), index, parser.toStringUTF8().c_str());
 
   int64_t start_time = getCurrentTime();
   RenderObject *child = Wson2RenderObject(data, page_id);
   page->ParseJsonTime(getCurrentTime() - start_time);
 
   if (child == nullptr) return false;
-  LOGD("[RenderManager] AddRenderObject >>>> child is not null");
 
   page->set_is_dirty(true);
   return page->AddRenderObject(parent_ref, index, child);
