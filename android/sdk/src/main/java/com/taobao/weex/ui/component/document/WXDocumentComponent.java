@@ -147,13 +147,13 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         + JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
         + ";" + JSON.toJSONString(events));*/
         if(style != null && style.size() > 0){
-            //style = new HashMap<String, String>(style);
+            style = new HashMap<String, String>(style);
         }
         if(attrs != null && attrs.size() > 0){
-            //attrs = new HashMap<String, String>(attrs);
+            attrs = new HashMap<String, String>(attrs);
         }
         if(events != null && events.size() > 0){
-            //events =  new ArrayList<String>(events);
+            events =  new ArrayList<String>(events);
         }
         documentView.actionAddElement(ref, componentType, parentRef, index, style, attrs, events);
     }
