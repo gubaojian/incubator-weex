@@ -172,9 +172,6 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
             return;
         }
-        if(documentView.getDocumentHeight() >= maxHeight || documentView.getDocumentWidth() >= maxWidth){
-            return;
-        }
         WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
         WXSDKManager.getInstance().getWXBridgeManager().postAtFrontOfQueue(this);
     }
