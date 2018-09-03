@@ -50,7 +50,7 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
     public WXDocumentMeasurement(WXDocumentComponent documentComponent) {
         this.documentComponent = documentComponent;
         this.maxHeight = WXViewUtils.getScreenHeight(documentComponent.getContext())*2;
-        this.maxWidth = maxHeight;
+        this.maxWidth = m;
     }
 
 
@@ -175,13 +175,8 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(documentView.getDocumentHeight() >= maxHeight || documentView.getDocumentWidth() >= maxWidth){
             return;
         }
-        if(documentView.getDocumentHeight() < maxHeight){
-            if(documentComponent.getHostView() != null && documentComponent.getLayoutHeight() <= 0.1){
-                documentComponent.setHostLayoutParams(documentComponent.getHostView(), documentView.getDocumentWidth(), documentView.getDocumentHeight(), 0, 0,0,0);
-            }
-            WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
-            WXSDKManager.getInstance().getWXBridgeManager().postAtFrontOfQueue(this);
-        }
+        WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
+        WXSDKManager.getInstance().getWXBridgeManager().postAtFrontOfQueue(this);
     }
 
     @Override
