@@ -372,4 +372,9 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     public DocumentView getDocumentView() {
         return documentView;
     }
+
+    @Override
+    public void setHostLayoutParams(ViewGroup host, int width, int height, int left, int right, int top, int bottom) {
+        super.setHostLayoutParams(host, width, height, left, right, top, bottom);
+    }
 }

@@ -68,7 +68,6 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
     this.mMargins = margins;
     this.mBorders = borders;
 
-    Log.e("Weex", "GraphicActionAddElement " + ref + " parent " + parentRef);
     if (instance.getContext() == null) {
       return;
     }
