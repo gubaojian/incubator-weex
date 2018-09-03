@@ -173,7 +173,7 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
             return;
         }
         WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
-        WXSDKManager.getInstance().getWXBridgeManager().postDelay(this, 16);
+        WXSDKManager.getInstance().getWXBridgeManager().postAtFrontOfQueue(this);
     }
 
     @Override

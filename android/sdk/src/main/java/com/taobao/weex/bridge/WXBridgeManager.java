@@ -420,6 +420,14 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     mJSHandler.postDelayed(WXThread.secure(r),delayMillis);
   }
 
+
+  public void postAtFrontOfQueue(Runnable r){
+    if (mJSHandler == null) {
+      return;
+    }
+    mJSHandler.postAtFrontOfQueue(r);
+  }
+
   public void removeCallback(Runnable r){
     if (mJSHandler == null) {
       return;

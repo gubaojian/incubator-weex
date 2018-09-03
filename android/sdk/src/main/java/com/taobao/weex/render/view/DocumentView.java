@@ -425,7 +425,7 @@ public class DocumentView implements Handler.Callback {
             documentWidth = width;
             documentHeight = height;
             if(mDocumentAdapter != null && mDocumentAdapter.getDocumentSizeChangedListener() != null){
-                mainHandler.post(new Runnable() {
+                mainHandler.postAtFrontOfQueue(new Runnable() {
                     @Override
                     public void run() {
                         if(documentWidth == width && documentHeight == height
