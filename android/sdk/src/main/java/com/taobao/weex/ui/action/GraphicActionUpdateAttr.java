@@ -43,9 +43,11 @@ public class GraphicActionUpdateAttr extends BasicGraphicAction {
       component.addAttr(mAttrs);
     }
 
-    WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
-    if(documentComponent != null){
-      documentComponent.actionUpdateAttrs(ref, attrs);
+    if(instance.isHasDocumentSegment()) {
+      WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
+      if (documentComponent != null) {
+        documentComponent.actionUpdateAttrs(ref, attrs);
+      }
     }
   }
 

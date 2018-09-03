@@ -39,9 +39,11 @@ public class GraphicActionRemoveElement extends BasicGraphicAction {
       return;
     }
 
-    WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
-    if(documentComponent != null){
-       documentComponent.actionRemoveElement(getRef());
+    if(component.getInstance().isHasDocumentSegment()) {
+      WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
+      if (documentComponent != null) {
+        documentComponent.actionRemoveElement(getRef());
+      }
     }
 
     clearRegistryForComponent(component);

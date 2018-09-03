@@ -79,17 +79,16 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         }
     }
     public WXDocumentComponent(WXSDKInstance instance, WXVContainer parent, String instanceId, boolean isLazy, BasicComponentData basicComponentData) {
-        super(instance, parent, instanceId, isLazy, basicComponentData);
-        actionCreateBody();
+       this(instance, parent, basicComponentData);
     }
 
     public WXDocumentComponent(WXSDKInstance instance, WXVContainer parent, boolean lazy, BasicComponentData basicComponentData) {
-        super(instance, parent, lazy, basicComponentData);
-        actionCreateBody();
+        this(instance, parent, basicComponentData);
     }
 
     public WXDocumentComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
         super(instance, parent, basicComponentData);
+        instance.setHasDocumentSegment(true);
         actionCreateBody();
         setContentBoxMeasurement(documentMeasurement);
     }
@@ -133,15 +132,19 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionCreateBody(String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+        /**
         Log.e("Weex", documentView.getDocumentKey() + "documentActionCreateBody"+ documentView.getNativeDocument()  + "|" +  hashCode()+ ";" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
                 + ";" + JSON.toJSONString(events));
+         */
         documentView.actionCreateBody(ref, style, attrs, events);
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+
+        /**
         Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddElement;" + ref + ";" + componentType + ";" + parentRef + ";" + index + ";"
         + JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
-        + ";" + JSON.toJSONString(events));
+        + ";" + JSON.toJSONString(events));*/
         documentView.actionAddElement(ref, componentType, parentRef, index, style, attrs, events);
     }
 
@@ -151,34 +154,34 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         for(Map.Entry<String, Object> entry : entries){
             stylesStrs.put(entry.getKey(), entry.getValue().toString());
         }
-        Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateStyle;" + ref + ";" + JSON.toJSONString(stylesStrs));
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateStyle;" + ref + ";" + JSON.toJSONString(stylesStrs));
         documentView.actionUpdateStyles(ref, stylesStrs);
     }
 
     public void actionUpdateAttrs(String ref, Map<String, String> attrs){
-        Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateAttrs;" + ref + ";" + JSON.toJSONString(attrs));
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateAttrs;" + ref + ";" + JSON.toJSONString(attrs));
         documentView.actionUpdateAttrs(ref, attrs);
     }
 
     public void actionAddEvent(String ref, Object event){
-        Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddEvent;" + ref);
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddEvent;" + ref);
         documentView.actionAddEvent(ref, event.toString());
 
     }
 
     public void actionRemoveEvent(String ref, Object event) {
-        Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveEvent;" + ref);
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveEvent;" + ref);
         documentView.actionRemoveEvent(ref, event.toString());
     }
 
 
     public void actionMoveElement(String ref, String parentRef, int index){
-        Log.e("Weex", documentView.getDocumentKey()  + "documentActionMoveElement;" + ref);
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionMoveElement;" + ref);
         documentView.actionMoveElement(ref, parentRef, index);
     }
 
     public void actionRemoveElement(String ref) {
-        Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveElement;" + ref);
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveElement;" + ref);
         documentView.actionRemoveElement(ref);
     }
 
@@ -283,7 +286,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
 
 
-    public static synchronized WXDocumentComponent getDocument(WXComponent parent){
+    public static  WXDocumentComponent getDocument(WXComponent parent){
         while (parent != null){
             if(DOCUMENT_COMPONENT.equals(parent.getComponentType())){
                 return (WXDocumentComponent) parent;

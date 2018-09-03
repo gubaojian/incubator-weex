@@ -38,9 +38,11 @@ public class GraphicActionAddEvent extends BasicGraphicAction {
     super(instance, ref);
     this.mEvent = WXEvent.getEventName(event);
     WXComponent component = WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), getRef());
-    documentComponent = WXDocumentComponent.getDocument(component);
-    if(documentComponent != null){
-      documentComponent.actionAddEvent(ref, event);
+    if(instance.isHasDocumentSegment()) {
+      documentComponent = WXDocumentComponent.getDocument(component);
+      if (documentComponent != null) {
+        documentComponent.actionAddEvent(ref, event);
+      }
     }
   }
 

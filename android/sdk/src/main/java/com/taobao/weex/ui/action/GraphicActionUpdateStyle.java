@@ -80,9 +80,12 @@ public class GraphicActionUpdateStyle extends BasicGraphicAction {
     if (null != borders) {
       component.setBorders(borders);
     }
-    WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
-    if(documentComponent != null){
-      documentComponent.actionUpdateStyles(ref, style);
+
+    if(instance.isHasDocumentSegment()) {
+      WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
+      if (documentComponent != null) {
+        documentComponent.actionUpdateStyles(ref, style);
+      }
     }
   }
 
@@ -121,9 +124,11 @@ public class GraphicActionUpdateStyle extends BasicGraphicAction {
     if (null != borders) {
       component.addShorthand(borders);
     }
-    WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
-    if(documentComponent != null){
-      documentComponent.actionUpdateStyles(ref, style);
+    if(instance.isHasDocumentSegment()) {
+      WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
+      if (documentComponent != null) {
+        documentComponent.actionUpdateStyles(ref, style);
+      }
     }
   }
 

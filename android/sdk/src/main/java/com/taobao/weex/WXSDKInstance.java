@@ -180,6 +180,8 @@ public class WXSDKInstance implements IWXActivityStateListener,View.OnLayoutChan
 
   private List<String> mLayerOverFlowListeners;
 
+  private boolean hasDocumentSegment;
+
   public List<String> getLayerOverFlowListeners() {
     return mLayerOverFlowListeners;
   }
@@ -2085,5 +2087,13 @@ public class WXSDKInstance implements IWXActivityStateListener,View.OnLayoutChan
     if(!getInstanceOnFireEventInterceptorList().contains(instanceOnFireEventInterceptor)){
       getInstanceOnFireEventInterceptorList().add(instanceOnFireEventInterceptor);
     }
+  }
+
+  public boolean isHasDocumentSegment() {
+    return hasDocumentSegment;
+  }
+
+  public void setHasDocumentSegment(boolean hasDocumentSegment) {
+    this.hasDocumentSegment = hasDocumentSegment;
   }
 }
