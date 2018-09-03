@@ -50,7 +50,7 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
     public WXDocumentMeasurement(WXDocumentComponent documentComponent) {
         this.documentComponent = documentComponent;
         this.maxHeight = WXViewUtils.getScreenHeight(documentComponent.getContext())*2;
-        this.maxWidth = m;
+        this.maxWidth = maxHeight;
     }
 
 
