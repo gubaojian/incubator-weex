@@ -46,11 +46,13 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
     private float lastComputedHeight;
     private float maxHeight;
     private float maxWidth;
+    private boolean documentComponentInited;
 
     public WXDocumentMeasurement(WXDocumentComponent documentComponent) {
         this.documentComponent = documentComponent;
         this.maxHeight = WXViewUtils.getScreenHeight(documentComponent.getContext())*2;
         this.maxWidth = maxHeight;
+        this.documentComponentInited = false;
     }
 
 
@@ -173,13 +175,22 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
             return;
         }
         WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
-        WXSDKManager.getInstance().getWXBridgeManager().postAtFrontOfQueue(this);
+        WXSDKManager.getInstance().getWXBridgeManager().post(this);
     }
 
     @Override
     public void run() {
         if(documentComponent.isDestoryed()){
             return;
+        }
+        if(!documentComponentInited){
+            documentComponent.lazy(false);
+            if(documentComponent.getLayoutSize().getHeight() == 0 || documentComponent.getLayoutSize().getWidth() == 0){
+                DocumentView documentView = documentComponent.getDocumentView();
+                documentComponent.getLayoutSize().setWidth(documentView.getDocumentWidth());
+                documentComponent.getLayoutSize().setHeight(documentView.getDocumentHeight());
+            }
+            WXSDKManager.getInstance().getWXRenderManager().postGraphicAction(documentComponent.getInstanceId(), new InitDocumentViewAction(documentComponent));
         }
         WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
     }

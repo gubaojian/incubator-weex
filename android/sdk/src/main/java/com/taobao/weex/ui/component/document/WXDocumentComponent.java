@@ -19,14 +19,10 @@
 package com.taobao.weex.ui.component.document;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.Constants;
@@ -46,7 +42,6 @@ import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXDataStructureUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +63,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
     public void updateWatchComponentStatus() {
         if(documentHelper != null){
-            documentHelper.updateWatchEvents();
+            documentHelper.updateChildWatchEvents();
         }
     }
 
@@ -89,6 +84,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
     public WXDocumentComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
         super(instance, parent, basicComponentData);
+        lazy(true);
         instance.setHasDocumentSegment(true);
         actionCreateBody();
         setContentBoxMeasurement(documentMeasurement);

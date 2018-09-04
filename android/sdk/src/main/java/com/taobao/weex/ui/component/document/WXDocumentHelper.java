@@ -20,7 +20,6 @@ package com.taobao.weex.ui.component.document;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.ui.component.WXComponent;
@@ -44,7 +43,7 @@ public class WXDocumentHelper {
         this.mainHandler = new Handler(Looper.getMainLooper());
     }
 
-    public void updateWatchEvents(){
+    public void updateChildWatchEvents(){
         if(updateWatchEventsRunnable == null){
             updateWatchEventsRunnable = new Runnable() {
                 @Override
@@ -58,23 +57,6 @@ public class WXDocumentHelper {
         mainHandler.postDelayed(updateWatchEventsRunnable, 60);
     }
 
-    private void updateElementsWatchEvents(){
-        if(documentComponent.containsEvent(Constants.Event.APPEAR) || documentComponent.containsEvent(Constants.Event.DISAPPEAR)){
-            notifyDocumentNodeAppearEvent(documentComponent, "none");
-            return;
-        }
-        boolean needWatch = needWatch(documentComponent);
-        if(!needWatch){
-            return;
-        }
-        documentComponent.getEvents().addEvent(Constants.Event.APPEAR);
-        documentComponent.getEvents().addEvent(Constants.Event.DISAPPEAR);
-        if(documentComponent.getHostView() != null){
-            documentComponent.addEvent(Constants.Event.APPEAR);
-            documentComponent.addEvent(Constants.Event.DISAPPEAR);
-        }
-        notifyDocumentNodeAppearEvent(documentComponent, "none");
-    }
 
     public void notifyAppearStateChange(String wxEventType, String direction) {
         if(Constants.Event.APPEAR.equals(wxEventType)){
@@ -88,10 +70,45 @@ public class WXDocumentHelper {
             }
             isAppear = false;
         }
-        updateWatchEvents();
+        updateChildWatchEvents();
     }
 
-    private void notifyDocumentNodeAppearEvent(WXComponent component, String direction){
+
+    private void updateElementsWatchEvents(){
+        if(documentComponent.containsEvent(Constants.Event.APPEAR) || documentComponent.containsEvent(Constants.Event.DISAPPEAR)){
+            notifyDocumentChildAppearEvent(documentComponent, "up");
+            return;
+        }
+        boolean needWatch = needWatchAppearDisappearEvent(documentComponent);
+        if(!needWatch){
+            return;
+        }
+        documentComponent.getEvents().addEvent(Constants.Event.APPEAR);
+        documentComponent.getEvents().addEvent(Constants.Event.DISAPPEAR);
+        if(documentComponent.getHostView() != null){
+            documentComponent.addEvent(Constants.Event.APPEAR);
+            documentComponent.addEvent(Constants.Event.DISAPPEAR);
+        }
+        notifyDocumentChildAppearEvent(documentComponent, "up");
+    }
+
+    private boolean needWatchAppearDisappearEvent(WXComponent component){
+        if(component.getEvents().contains(Constants.Event.APPEAR)
+                || component.getEvents().contains(Constants.Event.DISAPPEAR)){
+            return true;
+        }
+        if(component instanceof WXVContainer){
+            WXVContainer container = (WXVContainer) component;
+            for(int i=0; i<container.getChildCount(); i++){
+                if(needWatchAppearDisappearEvent(container.getChild(i))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void notifyDocumentChildAppearEvent(WXComponent component, String direction){
         if(isAppear){
             component.documentNodeAppearChange(Constants.Event.APPEAR, direction);
         }else{
@@ -100,25 +117,11 @@ public class WXDocumentHelper {
         if(component instanceof WXVContainer){
             WXVContainer container = (WXVContainer) component;
             for(int i=0; i<container.getChildCount(); i++){
-                notifyDocumentNodeAppearEvent(container.getChild(i), direction);
+                notifyDocumentChildAppearEvent(container.getChild(i), direction);
             }
         }
     }
 
-    private boolean needWatch(WXComponent component){
-        if(component.getEvents().contains(Constants.Event.APPEAR)
-                || component.getEvents().contains(Constants.Event.DISAPPEAR)){
-            return true;
-        }
-        if(component instanceof WXVContainer){
-            WXVContainer container = (WXVContainer) component;
-            for(int i=0; i<container.getChildCount(); i++){
-                if(needWatch(container.getChild(i))){
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+
 
 }
