@@ -39,6 +39,7 @@ import com.taobao.weex.render.event.DocumentAdapter;
 import com.taobao.weex.render.event.OnEventListener;
 import com.taobao.weex.render.image.BitmapTarget;
 import com.taobao.weex.render.image.RenderBitmapImageCache;
+import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.threads.GpuThread;
 import com.taobao.weex.render.manager.RenderManager;
 import com.taobao.weex.render.threads.WeakRefHandler;
@@ -155,6 +156,7 @@ public class DocumentView implements Handler.Callback {
 
 
     public void actionCreateBody(String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+        RenderLog.actionCreateBody(this, ref, style, attrs, events);
         CreateBodyAction createBodyAction = new CreateBodyAction(this, ref, style, attrs, events);
         if(gpuHandler != null){
             gpuHandler.post(createBodyAction);
@@ -162,6 +164,7 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+        RenderLog.actionAddElement(this, ref, componentType, parentRef, index, style, attrs, events);
         AddElementAction addElementAction = new AddElementAction(this, ref, componentType, parentRef, index, style, attrs, events);
         if(gpuHandler != null){
             gpuHandler.post(addElementAction);
@@ -169,6 +172,7 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void actionUpdateAttrs(String ref, Map<String, String> attrs){
+        RenderLog.actionUpdateAttrs(this, ref, attrs);
         UpdateAttrsAction updateAttrsAction = new UpdateAttrsAction(this, ref, attrs);
         if(gpuHandler != null){
             gpuHandler.post(updateAttrsAction);
@@ -176,6 +180,7 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void actionUpdateStyles(String ref, Map<String, String> styles){
+        RenderLog.actionUpdateStyles(this, ref, styles);
         if(styles == null || styles.size() <= 0){
             return;
         }
@@ -186,6 +191,7 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void actionAddEvent(String ref, String event){
+        RenderLog.actionAddEvent(this, ref, event);
         AddEventAction addEventAction = new AddEventAction(this, ref, event);
         if(gpuHandler != null){
             gpuHandler.post(addEventAction);
@@ -193,6 +199,7 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void actionRemoveEvent(String ref, String event){
+        RenderLog.actionRemoveEvent(this, ref, event);
         RemoveEventAction removeEventAction = new RemoveEventAction(this, ref, event);
         if(gpuHandler != null){
             gpuHandler.post(removeEventAction);
@@ -201,6 +208,7 @@ public class DocumentView implements Handler.Callback {
 
 
     public void actionMoveElement(String ref, String parentRef, int index){
+        RenderLog.actionMoveElement(this, ref, parentRef, index);
         MoveElementAction moveElementAction = new MoveElementAction(this, ref, parentRef, index);
         if(gpuHandler != null){
             gpuHandler.post(moveElementAction);
@@ -209,6 +217,7 @@ public class DocumentView implements Handler.Callback {
 
 
     public void actionRemoveElement(String ref){
+        RenderLog.actionRemoveElement(this, ref);
         RemoveElementAction removeElementAction = new RemoveElementAction(this, ref);
         if(gpuHandler != null){
             gpuHandler.post(removeElementAction);
@@ -285,12 +294,12 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void requestLayout(){
-        synchronized (DocumentView.this.lock){
+        synchronized (lock){
             if(layoutTask == null){
                 layoutTask = new FrameTask() {
                     @Override
                     public void run() {
-                        synchronized (DocumentView.this.lock){
+                        synchronized (lock){
                             Message message = Message.obtain(gpuHandler, MSG_RENDER_LAYOUT);
                             message.sendToTarget();
                             layoutTask = null;
@@ -347,6 +356,8 @@ public class DocumentView implements Handler.Callback {
                 RenderManager.getInstance().removeDocument(mDocumentKey);
                 mDocumentAdapter = null;
                 mOpenGLRender = null;
+                mContext = null;
+                imageTargetMap.clear();
                 mPause = true;
                 destroy = true;
             }
@@ -387,6 +398,7 @@ public class DocumentView implements Handler.Callback {
         if(token != renderStage.get()){
             return;
         }
+        RenderLog.actionInvalidate(this);
         boolean hasInvalidateDraw = RenderBridge.getInstance().invalidate(mNativeDocument);
         if(!hasInvalidateDraw){
             return;
@@ -397,6 +409,7 @@ public class DocumentView implements Handler.Callback {
         synchronized (lock){
             if(!mPause){
                 if(token == renderStage.get()){
+                    RenderLog.actionSwap(this);
                     RenderBridge.getInstance().swap(mNativeDocument);
                 }
             }
@@ -504,9 +517,11 @@ public class DocumentView implements Handler.Callback {
                 break;
                 case MSG_RENDER_LAYOUT:{
                     if(mNativeDocument != 0){
+                        RenderLog.actionLayoutExecute(this);
                         RenderBridge.getInstance().layoutIfNeed(mNativeDocument);
                         int height = RenderBridge.getInstance().documentHeight(mNativeDocument);
                         int width = RenderBridge.getInstance().documentWidth(mNativeDocument);
+                        Log.e("Weex", "Weex layout " + width + "  " + height);
                         setSize(width, height);
                         invalidate();
                     }

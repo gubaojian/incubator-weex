@@ -1905,7 +1905,7 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
           }
           documentNodeHasAppear = false;
         }
-        if(appearChanged){
+        if(appearChanged && containsEvent(wxEventType)){
           Map<String, Object> params = new HashMap<>();
           params.put(Constants.Name.DIRECTION, direction);
           fireEvent(wxEventType, params);
