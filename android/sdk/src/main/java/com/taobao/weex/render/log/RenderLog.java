@@ -87,13 +87,13 @@ public class RenderLog {
 
     public static void actionInvalidate(DocumentView documentView){
         if(isLogEnabled) {
-            Log.e(RENDER_LOG_TAG, RENDER_LOG_TAG + " " + documentView.hashCode() + "documentInvalidate;" + documentView.getNativeDocument());
+            Log.e(RENDER_LOG_TAG, RENDER_LOG_TAG + " " + documentView.hashCode() + "documentActionInvalidate;" + documentView.getNativeDocument());
         }
     }
 
     public static void actionSwap(DocumentView documentView){
         if(isLogEnabled) {
-            Log.e(RENDER_LOG_TAG, RENDER_LOG_TAG + " " + documentView.hashCode() + "documentSwap;" + documentView.getNativeDocument());
+            Log.e(RENDER_LOG_TAG, RENDER_LOG_TAG + " " + documentView.hashCode() + "documentActionSwap;" + documentView.getNativeDocument());
         }
     }
 

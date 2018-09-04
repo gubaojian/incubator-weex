@@ -48,7 +48,7 @@ public class WXDocumentHelper {
             updateWatchEventsRunnable = new Runnable() {
                 @Override
                 public void run() {
-                    updateElementsWatchEvents();
+                    updateChildWatchEventRun();
                     updateWatchEventsRunnable = null;
                 }
             };
@@ -74,9 +74,9 @@ public class WXDocumentHelper {
     }
 
 
-    private void updateElementsWatchEvents(){
+    private void updateChildWatchEventRun(){
         if(documentComponent.containsEvent(Constants.Event.APPEAR) || documentComponent.containsEvent(Constants.Event.DISAPPEAR)){
-            notifyDocumentChildAppearEvent(documentComponent, "up");
+            notifyDocumentAppearEvent(documentComponent, "up");
             return;
         }
         boolean needWatch = needWatchAppearDisappearEvent(documentComponent);
@@ -89,7 +89,7 @@ public class WXDocumentHelper {
             documentComponent.addEvent(Constants.Event.APPEAR);
             documentComponent.addEvent(Constants.Event.DISAPPEAR);
         }
-        notifyDocumentChildAppearEvent(documentComponent, "up");
+        notifyDocumentAppearEvent(documentComponent, "up");
     }
 
     private boolean needWatchAppearDisappearEvent(WXComponent component){
@@ -106,6 +106,13 @@ public class WXDocumentHelper {
             }
         }
         return false;
+    }
+
+    private void notifyDocumentAppearEvent(WXComponent component, String direction){
+        if(component.getHostView() == null){
+            return;
+        }
+        notifyDocumentChildAppearEvent(component, direction);
     }
 
     private void notifyDocumentChildAppearEvent(WXComponent component, String direction){
