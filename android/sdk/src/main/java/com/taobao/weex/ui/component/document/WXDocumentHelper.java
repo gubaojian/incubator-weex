@@ -70,7 +70,7 @@ public class WXDocumentHelper {
             }
             isAppear = false;
         }
-        updateChildWatchEvents();
+        notifyDocumentAppearEvent(documentComponent, direction);
     }
 
 
