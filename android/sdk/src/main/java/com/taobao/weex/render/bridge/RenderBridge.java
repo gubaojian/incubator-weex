@@ -58,6 +58,14 @@ public class RenderBridge {
         return RenderBridge.getInstance().getBitmap(documentKey, ref, url, width, height, isPlaceholder);
     }
 
+
+    public static boolean isImagePremultiplied(Bitmap bitmap){
+        if(bitmap == null){
+            return true;
+        }
+        return bitmap.isPremultiplied();
+    }
+
     public void initSDK(int screenWidth, int screenHeight, float density){
         nativeInitSDK(screenWidth, screenHeight, density);
     }
@@ -261,12 +269,12 @@ public class RenderBridge {
                 documentView.getImageTargetMap().put(imageKey, target);
             }
         }
-        if(target != null){
-            if(target.getLoadingState() == BitmapTarget.LOADING){
+        if(target != null) {
+            if (target.getLoadingState() == BitmapTarget.LOADING) {
                 return null;
             }
-            if(target.getLoadingState() == BitmapTarget.LOADING_SUCCESS){
-                return  target.getBitmap();
+            if (target.getLoadingState() == BitmapTarget.LOADING_SUCCESS) {
+                return target.getBitmap();
             }
         }
         BitmapTarget loadImageTarget = RenderSDK.getInstance().getImageAdapter().requestImageTarget(documentView, ref, url, width, height, isPlaceholder);
