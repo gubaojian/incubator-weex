@@ -261,11 +261,13 @@ public class RenderBridge {
                 documentView.getImageTargetMap().put(imageKey, target);
             }
         }
-        if(target != null && target.getLoadingState() == BitmapTarget.LOADING){
-            return null;
-        }
-        if(target != null && target.getBitmap() != null){
-            return  target.getBitmap();
+        if(target != null){
+            if(target.getLoadingState() == BitmapTarget.LOADING){
+                return null;
+            }
+            if(target.getLoadingState() == BitmapTarget.LOADING_SUCCESS){
+                return  target.getBitmap();
+            }
         }
         BitmapTarget loadImageTarget = RenderSDK.getInstance().getImageAdapter().requestImageTarget(documentView, ref, url, width, height, isPlaceholder);
         documentView.getImageTargetMap().put(imageKey, loadImageTarget);
