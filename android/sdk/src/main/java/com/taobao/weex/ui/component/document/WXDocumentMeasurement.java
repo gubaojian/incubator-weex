@@ -167,13 +167,6 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
 
     @Override
     public void onSizeChanged(final DocumentView documentView, final int width, final int height) {
-        if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH)
-                && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
-            return;
-        }
-        if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
-            return;
-        }
         WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
         WXSDKManager.getInstance().getWXBridgeManager().post(this);
     }
@@ -191,6 +184,10 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
                 documentComponent.getLayoutSize().setHeight(documentView.getDocumentHeight());
             }
             WXSDKManager.getInstance().getWXRenderManager().postGraphicAction(documentComponent.getInstanceId(), new InitDocumentViewAction(documentComponent));
+        }
+        if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH)
+                && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
+            return;
         }
         WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
     }
