@@ -34,6 +34,8 @@ import com.taobao.weex.render.view.DocumentTextureView;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.ui.ComponentCreator;
 import com.taobao.weex.ui.action.BasicComponentData;
+import com.taobao.weex.ui.action.GraphicPosition;
+import com.taobao.weex.ui.action.GraphicSize;
 import com.taobao.weex.ui.component.WXA;
 import com.taobao.weex.ui.component.WXBasicComponentType;
 import com.taobao.weex.ui.component.WXComponent;
@@ -60,6 +62,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     public DocumentTextureView documentTextureView;
     private WXDocumentHelper documentHelper;
     private WXDocumentMeasurement documentMeasurement;
+    private boolean documentShouldInited;
 
     public void updateWatchComponentStatus() {
         if(documentHelper != null){
@@ -306,8 +309,15 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         }
     }
 
-
-
+    @Override
+    public void setDemission(GraphicSize size, GraphicPosition position) {
+        super.setDemission(size, position);
+        if(getHostView() == null){
+            if(documentShouldInited){
+                new InitDocumentViewAction(this).run();
+            }
+        }
+    }
 
     @Override
     public void onLoadImage(BitmapTarget imageTarget) {
@@ -360,8 +370,11 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         return documentView;
     }
 
-    @Override
-    public void setHostLayoutParams(ViewGroup host, int width, int height, int left, int right, int top, int bottom) {
-        super.setHostLayoutParams(host, width, height, left, right, top, bottom);
+    public boolean isDocumentShouldInited() {
+        return documentShouldInited;
+    }
+
+    public void setDocumentShouldInited(boolean documentShouldInited) {
+        this.documentShouldInited = documentShouldInited;
     }
 }

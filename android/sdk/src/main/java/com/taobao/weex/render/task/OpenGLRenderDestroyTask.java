@@ -18,6 +18,7 @@
  */
 package com.taobao.weex.render.task;
 
+import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.render.view.SurfaceTextureHolder;
 
@@ -28,12 +29,11 @@ import com.taobao.weex.render.view.SurfaceTextureHolder;
 public class OpenGLRenderDestroyTask extends GLTask {
 
     private SurfaceTextureHolder surfaceTextureHolder;
-    private int token;
+
 
     public OpenGLRenderDestroyTask(DocumentView documentView, final SurfaceTextureHolder surfaceTextureHolder) {
         super(documentView);
         this.surfaceTextureHolder = surfaceTextureHolder;
-        this.token = documentView.getRenderStage().get();
     }
 
     @Override
@@ -43,6 +43,9 @@ public class OpenGLRenderDestroyTask extends GLTask {
             openGLRender.setWillDestory(true);
             openGLRender.destroy();
             surfaceTextureHolder.setOpenGLRender(null);
+            if(getDocumentView() != null){
+                RenderLog.actionDestroyGL(getDocumentView());
+            }
         }
     }
 }

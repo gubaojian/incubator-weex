@@ -38,6 +38,9 @@ public class InitDocumentViewAction extends BasicGraphicAction {
 
     @Override
     public void executeAction() {
+        if(documentComponent.getHostView() != null){
+            return;
+        }
         documentComponent.lazy(false);
         WXVContainer parent = documentComponent.getParent();
         if(parent != null){

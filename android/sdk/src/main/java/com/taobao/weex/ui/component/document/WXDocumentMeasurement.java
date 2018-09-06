@@ -28,6 +28,7 @@ import com.taobao.weex.layout.ContentBoxMeasurement;
 import com.taobao.weex.layout.MeasureMode;
 import com.taobao.weex.render.event.OnDocumentSizeChangedListener;
 import com.taobao.weex.render.view.DocumentView;
+import com.taobao.weex.ui.action.GraphicSize;
 import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
@@ -46,13 +47,11 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
     private float lastComputedHeight;
     private float maxHeight;
     private float maxWidth;
-    private boolean documentComponentInited;
 
     public WXDocumentMeasurement(WXDocumentComponent documentComponent) {
         this.documentComponent = documentComponent;
         this.maxHeight = WXViewUtils.getScreenHeight(documentComponent.getContext())*2;
         this.maxWidth = maxHeight;
-        this.documentComponentInited = false;
     }
 
 
@@ -167,6 +166,9 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
 
     @Override
     public void onSizeChanged(final DocumentView documentView, final int width, final int height) {
+        if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
+            return;
+        }
         WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
         WXSDKManager.getInstance().getWXBridgeManager().post(this);
     }
@@ -176,14 +178,11 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(documentComponent.isDestoryed()){
             return;
         }
-        if(!documentComponentInited){
-            documentComponent.lazy(false);
-            if(documentComponent.getLayoutSize().getHeight() == 0 || documentComponent.getLayoutSize().getWidth() == 0){
-                DocumentView documentView = documentComponent.getDocumentView();
-                documentComponent.getLayoutSize().setWidth(documentView.getDocumentWidth());
-                documentComponent.getLayoutSize().setHeight(documentView.getDocumentHeight());
+        if(!documentComponent.isDocumentShouldInited()){
+            if(documentComponent.getLayoutSize().getWidth() > 0 && documentComponent.getLayoutSize().getHeight() > 0){
+                WXSDKManager.getInstance().getWXRenderManager().postGraphicAction(documentComponent.getInstanceId(), new InitDocumentViewAction(documentComponent));
             }
-            WXSDKManager.getInstance().getWXRenderManager().postGraphicAction(documentComponent.getInstanceId(), new InitDocumentViewAction(documentComponent));
+            documentComponent.setDocumentShouldInited(true);
         }
         if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH)
                 && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){

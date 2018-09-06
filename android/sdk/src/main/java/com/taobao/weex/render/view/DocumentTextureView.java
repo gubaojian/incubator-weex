@@ -145,15 +145,13 @@ public class DocumentTextureView extends TextureView implements  TextureView.Sur
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-        if(documentView == null){
-            return true;
-        }
-        synchronized (documentView.lock){
-            documentView.setPause(true);
+        if(surfaceTextureHolder != null){
+            if(documentView != null){
+                documentView.setPause(true);
+            }
             surfaceTextureHolder.setDestory(true);
             OpenGLRenderDestroyTask openGLRenderDestroyTask = new OpenGLRenderDestroyTask(documentView, surfaceTextureHolder);
             gpuThreadTaskQueue.addTask(openGLRenderDestroyTask);
-
         }
         surfaceTextureHolder = null;
         return true;
