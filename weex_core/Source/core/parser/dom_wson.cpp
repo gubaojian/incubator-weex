@@ -78,7 +78,7 @@ namespace WeexCore {
                         render->AddAttr(attrKeyString, attrValueString);
                     }
                     if (parent != nullptr && parent->type() == kRenderCell){
-                        render->AddAttr("doctype", "weexrender");
+                        //render->AddAttr("doctype", "weexrender");
                     }
                 }else{
                     keyOrderRight = keys_order_as_expect(render, keyOrderRight);

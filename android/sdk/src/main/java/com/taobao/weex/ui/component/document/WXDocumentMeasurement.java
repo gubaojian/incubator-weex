@@ -99,6 +99,8 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(computedHeight >= maxHeight){
             return;
         }
+
+        componentShouldInit();
         if(documentComponent.getDocumentView() == null){
             return;
         }
@@ -169,8 +171,19 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
             return;
         }
-        WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
-        WXSDKManager.getInstance().getWXBridgeManager().post(this);
+        synchronized (documentComponent){
+            if(documentComponent.isDestoryed()){
+                return;
+            }
+            componentShouldInit();
+            if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH) && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
+                return;
+            }
+            WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
+        }
+
+        //WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
+        //WXSDKManager.getInstance().getWXBridgeManager().postAtFrontOfQueue(this);
     }
 
     @Override
@@ -178,16 +191,20 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(documentComponent.isDestoryed()){
             return;
         }
+        componentShouldInit();
+        if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH)
+                && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
+            return;
+        }
+        WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
+    }
+
+    private void componentShouldInit(){
         if(!documentComponent.isDocumentShouldInited()){
             if(documentComponent.getLayoutSize().getWidth() > 0 && documentComponent.getLayoutSize().getHeight() > 0){
                 WXSDKManager.getInstance().getWXRenderManager().postGraphicAction(documentComponent.getInstanceId(), new InitDocumentViewAction(documentComponent));
             }
             documentComponent.setDocumentShouldInited(true);
         }
-        if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH)
-                && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
-            return;
-        }
-        WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
     }
 }

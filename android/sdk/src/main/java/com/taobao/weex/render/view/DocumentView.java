@@ -299,14 +299,15 @@ public class DocumentView implements Handler.Callback {
                 layoutTask = new FrameTask() {
                     @Override
                     public void run() {
-                        synchronized (lock){
-                            Message message = Message.obtain(gpuHandler, MSG_RENDER_LAYOUT);
-                            message.sendToTarget();
-                            layoutTask = null;
-                        }
+                        layoutDocument();
+                        layoutTask = null;
                     }
                 };
             }
+        }
+        if(layoutTask.frameTime() <= 0){
+            layoutTask.run();
+        }else{
             gpuHandler.removeCallbacks(layoutTask);
             gpuHandler.postDelayed(layoutTask, FrameTask.FRAME_TIME);
         }
@@ -386,14 +387,14 @@ public class DocumentView implements Handler.Callback {
         if(mPause){
             return;
         }
+        if(mOpenGLRender == null || mOpenGLRender.isWillDestory()){
+            return;
+        }
         synchronized (lock){
             if(frameTask != null){
                 gpuHandler.removeCallbacks(frameTask);
                 frameTask = null;
             }
-        }
-        if(mOpenGLRender == null || mOpenGLRender.isWillDestory()){
-            return;
         }
         if(token != renderStage.get()){
             return;
@@ -423,8 +424,16 @@ public class DocumentView implements Handler.Callback {
         if(documentWidth != width || height != documentHeight){
             documentWidth = width;
             documentHeight = height;
+
+            if(documentWidth == width && documentHeight == height
+                    && mDocumentAdapter != null
+                    && mDocumentAdapter.getDocumentSizeChangedListener() != null){
+                mDocumentAdapter.getDocumentSizeChangedListener().onSizeChanged(DocumentView.this, width, height);
+            }
+
+            /**
             if(mDocumentAdapter != null && mDocumentAdapter.getDocumentSizeChangedListener() != null){
-                mainHandler.post(new Runnable() {
+                mainHandler.postAtFrontOfQueue(new Runnable() {
                     @Override
                     public void run() {
                         if(documentWidth == width && documentHeight == height
@@ -434,7 +443,7 @@ public class DocumentView implements Handler.Callback {
                         }
                     }
                 });
-            }
+            }*/
         }
     }
 
@@ -516,15 +525,7 @@ public class DocumentView implements Handler.Callback {
                 }
                 break;
                 case MSG_RENDER_LAYOUT:{
-                    if(mNativeDocument != 0){
-                        RenderLog.actionLayoutExecute(this);
-                        RenderBridge.getInstance().layoutIfNeed(mNativeDocument);
-                        int height = RenderBridge.getInstance().documentHeight(mNativeDocument);
-                        int width = RenderBridge.getInstance().documentWidth(mNativeDocument);
-                        Log.e("Weex", "Weex layout " + width + "  " + height);
-                        setSize(width, height);
-                        invalidate();
-                    }
+                    layoutDocument();
                 }
                 break;
                 case MSG_RENDER_ACTION_EVENT:{
@@ -553,11 +554,24 @@ public class DocumentView implements Handler.Callback {
             return true;
     }
 
+
     public String hitTest(int type, int x, int y){
         if(mNativeDocument != 0) {
             return RenderBridge.getInstance().actionEvent(mNativeDocument, type, x, y);
         }
         return null;
+    }
+
+
+    private void layoutDocument() {
+        if(mNativeDocument != 0){
+            RenderLog.actionLayoutExecute(this);
+            RenderBridge.getInstance().layoutIfNeed(mNativeDocument);
+            int height = RenderBridge.getInstance().documentHeight(mNativeDocument);
+            int width = RenderBridge.getInstance().documentWidth(mNativeDocument);
+            setSize(width, height);
+            handleMessageInvalidate(renderStage.get());
+        }
     }
 
     private void onEvent(final int eventType, final String ref) {

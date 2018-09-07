@@ -263,7 +263,9 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
     @Override
     public void destroy() {
-        super.destroy();
+        synchronized (this){
+            super.destroy();
+        }
         if(documentTextureView != null){
             documentTextureView.destroy();
         }
