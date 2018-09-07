@@ -35,7 +35,7 @@ public class RenderLog {
 
     private static final String RENDER_LOG_TAG  = "WeexRenderLog";
 
-    private static  boolean isLogEnabled = true;
+    private static  boolean isLogEnabled = false;
 
     public static final void openRenderLog(boolean enabled){
         isLogEnabled = enabled;
