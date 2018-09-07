@@ -570,7 +570,7 @@ public class DocumentView implements Handler.Callback {
             int height = RenderBridge.getInstance().documentHeight(mNativeDocument);
             int width = RenderBridge.getInstance().documentWidth(mNativeDocument);
             setSize(width, height);
-            handleMessageInvalidate(renderStage.get());
+            invalidate();
         }
     }
 
