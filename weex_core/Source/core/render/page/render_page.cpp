@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <android/base/log_utils.h>
 #include "core/render/page/render_page.h"
 #include "core/render/node/render_document.h"
 #include "base/TimeUtils.h"
@@ -468,6 +469,7 @@ void RenderPage::SendCreateBodyAction(RenderObject *render) {
 void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
                                       int index, bool is_recursion,
                                       bool will_layout) {
+
   if (child == nullptr || parent == nullptr) return;
   if (parent != nullptr && parent->type() == WeexCore::kRenderRecycleList) {
     will_layout = false;
@@ -475,7 +477,7 @@ void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
 
   if(WeexCore::isRenderDocumentChild(parent)){
       will_layout = false;
-      child->AddAttr("is_document", "true");
+      child->setIsSegmentChild(true);
   }
 
   RenderAction *action =

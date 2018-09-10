@@ -86,6 +86,7 @@ import com.taobao.weex.ui.animation.WXAnimationBean;
 import com.taobao.weex.ui.animation.WXAnimationModule;
 import com.taobao.weex.ui.component.basic.WXBasicComponent;
 import com.taobao.weex.ui.component.binding.Statements;
+import com.taobao.weex.ui.component.document.WXDocumentComponent;
 import com.taobao.weex.ui.component.list.WXCell;
 import com.taobao.weex.ui.component.list.template.jni.NativeRenderObjectUtils;
 import com.taobao.weex.ui.component.pesudo.OnActivePseudoListner;
@@ -954,7 +955,7 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
     }
 
     //calculate first screen time
-    if (!(mHost instanceof ViewGroup) && !mInstance.mEnd && mAbsoluteY + realHeight > mInstance.getWeexHeight() + 1) {
+    if (isFirstScreenComponent() && !mInstance.mEnd && mAbsoluteY + realHeight > mInstance.getWeexHeight() + 1) {
       mInstance.firstScreenRenderFinished();
       mInstance.mEnd = true;
     }
@@ -964,6 +965,13 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
     realHeight = measureOutput.height;
 
     setComponentLayoutParams(realWidth, realHeight, realLeft, realTop, realRight, realBottom, rawOffset);
+  }
+
+  private boolean isFirstScreenComponent(){
+    if(this instanceof  WXDocumentComponent){
+      return true;
+    }
+    return !(mHost instanceof ViewGroup);
   }
 
   private void setComponentLayoutParams(int realWidth, int realHeight, int realLeft, int realTop,
@@ -1890,24 +1898,26 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
   }
 
   public void documentNodeAppearChange(String wxEventType, String direction) {
-    boolean appearChanged = false;
-    if(Constants.Event.APPEAR.equals(wxEventType)){
-      if(!documentNodeHasAppear){
-        documentNodeHasAppear = true;
-        appearChanged = true;
-      }
-      documentHasDisappear = false;
-    }else if(Constants.Event.DISAPPEAR.equals(wxEventType)){
-      if(!documentHasDisappear){
-        documentHasDisappear = true;
-        appearChanged = true;
-      }
-      documentNodeHasAppear = false;
-    }
-    if(appearChanged && containsEvent(wxEventType)){
-      Map<String, Object> params = new HashMap<>();
-      params.put(Constants.Name.DIRECTION, direction);
-      fireEvent(wxEventType, params);
+    if(containsEvent(Constants.Event.APPEAR) || containsEvent(Constants.Event.DISAPPEAR) ){
+        boolean appearChanged = false;
+        if(Constants.Event.APPEAR.equals(wxEventType)){
+          if(!documentNodeHasAppear){
+            documentNodeHasAppear = true;
+            appearChanged = true;
+          }
+          documentHasDisappear = false;
+        }else if(Constants.Event.DISAPPEAR.equals(wxEventType)){
+          if(!documentHasDisappear){
+            documentHasDisappear = true;
+            appearChanged = true;
+          }
+          documentNodeHasAppear = false;
+        }
+        if(appearChanged && containsEvent(wxEventType)){
+          Map<String, Object> params = new HashMap<>();
+          params.put(Constants.Name.DIRECTION, direction);
+          fireEvent(wxEventType, params);
+        }
     }
   }
 

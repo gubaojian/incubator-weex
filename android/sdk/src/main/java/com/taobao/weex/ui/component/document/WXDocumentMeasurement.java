@@ -28,6 +28,7 @@ import com.taobao.weex.layout.ContentBoxMeasurement;
 import com.taobao.weex.layout.MeasureMode;
 import com.taobao.weex.render.event.OnDocumentSizeChangedListener;
 import com.taobao.weex.render.view.DocumentView;
+import com.taobao.weex.ui.action.GraphicSize;
 import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
@@ -38,7 +39,7 @@ import java.util.Map;
  * Created by furture on 2018/8/23.
  */
 
-public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDocumentSizeChangedListener {
+public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDocumentSizeChangedListener, Runnable {
 
 
     private WXDocumentComponent documentComponent;
@@ -50,7 +51,7 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
     public WXDocumentMeasurement(WXDocumentComponent documentComponent) {
         this.documentComponent = documentComponent;
         this.maxHeight = WXViewUtils.getScreenHeight(documentComponent.getContext())*2;
-        this.maxWidth = WXViewUtils.getScreenWidth(documentComponent.getContext())*2;
+        this.maxWidth = maxHeight;
     }
 
 
@@ -98,6 +99,8 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(computedHeight >= maxHeight){
             return;
         }
+
+        componentShouldInit();
         if(documentComponent.getDocumentView() == null){
             return;
         }
@@ -165,22 +168,43 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
 
     @Override
     public void onSizeChanged(final DocumentView documentView, final int width, final int height) {
+        if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
+            return;
+        }
+        synchronized (documentComponent){
+            if(documentComponent.isDestoryed()){
+                return;
+            }
+            componentShouldInit();
+            if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH) && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
+                return;
+            }
+            WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
+        }
+
+        //WXSDKManager.getInstance().getWXBridgeManager().removeCallback(this);
+        //WXSDKManager.getInstance().getWXBridgeManager().postAtFrontOfQueue(this);
+    }
+
+    @Override
+    public void run() {
+        if(documentComponent.isDestoryed()){
+            return;
+        }
+        componentShouldInit();
         if(documentComponent.getStyles().containsKey(Constants.Name.WIDTH)
                 && documentComponent.getStyles().containsKey(Constants.Name.HEIGHT)){
             return;
         }
-        WXSDKManager.getInstance().getWXBridgeManager().post(new Runnable() {
-            @Override
-            public void run() {
-                if(documentComponent.isDestoryed()){
-                    return;
-                }
-                if(documentView.getDocumentHeight() != height || documentView.getDocumentWidth() != width){
-                    return;
-                }
-                WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
-            }
-        });
+        WXBridgeManager.getInstance().markDirty(documentComponent.getInstanceId(), documentComponent.getRef(), true);
     }
 
+    private void componentShouldInit(){
+        if(!documentComponent.isDocumentShouldInited()){
+            if(documentComponent.getLayoutSize().getWidth() > 0 && documentComponent.getLayoutSize().getHeight() > 0){
+                WXSDKManager.getInstance().getWXRenderManager().postGraphicAction(documentComponent.getInstanceId(), new InitDocumentViewAction(documentComponent));
+            }
+            documentComponent.setDocumentShouldInited(true);
+        }
+    }
 }

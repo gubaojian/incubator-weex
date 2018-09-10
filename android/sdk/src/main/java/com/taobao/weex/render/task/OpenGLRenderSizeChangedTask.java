@@ -18,6 +18,7 @@
  */
 package com.taobao.weex.render.task;
 
+import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.render.view.SurfaceTextureHolder;
 
@@ -40,5 +41,6 @@ public class OpenGLRenderSizeChangedTask extends GLTask {
             return;
         }
         getDocumentView().renderSizeChanged(surfaceTextureHolder.getWidth(), surfaceTextureHolder.getHeight());
+        RenderLog.actionSizeChanged(getDocumentView(), surfaceTextureHolder.getWidth(),  surfaceTextureHolder.getHeight());
     }
 }

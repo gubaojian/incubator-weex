@@ -19,7 +19,6 @@
 package com.taobao.weex.ui.component.document;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -35,7 +34,10 @@ import com.taobao.weex.render.view.DocumentTextureView;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.ui.ComponentCreator;
 import com.taobao.weex.ui.action.BasicComponentData;
+import com.taobao.weex.ui.action.GraphicPosition;
+import com.taobao.weex.ui.action.GraphicSize;
 import com.taobao.weex.ui.component.WXA;
+import com.taobao.weex.ui.component.WXBasicComponentType;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXImage;
 import com.taobao.weex.ui.component.WXVContainer;
@@ -60,10 +62,11 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     public DocumentTextureView documentTextureView;
     private WXDocumentHelper documentHelper;
     private WXDocumentMeasurement documentMeasurement;
+    private boolean documentShouldInited;
 
     public void updateWatchComponentStatus() {
         if(documentHelper != null){
-            documentHelper.updateWatchEvents();
+            documentHelper.updateChildWatchEvents();
         }
     }
 
@@ -75,17 +78,17 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         }
     }
     public WXDocumentComponent(WXSDKInstance instance, WXVContainer parent, String instanceId, boolean isLazy, BasicComponentData basicComponentData) {
-        super(instance, parent, instanceId, isLazy, basicComponentData);
-        actionCreateBody();
+       this(instance, parent, basicComponentData);
     }
 
     public WXDocumentComponent(WXSDKInstance instance, WXVContainer parent, boolean lazy, BasicComponentData basicComponentData) {
-        super(instance, parent, lazy, basicComponentData);
-        actionCreateBody();
+        this(instance, parent, basicComponentData);
     }
 
     public WXDocumentComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
         super(instance, parent, basicComponentData);
+        lazy(true);
+        instance.setHasDocumentSegment(true);
         actionCreateBody();
         setContentBoxMeasurement(documentMeasurement);
     }
@@ -129,10 +132,19 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionCreateBody(String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+        /**
+        Log.e("Weex", documentView.getDocumentKey() + "documentActionCreateBody"+ documentView.getNativeDocument()  + "|" +  hashCode()+ ";" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
+                + ";" + JSON.toJSONString(events));
+         */
         documentView.actionCreateBody(ref, style, attrs, events);
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
+
+        /**
+        Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddElement;" + ref + ";" + componentType + ";" + parentRef + ";" + index + ";"
+        + JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
+        + ";" + JSON.toJSONString(events));*/
         documentView.actionAddElement(ref, componentType, parentRef, index, style, attrs, events);
     }
 
@@ -142,28 +154,34 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         for(Map.Entry<String, Object> entry : entries){
             stylesStrs.put(entry.getKey(), entry.getValue().toString());
         }
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateStyle;" + ref + ";" + JSON.toJSONString(stylesStrs));
         documentView.actionUpdateStyles(ref, stylesStrs);
     }
 
     public void actionUpdateAttrs(String ref, Map<String, String> attrs){
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateAttrs;" + ref + ";" + JSON.toJSONString(attrs));
         documentView.actionUpdateAttrs(ref, attrs);
     }
 
     public void actionAddEvent(String ref, Object event){
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddEvent;" + ref);
         documentView.actionAddEvent(ref, event.toString());
 
     }
 
     public void actionRemoveEvent(String ref, Object event) {
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveEvent;" + ref);
         documentView.actionRemoveEvent(ref, event.toString());
     }
 
 
     public void actionMoveElement(String ref, String parentRef, int index){
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionMoveElement;" + ref);
         documentView.actionMoveElement(ref, parentRef, index);
     }
 
     public void actionRemoveElement(String ref) {
+        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveElement;" + ref);
         documentView.actionRemoveElement(ref);
     }
 
@@ -245,7 +263,9 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
     @Override
     public void destroy() {
-        super.destroy();
+        synchronized (this){
+            super.destroy();
+        }
         if(documentTextureView != null){
             documentTextureView.destroy();
         }
@@ -268,14 +288,20 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
 
 
-    public static WXDocumentComponent getDocument(WXComponent parent){
-        if(parent == null){
-            return null;
+    public static  WXDocumentComponent getDocument(WXComponent parent){
+        while (parent != null){
+            if(DOCUMENT_COMPONENT.equals(parent.getComponentType())){
+                return (WXDocumentComponent) parent;
+            }
+            if(WXBasicComponentType.CELL.equals(parent.getComponentType())){
+                return null;
+            }
+            if(WXBasicComponentType.LIST.equals(parent.getComponentType())){
+                return null;
+            }
+            parent = parent.getParent();
         }
-        if(DOCUMENT_COMPONENT.equals(parent.getComponentType())){
-            return (WXDocumentComponent) parent;
-        }
-        return getDocument(parent.getParent());
+        return null;
     }
 
     @Override
@@ -285,8 +311,15 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         }
     }
 
-
-
+    @Override
+    public void setDemission(GraphicSize size, GraphicPosition position) {
+        super.setDemission(size, position);
+        if(getHostView() == null){
+            if(documentShouldInited){
+                new InitDocumentViewAction(this).run();
+            }
+        }
+    }
 
     @Override
     public void onLoadImage(BitmapTarget imageTarget) {
@@ -337,5 +370,13 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
     public DocumentView getDocumentView() {
         return documentView;
+    }
+
+    public boolean isDocumentShouldInited() {
+        return documentShouldInited;
+    }
+
+    public void setDocumentShouldInited(boolean documentShouldInited) {
+        this.documentShouldInited = documentShouldInited;
     }
 }

@@ -36,9 +36,11 @@ public class GraphicActionMoveElement extends BasicGraphicAction {
     this.mParentref = parentRef;
     this.mIndex = index;
     WXComponent component = WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), getRef());
-    WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
-    if(documentComponent != null){
-      documentComponent.actionMoveElement(ref, parentRef, index);
+    if(instance.isHasDocumentSegment()) {
+      WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
+      if (documentComponent != null) {
+        documentComponent.actionMoveElement(ref, parentRef, index);
+      }
     }
   }
 

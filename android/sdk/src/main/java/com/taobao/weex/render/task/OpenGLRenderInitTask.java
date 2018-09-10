@@ -20,6 +20,7 @@ package com.taobao.weex.render.task;
 
 import android.util.Log;
 
+import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.render.view.SurfaceTextureHolder;
 
@@ -43,9 +44,9 @@ public class OpenGLRenderInitTask extends GLTask {
             return;
         }
         OpenGLRender openGLRender = new OpenGLRender(surfaceTextureHolder.getSurfaceTexture(), surfaceTextureHolder.getWidth(), surfaceTextureHolder.getHeight());
+        RenderLog.actionInitOpenGL(getDocumentView(), openGLRender.getWidth(), openGLRender.getHeight());
         openGLRender.initRender();
-        Log.e("weex", "weex attach render " + openGLRender.getPtr());
         getDocumentView().attachGLRender(openGLRender);
         surfaceTextureHolder.setOpenGLRender(openGLRender);
-    }
+   }
 }

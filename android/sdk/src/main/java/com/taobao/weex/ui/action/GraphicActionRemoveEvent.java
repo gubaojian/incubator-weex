@@ -36,10 +36,12 @@ public class GraphicActionRemoveEvent extends BasicGraphicAction {
     super(instance, ref);
     this.mEvent = WXEvent.getEventName(event);
 
-    WXComponent component = WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), getRef());
-    WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
-    if(documentComponent != null){
-      documentComponent.actionRemoveEvent(ref, event);
+    if(instance.isHasDocumentSegment()) {
+      WXComponent component = WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), getRef());
+      WXDocumentComponent documentComponent = WXDocumentComponent.getDocument(component);
+      if (documentComponent != null) {
+        documentComponent.actionRemoveEvent(ref, event);
+      }
     }
   }
 

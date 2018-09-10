@@ -24,6 +24,8 @@ import android.support.annotation.RestrictTo.Scope;
 import android.support.annotation.WorkerThread;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.common.WXErrorCode;
@@ -136,10 +138,11 @@ public class GraphicActionAddElement extends GraphicActionAbstractAddElement {
               WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), mParentRef).getComponentType()),
           ext);
     }
-
-    documentComponent = WXDocumentComponent.getDocument(parent);
-    if(documentComponent != null){
-      documentComponent.actionAddElement(ref, componentType,parentRef, index, style, attributes, events);
+    if(instance.isHasDocumentSegment()){
+      documentComponent = WXDocumentComponent.getDocument(parent);
+      if(documentComponent != null){
+         documentComponent.actionAddElement(ref, componentType, parentRef, index, style, attributes, events);
+      }
     }
   }
 

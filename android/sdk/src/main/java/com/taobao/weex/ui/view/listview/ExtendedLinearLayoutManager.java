@@ -42,12 +42,12 @@ public class ExtendedLinearLayoutManager extends LinearLayoutManager{
 
     public ExtendedLinearLayoutManager(Context context) {
         super(context, VERTICAL, false);
-        extraLayoutSpace = WXViewUtils.getScreenWidth(context)/2;
+        extraLayoutSpace = WXViewUtils.getScreenWidth(context);
     }
 
     public ExtendedLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
-        extraLayoutSpace = WXViewUtils.getScreenWidth(context)/2;
+        extraLayoutSpace = WXViewUtils.getScreenWidth(context);
     }
 
     @Override

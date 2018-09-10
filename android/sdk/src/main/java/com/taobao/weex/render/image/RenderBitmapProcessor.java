@@ -19,6 +19,7 @@
 package com.taobao.weex.render.image;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.taobao.weex.render.manager.RenderManager;
 
@@ -31,6 +32,10 @@ public class RenderBitmapProcessor {
 
     public static void toRenderSupportBitmap(final BitmapTarget target){
         if(isSupportedBitmap(target.getBitmap())){
+            final Bitmap bitmap =  target.getBitmap();
+            Log.e("Weex", "Weex Bitmap tartget " + bitmap.isPremultiplied()
+                    + "  " + bitmap.getWidth() + "  " + bitmap.getHeight()
+                    +" row " + bitmap.getRowBytes());
             target.onSupportedBitmap(target.getBitmap());
             return;
         }
@@ -41,6 +46,10 @@ public class RenderBitmapProcessor {
                RenderManager.getInstance().getUiHandler().post(new Runnable() {
                    @Override
                    public void run() {
+
+                       Log.e("Weex", "Weex Bitmap tartget " + bitmap.isPremultiplied()
+                       + "  " + bitmap.getWidth() + "  " + bitmap.getHeight()
+                       +" row " + bitmap.getRowBytes());
                        target.onSupportedBitmap(bitmap);
                    }
                });

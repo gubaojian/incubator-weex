@@ -147,7 +147,7 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     Others
   };
 
-  private static final boolean BRIDGE_LOG_SWITCH = false;
+  private static final boolean BRIDGE_LOG_SWITCH = true;
 
   /**
    * Whether JS Framework(main.js) has been initialized.
@@ -418,6 +418,21 @@ public class WXBridgeManager implements Callback, BactchExecutor {
       return;
     }
     mJSHandler.postDelayed(WXThread.secure(r),delayMillis);
+  }
+
+
+  public void postAtFrontOfQueue(Runnable r){
+    if (mJSHandler == null) {
+      return;
+    }
+    mJSHandler.postAtFrontOfQueue(r);
+  }
+
+  public void removeCallback(Runnable r){
+    if (mJSHandler == null) {
+      return;
+    }
+    mJSHandler.removeCallbacks(r);
   }
 
   void setTimeout(String callbackId, String time) {
@@ -2256,12 +2271,14 @@ public class WXBridgeManager implements Callback, BactchExecutor {
               .append(", parentRef:").append(parentRef)
               .append(", styles:").append(styles)
               .append(", attributes:").append(attributes)
-              .append(", events:").append(events);
+              .append(", events:").append(events)
+              .append(", willLayout").append(willLayout);
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
 
     if (mDestroyedInstanceId != null && mDestroyedInstanceId.contains(pageId)) {
+      Log.e("Weex", "mDestroyedInstanceId.contains(pageId)" + pageId);
       return IWXBridge.DESTROY_INSTANCE;
     }
 
