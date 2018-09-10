@@ -34,16 +34,24 @@ public class DumpUtils {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("ref", component.getRef());
         jsonObject.put("type", component.getComponentType());
-        jsonObject.put("style", component.getStyles());
-        jsonObject.put("attr", component.getAttrs());
-        jsonObject.put("event", component.getEvents());
+        if(component.getStyles().size() > 0){
+            jsonObject.put("style", component.getStyles());
+        }
+        if(component.getAttrs().size() > 0){
+            jsonObject.put("attr", component.getAttrs());
+        }
+        if(component.getEvents().size() > 0){
+            jsonObject.put("event", component.getEvents());
+        }
         if(component instanceof WXVContainer){
             WXVContainer container = (WXVContainer) component;
             ArrayList<JSONObject> list = new ArrayList<>();
             for(int i=0; i<container.getChildCount(); i++){
                 list.add(dump(container.getChild(i)));
             }
-            jsonObject.put("children", list);
+            if(list.size() > 0) {
+                jsonObject.put("children", list);
+            }
         }
         return jsonObject;
     }
