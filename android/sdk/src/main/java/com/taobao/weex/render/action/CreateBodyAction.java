@@ -45,6 +45,7 @@ public class CreateBodyAction extends  Action {
     @Override
     protected void execute() {
         RenderBridge.getInstance().createBody(getDocumentView().getNativeDocument(), ref, style, attrs, events);
+        getDocumentView().setHasCreateBody(true);
         getDocumentView().requestLayout();
     }
 }

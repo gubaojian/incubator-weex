@@ -27,6 +27,7 @@ public class DocumentAdapter {
     private OnEventListener onEventListener;
     private OnImgLoadListener onImgLoadListener;
     private OnDocumentSizeChangedListener onDocumentSizeChangedListener;
+    private boolean sizeChangedOnMainThread = true;
 
     public OnEventListener getEventListener() {
         return onEventListener;
@@ -50,5 +51,13 @@ public class DocumentAdapter {
 
     public void setOnDocumentSizeChangedListener(OnDocumentSizeChangedListener onDocumentSizeChangedListener) {
         this.onDocumentSizeChangedListener = onDocumentSizeChangedListener;
+    }
+
+    public boolean isSizeChangedOnMainThread() {
+        return sizeChangedOnMainThread;
+    }
+
+    public void setSizeChangedOnMainThread(boolean sizeChangedOnMainThread) {
+        this.sizeChangedOnMainThread = sizeChangedOnMainThread;
     }
 }

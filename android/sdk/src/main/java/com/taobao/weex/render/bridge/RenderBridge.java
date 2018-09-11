@@ -20,7 +20,6 @@ package com.taobao.weex.render.bridge;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Surface;
 
 import com.taobao.weex.render.RenderSDK;
@@ -81,11 +80,11 @@ public class RenderBridge {
 
 
     public void attachRender(long mNativeDocument, long renderPtr) {
-        nativeAttachRender(mNativeDocument, renderPtr);
+        //nativeAttachRender(mNativeDocument, renderPtr);
     }
 
     public void detachRender(long mNativeDocument, long renderPtr) {
-        nativeDetachRender(mNativeDocument, renderPtr);
+        //nativeDetachRender(mNativeDocument, renderPtr);
     }
 
     public String actionEvent(long mNativeDocument, int type, int x, int y) {
@@ -93,7 +92,7 @@ public class RenderBridge {
     }
 
     public void renderSizeChanged(long mNativeDocument, long renderPtr, int width, int height) {
-        nativeRenderSizeChanged(mNativeDocument, renderPtr, width, height);
+        //nativeRenderSizeChanged(mNativeDocument);
     }
 
 
@@ -101,17 +100,32 @@ public class RenderBridge {
         return nativeCreateDocument(key);
     }
 
-    public boolean invalidate(long mNativeDocument) {
-        return nativeInvalidate(mNativeDocument);
+    public boolean invalidate(long mNativeDocument, long mRender) {
+        return nativeInvalidate(mNativeDocument, mRender);
+    }
+
+    public boolean clearBuffer(long mNativeDocument) {
+       // return nativeClearBuffer(mNativeDocument);
+        return false;
     }
 
     public void layoutIfNeed(long ptr){
         nativeLayoutIfNeed(ptr);
     }
 
-    public void swap(long mNativeDocument) {
-        nativeSwap(mNativeDocument);
+    public void renderClearBuffer(long openGLRenderPtr) {
+         nativeClearRenderBuffer(openGLRenderPtr);
     }
+
+    public void renderSizeChanged(long openGLRenderPtr, int width, int height) {
+        nativeRenderSizeChanged(openGLRenderPtr, width, height);
+    }
+
+    public void renderSwap(long openGLRenderPtr) {
+        nativeRenderSwap(openGLRenderPtr);
+    }
+
+
 
     public void destroyDocument(long mNativeDocument) {
         nativeDestroyDocument(mNativeDocument);
@@ -167,7 +181,6 @@ public class RenderBridge {
             });
             return;
         }
-        Log.e("Weex", "actionRefreshFont" + fontFamilyName);
         nativeRefreshFont(nativeDocument, fontFamilyName);
     }
 
@@ -287,14 +300,13 @@ public class RenderBridge {
     private native void nativeInitSDK(int screenWidth, int screenHeight, float density);
     private native long nativeInitOpenGLRender(Surface surface, int width, int height);
     private native void nativeDestroyOpenGLRender(long ptr, Surface surface);
-    private native void nativeAttachRender(long ptr, long renderPtr);
-    private native void nativeRenderSizeChanged(long ptr, long renderPtr, int width, int height);
     private native long nativeCreateDocument(long key);
-    private native boolean nativeInvalidate(long ptr);
+    private native boolean nativeInvalidate(long ptr, long mRender);
     private native void nativeLayoutIfNeed(long ptr);
     private native String nativeHandleEvent(long mNativeDocument, int type, int x, int  y);
-    private native void nativeSwap(long ptr);
-    private native void nativeDetachRender(long ptr, long renderPtr);
+    private native void nativeRenderSizeChanged(long openGLRenderPtr, int width, int height);
+    private native void nativeClearRenderBuffer(long openGLRenderPtr);
+    private native void nativeRenderSwap(long openGLRenderPtr);
     private native void nativeDestroyDocument(long ptr);
     private native int  nativeDocumentWidth(long ptr);
     private native int  nativeDocumentHeight(long ptr);

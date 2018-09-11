@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class RenderLog {
 
-    private static final String RENDER_LOG_TAG  = "WeexRenderLog";
+    public static final String RENDER_LOG_TAG  = "WeexRenderLog";
 
     private static  boolean isLogEnabled = true;
 
@@ -41,6 +41,9 @@ public class RenderLog {
         isLogEnabled = enabled;
     }
 
+    public static boolean isRenderLogEnabled(){
+        return isLogEnabled;
+    }
 
     public static void actionCreateBody(DocumentView documentView, String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events) {
        if(isLogEnabled){
@@ -130,6 +133,12 @@ public class RenderLog {
     public static void actionSwap(DocumentView documentView){
         if(isLogEnabled) {
             Log.e(RENDER_LOG_TAG, RENDER_LOG_TAG + " " + documentView.hashCode() + "documentActionSwap;" + documentView.getNativeDocument());
+        }
+    }
+
+    public static void actionError(String message) {
+        if(isLogEnabled){
+            Log.e(RENDER_LOG_TAG, RENDER_LOG_TAG + " error " + message);
         }
     }
 

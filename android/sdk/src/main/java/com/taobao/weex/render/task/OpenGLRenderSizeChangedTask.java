@@ -18,6 +18,7 @@
  */
 package com.taobao.weex.render.task;
 
+import com.taobao.weex.render.bridge.RenderBridge;
 import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.render.view.SurfaceTextureHolder;
@@ -37,10 +38,44 @@ public class OpenGLRenderSizeChangedTask extends GLTask {
 
     @Override
     public void run() {
+        OpenGLRender openGLRender = surfaceTextureHolder.getOpenGLRender();
+        if(surfaceTextureHolder.isDestory() || openGLRender == null){
+            return;
+        }
+        openGLRender.setWidth(surfaceTextureHolder.getWidth());
+        openGLRender.setHeight(surfaceTextureHolder.getHeight());
+        RenderBridge.getInstance().renderSizeChanged(openGLRender.getPtr(), surfaceTextureHolder.getWidth(), surfaceTextureHolder.getHeight());
+
         if(surfaceTextureHolder.isDestory()){
             return;
         }
-        getDocumentView().renderSizeChanged(surfaceTextureHolder.getWidth(), surfaceTextureHolder.getHeight());
-        RenderLog.actionSizeChanged(getDocumentView(), surfaceTextureHolder.getWidth(),  surfaceTextureHolder.getHeight());
+
+        synchronized (getDocumentView().lock){
+            if(!surfaceTextureHolder.isDestory()){
+                RenderBridge.getInstance().renderSwap(openGLRender.getPtr());
+            }
+        }
+
+        if(surfaceTextureHolder.isDestory()){
+            return;
+        }
+
+        RenderBridge.getInstance().renderClearBuffer(openGLRender.getPtr());
+
+        if(surfaceTextureHolder.isDestory()){
+            return;
+        }
+
+        synchronized (getDocumentView().lock){
+            if(!surfaceTextureHolder.isDestory()){
+                RenderBridge.getInstance().renderSwap(openGLRender.getPtr());
+            }
+        }
+
+        if(surfaceTextureHolder.isDestory()){
+            return;
+        }
+
+        getDocumentView().renderSizeChanged(openGLRender);
     }
 }

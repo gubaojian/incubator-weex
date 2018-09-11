@@ -44,11 +44,9 @@ import com.taobao.weex.render.task.OpenGLRenderSizeChangedTask;
  */
 
 public class DocumentTextureView extends TextureView implements  TextureView.SurfaceTextureListener, View.OnClickListener{
-    private static final int TIMES_DOUBLE_BUFFER = 2;
-    private DocumentView documentView;
+   private DocumentView documentView;
     private boolean hasAttachToWindow;
     private GLTaskQueue gpuThreadTaskQueue;
-    private int needRepaintTimes;
     private MotionEvent lastEvent;
     private DocumentAccessibilityHelper documentAccessibilityHelper;
     private SurfaceTextureHolder surfaceTextureHolder;
@@ -78,7 +76,9 @@ public class DocumentTextureView extends TextureView implements  TextureView.Sur
         setSurfaceTextureListener(this);
         setOnClickListener(this);
         gpuThreadTaskQueue = new GLTaskQueue();
-        setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        if(getLayerType() != View.LAYER_TYPE_HARDWARE) {
+            setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        }
         try{
             documentAccessibilityHelper = new DocumentAccessibilityHelper(this);
             ViewCompat.setAccessibilityDelegate(this, documentAccessibilityHelper);
@@ -117,19 +117,8 @@ public class DocumentTextureView extends TextureView implements  TextureView.Sur
         documentView.setPause(false);
 
         GLTask.waitIfTaskBlock();
-        //while (gpuThreadTaskQueue.size() > 0){
-            //try {
-               // Thread.sleep(4);
-            //} catch (InterruptedException e) {
-              //  e.printStackTrace();
-            //}
-       // }
         OpenGLRenderInitTask initOpenGLRenderTask = new OpenGLRenderInitTask(documentView, surfaceTextureHolder);
         gpuThreadTaskQueue.addTask(initOpenGLRenderTask);
-        needRepaintTimes = TIMES_DOUBLE_BUFFER;
-        Log.e("Weex", "onSurfaceTextureAvailable " + gpuThreadTaskQueue.size()
-        + "  taskNum " + GLTask.getTaskNum()
-        + " getRenderNum " + OpenGLRender.getRenderNum());
     }
 
 
@@ -158,16 +147,7 @@ public class DocumentTextureView extends TextureView implements  TextureView.Sur
     }
 
     @Override
-    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-        if(documentView == null){
-            return;
-        }
-
-        if(needRepaintTimes > 0) {
-            //documentView.invalidate();
-            needRepaintTimes--;
-        }
-    }
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {}
 
 
     @Override
@@ -180,6 +160,7 @@ public class DocumentTextureView extends TextureView implements  TextureView.Sur
     @Override
     protected void onDetachedFromWindow() {
         hasAttachToWindow = false;
+        GLTask.waitIfTaskBlock();
         super.onDetachedFromWindow();
     }
 
@@ -236,7 +217,6 @@ public class DocumentTextureView extends TextureView implements  TextureView.Sur
     public void destroy(){
         if(documentView != null){
             documentView.destory();
-            documentView = null;
         }
     }
 

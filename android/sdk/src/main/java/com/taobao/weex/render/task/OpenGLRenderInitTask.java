@@ -20,6 +20,7 @@ package com.taobao.weex.render.task;
 
 import android.util.Log;
 
+import com.taobao.weex.render.bridge.RenderBridge;
 import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.render.view.SurfaceTextureHolder;
@@ -40,13 +41,26 @@ public class OpenGLRenderInitTask extends GLTask {
     @Override
     public void run() {
         if(surfaceTextureHolder.isDestory()){
-            Log.e("weex", "weex surfaceTextureHolder destory ");
             return;
         }
         OpenGLRender openGLRender = new OpenGLRender(surfaceTextureHolder.getSurfaceTexture(), surfaceTextureHolder.getWidth(), surfaceTextureHolder.getHeight());
-        RenderLog.actionInitOpenGL(getDocumentView(), openGLRender.getWidth(), openGLRender.getHeight());
         openGLRender.initRender();
-        getDocumentView().attachGLRender(openGLRender);
         surfaceTextureHolder.setOpenGLRender(openGLRender);
-   }
+
+        if(surfaceTextureHolder.isDestory()){
+            return;
+        }
+
+        synchronized (getDocumentView().lock){
+            if(!surfaceTextureHolder.isDestory()){
+                RenderBridge.getInstance().renderSwap(openGLRender.getPtr());
+            }
+        }
+
+        if(surfaceTextureHolder.isDestory()){
+            return;
+        }
+        getDocumentView().attachGLRender(openGLRender);
+        RenderLog.actionInitOpenGL(getDocumentView(), openGLRender.getWidth(), openGLRender.getHeight());
+    }
 }
