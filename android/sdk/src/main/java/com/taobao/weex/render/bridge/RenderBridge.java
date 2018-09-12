@@ -19,6 +19,7 @@
 package com.taobao.weex.render.bridge;
 
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.Surface;
 
@@ -62,7 +63,10 @@ public class RenderBridge {
         if(bitmap == null){
             return true;
         }
-        return bitmap.isPremultiplied();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return bitmap.isPremultiplied();
+        }
+        return  true;
     }
 
     public void initSDK(int screenWidth, int screenHeight, float density){
@@ -79,21 +83,10 @@ public class RenderBridge {
     }
 
 
-    public void attachRender(long mNativeDocument, long renderPtr) {
-        //nativeAttachRender(mNativeDocument, renderPtr);
-    }
-
-    public void detachRender(long mNativeDocument, long renderPtr) {
-        //nativeDetachRender(mNativeDocument, renderPtr);
-    }
-
     public String actionEvent(long mNativeDocument, int type, int x, int y) {
         return nativeHandleEvent(mNativeDocument, type, x, y);
     }
 
-    public void renderSizeChanged(long mNativeDocument, long renderPtr, int width, int height) {
-        //nativeRenderSizeChanged(mNativeDocument);
-    }
 
 
     public long createDocument(long key) {
@@ -104,10 +97,6 @@ public class RenderBridge {
         return nativeInvalidate(mNativeDocument, mRender);
     }
 
-    public boolean clearBuffer(long mNativeDocument) {
-       // return nativeClearBuffer(mNativeDocument);
-        return false;
-    }
 
     public void layoutIfNeed(long ptr){
         nativeLayoutIfNeed(ptr);

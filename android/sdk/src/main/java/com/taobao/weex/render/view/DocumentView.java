@@ -241,7 +241,7 @@ public class DocumentView implements Handler.Callback {
         if(mOpenGLRender != openGLRender){
             return;
         }
-        handleInvalidate(renderStage.get());
+        invalidate();
     }
 
 
@@ -249,12 +249,6 @@ public class DocumentView implements Handler.Callback {
         return mOpenGLRender;
     }
 
-    public void doClearOrInvalidate(OpenGLRender openGLRender){
-        if(this.mOpenGLRender != openGLRender){
-            return;
-        }
-
-    }
 
     public void invalidate(){
         if(mPause || mOpenGLRender == null){
