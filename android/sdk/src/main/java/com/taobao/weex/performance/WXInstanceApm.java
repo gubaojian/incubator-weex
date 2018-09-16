@@ -158,9 +158,17 @@ public class WXInstanceApm {
         if (null != instance){
             instance.getExceptionRecorder().recordStage(name, time);
         }
-        if (null == apmInstance || mEnd) {
+        if (mEnd){
             return;
         }
+        if(WXAnalyzerDataTransfer.isOpenPerformance){
+            WXAnalyzerDataTransfer.transferPerformance(mInstanceId,"stage",name,time);
+        }
+
+        if (null == apmInstance) {
+            return;
+        }
+
         apmInstance.onStage(name, time);
     }
 
@@ -169,7 +177,15 @@ public class WXInstanceApm {
      * record property
      */
     public void addProperty(String key, Object value) {
-        if (null == apmInstance || mEnd) {
+        if (mEnd){
+            return;
+        }
+
+        if(WXAnalyzerDataTransfer.isOpenPerformance){
+            WXAnalyzerDataTransfer.transferPerformance(mInstanceId,"properties",key,value);
+        }
+
+        if (null == apmInstance) {
             return;
         }
         apmInstance.addProperty(key, value);
@@ -179,7 +195,14 @@ public class WXInstanceApm {
      * record statistic
      */
     public void addStats(String key, double value) {
-        if (null == apmInstance || mEnd) {
+        if (mEnd){
+            return;
+        }
+        if(WXAnalyzerDataTransfer.isOpenPerformance){
+            WXAnalyzerDataTransfer.transferPerformance(mInstanceId,"stats",key,value);
+        }
+
+        if (null == apmInstance) {
             return;
         }
         apmInstance.addStats(key, value);
@@ -272,9 +295,31 @@ public class WXInstanceApm {
         if (null == apmInstance || null == targetComponent || targetComponent.getInstance() == null) {
             return;
         }
+
+        if (WXAnalyzerDataTransfer.isOpenPerformance){
+            WXAnalyzerDataTransfer.transferInteractionInfo(targetComponent);
+        }
+
+
+        if (null == apmInstance){
+            return;
+        }
+
         WXPerformance performanceRecord = targetComponent.getInstance().getWXPerformance();
         if (null == performanceRecord){
             return;
+        }
+
+        long curTime = WXUtils.getFixUnixTime();
+
+        if (WXAnalyzerDataTransfer.isInteractionLogOpen()){
+            Log.d(WXAnalyzerDataTransfer.INTERACTION_TAG, "[client][wxinteraction]"
+                + targetComponent.getInstance().getInstanceId()
+                +","+targetComponent.getComponentType()
+                +","+targetComponent.getRef()
+                +","+targetComponent.getStyles()
+                +","+targetComponent.getAttrs()
+            );
         }
 
         if (!hasRecordFistInteractionView){
@@ -283,15 +328,6 @@ public class WXInstanceApm {
         }
         if (forceStopRecordInteraction){
             return;
-        }
-
-        long curTime = WXUtils.getFixUnixTime();
-
-        if (BuildConfig.DEBUG){
-            Log.d("wxapm", "screenComponent ["+targetComponent.getComponentType()+","+targetComponent.getRef()
-                +"], renderTime:"+ (curTime -performanceRecord.renderUnixTimeOrigin)
-                +",style:"+targetComponent.getStyles()
-                +",attrs:"+targetComponent.getAttrs());
         }
 
         performanceRecord.interactionTime = curTime - performanceRecord.renderUnixTimeOrigin;
