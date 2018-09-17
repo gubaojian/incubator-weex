@@ -46,9 +46,6 @@ public class GLTaskQueue implements Runnable {
             queues.clear();
         }
         for(GLTask task : tasks){
-            Log.e("Weex", "execute task " + task
-                    + "  " +  tasks.size()
-                    + "  " + queues.size());
             task.execute();
         }
         tasks.clear();

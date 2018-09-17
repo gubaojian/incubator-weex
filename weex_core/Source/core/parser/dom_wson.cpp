@@ -77,9 +77,10 @@ namespace WeexCore {
                         std::string attrValueString = parser.nextStringUTF8(parser.nextType());
                         render->AddAttr(attrKeyString, attrValueString);
                     }
+                    /**
                     if (parent != nullptr && parent->type() == kRenderCell){
                         render->AddAttr("doctype", "weexrender");
-                    }
+                    }*/
                 }else{
                     keyOrderRight = keys_order_as_expect(render, keyOrderRight);
                     parser.skipValue(attrType);

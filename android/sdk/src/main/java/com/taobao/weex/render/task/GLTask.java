@@ -46,8 +46,11 @@ public abstract class GLTask {
 
 
     public final void execute(){
-        run();
-        taskNum.decrementAndGet();
+        try {
+            run();
+        }finally {
+            taskNum.decrementAndGet();
+        }
     }
 
     public abstract void run();
@@ -59,7 +62,7 @@ public abstract class GLTask {
 
     public static void waitIfTaskBlock(){
         if(RenderLog.isRenderLogEnabled()){
-            Log.d(RenderLog.RENDER_LOG_TAG, "waitIfTaskBlock " + RenderManager.getInstance().getDocumentsMap().size() + " taskNum " + taskNum.get() + " renderNum " + OpenGLRender.getRenderNum());
+            Log.d(RenderLog.RENDER_LOG_TAG, "RenderTask waitIfTaskBlock " + RenderManager.getInstance().getDocumentsMap().size() + " taskNum " + taskNum.get() + " renderNum " + OpenGLRender.getRenderNum());
         }
         int maxTimes = taskNum.get();
         while (taskNum.get() >= 8 && maxTimes > 0){
