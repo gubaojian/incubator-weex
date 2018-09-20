@@ -241,7 +241,9 @@ public class DocumentView implements Handler.Callback {
         if(mOpenGLRender != openGLRender){
             return;
         }
-        handleInvalidate(renderStage.get());
+        if(!openGLRender.isWillDestory()){
+            invalidate();
+        }
     }
 
 
