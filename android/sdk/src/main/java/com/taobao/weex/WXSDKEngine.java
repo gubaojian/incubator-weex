@@ -39,6 +39,7 @@ import com.taobao.weex.appfram.storage.IWXStorageAdapter;
 import com.taobao.weex.appfram.storage.WXStorageModule;
 import com.taobao.weex.appfram.websocket.WebSocketModule;
 import com.taobao.weex.bridge.ModuleFactory;
+import com.taobao.weex.bridge.WXBridge;
 import com.taobao.weex.bridge.WXBridgeManager;
 import com.taobao.weex.bridge.WXModuleManager;
 import com.taobao.weex.bridge.WXServiceManager;
@@ -49,6 +50,8 @@ import com.taobao.weex.common.WXException;
 import com.taobao.weex.common.WXInstanceWrap;
 import com.taobao.weex.common.WXModule;
 import com.taobao.weex.http.WXStreamModule;
+import com.taobao.weex.render.RenderSDK;
+import com.taobao.weex.render.event.SDKOnInitListener;
 import com.taobao.weex.ui.ExternalLoaderComponentHolder;
 import com.taobao.weex.ui.IExternalComponentGetter;
 import com.taobao.weex.ui.IExternalModuleGetter;
@@ -176,8 +179,30 @@ public class WXSDKEngine implements Serializable {
       registerApplicationOptions(application);
       WXEnvironment.sSDKInitInvokeTime = System.currentTimeMillis()-start;
       WXLogUtils.renderPerformanceLog("SDKInitInvokeTime", WXEnvironment.sSDKInitInvokeTime);
+      doRenderSwitchConfig();
       mIsInit = true;
     }
+  }
+
+  private static void doRenderSwitchConfig(){
+    if(RenderSDK.getInstance().getSdkOnInitListener() != null){
+       return;
+    }
+    RenderSDK.getInstance().setSdkOnInitListener(new SDKOnInitListener() {
+      @Override
+      public void onInit(final boolean result) {
+        if(result){
+          WXBridgeManager.getInstance().post(new Runnable() {
+            @Override
+            public void run() {
+              if(WXBridgeManager.getInstance().getBridge() instanceof WXBridge){
+                ((WXBridge) WXBridgeManager.getInstance().getBridge()).setSegmentSwitch(result);
+              }
+            }
+          });
+        }
+      }
+    });
   }
 
   private static void registerApplicationOptions(final Application application) {

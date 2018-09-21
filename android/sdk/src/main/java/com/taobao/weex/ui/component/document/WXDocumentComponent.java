@@ -116,6 +116,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         documentView = new DocumentView(getContext());
         documentView.setInstance(getInstance());
         documentAdapter = new DocumentAdapter();
+        documentAdapter.setSizeChangedOnMainThread(false);
         documentMeasurement = new WXDocumentMeasurement(this);
         documentAdapter.setOnDocumentSizeChangedListener(documentMeasurement);
         documentAdapter.setOnImgLoadListener(this);

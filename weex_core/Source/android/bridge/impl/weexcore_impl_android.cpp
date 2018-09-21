@@ -17,6 +17,7 @@
  * under the License.
  */
 #include "weexcore_impl_android.h"
+#include "../../../core/render/node/factory/render_creator.h"
 #include <android/jsengine/multiprocess/WeexProxy.h>
 #include <android/base/jni/android_jni.h>
 #include <android/jniprebuild/jniheader/WXBridge_jni.h>
@@ -287,6 +288,11 @@ static void RegisterCoreEnv(JNIEnv *env, jobject jcaller, jstring key, jstring v
   LOGE("RegisterCoreEnv，key: %s, value: %s", jString2StrFast(env, key).c_str(),
        jString2StrFast(env, value).c_str());
   WXCoreEnvironment::getInstance()->AddOption(jString2StrFast(env, key), jString2StrFast(env, value));
+}
+
+
+static void SetSegmentSwitch(JNIEnv* env, jobject jcaller,  jboolean segmentSwitch){
+    RenderCreator::GetInstance()->setSegmentSwitch(segmentSwitch);
 }
 
 static jint InitFramework(JNIEnv *env, jobject object, jstring script, jobject params) {

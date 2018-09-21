@@ -21,9 +21,9 @@ package com.taobao.weex.render.view;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
+import android.os.AsyncTask;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.TextureView;
@@ -33,7 +33,6 @@ import com.taobao.weex.render.accessibility.DocumentAccessibilityHelper;
 import com.taobao.weex.render.event.OnEventListener;
 import com.taobao.weex.render.task.GLTask;
 import com.taobao.weex.render.task.GLTaskQueue;
-import com.taobao.weex.render.task.OpenGLRender;
 import com.taobao.weex.render.task.OpenGLRenderDestroyTask;
 import com.taobao.weex.render.task.OpenGLRenderInitTask;
 import com.taobao.weex.render.task.OpenGLRenderSizeChangedTask;
@@ -129,6 +128,7 @@ public class DocumentTextureView extends TextureView implements  TextureView.Sur
             surfaceTextureHolder.setSurfaceTexture(surfaceTexture, width, height);
             OpenGLRenderSizeChangedTask task = new OpenGLRenderSizeChangedTask(documentView, surfaceTextureHolder);
             gpuThreadTaskQueue.addTask(task);
+            task.waitComplete();
         }
     }
 

@@ -69,8 +69,8 @@ public class RenderBridge {
         return  true;
     }
 
-    public void initSDK(int screenWidth, int screenHeight, float density){
-        nativeInitSDK(screenWidth, screenHeight, density);
+    public boolean initSDK(int screenWidth, int screenHeight, float density){
+        return nativeInitSDK(screenWidth, screenHeight, density);
     }
 
 
@@ -280,13 +280,16 @@ public class RenderBridge {
             }
         }
         BitmapTarget loadImageTarget = RenderSDK.getInstance().getImageAdapter().requestImageTarget(documentView, ref, url, width, height, isPlaceholder);
+        if(loadImageTarget == null || imageKey == null){
+            return null;
+        }
         documentView.getImageTargetMap().put(imageKey, loadImageTarget);
         return loadImageTarget.getBitmap();
     }
 
 
 
-    private native void nativeInitSDK(int screenWidth, int screenHeight, float density);
+    private native boolean nativeInitSDK(int screenWidth, int screenHeight, float density);
     private native long nativeInitOpenGLRender(Surface surface, int width, int height);
     private native void nativeDestroyOpenGLRender(long ptr, Surface surface);
     private native long nativeCreateDocument(long key);

@@ -19,14 +19,19 @@
 package com.taobao.weex.render;
 
 import android.app.Application;
+import android.content.Context;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.taobao.weex.render.bridge.RenderBridge;
+import com.taobao.weex.render.download.DownloadUtils;
+import com.taobao.weex.render.event.SDKOnInitListener;
 import com.taobao.weex.render.image.RenderImageAdapter;
 import com.taobao.weex.render.lifecycle.RenderActivityLifecycleCallback;
 import com.taobao.weex.render.manager.RenderManager;
 import com.taobao.weex.render.threads.GpuThread;
 import com.taobao.weex.render.threads.IoThread;
+import java.io.File;
 
 /**
  * Created by furture on 2018/8/31.
@@ -35,13 +40,14 @@ import com.taobao.weex.render.threads.IoThread;
 public class RenderSDK {
 
     private static final String WEEX_RENDER = "weexrender";
+    private static final String WEEX_RENDER_URL =  "http://192.168.0.107:8000/libweexrender.zip";
+    private static final String WEEX_RENDER_SO_MD5 = "5ae1ca197e10bad886e1fac093975c26";
 
     private Application application;
     private RenderImageAdapter imageAdapter;
     private boolean isInited = false;
     private RenderActivityLifecycleCallback renderActivityLifecycleCallback;
-
-
+    private SDKOnInitListener sdkOnInitListener;
     private static RenderSDK renderSDK;
 
     private RenderSDK(){
@@ -78,6 +84,15 @@ public class RenderSDK {
         return this;
     }
 
+    public RenderSDK setSdkOnInitListener(SDKOnInitListener sdkOnInitListener){
+        this.sdkOnInitListener = sdkOnInitListener;
+       return this;
+    }
+
+    public SDKOnInitListener getSdkOnInitListener(){
+        return sdkOnInitListener;
+    }
+
     public void init(){
         RenderManager.getInstance().getGpuHandler().post(new Runnable() {
             @Override
@@ -107,12 +122,55 @@ public class RenderSDK {
                 }
                 application.unregisterActivityLifecycleCallbacks(renderActivityLifecycleCallback);
                 application.registerActivityLifecycleCallbacks(renderActivityLifecycleCallback);
-                System.loadLibrary(WEEX_RENDER);
-                DisplayMetrics displayMetrics = application.getResources().getDisplayMetrics();
-                RenderBridge.getInstance().initSDK(displayMetrics.widthPixels, displayMetrics.heightPixels, displayMetrics.density);
-                isInited = true;
+                try {
+                    boolean loadSO = loadSoFromNetwork(application);
+                    if(!loadSO){
+                        System.loadLibrary(WEEX_RENDER);
+                    }
+                    DisplayMetrics displayMetrics = application.getResources().getDisplayMetrics();
+                    isInited = RenderBridge.getInstance().initSDK(displayMetrics.widthPixels, displayMetrics.heightPixels, displayMetrics.density);
+                    if(sdkOnInitListener != null){
+                        sdkOnInitListener.onInit(isInited);
+                    }
+                }catch (Throwable e){
+                    if(sdkOnInitListener != null){
+                        sdkOnInitListener.onInit(false);
+                    }
+                }
+                sdkOnInitListener = null;
             }
         }
+    }
+
+    private boolean loadSoFromNetwork(Context context){
+        if(!TextUtils.isEmpty(WEEX_RENDER_URL)){
+            String path = context.getFilesDir().getPath();
+            String zipFile = path + "/lib/libweexrender.zip";
+            String soPath = path + "/lib/libweexrender.so";
+            File soFile = new File(soPath);
+
+            if(soFile.exists()){
+                String soMd5 = DownloadUtils.fileMd5(soPath);
+                if(!soMd5.equals(WEEX_RENDER_SO_MD5)){
+                    soFile.delete();
+                }
+            }
+            if(!soFile.exists()){
+                if(DownloadUtils.download(WEEX_RENDER_URL,  zipFile)){
+                    DownloadUtils.unzip(zipFile, path + "/lib/");
+                    DownloadUtils.deleteFile(zipFile);
+                }
+            }
+
+            if(soFile.exists()){
+                String soMd5 = DownloadUtils.fileMd5(soPath);
+                if(soMd5.equals(WEEX_RENDER_SO_MD5)){
+                    System.load(soFile.getAbsolutePath());
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void destory(){

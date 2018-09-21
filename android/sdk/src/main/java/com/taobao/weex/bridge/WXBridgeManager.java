@@ -2740,4 +2740,10 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     }
     mWeexCoreEnvOptions.clear();
   }
+
+
+  public IWXBridge getBridge(){
+    return mWXBridge;
+  }
+
 }
