@@ -28,7 +28,6 @@ import com.taobao.weex.layout.ContentBoxMeasurement;
 import com.taobao.weex.layout.MeasureMode;
 import com.taobao.weex.render.event.OnDocumentSizeChangedListener;
 import com.taobao.weex.render.view.DocumentView;
-import com.taobao.weex.ui.action.GraphicSize;
 import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
@@ -104,8 +103,6 @@ public class WXDocumentMeasurement extends ContentBoxMeasurement implements OnDo
         if(documentComponent.getDocumentView() == null){
             return;
         }
-        Log.e("Weex", "Measure height " + computedHeight
-                + "  " + documentComponent.getDocumentView().getDocumentHeight());
         if(lastComputedWidth != computedWidth || lastComputedHeight != computedHeight){
             lastComputedWidth = computedWidth;
             lastComputedHeight = computedHeight;

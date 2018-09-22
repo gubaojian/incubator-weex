@@ -77,9 +77,10 @@ namespace WeexCore {
                         std::string attrValueString = parser.nextStringUTF8(parser.nextType());
                         render->AddAttr(attrKeyString, attrValueString);
                     }
+                    /**
                     if (parent != nullptr && parent->type() == kRenderCell){
                         render->AddAttr("doctype", "weexrender");
-                    }
+                    }*/
                 }else{
                     keyOrderRight = keys_order_as_expect(render, keyOrderRight);
                     parser.skipValue(attrType);
@@ -188,7 +189,8 @@ namespace WeexCore {
         }
 
         if(render->type() == kRenderDiv
-           && render->attributes()->find("doctype") != render->attributes()->end()){
+           && render->attributes()->find("doctype") != render->attributes()->end()
+           && RenderCreator::GetInstance()->isSegmentSwitchOpen()){
             RenderObject* segment = (RenderObject *) RenderCreator::GetInstance()->CreateRender(kRenderDocument, ref);
             segment->set_page_id(pageId);
             if (parent != nullptr){

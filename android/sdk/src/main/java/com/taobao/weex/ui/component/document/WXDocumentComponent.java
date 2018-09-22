@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
+import com.taobao.weex.adapter.IWXUserTrackAdapter;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.render.event.DocumentAdapter;
 import com.taobao.weex.render.event.OnEventListener;
@@ -59,7 +60,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
 
     private DocumentView documentView;
     private DocumentAdapter documentAdapter;
-    public DocumentTextureView documentTextureView;
+    public  DocumentTextureView documentTextureView;
     private WXDocumentHelper documentHelper;
     private WXDocumentMeasurement documentMeasurement;
     private boolean documentShouldInited;
@@ -100,7 +101,6 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         documentTextureView.setDocumentView(documentView);
         FrameLayout frameLayout = new FrameLayout(context);
         frameLayout.addView(documentTextureView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        //frameLayout.holdComponent(this);
        return frameLayout;
     }
 
@@ -116,6 +116,7 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         documentView = new DocumentView(getContext());
         documentView.setInstance(getInstance());
         documentAdapter = new DocumentAdapter();
+        documentAdapter.setSizeChangedOnMainThread(false);
         documentMeasurement = new WXDocumentMeasurement(this);
         documentAdapter.setOnDocumentSizeChangedListener(documentMeasurement);
         documentAdapter.setOnImgLoadListener(this);
@@ -132,19 +133,10 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
     }
 
     public void actionCreateBody(String ref, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
-        /**
-        Log.e("Weex", documentView.getDocumentKey() + "documentActionCreateBody"+ documentView.getNativeDocument()  + "|" +  hashCode()+ ";" + ref + ";"+ JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
-                + ";" + JSON.toJSONString(events));
-         */
         documentView.actionCreateBody(ref, style, attrs, events);
     }
 
     public void actionAddElement(String ref, String componentType, String parentRef, int index, Map<String, String> style, Map<String, String> attrs, Collection<String> events){
-
-        /**
-        Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddElement;" + ref + ";" + componentType + ";" + parentRef + ";" + index + ";"
-        + JSON.toJSONString(style) + ";" + JSON.toJSONString(attrs)
-        + ";" + JSON.toJSONString(events));*/
         documentView.actionAddElement(ref, componentType, parentRef, index, style, attrs, events);
     }
 
@@ -154,34 +146,28 @@ public class WXDocumentComponent extends WXVContainer<ViewGroup> implements OnIm
         for(Map.Entry<String, Object> entry : entries){
             stylesStrs.put(entry.getKey(), entry.getValue().toString());
         }
-        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateStyle;" + ref + ";" + JSON.toJSONString(stylesStrs));
         documentView.actionUpdateStyles(ref, stylesStrs);
     }
 
     public void actionUpdateAttrs(String ref, Map<String, String> attrs){
-        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionUpdateAttrs;" + ref + ";" + JSON.toJSONString(attrs));
         documentView.actionUpdateAttrs(ref, attrs);
     }
 
     public void actionAddEvent(String ref, Object event){
-        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionAddEvent;" + ref);
         documentView.actionAddEvent(ref, event.toString());
 
     }
 
     public void actionRemoveEvent(String ref, Object event) {
-        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveEvent;" + ref);
         documentView.actionRemoveEvent(ref, event.toString());
     }
 
 
     public void actionMoveElement(String ref, String parentRef, int index){
-        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionMoveElement;" + ref);
         documentView.actionMoveElement(ref, parentRef, index);
     }
 
     public void actionRemoveElement(String ref) {
-        //Log.e("Weex", documentView.getDocumentKey()  + "documentActionRemoveElement;" + ref);
         documentView.actionRemoveElement(ref);
     }
 

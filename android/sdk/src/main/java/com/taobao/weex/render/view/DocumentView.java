@@ -45,9 +45,7 @@ import com.taobao.weex.render.manager.RenderManager;
 import com.taobao.weex.render.threads.WeakRefHandler;
 import com.taobao.weex.render.task.OpenGLRender;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -74,6 +72,7 @@ public class DocumentView implements Handler.Callback {
 
 
     private long mNativeDocument;
+    private boolean mHasCreateBody;
     private final long mDocumentKey;
     private boolean destroy;
     private volatile boolean mPause;
@@ -89,7 +88,7 @@ public class DocumentView implements Handler.Callback {
     private FrameTask layoutTask;
     private DocumentAdapter mDocumentAdapter;
     private Object instance;
-    public Object lock;
+    public  Object lock;
 
 
     public DocumentView(Context context){
@@ -225,51 +224,33 @@ public class DocumentView implements Handler.Callback {
     }
 
     public void attachGLRender(OpenGLRender openGLRender){
+        if(openGLRender.getPtr() == 0){
+            throw new IllegalArgumentException("DocumentView attachGLRender mOpenGLRender ptr " + openGLRender);
+        }
         if(this.mOpenGLRender != null){
             this.mOpenGLRender.setWillDestory(true);
             this.mOpenGLRender.destroy();
         }
         this.mOpenGLRender = openGLRender;
-        if(openGLRender.getPtr() == 0){
-            throw new IllegalArgumentException("DocumentView attachGLRender mOpenGLRender ptr " + openGLRender);
-        }
-        if(mNativeDocument == 0){
-            Message message = Message.obtain(gpuHandler, MSG_ATTACH_GL_RENDER, openGLRender);
-            message.sendToTarget();
-        }else {
-            RenderBridge.getInstance().attachRender(mNativeDocument, openGLRender.getPtr());
-            handleMessageInvalidate(renderStage.get());
+        if(!openGLRender.isWillDestory()){
+            invalidate();
         }
     }
 
+    public void renderSizeChanged(OpenGLRender openGLRender){
+        if(mOpenGLRender != openGLRender){
+            return;
+        }
+        if(!openGLRender.isWillDestory()){
+            invalidate();
+        }
+    }
 
 
     public OpenGLRender getOpenGLRender(){
         return mOpenGLRender;
     }
 
-    public boolean hasOpenGLRender(){
-        return mOpenGLRender != null;
-    }
-
-    public void renderSizeChanged(int width, int height){
-        synchronized (lock){
-            if( frameTask != null){
-                gpuHandler.removeCallbacks(frameTask);
-                frameTask = null;
-            }
-        }
-        if(mOpenGLRender != null){
-            if(mOpenGLRender.getHeight() != height || mOpenGLRender.getWidth() != width){
-                mOpenGLRender.setWidth(width);
-                mOpenGLRender.setHeight(height);
-                Message message = Message.obtain(gpuHandler, MSG_RENDER_SIZE_CHANGED, width, height, mOpenGLRender.getPtr());
-                message.sendToTarget();
-            }else{
-                invalidate();
-            }
-        }
-    }
 
     public void invalidate(){
         if(mPause || mOpenGLRender == null){
@@ -380,74 +361,6 @@ public class DocumentView implements Handler.Callback {
     }
 
 
-    public void handleMessageInvalidate(int token){
-        if(mNativeDocument == 0){
-            return;
-        }
-        if(mPause){
-            return;
-        }
-        if(mOpenGLRender == null || mOpenGLRender.isWillDestory()){
-            return;
-        }
-        synchronized (lock){
-            if(frameTask != null){
-                gpuHandler.removeCallbacks(frameTask);
-                frameTask = null;
-            }
-        }
-        if(token != renderStage.get()){
-            return;
-        }
-        RenderLog.actionInvalidate(this);
-        boolean hasInvalidateDraw = RenderBridge.getInstance().invalidate(mNativeDocument);
-        if(!hasInvalidateDraw){
-            return;
-        }
-        if(token != renderStage.get()){
-            return;
-        }
-        synchronized (lock){
-            if(!mPause){
-                if(token == renderStage.get()){
-                    RenderLog.actionSwap(this);
-                    RenderBridge.getInstance().swap(mNativeDocument);
-                }
-            }
-        }
-    }
-
-    private void setSize(final int width, final int height) {
-        if(width <= 0 || height <= 0){
-            return;
-        }
-        if(documentWidth != width || height != documentHeight){
-            documentWidth = width;
-            documentHeight = height;
-
-            if(documentWidth == width && documentHeight == height
-                    && mDocumentAdapter != null
-                    && mDocumentAdapter.getDocumentSizeChangedListener() != null){
-                mDocumentAdapter.getDocumentSizeChangedListener().onSizeChanged(DocumentView.this, width, height);
-            }
-
-            /**
-            if(mDocumentAdapter != null && mDocumentAdapter.getDocumentSizeChangedListener() != null){
-                mainHandler.postAtFrontOfQueue(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(documentWidth == width && documentHeight == height
-                                && mDocumentAdapter != null
-                                && mDocumentAdapter.getDocumentSizeChangedListener() != null){
-                            mDocumentAdapter.getDocumentSizeChangedListener().onSizeChanged(DocumentView.this, width, height);
-                        }
-                    }
-                });
-            }*/
-        }
-    }
-
-
     @Override
     public boolean handleMessage(Message msg) {
             if(mPause){
@@ -479,49 +392,10 @@ public class DocumentView implements Handler.Callback {
                     }
                 }
                 break;
-                case MSG_ATTACH_GL_RENDER:{
-                    if(mNativeDocument != 0 && mOpenGLRender != null){
-                        OpenGLRender attachRender = (OpenGLRender) msg.obj;
-                        long  renderPtr = attachRender.getPtr();
-                        if(renderPtr != 0 && !attachRender.isWillDestory()){
-                            RenderBridge.getInstance().attachRender(mNativeDocument, renderPtr);
-                            if(!mPause) {
-                                handleMessageInvalidate(renderStage.get());
-                            }
-                        }
-                    }
-                }
-                break;
-                case MSG_RENDER_SIZE_CHANGED:{
-                    if(mNativeDocument != 0 && mOpenGLRender != null ){
-                        long  renderPtr = (long) msg.obj;
-                        int width = msg.arg1;
-                        int height = msg.arg2;
-                        if(mOpenGLRender.getPtr() == renderPtr){
-                            RenderBridge.getInstance().renderSizeChanged(mNativeDocument, renderPtr, width, height);
-                            if(!mPause){
-                                synchronized (lock){
-                                    if(!mPause && mOpenGLRender != null && mOpenGLRender.getPtr() == renderPtr) {
-                                        RenderBridge.getInstance().swap(mNativeDocument);
-                                    }
-                                }
-                            }
-                            if(!mPause && mOpenGLRender != null && mOpenGLRender.getPtr() == renderPtr){
-                                handleMessageInvalidate(renderStage.get());
-                            }
-                        }
-                    }
-                }
-                break;
-                case MSG_DETACH_GL_RENDER:{
-                    if(mNativeDocument != 0){
-                        long  renderPtr = (long) msg.obj;
-                        RenderBridge.getInstance().detachRender(mNativeDocument, renderPtr);
-                    }
-                }
-                break;
                 case MSG_RENDER_INVALIDATE:{
-                    handleMessageInvalidate(msg.arg1);
+                    if(isCanRenderDocument()){
+                        handleInvalidate(msg.arg1);
+                    }
                 }
                 break;
                 case MSG_RENDER_LAYOUT:{
@@ -555,11 +429,111 @@ public class DocumentView implements Handler.Callback {
     }
 
 
+
+    private void handleInvalidate(int token){
+        if(!isCanRender(token)){
+            return;
+        }
+        long renderPtr;
+        synchronized (lock){
+            if(frameTask != null){
+                gpuHandler.removeCallbacks(frameTask);
+                frameTask = null;
+            }
+            if(mOpenGLRender == null){
+                return;
+            }
+            renderPtr = mOpenGLRender.getPtr();
+        }
+        RenderLog.actionInvalidate(this);
+        boolean hasInvalidateDraw = RenderBridge.getInstance().invalidate(mNativeDocument, renderPtr);
+        if(!hasInvalidateDraw){
+            return;
+        }
+        if(token != renderStage.get()){
+            return;
+        }
+        synchronized (lock){
+            if(isCanRender(token)){
+                RenderLog.actionSwap(this);
+                if(mOpenGLRender != null){
+                    RenderBridge.getInstance().renderSwap(mOpenGLRender.getPtr());
+                }
+            }
+        }
+    }
+
+    private void handleDocumentSize(final int width, final int height) {
+        if(width <= 0 || height <= 0){
+            return;
+        }
+        if(documentWidth != width || height != documentHeight){
+            documentWidth = width;
+            documentHeight = height;
+            if(mDocumentAdapter == null){
+                return;
+            }
+            if(mDocumentAdapter.isSizeChangedOnMainThread()){
+                if(mDocumentAdapter != null && mDocumentAdapter.getDocumentSizeChangedListener() != null){
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(documentWidth == width && documentHeight == height
+                                    && mDocumentAdapter != null
+                                    && mDocumentAdapter.getDocumentSizeChangedListener() != null){
+                                mDocumentAdapter.getDocumentSizeChangedListener().onSizeChanged(DocumentView.this, width, height);
+                            }
+                        }
+                    });
+                }
+            }else{
+                if(documentWidth == width && documentHeight == height
+                        && mDocumentAdapter != null
+                        && mDocumentAdapter.getDocumentSizeChangedListener() != null){
+                    mDocumentAdapter.getDocumentSizeChangedListener().onSizeChanged(DocumentView.this, width, height);
+                }
+            }
+        }
+    }
+
     public String hitTest(int type, int x, int y){
+        //FIXME check thread
         if(mNativeDocument != 0) {
             return RenderBridge.getInstance().actionEvent(mNativeDocument, type, x, y);
         }
         return null;
+    }
+
+    private boolean isCanRenderDocument(){
+        if(mNativeDocument == 0){
+            return false;
+        }
+        if(mPause){
+            return false;
+        }
+        if(mOpenGLRender == null || mOpenGLRender.isWillDestory()){
+            return false;
+        }
+        if(!mHasCreateBody){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isCanRender(int token){
+        if(token != renderStage.get()){
+            return false;
+        }
+        if(mNativeDocument == 0){
+            return false;
+        }
+        if(mPause){
+            return false;
+        }
+        if(mOpenGLRender == null || mOpenGLRender.isWillDestory()){
+            return false;
+        }
+        return true;
     }
 
 
@@ -569,7 +543,7 @@ public class DocumentView implements Handler.Callback {
             RenderBridge.getInstance().layoutIfNeed(mNativeDocument);
             int height = RenderBridge.getInstance().documentHeight(mNativeDocument);
             int width = RenderBridge.getInstance().documentWidth(mNativeDocument);
-            setSize(width, height);
+            handleDocumentSize(width, height);
             invalidate();
         }
     }
@@ -592,11 +566,17 @@ public class DocumentView implements Handler.Callback {
         }
     }
 
+    public boolean isHasCreateBody() {
+        return mHasCreateBody;
+    }
+
+    public void setHasCreateBody(boolean mHasCreateBody) {
+        this.mHasCreateBody = mHasCreateBody;
+    }
 
     public void setDocumentAdapter(DocumentAdapter documentAdapter) {
         this.mDocumentAdapter = documentAdapter;
     }
-
 
     public int getDocumentHeight() {
         return documentHeight;

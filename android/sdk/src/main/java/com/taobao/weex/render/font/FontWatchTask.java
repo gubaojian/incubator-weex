@@ -21,6 +21,7 @@ package com.taobao.weex.render.font;
 import android.text.TextUtils;
 
 import com.taobao.weex.render.bridge.RenderBridge;
+import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.manager.RenderManager;
 import com.taobao.weex.render.view.DocumentView;
 
@@ -48,9 +49,6 @@ public class FontWatchTask implements  Runnable{
     }
 
     public void notifyFontReadyWithFilePath(String filePath){
-        if(!new File(filePath).exists()){
-            throw new RuntimeException(fontFaimly + "Font File Not Exist At " + filePath);
-        }
         this.fontPath = filePath;
         RenderManager.getInstance().getGpuHandler().post(this);
     }
@@ -73,13 +71,17 @@ public class FontWatchTask implements  Runnable{
             return;
         }
         this.isLoaded = true;
-        if(!RenderBridge.getInstance().hasFont(fontFaimly, fontPath)){
-            RenderBridge.getInstance().addFont(fontFaimly, fontPath);
-            synchronized (documentViews){
-                for(DocumentView documentView : documentViews){
-                    documentView.refreshFont(fontFaimly);
+        if(new File(fontPath).exists()){
+            if(!RenderBridge.getInstance().hasFont(fontFaimly, fontPath)){
+                RenderBridge.getInstance().addFont(fontFaimly, fontPath);
+                synchronized (documentViews){
+                    for(DocumentView documentView : documentViews){
+                        documentView.refreshFont(fontFaimly);
+                    }
                 }
             }
+        }else{
+            //RenderLog.actionError();
         }
         synchronized (documentViews){
             documentViews.clear();

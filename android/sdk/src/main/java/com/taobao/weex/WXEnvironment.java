@@ -104,7 +104,7 @@ public class WXEnvironment {
   private static boolean isApkDebug = true;
   public static boolean isPerf = false;
 
-  private static boolean openDebugLog = true;
+  private static boolean openDebugLog = false;
 
   private static String sGlobalFontFamily;
 

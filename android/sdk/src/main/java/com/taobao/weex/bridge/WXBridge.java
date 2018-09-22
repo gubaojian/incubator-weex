@@ -97,6 +97,8 @@ public class WXBridge implements IWXBridge {
 
   private native void nativeRegisterCoreEnv(String key, String value);
 
+  private native void nativeSetSegmentSwitch(boolean segmentSwitch);
+
   /**
    * update global config,
    * @param config params
@@ -608,6 +610,11 @@ public class WXBridge implements IWXBridge {
   @Override
   public void registerCoreEnv(String key, String value) {
     nativeRegisterCoreEnv(key, value);
+  }
+
+
+  public void setSegmentSwitch(boolean segmentSwitch) {
+    nativeSetSegmentSwitch(segmentSwitch);
   }
 
   public void reportNativeInitStatus(String statusCode, String errorMsg) {

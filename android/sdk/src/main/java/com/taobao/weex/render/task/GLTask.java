@@ -20,6 +20,7 @@ package com.taobao.weex.render.task;
 
 import android.util.Log;
 
+import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.manager.RenderManager;
 import com.taobao.weex.render.view.DocumentView;
 
@@ -45,8 +46,11 @@ public abstract class GLTask {
 
 
     public final void execute(){
-        run();
-        taskNum.decrementAndGet();
+        try {
+            run();
+        }finally {
+            taskNum.decrementAndGet();
+        }
     }
 
     public abstract void run();
@@ -57,10 +61,11 @@ public abstract class GLTask {
     }
 
     public static void waitIfTaskBlock(){
-        Log.e("Weex", "Weex Weex  documents " + RenderManager.getInstance().getDocumentsMap().size()
-        + " " + taskNum.get() + " " + OpenGLRender.getRenderNum());
+        if(RenderLog.isRenderLogEnabled()){
+            Log.d(RenderLog.RENDER_LOG_TAG, "RenderTask waitIfTaskBlock " + RenderManager.getInstance().getDocumentsMap().size() + " taskNum " + taskNum.get() + " renderNum " + OpenGLRender.getRenderNum());
+        }
         int maxTimes = taskNum.get();
-        while (taskNum.get() >= 16 && maxTimes > 0){
+        while (taskNum.get() >= 8 && maxTimes > 0){
             try {
                 Thread.sleep(4);
             } catch (InterruptedException e) {
@@ -68,15 +73,5 @@ public abstract class GLTask {
             }
             maxTimes--;
         }
-        /**
-        maxTimes = OpenGLRender.getRenderNum();
-        while (OpenGLRender.getRenderNum() >= 24 && maxTimes > 0){
-            try {
-                Thread.sleep(4);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            maxTimes--;
-        }*/
     }
 }

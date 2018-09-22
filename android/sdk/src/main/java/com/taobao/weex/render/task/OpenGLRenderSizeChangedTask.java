@@ -18,29 +18,82 @@
  */
 package com.taobao.weex.render.task;
 
+import com.taobao.weex.render.bridge.RenderBridge;
 import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.view.DocumentView;
 import com.taobao.weex.render.view.SurfaceTextureHolder;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by furture on 2018/8/17.
  */
 
-public class OpenGLRenderSizeChangedTask extends GLTask {
+public class OpenGLRenderSizeChangedTask extends GLTask implements Runnable {
 
     private SurfaceTextureHolder surfaceTextureHolder;
+    private CountDownLatch countDownLatch;
 
     public OpenGLRenderSizeChangedTask(DocumentView documentView, SurfaceTextureHolder surfaceTextureHolder) {
         super(documentView);
         this.surfaceTextureHolder = surfaceTextureHolder;
+        this.countDownLatch = new CountDownLatch(1);
     }
 
     @Override
     public void run() {
-        if(surfaceTextureHolder.isDestory()){
-            return;
+        try {
+
+            OpenGLRender openGLRender = surfaceTextureHolder.getOpenGLRender();
+            if(surfaceTextureHolder.isDestory() || openGLRender == null){
+                return;
+            }
+            openGLRender.setWidth(surfaceTextureHolder.getWidth());
+            openGLRender.setHeight(surfaceTextureHolder.getHeight());
+            RenderBridge.getInstance().renderSizeChanged(openGLRender.getPtr(), surfaceTextureHolder.getWidth(), surfaceTextureHolder.getHeight());
+
+            if(surfaceTextureHolder.isDestory()){
+                return;
+            }
+
+            synchronized (getDocumentView().lock){
+                if(!surfaceTextureHolder.isDestory()){
+                    RenderBridge.getInstance().renderSwap(openGLRender.getPtr());
+                }
+            }
+
+            if(surfaceTextureHolder.isDestory()){
+                return;
+            }
+
+            RenderBridge.getInstance().renderClearBuffer(openGLRender.getPtr());
+
+            if(surfaceTextureHolder.isDestory()){
+                return;
+            }
+
+            synchronized (getDocumentView().lock){
+                if(!surfaceTextureHolder.isDestory()){
+                    RenderBridge.getInstance().renderSwap(openGLRender.getPtr());
+                }
+            }
+
+            if(surfaceTextureHolder.isDestory()){
+                return;
+            }
+
+            getDocumentView().renderSizeChanged(openGLRender);
+        }finally {
+            countDownLatch.countDown();
         }
-        getDocumentView().renderSizeChanged(surfaceTextureHolder.getWidth(), surfaceTextureHolder.getHeight());
-        RenderLog.actionSizeChanged(getDocumentView(), surfaceTextureHolder.getWidth(),  surfaceTextureHolder.getHeight());
+    }
+
+    public void waitComplete(){
+        try {
+            countDownLatch.await(160, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

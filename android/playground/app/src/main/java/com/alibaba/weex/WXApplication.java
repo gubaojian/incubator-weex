@@ -49,6 +49,7 @@ import com.taobao.weex.bridge.WXBridgeManager;
 import com.taobao.weex.common.WXException;
 import com.taobao.weex.render.RenderSDK;
 import com.taobao.weex.render.bridge.RenderBridge;
+import com.taobao.weex.render.log.RenderLog;
 
 public class WXApplication extends Application {
 
@@ -111,6 +112,8 @@ public class WXApplication extends Application {
 
       //Typeface nativeFont = Typeface.createFromAsset(getAssets(), "font/native_font.ttf");
       //WXEnvironment.setGlobalFontFamily("bolezhusun", nativeFont);
+
+      //RenderLog.openRenderLog(true);
 
     } catch (WXException e) {
       e.printStackTrace();
