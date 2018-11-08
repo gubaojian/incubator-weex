@@ -60,4 +60,18 @@ public class RenderStats {
                             + " eglNum " + elgNum.get());
         }
     }
+
+    public static void countDettachNum() {
+        if((System.currentTimeMillis() - lastCountTime) > 1000){
+            lastCountTime = System.currentTimeMillis();
+            dettachNum = 1;
+        }else{
+            dettachNum++;
+        }
+        Log.e("Weex", "Weex dettach num " + dettachNum);
+
+    }
+
+    private static long lastCountTime;
+    private static int dettachNum;
 }

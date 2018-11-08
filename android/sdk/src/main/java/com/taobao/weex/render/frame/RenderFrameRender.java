@@ -23,6 +23,7 @@ import com.taobao.weex.render.egl.AttachEGLAction;
 import com.taobao.weex.render.egl.DettachEGLAction;
 import com.taobao.weex.render.egl.InvalidateEGLAction;
 import com.taobao.weex.render.egl.ResizeEGLAction;
+import com.taobao.weex.render.manager.RenderStats;
 import com.taobao.weex.render.threads.GpuThread;
 
 
@@ -59,6 +60,8 @@ public class RenderFrameRender{
     public void dettachSurfaceTexture(SurfaceTextureHolder surfaceTextureHolder){
         DettachEGLAction dettachEGLAction = new DettachEGLAction(mRenderFrame, this);
         gpuHandler.post(dettachEGLAction);
+
+        RenderStats.countDettachNum();
     }
 
     public void invalidate() {
