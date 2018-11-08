@@ -29,6 +29,7 @@ import android.view.TextureView;
 import android.view.View;
 
 import com.taobao.weex.render.accessibility.RenderFrameAccessibilityHelper;
+import com.taobao.weex.render.fling.FlingControl;
 import com.taobao.weex.render.manager.RenderStats;
 import com.taobao.weex.render.event.OnFrameEventListener;
 
@@ -155,6 +156,7 @@ public class RenderFrameView extends TextureView implements  TextureView.Surface
         hasAttachToWindow = true;
         RenderStats.waitIfWaitEGLTaskExceed();
         super.onAttachedToWindow();
+        FlingControl.setParentMaxFling(this);
     }
 
     @Override

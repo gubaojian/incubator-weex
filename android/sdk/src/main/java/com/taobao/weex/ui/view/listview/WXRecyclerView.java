@@ -31,10 +31,12 @@ import android.view.MotionEvent;
 
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.WXThread;
+import com.taobao.weex.render.fling.FlingControl;
+import com.taobao.weex.render.fling.MaxFlingVelocity;
 import com.taobao.weex.ui.view.gesture.WXGesture;
 import com.taobao.weex.ui.view.gesture.WXGestureObservable;
 
-public class WXRecyclerView extends RecyclerView implements WXGestureObservable {
+public class WXRecyclerView extends RecyclerView implements WXGestureObservable, MaxFlingVelocity {
 
   public static final int TYPE_LINEAR_LAYOUT = 1;
   public static final int TYPE_GRID_LAYOUT = 2;
@@ -44,8 +46,13 @@ public class WXRecyclerView extends RecyclerView implements WXGestureObservable 
   private boolean hasTouch = false;
 
 
+  private int maxFlingVelocity;
+  private boolean maxFlingVelocityEnabled;
+
+
   public WXRecyclerView(Context context) {
     super(context);
+    maxFlingVelocity = getMaxFlingVelocity()/2;
   }
 
   public boolean isScrollable() {
@@ -154,19 +161,20 @@ public class WXRecyclerView extends RecyclerView implements WXGestureObservable 
 
 
   public boolean fling(int velocityX, int velocityY) {
-    if(velocityY > maxVelocityY){
-       velocityY  = maxVelocityY;
-    }
-    if(velocityY < -maxVelocityY){
-      velocityY  = -maxVelocityY;
+    if(maxFlingVelocityEnabled){
+         velocityY = FlingControl.getVelocity(velocityY, maxFlingVelocity);
+         velocityX = FlingControl.getVelocity(velocityX, maxFlingVelocity);
     }
     return super.fling(velocityX, velocityY);
   }
 
 
-  public static int  maxVelocityY = 4000;
+  @Override
+  public void setMaxFlingVelocityEnabled(boolean enabled) {
+       maxFlingVelocityEnabled = true;
+  }
 
-
-
-
+  public void setMaxFlingVelocity(int maxFlingVelocity) {
+    this.maxFlingVelocity = maxFlingVelocity;
+  }
 }
