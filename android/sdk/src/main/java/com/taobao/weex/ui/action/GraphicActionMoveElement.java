@@ -24,6 +24,7 @@ import android.text.TextUtils;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.component.frame.WXRenderFrameComponent;
 
 public class GraphicActionMoveElement extends BasicGraphicAction {
 
@@ -34,6 +35,14 @@ public class GraphicActionMoveElement extends BasicGraphicAction {
     super(instance, ref);
     this.mParentref = parentRef;
     this.mIndex = index;
+
+    if(instance.hasRenderFrameComponent()) {
+      WXComponent component = WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), getRef());
+      WXRenderFrameComponent renderFrameComponent = WXRenderFrameComponent.getRenderFrameComponent(component);
+      if (renderFrameComponent != null) {
+        renderFrameComponent.actionMoveElement(ref, parentRef, index);
+      }
+    }
   }
 
   @Override

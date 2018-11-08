@@ -187,6 +187,8 @@ dependencies {
     provided "com.android.support:appcompat-v7:${project.supportLibVersion}"
     provided "com.alibaba:fastjson:${project.fastjsonLibVersion}"
 
+    //compile "com.taobao.weex.render:render_sdk:0.0.1"
+
     testCompile "com.alibaba:fastjson:${project.fastjsonLibVersion}"
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-core:1.3'

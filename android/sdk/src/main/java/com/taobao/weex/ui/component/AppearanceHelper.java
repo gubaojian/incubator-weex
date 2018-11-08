@@ -99,6 +99,9 @@ public class AppearanceHelper {
 
   public boolean isViewVisible(boolean isList) {
     View view = mAwareChild.getHostView();
+    if(view == null){
+      return false;
+    }
     if(isList){
       if(view.getVisibility() == View.VISIBLE){
         if(view.getMeasuredHeight()  == 0){

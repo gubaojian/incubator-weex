@@ -21,6 +21,7 @@ package com.taobao.weex.ui.action;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.ui.component.WXComponent;
+import com.taobao.weex.ui.component.frame.WXRenderFrameComponent;
 
 import java.util.Map;
 
@@ -41,6 +42,14 @@ public class GraphicActionUpdateAttr extends BasicGraphicAction {
     if (mAttrs != null) {
       component.addAttr(mAttrs);
     }
+
+    if(instance.hasRenderFrameComponent()) {
+      WXRenderFrameComponent renderFrameComponent = WXRenderFrameComponent.getRenderFrameComponent(component);
+      if (renderFrameComponent != null) {
+        renderFrameComponent.actionUpdateAttrs(ref, attrs);
+      }
+    }
+
   }
 
   @Override

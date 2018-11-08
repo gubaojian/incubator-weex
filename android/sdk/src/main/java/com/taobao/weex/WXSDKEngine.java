@@ -78,6 +78,7 @@ import com.taobao.weex.ui.component.WXSwitch;
 import com.taobao.weex.ui.component.WXText;
 import com.taobao.weex.ui.component.WXVideo;
 import com.taobao.weex.ui.component.WXWeb;
+import com.taobao.weex.ui.component.frame.WXRenderFrameComponent;
 import com.taobao.weex.ui.component.list.HorizontalListComponent;
 import com.taobao.weex.ui.component.list.SimpleListComponent;
 import com.taobao.weex.ui.component.list.WXCell;
@@ -278,6 +279,14 @@ public class WXSDKEngine implements Serializable {
               WXBasicComponentType.HEADER,
               WXBasicComponentType.FOOTER
       );
+
+      registerComponent(
+              new SimpleComponentHolder(
+                      WXRenderFrameComponent.class,
+                      new WXRenderFrameComponent.Ceator()
+              ),
+              false, WXRenderFrameComponent.RENDER_FRAME_COMPONENT);
+
       registerComponent(
               new SimpleComponentHolder(
                       WXImage.class,

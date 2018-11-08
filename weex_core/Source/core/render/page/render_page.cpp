@@ -42,6 +42,7 @@
 #include "core/render/manager/render_manager.h"
 #include "core/render/node/factory/render_type.h"
 #include "core/render/node/render_list.h"
+#include "core/render/node/render_frame.h"
 #include "core/render/node/render_object.h"
 
 namespace WeexCore {
@@ -181,7 +182,7 @@ bool RenderPage::RemoveRenderObject(const std::string &ref) {
 
   RemoveRenderFromRegisterMap(child);
   SendRemoveElementAction(ref);
-    
+
   delete child;
   return true;
 }
@@ -231,7 +232,7 @@ bool RenderPage::UpdateStyle(
   // Bridge_Impl_Android::getInstance()->callHasTransitionPros(mPageId.c_str(),
   // ref.c_str(), src);
 
-  if (result == 1) {
+  if (result == 1 || WeexCore::isRenderFrameChild(render)) {
     SendUpdateStyleAction(render, src, margin, padding, border);
   } else {
     for (auto iter = src->begin(); iter != src->end(); iter++) {
@@ -410,7 +411,7 @@ bool RenderPage::CreateFinish() {
   SendRenderSuccessAction();
   return true;
 }
-    
+
 void RenderPage::LayoutInner() {
   CalculateLayout();
   this->need_layout_.store(false);
@@ -490,6 +491,12 @@ void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
     will_layout = false;
   }
 
+  if(WeexCore::isRenderFrameChild(parent)){
+      will_layout = false;
+      child->setIsSegmentChild(true);
+  }
+
+
   RenderAction *action =
       new RenderActionAddElement(page_id(), child, parent, index, will_layout);
   PostRenderAction(action);
@@ -508,6 +515,19 @@ void RenderPage::SendAddElementAction(RenderObject *child, RenderObject *parent,
     RenderList *render_list = static_cast<RenderList *>(child);
     std::vector<RenderObject *> &cell_slots = render_list->CellSlots();
     for (auto it = cell_slots.begin(); it != cell_slots.end(); it++) {
+      RenderObject *grandson = static_cast<RenderObject *>(*it);
+      if (grandson != nullptr) {
+        SendAddElementAction(grandson, child, -1, true, will_layout);
+      }
+      ++i;
+    }
+  }
+
+
+  if (child->type() == WeexCore::kRenderFrame) {
+    RenderFrame *render_frame = static_cast<RenderFrame*>(child);
+    std::vector<RenderObject *> &frameChilds = render_frame->GetFrameChilds();
+    for (auto it = frameChilds.begin(); it != frameChilds.end(); it++) {
       RenderObject *grandson = static_cast<RenderObject *>(*it);
       if (grandson != nullptr) {
         SendAddElementAction(grandson, child, -1, true, will_layout);
@@ -540,7 +560,7 @@ void RenderPage::SendLayoutAction(RenderObject *render, int index) {
   RenderAction *action = new RenderActionLayout(page_id(), render, index);
   PostRenderAction(action);
 }
-    
+
 void RenderPage::SendUpdateStyleAction(
     RenderObject *render,
     std::vector<std::pair<std::string, std::string>> *style,

@@ -27,6 +27,7 @@ import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.CSSShorthand;
 import com.taobao.weex.dom.transition.WXTransition;
 import com.taobao.weex.ui.component.WXComponent;
+import com.taobao.weex.ui.component.frame.WXRenderFrameComponent;
 
 import java.util.Map;
 
@@ -79,6 +80,11 @@ public class GraphicActionUpdateStyle extends BasicGraphicAction {
     if (null != borders) {
       component.setBorders(borders);
     }
+
+    if(instance.hasRenderFrameComponent()) {
+        updateRenderNodeStyle(ref, style);
+    }
+
   }
 
   public GraphicActionUpdateStyle(WXSDKInstance instance, String ref,
@@ -116,6 +122,9 @@ public class GraphicActionUpdateStyle extends BasicGraphicAction {
     if (null != borders) {
       component.addShorthand(borders);
     }
+    if(instance.hasRenderFrameComponent()) {
+      updateRenderNodeStyle(ref, style);
+    }
   }
 
   @Override
@@ -131,6 +140,13 @@ public class GraphicActionUpdateStyle extends BasicGraphicAction {
     } else {
       component.setTransition(WXTransition.fromMap(mStyle, component));
       component.updateStyles(mStyle);
+    }
+  }
+
+  private void updateRenderNodeStyle(String ref, Map<String, Object> style){
+    WXRenderFrameComponent documentComponent = WXRenderFrameComponent.getRenderFrameComponent(component);
+    if (documentComponent != null) {
+      documentComponent.actionUpdateStyles(ref, style);
     }
   }
 }

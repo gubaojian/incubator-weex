@@ -184,6 +184,10 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
   @Nullable
   private ConcurrentLinkedQueue<Pair<String, Map<String, Object>>> animations;
 
+
+  private boolean frameNodeHasAppear;
+  private boolean frameHasDisappear = true;
+
   @Deprecated
   public WXComponent(WXSDKInstance instance, WXVContainer parent, String instanceId, boolean isLazy, BasicComponentData basicComponentData) {
     this(instance, parent, isLazy, basicComponentData);
@@ -1885,6 +1889,30 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
       Map<String, Object> params = new HashMap<>();
       params.put("direction", direction);
       fireEvent(wxEventType, params);
+    }
+  }
+
+  public void frameNodeAppearChange(String wxEventType, String direction) {
+    if(containsEvent(Constants.Event.APPEAR) || containsEvent(Constants.Event.DISAPPEAR) ){
+      boolean appearChanged = false;
+      if(Constants.Event.APPEAR.equals(wxEventType)){
+        if(!frameNodeHasAppear){
+          frameNodeHasAppear = true;
+          appearChanged = true;
+        }
+        frameHasDisappear = false;
+      }else if(Constants.Event.DISAPPEAR.equals(wxEventType)){
+        if(!frameHasDisappear){
+          frameHasDisappear = true;
+          appearChanged = true;
+        }
+        frameNodeHasAppear = false;
+      }
+      if(appearChanged && containsEvent(wxEventType)){
+        Map<String, Object> params = new HashMap<>();
+        params.put(Constants.Name.DIRECTION, direction);
+        fireEvent(wxEventType, params);
+      }
     }
   }
 

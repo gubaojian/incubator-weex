@@ -434,6 +434,10 @@ public class WXAttr implements Map<String, Object>,Cloneable {
     return attr.put(key,value);
   }
 
+  public void putAllDirect(Map<? extends String, ?> map) {
+    this.attr.putAll(map);
+  }
+
   @Override
   public void putAll(Map<? extends String, ?> map) {
     //this.attr.putAll(map);

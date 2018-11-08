@@ -19,6 +19,7 @@
 
 #include "android/wrap/wx_bridge.h"
 #include <fstream>
+#include <core/render/node/render_frame.h>
 #include "core/data_render/common_error.h"
 #include "android/base/jni_type.h"
 #include "android/base/jni/jbytearray_ref.h"
@@ -237,6 +238,11 @@ static void ResetWXBridge(JNIEnv* env, jobject jcaller,
   ScopedJStringUTF8 classNameRef = ScopedJStringUTF8(env, className);
   WXBridge::Instance()->Reset(env, bridge);
   WXBridge::Instance()->reset_clazz(env, classNameRef.getChars());
+}
+
+
+static void SetRenderFrameSwitch(JNIEnv* env, jobject jcaller,  jboolean frameSwitch){
+    RenderFrame::setFrameSwitchOpen(frameSwitch);
 }
 
 static void SetViewPortWidth(JNIEnv* env, jobject jcaller, jstring instanceId,

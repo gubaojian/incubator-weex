@@ -479,6 +479,20 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     mJSHandler.postDelayed(WXThread.secure(r),delayMillis);
   }
 
+  public void postAtFrontOfQueue(Runnable r){
+    if (mJSHandler == null) {
+      return;
+    }
+    mJSHandler.postAtFrontOfQueue(r);
+  }
+
+  public void removeCallback(Runnable r){
+    if (mJSHandler == null) {
+      return;
+    }
+    mJSHandler.removeCallbacks(r);
+  }
+
   void setTimeout(String callbackId, String time) {
     Message message = Message.obtain();
     message.what = WXJSBridgeMsgType.SET_TIMEOUT;
@@ -3018,4 +3032,9 @@ public class WXBridgeManager implements Callback, BactchExecutor {
     }
     mWeexCoreEnvOptions.clear();
   }
+
+  public IWXBridge getBridge(){
+    return mWXBridge;
+  }
+
 }

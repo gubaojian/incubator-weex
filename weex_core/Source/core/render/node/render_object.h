@@ -54,7 +54,7 @@ class RenderObject : public IRenderObject {
   void LayoutBeforeImpl();
 
   void LayoutPlatformImpl();
-    
+
   void LayoutAfterImpl();
 
   void CopyFrom(RenderObject *src);
@@ -84,7 +84,7 @@ class RenderObject : public IRenderObject {
   void BindMeasureFunc();
 
   void OnLayoutBefore();
-    
+
   void OnLayoutPlatform();
 
   void OnLayoutAfter(float width, float height);
@@ -149,6 +149,11 @@ class RenderObject : public IRenderObject {
 
   inline bool is_sticky() { return this->is_sticky_; }
 
+  inline bool isSegmentChild() { return this->is_segment_child; }
+
+  inline void setIsSegmentChild(bool isSegmentChildRender) { this->is_segment_child = isSegmentChildRender;}
+
+
  private:
   RenderObject *parent_render_;
   std::map<std::string, std::string> *styles_;
@@ -156,6 +161,7 @@ class RenderObject : public IRenderObject {
   std::set<std::string> *events_;
   bool is_root_render_;
   bool is_sticky_ = false;
+  bool is_segment_child = false;
 };
 }  // namespace WeexCore
 #endif  // CORE_RENDER_NODE_RENDER_OBJECT_H_

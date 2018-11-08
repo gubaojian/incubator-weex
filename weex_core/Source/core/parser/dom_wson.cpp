@@ -23,6 +23,8 @@
 #include <core/render/node/render_object.h>
 #include <core/render/page/render_page.h>
 #include <core/render/node/factory/render_creator.h>
+#include <core/render/node/factory/render_type.h>
+#include <core/render/node/render_frame.h>
 #include "dom_wson.h"
 #include "wson/wson.h"
 #include "wson/wson_parser.h"
@@ -79,6 +81,9 @@ namespace WeexCore {
                         std::string attrKeyString = parser.nextMapKeyUTF8();
                         std::string attrValueString = parser.nextStringUTF8(parser.nextType());
                         render->AddAttr(attrKeyString, attrValueString);
+                    }
+                    if (parent != nullptr && parent->type() == kRenderCell){
+                        //render->AddAttr("doctype", "weexrender");
                     }
                 }else{
                     keyOrderRight = keys_order_as_expect(render, keyOrderRight);
@@ -187,6 +192,38 @@ namespace WeexCore {
             }
         }
 
+
+        if(render->type() == kRenderDiv
+                   && render->attributes()->find("doctype") != render->attributes()->end()
+                   && RenderFrame::isFrameSwitchOpen()){
+            RenderObject* renderFrame = (RenderObject *) RenderCreator::GetInstance()->CreateRender(kRenderFrame, ref);
+            renderFrame->set_page_id(pageId);
+            if (parent != nullptr){
+                parent->removeChild(render);
+                parent->AddRenderObject(index, renderFrame);
+            }
+            for(int i=0; i<render->getChildCount(); i++){
+                RenderObject* child = (RenderObject *) render->getChildAt(i);
+                renderFrame->AddRenderObject(i, child);
+            }
+            std::map<std::string, std::string>::iterator attrIt = render->attributes()->begin();
+            for(; attrIt != render->attributes()->end(); attrIt++){
+                renderFrame->AddAttr(attrIt->first, attrIt->second);
+            }
+            std::map<std::string, std::string>::iterator styleIt = render->styles()->begin();
+            for(; styleIt != render->styles()->end(); styleIt++){
+                renderFrame->AddStyle(styleIt->first, styleIt->second);
+            }
+            std::set<std::string>::iterator eventIt =  render->events()->begin();
+            for(;eventIt != render->events()->end(); eventIt++){
+                renderFrame->AddEvent(*eventIt);
+            }
+
+
+            render->clearChilds();
+            delete  render;
+            render = renderFrame;
+        }
 
         if (render != nullptr) {
             render->ApplyDefaultStyle();

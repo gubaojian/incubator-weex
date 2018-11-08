@@ -155,6 +155,10 @@ static void ResetWXBridge(JNIEnv* env, jobject jcaller,
     jobject bridge,
     jstring className);
 
+static void SetRenderFrameSwitch(JNIEnv* env, jobject jcaller,
+    jboolean frameSwitch);
+
+
 static void UpdateGlobalConfig(JNIEnv* env, jobject jcaller,
     jstring config);
 
@@ -1105,6 +1109,11 @@ static const JNINativeMethod kMethodsWXBridge[] = {
 "Ljava/lang/String;"
 ")"
 "V", reinterpret_cast<void*>(ResetWXBridge) },
+{ "nativeSetRenderFrameSwitch",
+"("
+"Z"
+")"
+"V", reinterpret_cast<void*>(SetRenderFrameSwitch) },
     { "nativeUpdateGlobalConfig",
 "("
 "Ljava/lang/String;"

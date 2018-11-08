@@ -23,6 +23,7 @@ import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.dom.WXEvent;
 import com.taobao.weex.tracing.Stopwatch;
 import com.taobao.weex.ui.component.WXComponent;
+import com.taobao.weex.ui.component.frame.WXRenderFrameComponent;
 
 /**
  * Created by listen on 18/01/11.
@@ -34,6 +35,14 @@ public class GraphicActionRemoveEvent extends BasicGraphicAction {
   public GraphicActionRemoveEvent(WXSDKInstance instance, String ref, Object event) {
     super(instance, ref);
     this.mEvent = WXEvent.getEventName(event);
+    if(instance.hasRenderFrameComponent()) {
+      WXComponent component = WXSDKManager.getInstance().getWXRenderManager().getWXComponent(getPageId(), getRef());
+      WXRenderFrameComponent renderFrameComponent = WXRenderFrameComponent.getRenderFrameComponent(component);
+      if (renderFrameComponent != null) {
+        renderFrameComponent.actionRemoveEvent(ref, event);
+      }
+    }
+
   }
 
   @Override

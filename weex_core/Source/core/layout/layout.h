@@ -214,7 +214,7 @@ namespace WeexCore {
     bool dirty, widthDirty, heightDirty;
 
     bool mIsDestroy = true;
-      
+
     bool mNeedsPlatformDependentLayout = false;
 
     WXCoreMeasureFunc measureFunc = nullptr;
@@ -273,16 +273,16 @@ namespace WeexCore {
         markDirty();
       }
     }
-      
+
       /** ================================ custom =================================== **/
     inline bool getNeedsPlatformDependentLayout() const {
       return mNeedsPlatformDependentLayout;
     }
-      
+
     inline void setNeedsPlatformDependentLayout(bool v) {
       this->mNeedsPlatformDependentLayout = v;
     }
-      
+
   private:
 
     /** ================================ measure =================================== **/
@@ -710,6 +710,12 @@ namespace WeexCore {
       markDirty();
     }
 
+    inline void clearChilds(){
+      mChildList.clear();
+      markDirty();
+    }
+
+
     inline void addChildAt(WXCoreLayoutNode* const child, Index index) {
       mChildList.insert(mChildList.begin() + index, child);
       child->mParent = this;
@@ -1085,7 +1091,7 @@ namespace WeexCore {
         }
       }
     }
-      
+
     void markAllDirty() {
       markDirty(false);
       for (WXCoreLayoutNode* c : mChildList) {
@@ -1123,7 +1129,7 @@ namespace WeexCore {
       }
       return largestSize + sumPaddingBorderAlongAxis(this, isMainAxisHorizontal(this));
     }
-      
+
     inline void rewriteLayoutResult(float left, float top, float width, float height) {
       if (mLayoutResult != nullptr) {
           mLayoutResult->mLayoutPosition.setPosition(kPositionEdgeLeft, left);

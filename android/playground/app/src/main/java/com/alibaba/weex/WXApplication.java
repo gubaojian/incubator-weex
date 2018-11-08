@@ -39,13 +39,18 @@ import com.alibaba.weex.extend.module.SyncTestModule;
 import com.alibaba.weex.extend.module.WXEventModule;
 import com.alibaba.weex.extend.module.WXTitleBar;
 import com.alibaba.weex.extend.module.WXWsonTestModule;
+import com.alibaba.weex.extend.render.PicassoImageAdapter;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.taobao.weex.InitConfig;
 import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.WXSDKEngine;
 import com.taobao.weex.WXSDKManager;
+import com.taobao.weex.bridge.WXBridge;
 import com.taobao.weex.bridge.WXBridgeManager;
 import com.taobao.weex.common.WXException;
+import com.taobao.weex.render.log.RenderLog;
+import com.taobao.weex.render.sdk.OnRenderSDKInitListener;
+import com.taobao.weex.render.sdk.RenderSDK;
 
 public class WXApplication extends Application {
 
@@ -99,6 +104,26 @@ public class WXApplication extends Application {
 
       WXSDKEngine.registerModule("wsonTest", WXWsonTestModule.class);
 
+
+      RenderLog.openDebugLog(true);
+      RenderSDK.getInstance().setApplication(this)
+              .setImageAdapter(new PicassoImageAdapter())
+              .setSdkOnInitListener(new OnRenderSDKInitListener() {
+                @Override
+                public void onInit(final boolean result) {
+                  if(result){
+                    WXBridgeManager.getInstance().post(new Runnable() {
+                      @Override
+                      public void run() {
+                        if(WXBridgeManager.getInstance().getBridge() instanceof WXBridge){
+                          ((WXBridge) WXBridgeManager.getInstance().getBridge()).setRenderFrameSwitch(result);
+                        }
+                      }
+                    });
+                  }
+                }
+              })
+              .init();
 
       /**
        * override default image tag

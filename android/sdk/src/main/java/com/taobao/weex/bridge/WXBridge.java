@@ -106,6 +106,8 @@ public class WXBridge implements IWXBridge {
   private native void nativeRegisterCoreEnv(String key, String value);
 
   private native void nativeResetWXBridge(Object bridge, String className);
+  private native void nativeSetRenderFrameSwitch(boolean renderFrameSwitch);
+
 
   /**
    * update global config,
@@ -226,6 +228,10 @@ public class WXBridge implements IWXBridge {
       }
     }
     return errorCode;
+  }
+
+  public void setRenderFrameSwitch(boolean renderFrameSwitch) {
+    nativeSetRenderFrameSwitch(renderFrameSwitch);
   }
 
   @CalledByNative

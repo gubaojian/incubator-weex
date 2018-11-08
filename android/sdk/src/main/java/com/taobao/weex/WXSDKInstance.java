@@ -205,6 +205,7 @@ public class WXSDKInstance implements IWXActivityStateListener,View.OnLayoutChan
    * */
   private volatile boolean isPreRenderMode;
 
+
   private boolean mCurrentGround = false;
   private ComponentObserver mComponentObserver;
   private Map<String, GraphicActionAddElement> inactiveAddElementAction = new ArrayMap<>();
@@ -213,6 +214,9 @@ public class WXSDKInstance implements IWXActivityStateListener,View.OnLayoutChan
 
   private List<InstanceOnFireEventInterceptor> mInstanceOnFireEventInterceptorList;
 
+
+
+  private boolean hasRenderFrameComponent;
 
   /**
    * network handler
@@ -2169,5 +2173,13 @@ public class WXSDKInstance implements IWXActivityStateListener,View.OnLayoutChan
     if(!getInstanceOnFireEventInterceptorList().contains(instanceOnFireEventInterceptor)){
       getInstanceOnFireEventInterceptorList().add(instanceOnFireEventInterceptor);
     }
+  }
+
+  public boolean hasRenderFrameComponent() {
+    return hasRenderFrameComponent;
+  }
+
+  public void setHasRenderFrameComponent(boolean hasRenderFrameComponent) {
+    this.hasRenderFrameComponent = hasRenderFrameComponent;
   }
 }
