@@ -155,13 +155,16 @@ public class WXRecyclerView extends RecyclerView implements WXGestureObservable 
 
   public boolean fling(int velocityX, int velocityY) {
     if(velocityY > maxVelocityY){
-      velocityY  = maxVelocityY;
+       velocityY  = maxVelocityY;
+    }
+    if(velocityY < -maxVelocityY){
+      velocityY  = -maxVelocityY;
     }
     return super.fling(velocityX, velocityY);
   }
 
 
-  public static int  maxVelocityY = 800;
+  public static int  maxVelocityY = 4000;
 
 
 

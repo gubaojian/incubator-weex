@@ -25,14 +25,21 @@ import com.taobao.weex.render.frame.SurfaceTextureHolder;
 import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.manager.RenderStats;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 public class DettachEGLAction extends EGLAction {
 
     private SurfaceTextureHolder surfaceTextureHolder;
+    private CountDownLatch countDownLatch;
 
     public DettachEGLAction(RenderFrame renderFrame, RenderFrameRender renderFrameRender) {
         super(renderFrame, renderFrameRender);
         this.surfaceTextureHolder = renderFrameRender.getSurfaceTextureHolder();
         RenderStats.getCurrentWaitEglTaskNum().incrementAndGet();
+        if(RenderStats.getCountDettachNum() > RenderStats.MAX_DETTACH_NUM_ON_SECOND){
+            countDownLatch = new CountDownLatch(1);
+        }
     }
 
     /**
@@ -46,6 +53,9 @@ public class DettachEGLAction extends EGLAction {
             RenderStats.getElgNum().decrementAndGet();
             RenderStats.getCurrentWaitEglTaskNum().decrementAndGet();
             RenderStats.showRenderStats();
+            if(countDownLatch != null){
+                countDownLatch.countDown();
+            }
         }
     }
 
@@ -67,5 +77,15 @@ public class DettachEGLAction extends EGLAction {
             surfaceTextureHolder.getSurface().release();
         }
         surfaceTextureHolder.getRenderFrameRender().destroy();
+    }
+
+    public void waitComplete(){
+        if(countDownLatch != null){
+            try {
+                countDownLatch.await(300, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
