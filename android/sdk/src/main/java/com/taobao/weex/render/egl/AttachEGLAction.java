@@ -26,14 +26,19 @@ import com.taobao.weex.render.frame.SurfaceTextureHolder;
 import com.taobao.weex.render.log.RenderLog;
 import com.taobao.weex.render.manager.RenderStats;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 public class AttachEGLAction extends EGLAction {
 
     private SurfaceTextureHolder surfaceTextureHolder;
+    private CountDownLatch countDownLatch;
 
     public AttachEGLAction(RenderFrame renderFrame, RenderFrameRender renderFrameRender) {
         super(renderFrame, renderFrameRender);
         surfaceTextureHolder = renderFrameRender.getSurfaceTextureHolder();
         RenderStats.getCurrentWaitEglTaskNum().incrementAndGet();
+        countDownLatch = new CountDownLatch(1);
     }
 
     @Override
@@ -43,6 +48,7 @@ public class AttachEGLAction extends EGLAction {
         }finally {
             RenderStats.getElgNum().incrementAndGet();
             RenderStats.getCurrentWaitEglTaskNum().decrementAndGet();
+            countDownLatch.countDown();
         }
     }
 
@@ -77,5 +83,13 @@ public class AttachEGLAction extends EGLAction {
         }
         getRenderFrame().setFrameRender(getRenderFrameRender());
         getRenderFrame().requestFrame();
+    }
+
+    public void waitComplete(){
+        try {
+            countDownLatch.await(50, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

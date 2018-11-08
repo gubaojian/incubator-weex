@@ -47,6 +47,7 @@ public class RenderFrameRender{
     public void attachEGLSurfaceTexture(SurfaceTextureHolder surfaceTextureHolder){
         AttachEGLAction attachOpenGLAction = new AttachEGLAction(mRenderFrame, this);
         gpuHandler.postAtFrontOfQueue(attachOpenGLAction);
+        attachOpenGLAction.waitComplete();
 
     }
 
