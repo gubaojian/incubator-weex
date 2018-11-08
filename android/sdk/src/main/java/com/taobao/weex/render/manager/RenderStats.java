@@ -74,10 +74,18 @@ public class RenderStats {
             dettachNum = 1;
         }else{
             dettachNum++;
+            if(dettachNum > MAX_DETTACH_NUM_ON_SECOND){
+                try {
+                    Thread.sleep(sleepTime*(dettachNum - MAX_DETTACH_NUM_ON_SECOND));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         Log.e("Weex", "Weex dettach num " + dettachNum);
     }
 
+    private static long sleepTime = 4;
     private static long lastCountTime;
     private static int dettachNum;
 }
