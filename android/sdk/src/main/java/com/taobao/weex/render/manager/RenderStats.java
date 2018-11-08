@@ -69,11 +69,18 @@ public class RenderStats {
 
     }
     public static void countDettachNum() {
-        if((System.currentTimeMillis() - lastCountTime) > 1000){
+        if((System.currentTimeMillis() - lastCountTime) > 1500){
             lastCountTime = System.currentTimeMillis();
             dettachNum = 1;
         }else{
             dettachNum++;
+            if(dettachNum > MAX_DETTACH_NUM_ON_SECOND){
+                try {
+                    Thread.sleep(4);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         Log.e("Weex", "Weex dettach num " + dettachNum);
     }
