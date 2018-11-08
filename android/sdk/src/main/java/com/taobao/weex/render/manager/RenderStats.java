@@ -76,7 +76,7 @@ public class RenderStats {
             dettachNum++;
             if(dettachNum > MAX_DETTACH_NUM_ON_SECOND){
                 try {
-                    Thread.sleep(4);
+                    Thread.sleep(4*(dettachNum - MAX_DETTACH_NUM_ON_SECOND));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
