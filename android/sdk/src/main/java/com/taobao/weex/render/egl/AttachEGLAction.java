@@ -38,7 +38,9 @@ public class AttachEGLAction extends EGLAction {
         super(renderFrame, renderFrameRender);
         surfaceTextureHolder = renderFrameRender.getSurfaceTextureHolder();
         RenderStats.getCurrentWaitEglTaskNum().incrementAndGet();
-        countDownLatch = new CountDownLatch(1);
+        if(RenderStats.getCountDettachNum() > RenderStats.MAX_DETTACH_NUM_ON_SECOND){
+            countDownLatch = new CountDownLatch(1);
+        }
     }
 
     @Override
@@ -48,7 +50,9 @@ public class AttachEGLAction extends EGLAction {
         }finally {
             RenderStats.getElgNum().incrementAndGet();
             RenderStats.getCurrentWaitEglTaskNum().decrementAndGet();
-            countDownLatch.countDown();
+            if(countDownLatch != null){
+                countDownLatch.countDown();
+            }
         }
     }
 
@@ -86,10 +90,12 @@ public class AttachEGLAction extends EGLAction {
     }
 
     public void waitComplete(){
-        try {
-            countDownLatch.await(50, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(countDownLatch != null){
+            try {
+                countDownLatch.await(300, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
