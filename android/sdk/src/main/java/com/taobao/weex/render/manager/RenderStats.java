@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RenderStats {
 
 
-    public static int MAX_DETTACH_NUM_ON_SECOND = 8;
+    public static int MAX_DETTACH_NUM_ON_SECOND = 10;
 
     private static AtomicInteger elgNum = new AtomicInteger(0);
     private static volatile AtomicInteger currentWaitEglTaskNum = new AtomicInteger(0);
@@ -65,10 +65,6 @@ public class RenderStats {
     }
 
     public static int getCountDettachNum() {
-        if((System.currentTimeMillis() - lastCountTime) > 1000){
-            lastCountTime = System.currentTimeMillis();
-            dettachNum = 1;
-        }
         return dettachNum;
 
     }
@@ -80,7 +76,6 @@ public class RenderStats {
             dettachNum++;
         }
         Log.e("Weex", "Weex dettach num " + dettachNum);
-
     }
 
     private static long lastCountTime;
