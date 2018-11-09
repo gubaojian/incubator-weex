@@ -49,9 +49,9 @@ public class RenderStats {
 
 
     /**
-     * when fast fling,render when don't block main thread render like normal view.
+     * when fast fling,render when don't block main thread like normal view.
      * which lead to scroll so fast. and async render not responsive to screen.
-     * so when fast fling to fast. when sleep while, which like normal view's layout and draw cost
+     * so when fling too fast. when sleep while, which like normal view's layout and draw cost
      * and wait render to screen.
      * */
     public static void countPeriodDettachNum(Context context) {
@@ -81,14 +81,14 @@ public class RenderStats {
     }
 
     /**
-     * when fast fling,render when don't block main thread render like normal view.
+     * when fast fling,render when don't block main thread like normal view.
      * which lead to scroll so fast. and async render not responsive to screen.
-     * so when fast fling to fast. when sleep while, which like normal view's layout and draw cost
+     * so when fling too fast. when sleep while, which like normal view's layout and draw cost
      * and wait render to screen.
      * */
     private static int periodDettachNum;
     private static long lastDettachCountTime;
-    private static long DETTACH_COUNT_PERIOD_TIME = 1500;
-    public static int MAX_DETTACH_NUM_ONE_PERIOD = 10;
-    public static long sleepTime = 2;
+    private static long DETTACH_COUNT_PERIOD_TIME = 1600;
+    public static int MAX_DETTACH_NUM_ONE_PERIOD = 8;
+    public static long sleepTime = 4;
 }
