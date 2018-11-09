@@ -146,5 +146,5 @@ public class FlingControl {
     private static int mMaxFlingVelocityForHScrollView = 0;
     private static int mMaxFlingVelocityForAbsList = 0;
     private static float mMaxFactor = 0.53f;
-    private static float mLimitFactor = 0.45f;
+    private static float mLimitFactor = 0.4f;
 }

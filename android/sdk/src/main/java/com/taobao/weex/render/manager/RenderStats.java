@@ -27,8 +27,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RenderStats {
 
-
-
     private static AtomicInteger elgNum = new AtomicInteger(0);
 
     public static AtomicInteger getElgNum(){
@@ -48,6 +46,14 @@ public class RenderStats {
         return periodDettachNum;
 
     }
+
+
+    /**
+     * when fast fling,render when don't block main thread render like normal view.
+     * which lead to scroll so fast. and async render not responsive to screen.
+     * so when fast fling to fast. when sleep while, which like normal view's layout and draw cost
+     * and wait render to screen.
+     * */
     public static void countPeriodDettachNum(Context context) {
         if(context instanceof Activity){
             Activity activity = (Activity) context;
@@ -65,9 +71,7 @@ public class RenderStats {
                 if(sleepTime > 0){
                     try {
                         Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    } catch (InterruptedException e) {}
                 }
             }
         }
@@ -76,10 +80,15 @@ public class RenderStats {
         }
     }
 
+    /**
+     * when fast fling,render when don't block main thread render like normal view.
+     * which lead to scroll so fast. and async render not responsive to screen.
+     * so when fast fling to fast. when sleep while, which like normal view's layout and draw cost
+     * and wait render to screen.
+     * */
     private static int periodDettachNum;
     private static long lastDettachCountTime;
     private static long DETTACH_COUNT_PERIOD_TIME = 1500;
     public static int MAX_DETTACH_NUM_ONE_PERIOD = 10;
-
-    public static long sleepTime = 0;
+    public static long sleepTime = 2;
 }
