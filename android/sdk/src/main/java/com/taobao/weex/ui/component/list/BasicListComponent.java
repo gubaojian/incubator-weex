@@ -82,6 +82,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static com.taobao.weex.common.Constants.Name.MAX_FLING_FACTOR;
+
 /**
  * Created by sospartan on 13/12/2016.
  */
@@ -348,6 +350,11 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         }
       }
     });
+
+    if(getAttrs().get(MAX_FLING_FACTOR) != null){
+      bounceRecyclerView.getInnerView().setMaxFlingVelocityFactor(WXUtils.getFloat(getAttrs().get(MAX_FLING_FACTOR)));
+    }
+
     return bounceRecyclerView;
   }
 

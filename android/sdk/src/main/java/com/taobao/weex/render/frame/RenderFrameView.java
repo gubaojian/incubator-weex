@@ -110,7 +110,6 @@ public class RenderFrameView extends TextureView implements  TextureView.Surface
         if(renderFrame == null){
             return;
         }
-        RenderStats.waitIfWaitEGLTaskExceed();
         renderFrame.setPause(false);
         surfaceTextureHolder = new SurfaceTextureHolder(surfaceTexture, width, height);
         renderFrameRender = new RenderFrameRender(renderFrame, surfaceTextureHolder);
@@ -141,6 +140,7 @@ public class RenderFrameView extends TextureView implements  TextureView.Surface
                 surfaceTextureHolder.setDestory(true);
             }
             surfaceTextureHolder.getRenderFrameRender().dettachSurfaceTexture(surfaceTextureHolder);
+            RenderStats.countPeriodDettachNum(getContext());
         }
         surfaceTextureHolder = null;
         renderFrameRender = null;
@@ -154,7 +154,6 @@ public class RenderFrameView extends TextureView implements  TextureView.Surface
     @Override
     protected void onAttachedToWindow() {
         hasAttachToWindow = true;
-        RenderStats.waitIfWaitEGLTaskExceed();
         super.onAttachedToWindow();
         FlingControl.setParentMaxFling(this);
     }
@@ -162,7 +161,6 @@ public class RenderFrameView extends TextureView implements  TextureView.Surface
     @Override
     protected void onDetachedFromWindow() {
         hasAttachToWindow = false;
-        RenderStats.waitIfWaitEGLTaskExceed();
         super.onDetachedFromWindow();
     }
 

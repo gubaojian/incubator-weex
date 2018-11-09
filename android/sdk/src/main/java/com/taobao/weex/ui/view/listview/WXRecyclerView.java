@@ -28,6 +28,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.common.WXThread;
@@ -52,7 +53,7 @@ public class WXRecyclerView extends RecyclerView implements WXGestureObservable,
 
   public WXRecyclerView(Context context) {
     super(context);
-    maxFlingVelocity = getMaxFlingVelocity()/2;
+    maxFlingVelocity = FlingControl.getLimitMaxFlingVelocity(getMaxFlingVelocity());
   }
 
   public boolean isScrollable() {
@@ -160,21 +161,23 @@ public class WXRecyclerView extends RecyclerView implements WXGestureObservable,
   }
 
 
+  @Override
   public boolean fling(int velocityX, int velocityY) {
-    if(maxFlingVelocityEnabled){
+    if(maxFlingVelocityEnabled && maxFlingVelocity > 0){
          velocityY = FlingControl.getVelocity(velocityY, maxFlingVelocity);
          velocityX = FlingControl.getVelocity(velocityX, maxFlingVelocity);
     }
     return super.fling(velocityX, velocityY);
   }
 
+  public void setMaxFlingVelocityFactor(float factor){
+    maxFlingVelocity = (int) (ViewConfiguration.get(getContext()).getScaledMaximumFlingVelocity()*factor);
+  }
+
+
 
   @Override
   public void setMaxFlingVelocityEnabled(boolean enabled) {
        maxFlingVelocityEnabled = true;
-  }
-
-  public void setMaxFlingVelocity(int maxFlingVelocity) {
-    this.maxFlingVelocity = maxFlingVelocity;
   }
 }

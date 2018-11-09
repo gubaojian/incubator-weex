@@ -18,7 +18,8 @@
  */
 package com.taobao.weex.render.manager;
 
-import android.util.Log;
+import android.app.Activity;
+import android.content.Context;
 
 import com.taobao.weex.render.log.RenderLog;
 
@@ -27,58 +28,58 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class RenderStats {
 
 
-    public static int MAX_DETTACH_NUM_ON_SECOND = 10;
 
     private static AtomicInteger elgNum = new AtomicInteger(0);
-    private static volatile AtomicInteger currentWaitEglTaskNum = new AtomicInteger(0);
-    private static final int MAX_WAIT_EGL_TASK_NUM = 8;
 
     public static AtomicInteger getElgNum(){
         return elgNum;
-    }
-
-    public static AtomicInteger getCurrentWaitEglTaskNum(){
-        return currentWaitEglTaskNum;
-    }
-
-    public static void waitIfWaitEGLTaskExceed(){
-        showRenderStats();
-        int maxTimes = currentWaitEglTaskNum.get();
-        while (currentWaitEglTaskNum.get() >= MAX_WAIT_EGL_TASK_NUM && maxTimes > 0){
-            try {
-                Thread.sleep(4);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            maxTimes--;
-        }
     }
 
     public static void showRenderStats() {
         if(RenderLog.isDebugLogEnabled()){
             RenderLog.debug("RenderStats stats frameNum "
                             + RenderManager.getInstance().getRenderFrameMap().size()
-                            + " waitNum " + currentWaitEglTaskNum.get()
+                            + " dettach num " + periodDettachNum
                             + " eglNum " + elgNum.get());
         }
     }
 
-    public static int getCountDettachNum() {
-        return dettachNum;
+    public static int getPeriodDettachNum() {
+        return periodDettachNum;
 
     }
-    public static void countDettachNum() {
-        if((System.currentTimeMillis() - lastDettachCountTime) > 1500){
+    public static void countPeriodDettachNum(Context context) {
+        if(context instanceof Activity){
+            Activity activity = (Activity) context;
+            if(activity.isFinishing()){
+                periodDettachNum = 0;
+                return;
+            }
+        }
+        if((System.currentTimeMillis() - lastDettachCountTime) > DETTACH_COUNT_PERIOD_TIME){
             lastDettachCountTime = System.currentTimeMillis();
-            dettachNum = 1;
+            periodDettachNum = 1;
         }else{
-            dettachNum++;
+            periodDettachNum++;
+            if(periodDettachNum > MAX_DETTACH_NUM_ONE_PERIOD){
+                if(sleepTime > 0){
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
         if(RenderLog.isDebugLogEnabled()){
-            RenderLog.debug("RenderStats dettach num " + dettachNum);
+            RenderLog.debug("RenderStats second dettach num " + periodDettachNum);
         }
     }
 
+    private static int periodDettachNum;
     private static long lastDettachCountTime;
-    private static int dettachNum;
+    private static long DETTACH_COUNT_PERIOD_TIME = 1500;
+    public static int MAX_DETTACH_NUM_ONE_PERIOD = 10;
+
+    public static long sleepTime = 0;
 }

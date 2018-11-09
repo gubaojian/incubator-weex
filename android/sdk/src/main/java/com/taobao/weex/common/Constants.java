@@ -247,6 +247,8 @@ public class Constants {
     String NEST_SCROLLING_ENABLED = "nestedScrollingEnabled";
 
     String ORIENTATION  = "orientation";
+
+    String MAX_FLING_FACTOR = "flingfactor";
   }
 
   public interface Value {

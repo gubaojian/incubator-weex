@@ -58,7 +58,6 @@ public class RenderFrameRender{
     }
 
     public void dettachSurfaceTexture(SurfaceTextureHolder surfaceTextureHolder){
-        RenderStats.countDettachNum();
         DettachEGLAction dettachEGLAction = new DettachEGLAction(mRenderFrame, this);
         gpuHandler.post(dettachEGLAction);
         dettachEGLAction.waitComplete();

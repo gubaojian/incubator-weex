@@ -30,6 +30,14 @@ import java.lang.reflect.Field;
 public class FlingControl {
 
 
+
+    /**
+     * limit
+     * */
+    public static int getLimitMaxFlingVelocity(int maxFlingVelocity){
+        return (int) (maxFlingVelocity*mLimitFactor);
+    }
+
     /**
      * return velocity between[-maxFlingVelocity, maxFlingVelocity]
      * */
@@ -82,7 +90,7 @@ public class FlingControl {
         try{
             Field field = RecyclerView.class.getDeclaredField("mMaxFlingVelocity");
             field.setAccessible(true);
-            int velocity = mMaxFlingVelocityForRecyclerView/2;
+            int velocity = (int) (mMaxFlingVelocityForRecyclerView* mMaxFactor);
             if(velocity > 0){
                 field.setInt(recyclerView, velocity);
             }
@@ -98,7 +106,7 @@ public class FlingControl {
             if(mMaxFlingVelocityForScrollView == 0){
                 mMaxFlingVelocityForScrollView = field.getInt(scrollView);
             }
-            int velocity = mMaxFlingVelocityForScrollView /2;
+            int velocity = (int) (mMaxFlingVelocityForScrollView* mMaxFactor);
             if(velocity > 0){
                 field.setInt(scrollView, velocity);
             }
@@ -113,7 +121,7 @@ public class FlingControl {
             if(mMaxFlingVelocityForHScrollView == 0){
                 mMaxFlingVelocityForHScrollView = field.getInt(scrollView);
             }
-            int velocity = mMaxFlingVelocityForHScrollView/2;
+            int velocity = (int) (mMaxFlingVelocityForHScrollView* mMaxFactor);
             if(velocity > 0){
                 field.setInt(scrollView, velocity);
             }
@@ -126,7 +134,7 @@ public class FlingControl {
             if(mMaxFlingVelocityForAbsList == 0){
                 mMaxFlingVelocityForAbsList = field.getInt(listView);
             }
-            int velocity = mMaxFlingVelocityForAbsList/2;
+            int velocity = (int)(mMaxFlingVelocityForAbsList* mMaxFactor);
             if(velocity > 0){
                 field.setInt(listView, velocity);
             }
@@ -137,4 +145,6 @@ public class FlingControl {
     private static int mMaxFlingVelocityForScrollView = 0;
     private static int mMaxFlingVelocityForHScrollView = 0;
     private static int mMaxFlingVelocityForAbsList = 0;
+    private static float mMaxFactor = 0.53f;
+    private static float mLimitFactor = 0.45f;
 }
