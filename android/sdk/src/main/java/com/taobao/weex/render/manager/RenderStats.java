@@ -56,8 +56,7 @@ public class RenderStats {
 
     public static void showRenderStats() {
         if(RenderLog.isDebugLogEnabled()){
-            Log.e(RenderLog.RENDER_LOG_TAG,
-                    "EGLControl stats frameNum "
+            RenderLog.debug("RenderStats stats frameNum "
                             + RenderManager.getInstance().getRenderFrameMap().size()
                             + " waitNum " + currentWaitEglTaskNum.get()
                             + " eglNum " + elgNum.get());
@@ -74,6 +73,9 @@ public class RenderStats {
             dettachNum = 1;
         }else{
             dettachNum++;
+        }
+        if(RenderLog.isDebugLogEnabled()){
+            RenderLog.debug("RenderStats dettach num " + dettachNum);
         }
     }
 

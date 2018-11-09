@@ -38,7 +38,7 @@ public class DettachEGLAction extends EGLAction {
         this.surfaceTextureHolder = renderFrameRender.getSurfaceTextureHolder();
         RenderStats.getCurrentWaitEglTaskNum().incrementAndGet();
         if(RenderStats.getCountDettachNum() > RenderStats.MAX_DETTACH_NUM_ON_SECOND){
-            countDownLatch = new CountDownLatch(1);
+            ///countDownLatch = new CountDownLatch(1);
         }
     }
 
