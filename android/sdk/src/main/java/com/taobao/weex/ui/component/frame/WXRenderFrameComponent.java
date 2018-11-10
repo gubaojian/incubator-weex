@@ -138,12 +138,7 @@ public class WXRenderFrameComponent extends WXVContainer<ViewGroup> implements O
     }
 
     public void actionUpdateStyles(String ref, Map<String, Object> styles){
-        Map<String, String> stylesStrs = new HashMap<>();
-        Set<Map.Entry<String, Object>> entries = styles.entrySet();
-        for(Map.Entry<String, Object> entry : entries){
-            stylesStrs.put(entry.getKey(), entry.getValue().toString());
-        }
-        renderFrame.actionUpdateStyles(ref, stylesStrs);
+        renderFrame.actionUpdateStyles(ref, toMap(styles));
     }
 
     public void actionUpdateAttrs(String ref, Map<String, String> attrs){
