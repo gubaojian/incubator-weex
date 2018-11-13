@@ -35,7 +35,7 @@ public class RenderLog {
 
     public static final String RENDER_LOG_TAG  = "RenderLog";
 
-    private static boolean isDebugLogEnabled = false;
+    private static boolean isDebugLogEnabled = true;
     private static boolean isErrorLogEnabled = true;
     private static  boolean isRenderLogEnabled = false;
 
