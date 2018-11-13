@@ -78,7 +78,11 @@ public class FlingControl {
                 setAbsListViewMaxFlingVelocity((AbsListView) parent);
                 break;
             }
-            parent = (View) parent.getParent();
+            if(parent.getParent() instanceof View){
+                parent = (View) parent.getParent();
+            }else{
+                break;
+            }
         }
     }
 
