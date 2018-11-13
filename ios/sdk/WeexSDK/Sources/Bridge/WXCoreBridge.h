@@ -123,6 +123,7 @@ namespace WeexCore
         }
         
         void OnReceivedResult(long callback_id, std::unique_ptr<WeexJSResult>& result) override {};
+
     };
     
     class WXCoreMeasureFunctionBridge : public MeasureFunctionAdapter
