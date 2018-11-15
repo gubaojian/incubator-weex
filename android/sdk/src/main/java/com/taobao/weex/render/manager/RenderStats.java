@@ -89,6 +89,6 @@ public class RenderStats {
     private static int periodDettachNum;
     private static long lastDettachCountTime;
     private static long DETTACH_COUNT_PERIOD_TIME = 1600;
-    public static int MAX_DETTACH_NUM_ONE_PERIOD = 16;
-    public static long sleepTime = 2;
+    public static int MAX_DETTACH_NUM_ONE_PERIOD = 12;
+    public static long sleepTime = 4;
 }
