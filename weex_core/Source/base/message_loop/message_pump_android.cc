@@ -52,7 +52,7 @@ void MessagePumpAndroid::Run(Delegate* delegate) {
 
 void MessagePumpAndroid::Stop() {
   JNIEnv* env = ::base::android::AttachCurrentThread();
-  if(env == nullptr) {
+  if(!env || !jni_object()) {
     return;
   }
   Java_SystemMessageHandler_stop(env, jni_object());
@@ -60,7 +60,7 @@ void MessagePumpAndroid::Stop() {
 
 void MessagePumpAndroid::ScheduleWork() {
   JNIEnv* env = ::base::android::AttachCurrentThread();
-  if(env == nullptr) {
+  if(!env || !jni_object()) {
     return;
   }
   Java_SystemMessageHandler_scheduleWork(env, jni_object());
@@ -68,7 +68,7 @@ void MessagePumpAndroid::ScheduleWork() {
 
 void MessagePumpAndroid::ScheduleDelayedWork(TimeUnit delayed_time) {
   JNIEnv* env = ::base::android::AttachCurrentThread();
-  if(env == nullptr) {
+  if(!env || !jni_object()) {
     return;
   }
   Java_SystemMessageHandler_scheduleDelayedWork(env, jni_object(),
