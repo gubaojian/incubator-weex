@@ -700,7 +700,7 @@ namespace WeexCore {
        }
     }
 
-    inline void removeChild(const WXCoreLayoutNode* const child) {
+   virtual void removeChild(const WXCoreLayoutNode* const child) {
       for (int index = 0; index < mChildList.size(); index++) {
         if (child == mChildList[index]) {
           mChildList.erase(mChildList.begin() + index);
@@ -716,7 +716,7 @@ namespace WeexCore {
     }
 
 
-    inline void addChildAt(WXCoreLayoutNode* const child, Index index) {
+    virtual void addChildAt(WXCoreLayoutNode* const child, Index index) {
       mChildList.insert(mChildList.begin() + index, child);
       child->mParent = this;
       markDirty();

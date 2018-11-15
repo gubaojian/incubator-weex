@@ -54,13 +54,22 @@ namespace WeexCore {
             for (auto it = this->frameChilds.begin();
                  it != this->frameChilds.end(); ++it) {
                 RenderObject *child = *it;
-                if (child) {
+                if (child != nullptr) {
                     delete child;
                     child = nullptr;
                 }
             }
             this->frameChilds.clear();
         }
+    }
+
+
+    void RenderFrame::removeChild(const WeexCore::WXCoreLayoutNode *const child) {
+        frameChilds.erase(std::remove(frameChilds.begin(), frameChilds.end(), child), frameChilds.end());
+    }
+
+    void RenderFrame::addChildAt(WeexCore::WXCoreLayoutNode *const child, WeexCore::Index index) {
+        AddRenderObject(index, (RenderObject *) child);
     }
 
     int RenderFrame::AddRenderObject(int index, RenderObject *child){

@@ -41,7 +41,10 @@ namespace WeexCore {
 
     public:
         ~RenderFrame();
-        int AddRenderObject(int index, RenderObject *child);
+
+        virtual void removeChild(const WXCoreLayoutNode* const child) override;
+        virtual void addChildAt(WXCoreLayoutNode* const child, Index index) override;
+        virtual int AddRenderObject(int index, RenderObject *child) override;
         RenderObject *GetChild(const Index &index);
         void RemoveRenderObject(RenderObject *child);
 
