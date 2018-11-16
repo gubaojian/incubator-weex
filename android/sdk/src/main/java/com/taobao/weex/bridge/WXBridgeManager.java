@@ -2232,7 +2232,8 @@ public class WXBridgeManager implements Callback, BactchExecutor {
       exception +=   "\n getTemplateInfo==" +instance.getTemplateInfo();//add network header info
       if (METHOD_CREATE_INSTANCE.equals(function) || !instance.isContentMd5Match()) {
         try {
-          if (isJSFrameworkInit() && reInitCount > 1 && !instance.isNeedReLoad()) {
+          // Just to be safe, only when 1 < reInitCount < 10 , allow instance to reload.
+          if (isJSFrameworkInit() && (reInitCount > 1 && reInitCount < 10) && !instance.isNeedReLoad()) {
             new ActionReloadPage(instanceId, true).executeAction();
             instance.setNeedLoad(true);
             return;
