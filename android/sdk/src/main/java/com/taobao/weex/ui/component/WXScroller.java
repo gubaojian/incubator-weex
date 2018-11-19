@@ -96,6 +96,7 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
   private int pageSize = 0;
   private boolean pageEnable = false;
   private boolean mIsHostAttachedToWindow = false;
+  private View.OnAttachStateChangeListener mOnAttachStateChangeListener;
 
   public static class Creator implements ComponentCreator {
     @Override
@@ -372,6 +373,9 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
     if (mStickyMap != null) {
       mStickyMap.clear();
     }
+    if (mOnAttachStateChangeListener != null && getInnerView() != null) {
+      getInnerView().removeOnAttachStateChangeListener(mOnAttachStateChangeListener);
+    }
     if (getInnerView() != null && getInnerView() instanceof IWXScroller) {
       ((IWXScroller) getInnerView()).destroy();
     }
@@ -537,7 +541,7 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
         }
       }
     });
-    host.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+    mOnAttachStateChangeListener = new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
         mIsHostAttachedToWindow = true;
@@ -549,7 +553,8 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
         mIsHostAttachedToWindow = false;
         dispatchDisappearEvent();
       }
-    });
+    };
+    host.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
     return host;
   }
 
