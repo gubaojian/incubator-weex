@@ -24,6 +24,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
@@ -74,6 +75,7 @@ import com.taobao.weex.utils.WXResourceUtils;
 import com.taobao.weex.utils.WXUtils;
 import com.taobao.weex.utils.WXViewUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -572,7 +574,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         return;
       }
       final WXRecyclerView view = bounceRecyclerView.getInnerView();
-      view.scrollTo(smooth, pos, offset, getOrientation());
+      //view.scrollTo(smooth, pos, offset, getOrientation());
     }
   }
 
@@ -706,6 +708,8 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     if (child == null || index < -1) {
       return;
     }
+    Parcelable parcelable =  getHostView().getInnerView().getLayoutManager().onSaveInstanceState();
+
     int count = mChildren.size();
     index = index >= count ? -1 : index;
     bindViewType(child);
@@ -784,6 +788,15 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       }
     }
     relocateAppearanceHelper();
+
+    try{
+      Field field =  parcelable.getClass().getDeclaredField("mAnchorPosition");
+      field.setAccessible(true);
+      int value = field.getInt(parcelable);
+      field.setInt(parcelable, value + 1);
+    }catch (Exception e){}
+    getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
+
   }
 
   private void relocateAppearanceHelper() {
