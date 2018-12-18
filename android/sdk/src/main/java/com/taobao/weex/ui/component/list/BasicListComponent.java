@@ -123,6 +123,9 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   private Point mLastReport = new Point(-1, -1);
   private boolean mHasAddScrollEvent = false;
 
+  private boolean mUsingAnchor = false;
+  private  int mAnchorOffset = 0;
+
   private RecyclerView.ItemAnimator mItemAnimator;
 
   private DragHelper mDragHelper;
@@ -573,8 +576,13 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         //Invalid position
         return;
       }
-      final WXRecyclerView view = bounceRecyclerView.getInnerView();
-      //view.scrollTo(smooth, pos, offset, getOrientation());
+      this.mUsingAnchor = WXUtils.getBoolean(options.get("usingAnchor"), false);
+      if (!this.mUsingAnchor) {
+        final WXRecyclerView view = bounceRecyclerView.getInnerView();
+        view.scrollTo(smooth, pos, offset, getOrientation());
+      } else {
+        this.mAnchorOffset = offset;
+      }
     }
   }
 
@@ -708,7 +716,10 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     if (child == null || index < -1) {
       return;
     }
-    Parcelable parcelable =  getHostView().getInnerView().getLayoutManager().onSaveInstanceState();
+    Parcelable parcelable = null;
+    if (this.mUsingAnchor) {
+       parcelable = getHostView().getInnerView().getLayoutManager().onSaveInstanceState();
+    }
 
     int count = mChildren.size();
     index = index >= count ? -1 : index;
@@ -788,14 +799,26 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       }
     }
     relocateAppearanceHelper();
+    if (this.mUsingAnchor) {
+      try {
+        Field field = parcelable.getClass().getDeclaredField("mAnchorPosition");
+        field.setAccessible(true);
+        int value = field.getInt(parcelable);
+        field.setInt(parcelable, value + 1);
+      } catch (Exception e) {
+      }
+      try {
+        Field field = parcelable.getClass().getDeclaredField("mAnchorOffset");
+        field.setAccessible(true);
+        int value = field.getInt(parcelable);
+        field.setInt(parcelable, this.mAnchorOffset);
+      }catch (Exception e) {
 
-    try{
-      Field field =  parcelable.getClass().getDeclaredField("mAnchorPosition");
-      field.setAccessible(true);
-      int value = field.getInt(parcelable);
-      field.setInt(parcelable, value + 1);
-    }catch (Exception e){}
-    getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
+      }
+      getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
+
+      this.mAnchorOffset = 0;
+    }
 
   }
 
