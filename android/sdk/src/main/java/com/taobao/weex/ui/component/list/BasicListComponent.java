@@ -795,6 +795,13 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       int value = field.getInt(parcelable);
       field.setInt(parcelable, value + 1);
     }catch (Exception e){}
+
+    try{
+      Field field =  parcelable.getClass().getDeclaredField("mAnchorOffset");
+      field.setAccessible(true);
+      int value = field.getInt(parcelable);
+      field.setInt(parcelable, value);
+    }catch (Exception e){}
     getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
 
   }
