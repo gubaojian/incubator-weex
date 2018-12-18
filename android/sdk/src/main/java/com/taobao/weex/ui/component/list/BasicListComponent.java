@@ -319,6 +319,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       boolean hasFixedSize = WXUtils.getBoolean(getAttrs().get(Constants.Name.HAS_FIXED_SIZE), false);
       bounceRecyclerView.getInnerView().setHasFixedSize(hasFixedSize);
     }
+    this.mUsingAnchor = WXUtils.getBoolean(getAttrs().get("usingAnchor"), false);
 
     bounceRecyclerView.getInnerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override
@@ -438,6 +439,9 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         if (result != null)
           setShowScrollbar(result);
         return true;
+      case "usingAnchor":
+          this.mUsingAnchor = WXUtils.getBoolean(param, false);
+          return true;
     }
     return super.setProperty(key, param);
   }
@@ -576,7 +580,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         //Invalid position
         return;
       }
-      this.mUsingAnchor = WXUtils.getBoolean(options.get("usingAnchor"), false);
       if (!this.mUsingAnchor) {
         final WXRecyclerView view = bounceRecyclerView.getInnerView();
         view.scrollTo(smooth, pos, offset, getOrientation());
