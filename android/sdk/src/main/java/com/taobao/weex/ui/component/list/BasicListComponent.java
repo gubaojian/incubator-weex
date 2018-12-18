@@ -818,8 +818,20 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
 
       this.mAnchorOffset = 0;
-    }
+      try{
+        Field field =  parcelable.getClass().getDeclaredField("mAnchorPosition");
+        field.setAccessible(true);
+        int value = field.getInt(parcelable);
+        field.setInt(parcelable, value + 1);
+      }catch (Exception e){}
 
+    try{
+      Field field =  parcelable.getClass().getDeclaredField("mAnchorOffset");
+      field.setAccessible(true);
+      int value = field.getInt(parcelable);
+      field.setInt(parcelable, value);
+    }catch (Exception e){}
+    getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
   }
 
   private void relocateAppearanceHelper() {
