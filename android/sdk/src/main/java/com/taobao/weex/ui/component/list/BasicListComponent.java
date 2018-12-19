@@ -320,6 +320,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       bounceRecyclerView.getInnerView().setHasFixedSize(hasFixedSize);
     }
     this.mUsingAnchor = WXUtils.getBoolean(getAttrs().get("usingAnchor"), false);
+    this.mAnchorOffset = WXUtils.getInt(getAttrs().get("offset"));
 
     bounceRecyclerView.getInnerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override
@@ -442,6 +443,9 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       case "usingAnchor":
           this.mUsingAnchor = WXUtils.getBoolean(param, false);
           return true;
+      case "offset":
+        this.mAnchorOffset = WXUtils.getInt(getAttrs().get("offset"));
+        return true;
     }
     return super.setProperty(key, param);
   }
@@ -819,8 +823,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
       }
       getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
-
-      this.mAnchorOffset = 0;
     }
   }
 
