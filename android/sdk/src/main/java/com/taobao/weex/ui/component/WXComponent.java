@@ -452,7 +452,7 @@ public abstract class WXComponent<T extends View> extends WXBasicComponent imple
   }
 
   public String getAttrByKey(String key) {
-    return "default";
+    return WXUtils.getString(getAttrs().get(key),"");
   }
 
   //Holding the animation bean when component is uninitialized
