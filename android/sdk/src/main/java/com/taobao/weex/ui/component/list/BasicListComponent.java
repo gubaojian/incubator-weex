@@ -91,6 +91,10 @@ import java.util.regex.Pattern;
 
 public abstract class BasicListComponent<T extends ViewGroup & ListComponentView> extends WXVContainer<T> implements
     IRecyclerAdapterListener<ListBaseViewHolder>, IOnLoadMoreListener, Scrollable {
+
+
+  private static final String KEEP_ARCHOR = "keepArchor";
+
   public static final String TRANSFORM = "transform";
   public static final String LOADMOREOFFSET = "loadmoreoffset";
   private String TAG = "BasicListComponent";
@@ -122,9 +126,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
   private int mOffsetAccuracy = 10;
   private Point mLastReport = new Point(-1, -1);
   private boolean mHasAddScrollEvent = false;
-
-  private boolean mUsingAnchor = false;
-  private  int mAnchorOffset = 0;
 
   private RecyclerView.ItemAnimator mItemAnimator;
 
@@ -319,8 +320,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       boolean hasFixedSize = WXUtils.getBoolean(getAttrs().get(Constants.Name.HAS_FIXED_SIZE), false);
       bounceRecyclerView.getInnerView().setHasFixedSize(hasFixedSize);
     }
-    this.mUsingAnchor = WXUtils.getBoolean(getAttrs().get("usingAnchor"), false);
-    this.mAnchorOffset = WXUtils.getInt(getAttrs().get("offset"));
 
     bounceRecyclerView.getInnerView().addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override
@@ -439,12 +438,6 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         Boolean result = WXUtils.getBoolean(param,null);
         if (result != null)
           setShowScrollbar(result);
-        return true;
-      case "usingAnchor":
-          this.mUsingAnchor = WXUtils.getBoolean(param, false);
-          return true;
-      case "offset":
-        this.mAnchorOffset = WXUtils.getInt(getAttrs().get("offset"));
         return true;
     }
     return super.setProperty(key, param);
@@ -584,12 +577,8 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
         //Invalid position
         return;
       }
-      if (!this.mUsingAnchor) {
-        final WXRecyclerView view = bounceRecyclerView.getInnerView();
-        view.scrollTo(smooth, pos, offset, getOrientation());
-      } else {
-        this.mAnchorOffset = offset;
-      }
+      final WXRecyclerView view = bounceRecyclerView.getInnerView();
+      view.scrollTo(smooth, pos, offset, getOrientation());
     }
   }
 
@@ -723,9 +712,12 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
     if (child == null || index < -1) {
       return;
     }
-    Parcelable parcelable = null;
-    if (this.mUsingAnchor) {
-       parcelable = getHostView().getInnerView().getLayoutManager().onSaveInstanceState();
+
+    Parcelable archorStateParcelable =  null;
+
+    String keepArchor = child.getAttrByKey(KEEP_ARCHOR);
+    if(!TextUtils.isEmpty(keepArchor)){
+       archorStateParcelable = getHostView().getInnerView().getLayoutManager().onSaveInstanceState();
     }
 
     int count = mChildren.size();
@@ -806,24 +798,31 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       }
     }
     relocateAppearanceHelper();
-    if (this.mUsingAnchor) {
-      try {
-        Field field = parcelable.getClass().getDeclaredField("mAnchorPosition");
-        field.setAccessible(true);
-        int value = field.getInt(parcelable);
-        field.setInt(parcelable, value + 1);
-      } catch (Exception e) {
-      }
-      try {
-        Field field = parcelable.getClass().getDeclaredField("mAnchorOffset");
-        field.setAccessible(true);
-        int value = field.getInt(parcelable);
-        field.setInt(parcelable, this.mAnchorOffset);
-      } catch (Exception e) {
 
-      }
-      getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(parcelable);
+    if(archorStateParcelable != null){
+      try{
+        String anchorPosition = child.getAttrByKey("anchorPosition");
+        Field field =  archorStateParcelable.getClass().getDeclaredField("mAnchorPosition");
+        field.setAccessible(true);
+        int value = field.getInt(archorStateParcelable);
+        if(TextUtils.isEmpty(anchorPosition)){
+          field.setInt(archorStateParcelable, value + 1);
+        }else{
+          field.setInt(archorStateParcelable, WXUtils.getInteger(anchorPosition, value));
+        }
+      }catch (Exception e){}
+
+      try{
+        String anchorOffset = child.getAttrByKey("anchorOffset");
+        if(!TextUtils.isEmpty(anchorOffset)){
+          Field field =  archorStateParcelable.getClass().getDeclaredField("mAnchorOffset");
+          field.setAccessible(true);
+          field.setInt(archorStateParcelable, (int)WXViewUtils.getRealPxByWidth(WXUtils.getFloat(anchorOffset), getViewPortWidth()));
+        }
+      }catch (Exception e){}
+      getHostView().getInnerView().getLayoutManager().onRestoreInstanceState(archorStateParcelable);
     }
+
   }
 
   private void relocateAppearanceHelper() {
