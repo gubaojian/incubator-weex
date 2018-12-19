@@ -715,7 +715,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
     Parcelable archorStateParcelable =  null;
 
-    String keepArchor = child.getAttrByKey(KEEP_ARCHOR);
+    String keepArchor = WXUtils.getString(child.getAttrs().get(KEEP_ARCHOR),"");
     if(!TextUtils.isEmpty(keepArchor)){
        archorStateParcelable = getHostView().getInnerView().getLayoutManager().onSaveInstanceState();
     }
@@ -801,7 +801,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
 
     if(archorStateParcelable != null){
       try{
-        String anchorPosition = child.getAttrByKey("anchorPosition");
+        String anchorPosition = WXUtils.getString(child.getAttrs().get("anchorPosition"), "");
         Field field =  archorStateParcelable.getClass().getDeclaredField("mAnchorPosition");
         field.setAccessible(true);
         int value = field.getInt(archorStateParcelable);
@@ -813,7 +813,7 @@ public abstract class BasicListComponent<T extends ViewGroup & ListComponentView
       }catch (Exception e){}
 
       try{
-        String anchorOffset = child.getAttrByKey("anchorOffset");
+        String anchorOffset = WXUtils.getString(child.getAttrs().get("anchorOffset"),"");
         if(!TextUtils.isEmpty(anchorOffset)){
           Field field =  archorStateParcelable.getClass().getDeclaredField("mAnchorOffset");
           field.setAccessible(true);
