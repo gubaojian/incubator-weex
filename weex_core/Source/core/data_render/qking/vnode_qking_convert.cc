@@ -197,22 +197,6 @@ bool string_from_qking_set_assembly_code(qking_executor_t executor, uint8_t *cod
     return success;
 }
 
-#ifndef CONFIG_DISABLE_COMPILER_BUILTIN
-
-bool string_from_qking_set_compile_code(qking_executor_t executor, const char *pstr, std::string &error)
-{
-    qking_value_t error_var = qking_create_undefined();
-    bool success = qking_set_compile_code(executor, pstr, &error_var);
-    if (!success) {
-        error = string_from_qking_string_value(error_var);
-        qking_release_value(error_var);
-    }
-    return success;
-}
-
-#endif
-
-
 #ifdef DEBUG
 std::string qking_value_print(const qking_value_t value) {
     qking_value_t string = qking_value_debug_print(value);

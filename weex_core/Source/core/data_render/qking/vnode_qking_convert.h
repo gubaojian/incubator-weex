@@ -44,12 +44,6 @@ std::string string_from_qking_error(const qking_value_t err);
 bool string_from_qking_execute_code(qking_executor_t executor, std::string &error);
     
 bool string_from_qking_set_assembly_code(qking_executor_t executor, uint8_t *code, size_t size, std::string &error);
-
-#ifndef CONFIG_DISABLE_COMPILER_BUILTIN
-    
-bool string_from_qking_set_compile_code(qking_executor_t executor, const char *pcstr, std::string &error);
-    
-#endif
     
 #ifdef DEBUG
 std::string qking_value_print(const qking_value_t value);
