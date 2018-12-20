@@ -330,11 +330,11 @@
 		98399A9621916A9800D83CCE /* class_function.h in Headers */ = {isa = PBXBuildFile; fileRef = 98399A8921916A9800D83CCE /* class_function.h */; };
 		98399A9721916A9800D83CCE /* op_code.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98399A8A21916A9800D83CCE /* op_code.cc */; };
 		98ABF28E21CA50B800062F1C /* qking.h in Headers */ = {isa = PBXBuildFile; fileRef = 98ABF28D21CA50B800062F1C /* qking.h */; };
-		98ABF29321CA5E7300062F1C /* Qking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98ABF29221CA5E7300062F1C /* Qking.framework */; };
 		98B69EF721CA295F00E03B77 /* vnode_qking_convert.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98B69EF321CA295F00E03B77 /* vnode_qking_convert.cc */; };
 		98B69EF821CA295F00E03B77 /* vnode_qking_env.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98B69EF421CA295F00E03B77 /* vnode_qking_env.cc */; };
 		98B69EF921CA295F00E03B77 /* vnode_qking_env.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B69EF521CA295F00E03B77 /* vnode_qking_env.h */; };
 		98B69EFA21CA295F00E03B77 /* vnode_qking_convert.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B69EF621CA295F00E03B77 /* vnode_qking_convert.h */; };
+		98CB53AC21CBC8F800929CC6 /* Qking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CB53AB21CBC8F800929CC6 /* Qking.framework */; };
 		9B9E74791FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9E74781FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m */; };
 		B82A159820F8556F0098A509 /* WXSDKInstance_performance.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B1221F2090AA9300387E33 /* WXSDKInstance_performance.m */; };
 		B82A159920F857200098A509 /* WXSDKError.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B122242090AAB000387E33 /* WXSDKError.m */; };
@@ -1332,11 +1332,11 @@
 		98399A8921916A9800D83CCE /* class_function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = class_function.h; sourceTree = "<group>"; };
 		98399A8A21916A9800D83CCE /* op_code.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = op_code.cc; sourceTree = "<group>"; };
 		98ABF28D21CA50B800062F1C /* qking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking.h; sourceTree = "<group>"; };
-		98ABF29221CA5E7300062F1C /* Qking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Qking.framework; sourceTree = "<group>"; };
 		98B69EF321CA295F00E03B77 /* vnode_qking_convert.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vnode_qking_convert.cc; sourceTree = "<group>"; };
 		98B69EF421CA295F00E03B77 /* vnode_qking_env.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vnode_qking_env.cc; sourceTree = "<group>"; };
 		98B69EF521CA295F00E03B77 /* vnode_qking_env.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vnode_qking_env.h; sourceTree = "<group>"; };
 		98B69EF621CA295F00E03B77 /* vnode_qking_convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vnode_qking_convert.h; sourceTree = "<group>"; };
+		98CB53AB21CBC8F800929CC6 /* Qking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Qking.framework; sourceTree = "<group>"; };
 		9B9E74771FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXTestBridgeMethodDummy.h; sourceTree = "<group>"; };
 		9B9E74781FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXTestBridgeMethodDummy.m; sourceTree = "<group>"; };
 		B8394F3521468AF100CA1EFF /* render_action_trigger_vsync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render_action_trigger_vsync.h; sourceTree = "<group>"; };
@@ -1625,7 +1625,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98ABF29321CA5E7300062F1C /* Qking.framework in Frameworks */,
+				98CB53AC21CBC8F800929CC6 /* Qking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2258,7 +2258,7 @@
 		98B69EF221CA295F00E03B77 /* qking */ = {
 			isa = PBXGroup;
 			children = (
-				98ABF29221CA5E7300062F1C /* Qking.framework */,
+				98CB53AB21CBC8F800929CC6 /* Qking.framework */,
 				98B69EF321CA295F00E03B77 /* vnode_qking_convert.cc */,
 				98B69EF421CA295F00E03B77 /* vnode_qking_env.cc */,
 				98B69EF521CA295F00E03B77 /* vnode_qking_env.h */,
