@@ -16,7 +16,7 @@
 #ifndef QKING_CORE_H
 #define QKING_CORE_H
 
-#include "include/qking.h"
+#include "qking/include/qking.h"
 #include "qking_compiler.h"
 
 #ifdef __cplusplus

@@ -1,6 +1,6 @@
 #include "stdlib.h"
 #include "handler/handler.h"
-#include "include/qking.h"
+#include "qking/include/qking.h"
 #include "base/common_logger.h"
 #include "core/include/qking_core.h"
 #include "core/jcontext/jcontext.h"

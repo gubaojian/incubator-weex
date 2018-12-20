@@ -14,7 +14,7 @@
  */
 
 #include "core/include/qking_core.h"
-#include "include/qking.h"
+#include "qking/include/qking.h"
 #include "ecma_array_object.h"
 #include "ecma_compiled_code.h"
 

@@ -21,7 +21,7 @@
 #define CORE_DATA_RENDER_VNODE_QKING_CONVERT_H
 
 #include <string>
-#include "include/qking.h"
+#include "qking/include/qking.h"
 
 namespace weex {
 namespace core {
