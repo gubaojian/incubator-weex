@@ -230,7 +230,7 @@ public class WXImage extends WXComponent<ImageView> {
       return;
     }
 
-    if(image != null){
+    if(image != null && !TextUtils.equals(mSrc, src)){
       if(image.getDrawable() != null){
         image.setImageDrawable(null);
       }
