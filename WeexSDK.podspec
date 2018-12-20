@@ -110,7 +110,7 @@ Pod::Spec.new do |s|
   s.ios.vendored_frameworks = 'Frameworks/Qking.framework'
   s.xcconfig = { "OTHER_LINK_FLAG" => '$(inherited) -ObjC' }
   s.pod_target_xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${PODS_ROOT}/WeexSDK/weex_core/Source/ ${PROJECT_DIR}/../../../weex_core/Source ${PROJECT_DIR}/../../../weex_core/Source/qking',
-    'GCC_PREPROCESSOR_DEFINITIONS' => 'OS_IOS=1 QKING_ENABLE_EXTERNAL_CONTEXT QKING_NDEBUG CONFIG_DISABLE_ERROR_BUILTINS' }
+    'GCC_PREPROCESSOR_DEFINITIONS' => 'OS_IOS=1 QKING_ENABLE_EXTERNAL_CONTEXT QKING_NDEBUG' }
 
   s.frameworks = 'CoreMedia','MediaPlayer','AVFoundation','AVKit','JavaScriptCore','GLKit','OpenGLES','CoreText','QuartzCore','CoreGraphics'
   
