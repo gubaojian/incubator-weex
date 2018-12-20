@@ -1,6 +1,0 @@
-framework module Qking {
-  umbrella header "Qking.h"
-
-  export *
-  module * { export * }
-}

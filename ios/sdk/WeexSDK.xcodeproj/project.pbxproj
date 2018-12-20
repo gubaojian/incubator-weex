@@ -334,9 +334,289 @@
 		98B69EF821CA295F00E03B77 /* vnode_qking_env.cc in Sources */ = {isa = PBXBuildFile; fileRef = 98B69EF421CA295F00E03B77 /* vnode_qking_env.cc */; };
 		98B69EF921CA295F00E03B77 /* vnode_qking_env.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B69EF521CA295F00E03B77 /* vnode_qking_env.h */; };
 		98B69EFA21CA295F00E03B77 /* vnode_qking_convert.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B69EF621CA295F00E03B77 /* vnode_qking_convert.h */; };
-		98CB53AC21CBC8F800929CC6 /* Qking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CB53AB21CBC8F800929CC6 /* Qking.framework */; };
-		98CB53AD21CBCD2900929CC6 /* Qking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CB53AB21CBC8F800929CC6 /* Qking.framework */; };
-		98CB53AE21CBCE6600929CC6 /* Qking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CB53AB21CBC8F800929CC6 /* Qking.framework */; };
+		98CB54E221CBD81100929CC6 /* handler-assert.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53B121CBD80F00929CC6 /* handler-assert.c */; };
+		98CB54E321CBD81100929CC6 /* handler-register.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53B221CBD80F00929CC6 /* handler-register.c */; };
+		98CB54E421CBD81100929CC6 /* handler-gc.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53B321CBD80F00929CC6 /* handler-gc.c */; };
+		98CB54E521CBD81100929CC6 /* handler-print.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53B421CBD80F00929CC6 /* handler-print.c */; };
+		98CB54E621CBD81100929CC6 /* handler.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53B521CBD80F00929CC6 /* handler.h */; };
+		98CB54E721CBD81100929CC6 /* jcontext.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53B821CBD80F00929CC6 /* jcontext.c */; };
+		98CB54E821CBD81100929CC6 /* jcontext.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53B921CBD80F00929CC6 /* jcontext.h */; };
+		98CB54E921CBD81100929CC6 /* lit_magic_strings.ini in Resources */ = {isa = PBXBuildFile; fileRef = 98CB53BB21CBD80F00929CC6 /* lit_magic_strings.ini */; };
+		98CB54EA21CBD81100929CC6 /* lit_magic_strings.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53BC21CBD80F00929CC6 /* lit_magic_strings.c */; };
+		98CB54EB21CBD81100929CC6 /* lit_strings.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53BD21CBD80F00929CC6 /* lit_strings.h */; };
+		98CB54EC21CBD81100929CC6 /* lit_unicode_ranges.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53BE21CBD80F00929CC6 /* lit_unicode_ranges.inc.h */; };
+		98CB54ED21CBD81100929CC6 /* lit_magic_strings.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53BF21CBD80F00929CC6 /* lit_magic_strings.inc.h */; };
+		98CB54EE21CBD81100929CC6 /* lit_char_helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53C021CBD80F00929CC6 /* lit_char_helpers.h */; };
+		98CB54EF21CBD81100929CC6 /* lit_strings.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53C121CBD80F00929CC6 /* lit_strings.c */; };
+		98CB54F021CBD81100929CC6 /* lit_magic_strings.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53C221CBD80F00929CC6 /* lit_magic_strings.h */; };
+		98CB54F121CBD81100929CC6 /* lit_unicode_conversions.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53C321CBD80F00929CC6 /* lit_unicode_conversions.inc.h */; };
+		98CB54F221CBD81100929CC6 /* lit_globals.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53C421CBD80F00929CC6 /* lit_globals.h */; };
+		98CB54F321CBD81100929CC6 /* lit_char_helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53C521CBD80F00929CC6 /* lit_char_helpers.c */; };
+		98CB54F421CBD81100929CC6 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53C621CBD80F00929CC6 /* config.h */; };
+		98CB54F521CBD81100929CC6 /* qking_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53C821CBD80F00929CC6 /* qking_internal.h */; };
+		98CB54F621CBD81100929CC6 /* qking_port.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53C921CBD80F00929CC6 /* qking_port.h */; };
+		98CB54F721CBD81100929CC6 /* qking_compiler.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53CA21CBD80F00929CC6 /* qking_compiler.h */; };
+		98CB54F821CBD81100929CC6 /* qking_core.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53CB21CBD80F00929CC6 /* qking_core.h */; };
+		98CB54F921CBD81100929CC6 /* qking_debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53CC21CBD80F00929CC6 /* qking_debugger.h */; };
+		98CB54FA21CBD81100929CC6 /* qking_snapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53CD21CBD80F00929CC6 /* qking_snapshot.h */; };
+		98CB54FB21CBD81100929CC6 /* qking_debugger_transport.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53CE21CBD80F00929CC6 /* qking_debugger_transport.h */; };
+		98CB54FC21CBD81100929CC6 /* re_bytecode.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53D121CBD80F00929CC6 /* re_bytecode.h */; };
+		98CB54FD21CBD81100929CC6 /* re_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53D221CBD80F00929CC6 /* re_parser.c */; };
+		98CB54FE21CBD81100929CC6 /* re_compiler.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53D321CBD80F00929CC6 /* re_compiler.c */; };
+		98CB54FF21CBD81100929CC6 /* re_bytecode.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53D421CBD80F00929CC6 /* re_bytecode.c */; };
+		98CB550021CBD81100929CC6 /* re_compiler.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53D521CBD80F00929CC6 /* re_compiler.h */; };
+		98CB550121CBD81100929CC6 /* re_parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53D621CBD80F00929CC6 /* re_parser.h */; };
+		98CB550221CBD81100929CC6 /* jrt_libc_includes.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53D821CBD80F00929CC6 /* jrt_libc_includes.h */; };
+		98CB550321CBD81100929CC6 /* jrt_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53D921CBD80F00929CC6 /* jrt_types.h */; };
+		98CB550421CBD81100929CC6 /* jrt_bit_fields.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53DA21CBD80F00929CC6 /* jrt_bit_fields.h */; };
+		98CB550521CBD81100929CC6 /* jrt_fatals.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53DB21CBD80F00929CC6 /* jrt_fatals.c */; };
+		98CB550621CBD81100929CC6 /* jrt.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53DC21CBD80F00929CC6 /* jrt.h */; };
+		98CB550721CBD81100929CC6 /* vm_logic_utils_relational_equality.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53DE21CBD80F00929CC6 /* vm_logic_utils_relational_equality.c */; };
+		98CB550821CBD81100929CC6 /* vm_logic_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53DF21CBD80F00929CC6 /* vm_logic_utils.c */; };
+		98CB550921CBD81100929CC6 /* vm.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53E021CBD80F00929CC6 /* vm.c */; };
+		98CB550A21CBD81100929CC6 /* vm_ecma_value_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53E121CBD80F00929CC6 /* vm_ecma_value_helper.c */; };
+		98CB550B21CBD81100929CC6 /* vm_logic_utils_bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53E221CBD80F00929CC6 /* vm_logic_utils_bitwise.c */; };
+		98CB550C21CBD81100929CC6 /* vm_op_code.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53E321CBD80F00929CC6 /* vm_op_code.h */; };
+		98CB550D21CBD81100929CC6 /* vm_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53E421CBD80F00929CC6 /* vm_utils.c */; };
+		98CB550E21CBD81100929CC6 /* vm_exec_state.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53E521CBD80F00929CC6 /* vm_exec_state.c */; };
+		98CB550F21CBD81100929CC6 /* vm_logic_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53E621CBD80F00929CC6 /* vm_logic_utils.h */; };
+		98CB551021CBD81100929CC6 /* vm_logic_utils_arithmetics.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53E721CBD80F00929CC6 /* vm_logic_utils_arithmetics.c */; };
+		98CB551121CBD81100929CC6 /* vm_defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53E821CBD80F00929CC6 /* vm_defines.h */; };
+		98CB551221CBD81100929CC6 /* vm_ecma_value_helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53E921CBD80F00929CC6 /* vm_ecma_value_helper.h */; };
+		98CB551321CBD81100929CC6 /* vm.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53EA21CBD81000929CC6 /* vm.h */; };
+		98CB551421CBD81100929CC6 /* vm_exec_state.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53EB21CBD81000929CC6 /* vm_exec_state.h */; };
+		98CB551521CBD81100929CC6 /* vm_context.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53EC21CBD81000929CC6 /* vm_context.h */; };
+		98CB551621CBD81100929CC6 /* vm_op_code.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53ED21CBD81000929CC6 /* vm_op_code.c */; };
+		98CB551721CBD81100929CC6 /* ecma_builtin_rangeerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53F021CBD81000929CC6 /* ecma_builtin_rangeerror.c */; };
+		98CB551821CBD81100929CC6 /* ecma_builtin_string_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53F121CBD81000929CC6 /* ecma_builtin_string_prototype.inc.h */; };
+		98CB551921CBD81100929CC6 /* ecma_builtin_rangeerror_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53F221CBD81000929CC6 /* ecma_builtin_rangeerror_prototype.inc.h */; };
+		98CB551A21CBD81100929CC6 /* ecma_builtin_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53F321CBD81000929CC6 /* ecma_builtin_error.c */; };
+		98CB551B21CBD81100929CC6 /* ecma_builtin_map_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53F421CBD81000929CC6 /* ecma_builtin_map_prototype.c */; };
+		98CB551C21CBD81100929CC6 /* ecma_builtin_typeerror.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53F521CBD81000929CC6 /* ecma_builtin_typeerror.inc.h */; };
+		98CB551D21CBD81100929CC6 /* ecma_builtin_helpers_sort.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53F621CBD81000929CC6 /* ecma_builtin_helpers_sort.c */; };
+		98CB551E21CBD81100929CC6 /* ecma_builtin_arraybuffer_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53F721CBD81000929CC6 /* ecma_builtin_arraybuffer_prototype.inc.h */; };
+		98CB551F21CBD81100929CC6 /* ecma_builtin_array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53F821CBD81000929CC6 /* ecma_builtin_array_prototype.inc.h */; };
+		98CB552021CBD81100929CC6 /* ecma_builtin_typeerror_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53F921CBD81000929CC6 /* ecma_builtin_typeerror_prototype.c */; };
+		98CB552121CBD81100929CC6 /* ecma_builtin_rangeerror_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53FA21CBD81000929CC6 /* ecma_builtin_rangeerror_prototype.c */; };
+		98CB552221CBD81100929CC6 /* ecma_builtin_urierror_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53FB21CBD81000929CC6 /* ecma_builtin_urierror_prototype.c */; };
+		98CB552321CBD81100929CC6 /* ecma_builtin_string.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB53FC21CBD81000929CC6 /* ecma_builtin_string.inc.h */; };
+		98CB552421CBD81100929CC6 /* ecma_builtin_map.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53FD21CBD81000929CC6 /* ecma_builtin_map.c */; };
+		98CB552521CBD81100929CC6 /* ecma_builtin_promise_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53FE21CBD81000929CC6 /* ecma_builtin_promise_prototype.c */; };
+		98CB552621CBD81100929CC6 /* ecma_builtin_error_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB53FF21CBD81000929CC6 /* ecma_builtin_error_prototype.c */; };
+		98CB552721CBD81100929CC6 /* ecma_builtin_rangeerror.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540021CBD81000929CC6 /* ecma_builtin_rangeerror.inc.h */; };
+		98CB552821CBD81100929CC6 /* ecma_builtin_date.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB540121CBD81000929CC6 /* ecma_builtin_date.c */; };
+		98CB552921CBD81100929CC6 /* ecma_builtin_number_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB540221CBD81000929CC6 /* ecma_builtin_number_prototype.c */; };
+		98CB552A21CBD81100929CC6 /* ecma_builtin_helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB540321CBD81000929CC6 /* ecma_builtin_helpers.c */; };
+		98CB552B21CBD81100929CC6 /* ecma_builtin_number_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540421CBD81000929CC6 /* ecma_builtin_number_prototype.inc.h */; };
+		98CB552C21CBD81100929CC6 /* ecma_builtin_date_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB540521CBD81000929CC6 /* ecma_builtin_date_prototype.c */; };
+		98CB552D21CBD81100929CC6 /* ecma_builtin_regexp.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540621CBD81000929CC6 /* ecma_builtin_regexp.inc.h */; };
+		98CB552E21CBD81100929CC6 /* ecma_builtin_boolean.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540721CBD81000929CC6 /* ecma_builtin_boolean.inc.h */; };
+		98CB552F21CBD81100929CC6 /* ecma_builtin_promise_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540821CBD81000929CC6 /* ecma_builtin_promise_prototype.inc.h */; };
+		98CB553021CBD81100929CC6 /* ecma_builtin_helpers_macro_undefs.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540921CBD81000929CC6 /* ecma_builtin_helpers_macro_undefs.inc.h */; };
+		98CB553121CBD81100929CC6 /* ecma_builtin_urierror.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB540A21CBD81000929CC6 /* ecma_builtin_urierror.c */; };
+		98CB553221CBD81100929CC6 /* ecma_builtin_urierror.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540B21CBD81000929CC6 /* ecma_builtin_urierror.inc.h */; };
+		98CB553321CBD81100929CC6 /* ecma_builtin_regexp_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540C21CBD81000929CC6 /* ecma_builtin_regexp_prototype.inc.h */; };
+		98CB553421CBD81100929CC6 /* ecma_builtin_syntaxerror.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB540D21CBD81000929CC6 /* ecma_builtin_syntaxerror.inc.h */; };
+		98CB553521CBD81100929CC6 /* ecma_builtin_boolean.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB540E21CBD81000929CC6 /* ecma_builtin_boolean.c */; };
+		98CB553621CBD81100929CC6 /* ecma_builtin_syntaxerror_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB540F21CBD81000929CC6 /* ecma_builtin_syntaxerror_prototype.c */; };
+		98CB553721CBD81100929CC6 /* ecma_builtin_typeerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB541021CBD81000929CC6 /* ecma_builtin_typeerror.c */; };
+		98CB553821CBD81100929CC6 /* ecma_builtin_referenceerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB541121CBD81000929CC6 /* ecma_builtin_referenceerror.c */; };
+		98CB553921CBD81100929CC6 /* ecma_builtin_typedarray_template.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541321CBD81000929CC6 /* ecma_builtin_typedarray_template.inc.h */; };
+		98CB553A21CBD81100929CC6 /* ecma_builtin_int8array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541421CBD81000929CC6 /* ecma_builtin_int8array_prototype.inc.h */; };
+		98CB553B21CBD81100929CC6 /* ecma_builtin_float64array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB541521CBD81000929CC6 /* ecma_builtin_float64array.c */; };
+		98CB553C21CBD81100929CC6 /* ecma_builtin_typedarray.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541621CBD81000929CC6 /* ecma_builtin_typedarray.inc.h */; };
+		98CB553D21CBD81100929CC6 /* ecma_builtin_int32array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541721CBD81000929CC6 /* ecma_builtin_int32array.inc.h */; };
+		98CB553E21CBD81100929CC6 /* ecma_builtin_uint16array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB541821CBD81000929CC6 /* ecma_builtin_uint16array.c */; };
+		98CB553F21CBD81100929CC6 /* ecma_builtin_typedarray_helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB541921CBD81000929CC6 /* ecma_builtin_typedarray_helpers.c */; };
+		98CB554021CBD81100929CC6 /* ecma_builtin_uint32array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB541A21CBD81000929CC6 /* ecma_builtin_uint32array.c */; };
+		98CB554121CBD81100929CC6 /* ecma_builtin_int32array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB541B21CBD81000929CC6 /* ecma_builtin_int32array_prototype.c */; };
+		98CB554221CBD81100929CC6 /* ecma_builtin_typedarray_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541C21CBD81000929CC6 /* ecma_builtin_typedarray_prototype.inc.h */; };
+		98CB554321CBD81100929CC6 /* ecma_builtin_uint8clampedarray.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541D21CBD81000929CC6 /* ecma_builtin_uint8clampedarray.inc.h */; };
+		98CB554421CBD81100929CC6 /* ecma_builtin_float64array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541E21CBD81000929CC6 /* ecma_builtin_float64array.inc.h */; };
+		98CB554521CBD81100929CC6 /* ecma_builtin_typedarray_prototype_template.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB541F21CBD81000929CC6 /* ecma_builtin_typedarray_prototype_template.inc.h */; };
+		98CB554621CBD81100929CC6 /* ecma_builtin_uint8array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB542021CBD81000929CC6 /* ecma_builtin_uint8array.c */; };
+		98CB554721CBD81100929CC6 /* ecma_builtin_int16array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542121CBD81000929CC6 /* ecma_builtin_int16array.inc.h */; };
+		98CB554821CBD81100929CC6 /* ecma_builtin_uint8array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542221CBD81000929CC6 /* ecma_builtin_uint8array.inc.h */; };
+		98CB554921CBD81100929CC6 /* ecma_builtin_int8array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542321CBD81000929CC6 /* ecma_builtin_int8array.inc.h */; };
+		98CB554A21CBD81100929CC6 /* ecma_builtin_float32array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB542421CBD81000929CC6 /* ecma_builtin_float32array_prototype.c */; };
+		98CB554B21CBD81100929CC6 /* ecma_builtin_int16array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB542521CBD81000929CC6 /* ecma_builtin_int16array_prototype.c */; };
+		98CB554C21CBD81100929CC6 /* ecma_builtin_typedarray_helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542621CBD81000929CC6 /* ecma_builtin_typedarray_helpers.h */; };
+		98CB554D21CBD81100929CC6 /* ecma_builtin_uint16array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542721CBD81000929CC6 /* ecma_builtin_uint16array.inc.h */; };
+		98CB554E21CBD81100929CC6 /* ecma_builtin_float32array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542821CBD81000929CC6 /* ecma_builtin_float32array_prototype.inc.h */; };
+		98CB554F21CBD81100929CC6 /* ecma_builtin_uint16array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB542921CBD81000929CC6 /* ecma_builtin_uint16array_prototype.c */; };
+		98CB555021CBD81100929CC6 /* ecma_builtin_uint16array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542A21CBD81000929CC6 /* ecma_builtin_uint16array_prototype.inc.h */; };
+		98CB555121CBD81100929CC6 /* ecma_builtin_typedarray.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB542B21CBD81000929CC6 /* ecma_builtin_typedarray.c */; };
+		98CB555221CBD81100929CC6 /* ecma_builtin_float32array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB542C21CBD81000929CC6 /* ecma_builtin_float32array.c */; };
+		98CB555321CBD81100929CC6 /* ecma_builtin_uint8array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542D21CBD81000929CC6 /* ecma_builtin_uint8array_prototype.inc.h */; };
+		98CB555421CBD81100929CC6 /* ecma_builtin_float64array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542E21CBD81000929CC6 /* ecma_builtin_float64array_prototype.inc.h */; };
+		98CB555521CBD81100929CC6 /* ecma_builtin_int16array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB542F21CBD81000929CC6 /* ecma_builtin_int16array_prototype.inc.h */; };
+		98CB555621CBD81100929CC6 /* ecma_builtin_int8array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543021CBD81000929CC6 /* ecma_builtin_int8array_prototype.c */; };
+		98CB555721CBD81100929CC6 /* ecma_builtin_int16array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543121CBD81000929CC6 /* ecma_builtin_int16array.c */; };
+		98CB555821CBD81100929CC6 /* ecma_builtin_uint8array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543221CBD81000929CC6 /* ecma_builtin_uint8array_prototype.c */; };
+		98CB555921CBD81100929CC6 /* ecma_builtin_int32array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543321CBD81000929CC6 /* ecma_builtin_int32array.c */; };
+		98CB555A21CBD81100929CC6 /* ecma_builtin_int32array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB543421CBD81000929CC6 /* ecma_builtin_int32array_prototype.inc.h */; };
+		98CB555B21CBD81100929CC6 /* ecma_builtin_uint32array_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB543521CBD81000929CC6 /* ecma_builtin_uint32array_prototype.inc.h */; };
+		98CB555C21CBD81100929CC6 /* ecma_builtin_uint32array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB543621CBD81000929CC6 /* ecma_builtin_uint32array.inc.h */; };
+		98CB555D21CBD81100929CC6 /* ecma_builtin_float32array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB543721CBD81000929CC6 /* ecma_builtin_float32array.inc.h */; };
+		98CB555E21CBD81100929CC6 /* ecma_builtin_float64array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543821CBD81000929CC6 /* ecma_builtin_float64array_prototype.c */; };
+		98CB555F21CBD81100929CC6 /* ecma_builtin_uint8clampedarray.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543921CBD81000929CC6 /* ecma_builtin_uint8clampedarray.c */; };
+		98CB556021CBD81100929CC6 /* ecma_builtin_uint32array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543A21CBD81000929CC6 /* ecma_builtin_uint32array_prototype.c */; };
+		98CB556121CBD81100929CC6 /* ecma_builtin_typedarray_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543B21CBD81000929CC6 /* ecma_builtin_typedarray_prototype.c */; };
+		98CB556221CBD81100929CC6 /* ecma_builtin_int8array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543C21CBD81000929CC6 /* ecma_builtin_int8array.c */; };
+		98CB556321CBD81100929CC6 /* ecma_builtin_uint8clampedarray_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB543D21CBD81000929CC6 /* ecma_builtin_uint8clampedarray_prototype.c */; };
+		98CB556421CBD81100929CC6 /* ecma_builtin_uint8clampedarray_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB543E21CBD81000929CC6 /* ecma_builtin_uint8clampedarray_prototype.inc.h */; };
+		98CB556521CBD81100929CC6 /* ecma_builtin_date_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB543F21CBD81000929CC6 /* ecma_builtin_date_prototype.inc.h */; };
+		98CB556621CBD81100929CC6 /* ecma_builtin_object.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544021CBD81000929CC6 /* ecma_builtin_object.inc.h */; };
+		98CB556721CBD81100929CC6 /* ecma_builtins.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544121CBD81000929CC6 /* ecma_builtins.inc.h */; };
+		98CB556821CBD81100929CC6 /* ecma_builtin_function.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544221CBD81000929CC6 /* ecma_builtin_function.inc.h */; };
+		98CB556921CBD81100929CC6 /* ecma_builtin_type_error_thrower.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB544321CBD81000929CC6 /* ecma_builtin_type_error_thrower.c */; };
+		98CB556A21CBD81100929CC6 /* ecma_builtin_syntaxerror_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544421CBD81000929CC6 /* ecma_builtin_syntaxerror_prototype.inc.h */; };
+		98CB556B21CBD81100929CC6 /* ecma_builtin_global.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB544521CBD81000929CC6 /* ecma_builtin_global.c */; };
+		98CB556C21CBD81100929CC6 /* ecma_builtin_internal_routines_template.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544621CBD81000929CC6 /* ecma_builtin_internal_routines_template.inc.h */; };
+		98CB556D21CBD81100929CC6 /* ecma_builtin_promise.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB544721CBD81000929CC6 /* ecma_builtin_promise.c */; };
+		98CB556E21CBD81100929CC6 /* ecma_builtin_promise.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544821CBD81000929CC6 /* ecma_builtin_promise.inc.h */; };
+		98CB556F21CBD81100929CC6 /* ecma_builtin_error.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544921CBD81000929CC6 /* ecma_builtin_error.inc.h */; };
+		98CB557021CBD81100929CC6 /* ecma_builtin_regexp_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB544A21CBD81000929CC6 /* ecma_builtin_regexp_prototype.c */; };
+		98CB557121CBD81100929CC6 /* ecma_builtin_boolean_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB544B21CBD81000929CC6 /* ecma_builtin_boolean_prototype.c */; };
+		98CB557221CBD81100929CC6 /* ecma_builtin_function_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB544C21CBD81000929CC6 /* ecma_builtin_function_prototype.c */; };
+		98CB557321CBD81100929CC6 /* ecma_builtin_syntaxerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB544D21CBD81000929CC6 /* ecma_builtin_syntaxerror.c */; };
+		98CB557421CBD81100929CC6 /* ecma_builtin_function_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544E21CBD81000929CC6 /* ecma_builtin_function_prototype.inc.h */; };
+		98CB557521CBD81100929CC6 /* ecma_builtin_array.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB544F21CBD81000929CC6 /* ecma_builtin_array.inc.h */; };
+		98CB557621CBD81100929CC6 /* ecma_builtins.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545021CBD81000929CC6 /* ecma_builtins.c */; };
+		98CB557721CBD81100929CC6 /* ecma_builtin_object_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB545121CBD81000929CC6 /* ecma_builtin_object_prototype.inc.h */; };
+		98CB557821CBD81100929CC6 /* ecma_builtin_boolean_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB545221CBD81000929CC6 /* ecma_builtin_boolean_prototype.inc.h */; };
+		98CB557921CBD81100929CC6 /* ecma_builtin_map_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB545321CBD81000929CC6 /* ecma_builtin_map_prototype.inc.h */; };
+		98CB557A21CBD81100929CC6 /* ecma_builtin_global.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB545421CBD81000929CC6 /* ecma_builtin_global.inc.h */; };
+		98CB557B21CBD81100929CC6 /* ecma_builtin_arraybuffer_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545521CBD81000929CC6 /* ecma_builtin_arraybuffer_prototype.c */; };
+		98CB557C21CBD81100929CC6 /* ecma_builtin_urierror_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB545621CBD81000929CC6 /* ecma_builtin_urierror_prototype.inc.h */; };
+		98CB557D21CBD81100929CC6 /* ecma_builtins_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB545721CBD81000929CC6 /* ecma_builtins_internal.h */; };
+		98CB557E21CBD81100929CC6 /* ecma_builtin_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545821CBD81000929CC6 /* ecma_builtin_function.c */; };
+		98CB557F21CBD81100929CC6 /* ecma_builtin_referenceerror_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545921CBD81000929CC6 /* ecma_builtin_referenceerror_prototype.c */; };
+		98CB558021CBD81100929CC6 /* ecma_builtin_helpers_date.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545A21CBD81000929CC6 /* ecma_builtin_helpers_date.c */; };
+		98CB558121CBD81100929CC6 /* ecma_builtin_array.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545B21CBD81000929CC6 /* ecma_builtin_array.c */; };
+		98CB558221CBD81100929CC6 /* ecma_builtin_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545C21CBD81000929CC6 /* ecma_builtin_object.c */; };
+		98CB558321CBD81100929CC6 /* ecma_builtin_helpers_error.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545D21CBD81000929CC6 /* ecma_builtin_helpers_error.c */; };
+		98CB558421CBD81100929CC6 /* ecma_builtin_map.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB545E21CBD81000929CC6 /* ecma_builtin_map.inc.h */; };
+		98CB558521CBD81100929CC6 /* ecma_builtin_arraybuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB545F21CBD81000929CC6 /* ecma_builtin_arraybuffer.c */; };
+		98CB558621CBD81100929CC6 /* ecma_builtin_json.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546021CBD81000929CC6 /* ecma_builtin_json.inc.h */; };
+		98CB558721CBD81100929CC6 /* ecma_builtin_helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546121CBD81000929CC6 /* ecma_builtin_helpers.h */; };
+		98CB558821CBD81100929CC6 /* ecma_builtin_arraybuffer.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546221CBD81000929CC6 /* ecma_builtin_arraybuffer.inc.h */; };
+		98CB558921CBD81100929CC6 /* ecma_builtin_math.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546321CBD81000929CC6 /* ecma_builtin_math.inc.h */; };
+		98CB558A21CBD81100929CC6 /* ecma_builtin_math.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB546421CBD81000929CC6 /* ecma_builtin_math.c */; };
+		98CB558B21CBD81100929CC6 /* ecma_builtin_referenceerror_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546521CBD81000929CC6 /* ecma_builtin_referenceerror_prototype.inc.h */; };
+		98CB558C21CBD81100929CC6 /* ecma_builtin_date.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546621CBD81000929CC6 /* ecma_builtin_date.inc.h */; };
+		98CB558D21CBD81100929CC6 /* ecma_builtin_typeerror_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546721CBD81000929CC6 /* ecma_builtin_typeerror_prototype.inc.h */; };
+		98CB558E21CBD81100929CC6 /* ecma_builtin_array_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB546821CBD81000929CC6 /* ecma_builtin_array_prototype.c */; };
+		98CB558F21CBD81100929CC6 /* ecma_builtin_error_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546921CBD81000929CC6 /* ecma_builtin_error_prototype.inc.h */; };
+		98CB559021CBD81100929CC6 /* ecma_builtin_helpers_macro_defines.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546A21CBD81000929CC6 /* ecma_builtin_helpers_macro_defines.inc.h */; };
+		98CB559121CBD81100929CC6 /* ecma_builtin_number.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB546B21CBD81000929CC6 /* ecma_builtin_number.c */; };
+		98CB559221CBD81100929CC6 /* ecma_builtin_string_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB546C21CBD81000929CC6 /* ecma_builtin_string_prototype.c */; };
+		98CB559321CBD81100929CC6 /* ecma_builtins.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB546D21CBD81000929CC6 /* ecma_builtins.h */; };
+		98CB559421CBD81100929CC6 /* ecma_builtin_json.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB546E21CBD81000929CC6 /* ecma_builtin_json.c */; };
+		98CB559521CBD81100929CC6 /* ecma_builtin_object_prototype.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB546F21CBD81000929CC6 /* ecma_builtin_object_prototype.c */; };
+		98CB559621CBD81100929CC6 /* ecma_builtin_number.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB547021CBD81000929CC6 /* ecma_builtin_number.inc.h */; };
+		98CB559721CBD81100929CC6 /* ecma_builtin_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547121CBD81000929CC6 /* ecma_builtin_string.c */; };
+		98CB559821CBD81100929CC6 /* ecma_builtin_referenceerror.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB547221CBD81000929CC6 /* ecma_builtin_referenceerror.inc.h */; };
+		98CB559921CBD81100929CC6 /* ecma_builtin_helpers-json.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547321CBD81000929CC6 /* ecma_builtin_helpers-json.c */; };
+		98CB559A21CBD81100929CC6 /* ecma_builtin_type_error_thrower.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB547421CBD81000929CC6 /* ecma_builtin_type_error_thrower.inc.h */; };
+		98CB559B21CBD81100929CC6 /* ecma_builtin_regexp.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547521CBD81000929CC6 /* ecma_builtin_regexp.c */; };
+		98CB559C21CBD81100929CC6 /* ecma_reference.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547721CBD81000929CC6 /* ecma_reference.c */; };
+		98CB559D21CBD81100929CC6 /* ecma_jobqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB547821CBD81000929CC6 /* ecma_jobqueue.h */; };
+		98CB559E21CBD81100929CC6 /* ecma_get_put_value.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547921CBD81000929CC6 /* ecma_get_put_value.c */; };
+		98CB559F21CBD81100929CC6 /* ecma_conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547A21CBD81000929CC6 /* ecma_conversion.c */; };
+		98CB55A021CBD81100929CC6 /* ecma_objects.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB547B21CBD81000929CC6 /* ecma_objects.h */; };
+		98CB55A121CBD81100929CC6 /* ecma_arraybuffer_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547C21CBD81000929CC6 /* ecma_arraybuffer_object.c */; };
+		98CB55A221CBD81100929CC6 /* ecma_promise_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB547D21CBD81000929CC6 /* ecma_promise_object.h */; };
+		98CB55A321CBD81100929CC6 /* ecma_string_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB547E21CBD81000929CC6 /* ecma_string_object.h */; };
+		98CB55A421CBD81100929CC6 /* ecma_exceptions.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB547F21CBD81000929CC6 /* ecma_exceptions.c */; };
+		98CB55A521CBD81100929CC6 /* ecma_lex_env.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548021CBD81000929CC6 /* ecma_lex_env.h */; };
+		98CB55A621CBD81100929CC6 /* ecma_array_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548121CBD81000929CC6 /* ecma_array_object.h */; };
+		98CB55A721CBD81100929CC6 /* ecma_boolean_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548221CBD81000929CC6 /* ecma_boolean_object.h */; };
+		98CB55A821CBD81100929CC6 /* ecma_objects_general.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548321CBD81000929CC6 /* ecma_objects_general.h */; };
+		98CB55A921CBD81100929CC6 /* ecma_objects_arguments.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548421CBD81000929CC6 /* ecma_objects_arguments.h */; };
+		98CB55AA21CBD81100929CC6 /* ecma_compiled_code.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548521CBD81000929CC6 /* ecma_compiled_code.h */; };
+		98CB55AB21CBD81100929CC6 /* ecma_function_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548621CBD81000929CC6 /* ecma_function_object.h */; };
+		98CB55AC21CBD81100929CC6 /* ecma_try_catch_macro.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548721CBD81000929CC6 /* ecma_try_catch_macro.h */; };
+		98CB55AD21CBD81100929CC6 /* ecma_number_arithmetic.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548821CBD81000929CC6 /* ecma_number_arithmetic.h */; };
+		98CB55AE21CBD81100929CC6 /* ecma_number_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548921CBD81000929CC6 /* ecma_number_object.h */; };
+		98CB55AF21CBD81100929CC6 /* ecma_map_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548A21CBD81000929CC6 /* ecma_map_object.h */; };
+		98CB55B021CBD81100929CC6 /* ecma_comparison.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB548B21CBD81000929CC6 /* ecma_comparison.c */; };
+		98CB55B121CBD81100929CC6 /* ecma_typedarray_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548C21CBD81000929CC6 /* ecma_typedarray_object.h */; };
+		98CB55B221CBD81100929CC6 /* ecma_regexp_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB548D21CBD81000929CC6 /* ecma_regexp_object.c */; };
+		98CB55B321CBD81100929CC6 /* ecma_objects.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB548E21CBD81000929CC6 /* ecma_objects.c */; };
+		98CB55B421CBD81100929CC6 /* ecma_conversion.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB548F21CBD81000929CC6 /* ecma_conversion.h */; };
+		98CB55B521CBD81100929CC6 /* ecma_jobqueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549021CBD81000929CC6 /* ecma_jobqueue.c */; };
+		98CB55B621CBD81100929CC6 /* ecma_reference.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB549121CBD81000929CC6 /* ecma_reference.h */; };
+		98CB55B721CBD81100929CC6 /* ecma_lex_env.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549221CBD81000929CC6 /* ecma_lex_env.c */; };
+		98CB55B821CBD81100929CC6 /* ecma_boolean_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549321CBD81000929CC6 /* ecma_boolean_object.c */; };
+		98CB55B921CBD81100929CC6 /* ecma_array_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549421CBD81000929CC6 /* ecma_array_object.c */; };
+		98CB55BA21CBD81100929CC6 /* ecma_exceptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB549521CBD81000929CC6 /* ecma_exceptions.h */; };
+		98CB55BB21CBD81100929CC6 /* ecma_promise_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549621CBD81000929CC6 /* ecma_promise_object.c */; };
+		98CB55BC21CBD81100929CC6 /* ecma_arraybuffer_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB549721CBD81000929CC6 /* ecma_arraybuffer_object.h */; };
+		98CB55BD21CBD81100929CC6 /* ecma_string_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549821CBD81000929CC6 /* ecma_string_object.c */; };
+		98CB55BE21CBD81100929CC6 /* ecma_number_arithmetic.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549921CBD81000929CC6 /* ecma_number_arithmetic.c */; };
+		98CB55BF21CBD81100929CC6 /* ecma_compiled_code.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549A21CBD81000929CC6 /* ecma_compiled_code.c */; };
+		98CB55C021CBD81100929CC6 /* ecma_function_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549B21CBD81000929CC6 /* ecma_function_object.c */; };
+		98CB55C121CBD81100929CC6 /* ecma_objects_general.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549C21CBD81000929CC6 /* ecma_objects_general.c */; };
+		98CB55C221CBD81100929CC6 /* ecma_objects_arguments.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549D21CBD81000929CC6 /* ecma_objects_arguments.c */; };
+		98CB55C321CBD81100929CC6 /* ecma_typedarray_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB549E21CBD81000929CC6 /* ecma_typedarray_object.c */; };
+		98CB55C421CBD81100929CC6 /* ecma_regexp_object.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB549F21CBD81000929CC6 /* ecma_regexp_object.h */; };
+		98CB55C521CBD81100929CC6 /* ecma_comparison.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54A021CBD81000929CC6 /* ecma_comparison.h */; };
+		98CB55C621CBD81100929CC6 /* ecma_number_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54A121CBD81000929CC6 /* ecma_number_object.c */; };
+		98CB55C721CBD81100929CC6 /* ecma_map_object.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54A221CBD81000929CC6 /* ecma_map_object.c */; };
+		98CB55C821CBD81100929CC6 /* ecma_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54A421CBD81000929CC6 /* ecma_alloc.c */; };
+		98CB55C921CBD81100929CC6 /* ecma_literal_storage.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54A521CBD81000929CC6 /* ecma_literal_storage.c */; };
+		98CB55CA21CBD81100929CC6 /* ecma_helpers.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54A621CBD81000929CC6 /* ecma_helpers.c */; };
+		98CB55CB21CBD81100929CC6 /* ecma_globals.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54A721CBD81000929CC6 /* ecma_globals.h */; };
+		98CB55CC21CBD81100929CC6 /* ecma_gc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54A821CBD81000929CC6 /* ecma_gc.h */; };
+		98CB55CD21CBD81100929CC6 /* ecma_lcache.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54A921CBD81000929CC6 /* ecma_lcache.c */; };
+		98CB55CE21CBD81100929CC6 /* ecma_helpers_conversion.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54AA21CBD81000929CC6 /* ecma_helpers_conversion.c */; };
+		98CB55CF21CBD81100929CC6 /* ecma_property_hashmap.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54AB21CBD81000929CC6 /* ecma_property_hashmap.c */; };
+		98CB55D021CBD81100929CC6 /* ecma_helpers_errol.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54AC21CBD81000929CC6 /* ecma_helpers_errol.c */; };
+		98CB55D121CBD81100929CC6 /* ecma_init_finalize.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54AD21CBD81000929CC6 /* ecma_init_finalize.c */; };
+		98CB55D221CBD81100929CC6 /* ecma_gc.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54AE21CBD81000929CC6 /* ecma_gc.c */; };
+		98CB55D321CBD81100929CC6 /* ecma_helpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54AF21CBD81000929CC6 /* ecma_helpers.h */; };
+		98CB55D421CBD81100929CC6 /* ecma_literal_storage.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54B021CBD81000929CC6 /* ecma_literal_storage.h */; };
+		98CB55D521CBD81100929CC6 /* ecma_helpers_value.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54B121CBD81000929CC6 /* ecma_helpers_value.c */; };
+		98CB55D621CBD81100929CC6 /* ecma_alloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54B221CBD81000929CC6 /* ecma_alloc.h */; };
+		98CB55D721CBD81100929CC6 /* ecma_lcache.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54B321CBD81000929CC6 /* ecma_lcache.h */; };
+		98CB55D821CBD81100929CC6 /* ecma_init_finalize.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54B421CBD81000929CC6 /* ecma_init_finalize.h */; };
+		98CB55D921CBD81100929CC6 /* ecma_helpers_external_pointers.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54B521CBD81000929CC6 /* ecma_helpers_external_pointers.c */; };
+		98CB55DA21CBD81100929CC6 /* ecma_helpers_number.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54B621CBD81000929CC6 /* ecma_helpers_number.c */; };
+		98CB55DB21CBD81100929CC6 /* ecma_helpers_values_collection.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54B721CBD81000929CC6 /* ecma_helpers_values_collection.c */; };
+		98CB55DC21CBD81100929CC6 /* ecma_property_hashmap.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54B821CBD81000929CC6 /* ecma_property_hashmap.h */; };
+		98CB55DD21CBD81100929CC6 /* ecma_helpers_string.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54B921CBD81000929CC6 /* ecma_helpers_string.c */; };
+		98CB55DE21CBD81100929CC6 /* jmem_poolman.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54BB21CBD81000929CC6 /* jmem_poolman.c */; };
+		98CB55DF21CBD81100929CC6 /* jmem_heap.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54BC21CBD81000929CC6 /* jmem_heap.c */; };
+		98CB55E021CBD81100929CC6 /* jmem.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54BD21CBD81000929CC6 /* jmem.h */; };
+		98CB55E121CBD81100929CC6 /* jmem_allocator.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54BE21CBD81000929CC6 /* jmem_allocator.c */; };
+		98CB55E221CBD81100929CC6 /* jmem_allocator_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54BF21CBD81000929CC6 /* jmem_allocator_internal.h */; };
+		98CB55E321CBD81100929CC6 /* debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54C121CBD81000929CC6 /* debugger.c */; };
+		98CB55E421CBD81100929CC6 /* debugger.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54C221CBD81000929CC6 /* debugger.h */; };
+		98CB55E521CBD81100929CC6 /* qking_debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54C421CBD81000929CC6 /* qking_debugger.c */; };
+		98CB55E621CBD81100929CC6 /* qking_debugger_transport.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54C521CBD81000929CC6 /* qking_debugger_transport.c */; };
+		98CB55E721CBD81100929CC6 /* qking_snapshot.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54C621CBD81000929CC6 /* qking_snapshot.c */; };
+		98CB55E821CBD81100929CC6 /* qking.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54C721CBD81000929CC6 /* qking.c */; };
+		98CB55E921CBD81100929CC6 /* qking_internal.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54C821CBD81000929CC6 /* qking_internal.c */; };
+		98CB55EA21CBD81100929CC6 /* qking_snapshot.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54C921CBD81000929CC6 /* qking_snapshot.h */; };
+		98CB55EB21CBD81100929CC6 /* qking.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54CB21CBD81000929CC6 /* qking.h */; };
+		98CB55EC21CBD81100929CC6 /* exec_state_decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54CD21CBD81000929CC6 /* exec_state_decode.c */; };
+		98CB55ED21CBD81100929CC6 /* decoder_sections.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54CE21CBD81000929CC6 /* decoder_sections.c */; };
+		98CB55EE21CBD81100929CC6 /* exec_state_decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54CF21CBD81000929CC6 /* exec_state_decode.h */; };
+		98CB55EF21CBD81100929CC6 /* decoder_sections.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54D021CBD81000929CC6 /* decoder_sections.h */; };
+		98CB55F021CBD81100929CC6 /* default_io.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54D321CBD81000929CC6 /* default_io.c */; };
+		98CB55F121CBD81100929CC6 /* qking_port_default.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54D521CBD81000929CC6 /* qking_port_default.h */; };
+		98CB55F221CBD81100929CC6 /* default_external_context.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54D621CBD81000929CC6 /* default_external_context.c */; };
+		98CB55F321CBD81100929CC6 /* default_fatal.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54D721CBD81000929CC6 /* default_fatal.c */; };
+		98CB55F421CBD81100929CC6 /* defaultx-handler.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54D821CBD81000929CC6 /* defaultx-handler.c */; };
+		98CB55F521CBD81100929CC6 /* default_debugger.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54D921CBD81000929CC6 /* default_debugger.c */; };
+		98CB55F621CBD81100929CC6 /* default_date.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54DA21CBD81000929CC6 /* default_date.c */; };
+		98CB55F721CBD81100929CC6 /* common_logger.c in Sources */ = {isa = PBXBuildFile; fileRef = 98CB54DC21CBD81000929CC6 /* common_logger.c */; };
+		98CB55F821CBD81100929CC6 /* string_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54DD21CBD81000929CC6 /* string_utils.h */; };
+		98CB55F921CBD81100929CC6 /* common_error.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54DE21CBD81000929CC6 /* common_error.h */; };
+		98CB55FA21CBD81100929CC6 /* common_base.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54DF21CBD81000929CC6 /* common_base.h */; };
+		98CB55FB21CBD81100929CC6 /* common_logger.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54E021CBD81000929CC6 /* common_logger.h */; };
+		98CB55FC21CBD81100929CC6 /* common_binary.h in Headers */ = {isa = PBXBuildFile; fileRef = 98CB54E121CBD81000929CC6 /* common_binary.h */; };
 		9B9E74791FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9E74781FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m */; };
 		B82A159820F8556F0098A509 /* WXSDKInstance_performance.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B1221F2090AA9300387E33 /* WXSDKInstance_performance.m */; };
 		B82A159920F857200098A509 /* WXSDKError.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B122242090AAB000387E33 /* WXSDKError.m */; };
@@ -1338,7 +1618,289 @@
 		98B69EF421CA295F00E03B77 /* vnode_qking_env.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vnode_qking_env.cc; sourceTree = "<group>"; };
 		98B69EF521CA295F00E03B77 /* vnode_qking_env.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vnode_qking_env.h; sourceTree = "<group>"; };
 		98B69EF621CA295F00E03B77 /* vnode_qking_convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vnode_qking_convert.h; sourceTree = "<group>"; };
-		98CB53AB21CBC8F800929CC6 /* Qking.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Qking.framework; sourceTree = "<group>"; };
+		98CB53B121CBD80F00929CC6 /* handler-assert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "handler-assert.c"; sourceTree = "<group>"; };
+		98CB53B221CBD80F00929CC6 /* handler-register.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "handler-register.c"; sourceTree = "<group>"; };
+		98CB53B321CBD80F00929CC6 /* handler-gc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "handler-gc.c"; sourceTree = "<group>"; };
+		98CB53B421CBD80F00929CC6 /* handler-print.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "handler-print.c"; sourceTree = "<group>"; };
+		98CB53B521CBD80F00929CC6 /* handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = handler.h; sourceTree = "<group>"; };
+		98CB53B821CBD80F00929CC6 /* jcontext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jcontext.c; sourceTree = "<group>"; };
+		98CB53B921CBD80F00929CC6 /* jcontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jcontext.h; sourceTree = "<group>"; };
+		98CB53BB21CBD80F00929CC6 /* lit_magic_strings.ini */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lit_magic_strings.ini; sourceTree = "<group>"; };
+		98CB53BC21CBD80F00929CC6 /* lit_magic_strings.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lit_magic_strings.c; sourceTree = "<group>"; };
+		98CB53BD21CBD80F00929CC6 /* lit_strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lit_strings.h; sourceTree = "<group>"; };
+		98CB53BE21CBD80F00929CC6 /* lit_unicode_ranges.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lit_unicode_ranges.inc.h; sourceTree = "<group>"; };
+		98CB53BF21CBD80F00929CC6 /* lit_magic_strings.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lit_magic_strings.inc.h; sourceTree = "<group>"; };
+		98CB53C021CBD80F00929CC6 /* lit_char_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lit_char_helpers.h; sourceTree = "<group>"; };
+		98CB53C121CBD80F00929CC6 /* lit_strings.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lit_strings.c; sourceTree = "<group>"; };
+		98CB53C221CBD80F00929CC6 /* lit_magic_strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lit_magic_strings.h; sourceTree = "<group>"; };
+		98CB53C321CBD80F00929CC6 /* lit_unicode_conversions.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lit_unicode_conversions.inc.h; sourceTree = "<group>"; };
+		98CB53C421CBD80F00929CC6 /* lit_globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lit_globals.h; sourceTree = "<group>"; };
+		98CB53C521CBD80F00929CC6 /* lit_char_helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lit_char_helpers.c; sourceTree = "<group>"; };
+		98CB53C621CBD80F00929CC6 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		98CB53C821CBD80F00929CC6 /* qking_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_internal.h; sourceTree = "<group>"; };
+		98CB53C921CBD80F00929CC6 /* qking_port.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_port.h; sourceTree = "<group>"; };
+		98CB53CA21CBD80F00929CC6 /* qking_compiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_compiler.h; sourceTree = "<group>"; };
+		98CB53CB21CBD80F00929CC6 /* qking_core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_core.h; sourceTree = "<group>"; };
+		98CB53CC21CBD80F00929CC6 /* qking_debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_debugger.h; sourceTree = "<group>"; };
+		98CB53CD21CBD80F00929CC6 /* qking_snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_snapshot.h; sourceTree = "<group>"; };
+		98CB53CE21CBD80F00929CC6 /* qking_debugger_transport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_debugger_transport.h; sourceTree = "<group>"; };
+		98CB53D121CBD80F00929CC6 /* re_bytecode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = re_bytecode.h; sourceTree = "<group>"; };
+		98CB53D221CBD80F00929CC6 /* re_parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = re_parser.c; sourceTree = "<group>"; };
+		98CB53D321CBD80F00929CC6 /* re_compiler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = re_compiler.c; sourceTree = "<group>"; };
+		98CB53D421CBD80F00929CC6 /* re_bytecode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = re_bytecode.c; sourceTree = "<group>"; };
+		98CB53D521CBD80F00929CC6 /* re_compiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = re_compiler.h; sourceTree = "<group>"; };
+		98CB53D621CBD80F00929CC6 /* re_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = re_parser.h; sourceTree = "<group>"; };
+		98CB53D821CBD80F00929CC6 /* jrt_libc_includes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jrt_libc_includes.h; sourceTree = "<group>"; };
+		98CB53D921CBD80F00929CC6 /* jrt_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jrt_types.h; sourceTree = "<group>"; };
+		98CB53DA21CBD80F00929CC6 /* jrt_bit_fields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jrt_bit_fields.h; sourceTree = "<group>"; };
+		98CB53DB21CBD80F00929CC6 /* jrt_fatals.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jrt_fatals.c; sourceTree = "<group>"; };
+		98CB53DC21CBD80F00929CC6 /* jrt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jrt.h; sourceTree = "<group>"; };
+		98CB53DE21CBD80F00929CC6 /* vm_logic_utils_relational_equality.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_logic_utils_relational_equality.c; sourceTree = "<group>"; };
+		98CB53DF21CBD80F00929CC6 /* vm_logic_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_logic_utils.c; sourceTree = "<group>"; };
+		98CB53E021CBD80F00929CC6 /* vm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm.c; sourceTree = "<group>"; };
+		98CB53E121CBD80F00929CC6 /* vm_ecma_value_helper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_ecma_value_helper.c; sourceTree = "<group>"; };
+		98CB53E221CBD80F00929CC6 /* vm_logic_utils_bitwise.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_logic_utils_bitwise.c; sourceTree = "<group>"; };
+		98CB53E321CBD80F00929CC6 /* vm_op_code.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_op_code.h; sourceTree = "<group>"; };
+		98CB53E421CBD80F00929CC6 /* vm_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_utils.c; sourceTree = "<group>"; };
+		98CB53E521CBD80F00929CC6 /* vm_exec_state.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_exec_state.c; sourceTree = "<group>"; };
+		98CB53E621CBD80F00929CC6 /* vm_logic_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_logic_utils.h; sourceTree = "<group>"; };
+		98CB53E721CBD80F00929CC6 /* vm_logic_utils_arithmetics.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_logic_utils_arithmetics.c; sourceTree = "<group>"; };
+		98CB53E821CBD80F00929CC6 /* vm_defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_defines.h; sourceTree = "<group>"; };
+		98CB53E921CBD80F00929CC6 /* vm_ecma_value_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_ecma_value_helper.h; sourceTree = "<group>"; };
+		98CB53EA21CBD81000929CC6 /* vm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm.h; sourceTree = "<group>"; };
+		98CB53EB21CBD81000929CC6 /* vm_exec_state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_exec_state.h; sourceTree = "<group>"; };
+		98CB53EC21CBD81000929CC6 /* vm_context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_context.h; sourceTree = "<group>"; };
+		98CB53ED21CBD81000929CC6 /* vm_op_code.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_op_code.c; sourceTree = "<group>"; };
+		98CB53F021CBD81000929CC6 /* ecma_builtin_rangeerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_rangeerror.c; sourceTree = "<group>"; };
+		98CB53F121CBD81000929CC6 /* ecma_builtin_string_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_string_prototype.inc.h; sourceTree = "<group>"; };
+		98CB53F221CBD81000929CC6 /* ecma_builtin_rangeerror_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_rangeerror_prototype.inc.h; sourceTree = "<group>"; };
+		98CB53F321CBD81000929CC6 /* ecma_builtin_error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_error.c; sourceTree = "<group>"; };
+		98CB53F421CBD81000929CC6 /* ecma_builtin_map_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_map_prototype.c; sourceTree = "<group>"; };
+		98CB53F521CBD81000929CC6 /* ecma_builtin_typeerror.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_typeerror.inc.h; sourceTree = "<group>"; };
+		98CB53F621CBD81000929CC6 /* ecma_builtin_helpers_sort.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_helpers_sort.c; sourceTree = "<group>"; };
+		98CB53F721CBD81000929CC6 /* ecma_builtin_arraybuffer_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_arraybuffer_prototype.inc.h; sourceTree = "<group>"; };
+		98CB53F821CBD81000929CC6 /* ecma_builtin_array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB53F921CBD81000929CC6 /* ecma_builtin_typeerror_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_typeerror_prototype.c; sourceTree = "<group>"; };
+		98CB53FA21CBD81000929CC6 /* ecma_builtin_rangeerror_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_rangeerror_prototype.c; sourceTree = "<group>"; };
+		98CB53FB21CBD81000929CC6 /* ecma_builtin_urierror_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_urierror_prototype.c; sourceTree = "<group>"; };
+		98CB53FC21CBD81000929CC6 /* ecma_builtin_string.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_string.inc.h; sourceTree = "<group>"; };
+		98CB53FD21CBD81000929CC6 /* ecma_builtin_map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_map.c; sourceTree = "<group>"; };
+		98CB53FE21CBD81000929CC6 /* ecma_builtin_promise_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_promise_prototype.c; sourceTree = "<group>"; };
+		98CB53FF21CBD81000929CC6 /* ecma_builtin_error_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_error_prototype.c; sourceTree = "<group>"; };
+		98CB540021CBD81000929CC6 /* ecma_builtin_rangeerror.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_rangeerror.inc.h; sourceTree = "<group>"; };
+		98CB540121CBD81000929CC6 /* ecma_builtin_date.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_date.c; sourceTree = "<group>"; };
+		98CB540221CBD81000929CC6 /* ecma_builtin_number_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_number_prototype.c; sourceTree = "<group>"; };
+		98CB540321CBD81000929CC6 /* ecma_builtin_helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_helpers.c; sourceTree = "<group>"; };
+		98CB540421CBD81000929CC6 /* ecma_builtin_number_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_number_prototype.inc.h; sourceTree = "<group>"; };
+		98CB540521CBD81000929CC6 /* ecma_builtin_date_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_date_prototype.c; sourceTree = "<group>"; };
+		98CB540621CBD81000929CC6 /* ecma_builtin_regexp.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_regexp.inc.h; sourceTree = "<group>"; };
+		98CB540721CBD81000929CC6 /* ecma_builtin_boolean.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_boolean.inc.h; sourceTree = "<group>"; };
+		98CB540821CBD81000929CC6 /* ecma_builtin_promise_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_promise_prototype.inc.h; sourceTree = "<group>"; };
+		98CB540921CBD81000929CC6 /* ecma_builtin_helpers_macro_undefs.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_helpers_macro_undefs.inc.h; sourceTree = "<group>"; };
+		98CB540A21CBD81000929CC6 /* ecma_builtin_urierror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_urierror.c; sourceTree = "<group>"; };
+		98CB540B21CBD81000929CC6 /* ecma_builtin_urierror.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_urierror.inc.h; sourceTree = "<group>"; };
+		98CB540C21CBD81000929CC6 /* ecma_builtin_regexp_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_regexp_prototype.inc.h; sourceTree = "<group>"; };
+		98CB540D21CBD81000929CC6 /* ecma_builtin_syntaxerror.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_syntaxerror.inc.h; sourceTree = "<group>"; };
+		98CB540E21CBD81000929CC6 /* ecma_builtin_boolean.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_boolean.c; sourceTree = "<group>"; };
+		98CB540F21CBD81000929CC6 /* ecma_builtin_syntaxerror_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_syntaxerror_prototype.c; sourceTree = "<group>"; };
+		98CB541021CBD81000929CC6 /* ecma_builtin_typeerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_typeerror.c; sourceTree = "<group>"; };
+		98CB541121CBD81000929CC6 /* ecma_builtin_referenceerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_referenceerror.c; sourceTree = "<group>"; };
+		98CB541321CBD81000929CC6 /* ecma_builtin_typedarray_template.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_typedarray_template.inc.h; sourceTree = "<group>"; };
+		98CB541421CBD81000929CC6 /* ecma_builtin_int8array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_int8array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB541521CBD81000929CC6 /* ecma_builtin_float64array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_float64array.c; sourceTree = "<group>"; };
+		98CB541621CBD81000929CC6 /* ecma_builtin_typedarray.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_typedarray.inc.h; sourceTree = "<group>"; };
+		98CB541721CBD81000929CC6 /* ecma_builtin_int32array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_int32array.inc.h; sourceTree = "<group>"; };
+		98CB541821CBD81000929CC6 /* ecma_builtin_uint16array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint16array.c; sourceTree = "<group>"; };
+		98CB541921CBD81000929CC6 /* ecma_builtin_typedarray_helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_typedarray_helpers.c; sourceTree = "<group>"; };
+		98CB541A21CBD81000929CC6 /* ecma_builtin_uint32array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint32array.c; sourceTree = "<group>"; };
+		98CB541B21CBD81000929CC6 /* ecma_builtin_int32array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_int32array_prototype.c; sourceTree = "<group>"; };
+		98CB541C21CBD81000929CC6 /* ecma_builtin_typedarray_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_typedarray_prototype.inc.h; sourceTree = "<group>"; };
+		98CB541D21CBD81000929CC6 /* ecma_builtin_uint8clampedarray.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint8clampedarray.inc.h; sourceTree = "<group>"; };
+		98CB541E21CBD81000929CC6 /* ecma_builtin_float64array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_float64array.inc.h; sourceTree = "<group>"; };
+		98CB541F21CBD81000929CC6 /* ecma_builtin_typedarray_prototype_template.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_typedarray_prototype_template.inc.h; sourceTree = "<group>"; };
+		98CB542021CBD81000929CC6 /* ecma_builtin_uint8array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint8array.c; sourceTree = "<group>"; };
+		98CB542121CBD81000929CC6 /* ecma_builtin_int16array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_int16array.inc.h; sourceTree = "<group>"; };
+		98CB542221CBD81000929CC6 /* ecma_builtin_uint8array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint8array.inc.h; sourceTree = "<group>"; };
+		98CB542321CBD81000929CC6 /* ecma_builtin_int8array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_int8array.inc.h; sourceTree = "<group>"; };
+		98CB542421CBD81000929CC6 /* ecma_builtin_float32array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_float32array_prototype.c; sourceTree = "<group>"; };
+		98CB542521CBD81000929CC6 /* ecma_builtin_int16array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_int16array_prototype.c; sourceTree = "<group>"; };
+		98CB542621CBD81000929CC6 /* ecma_builtin_typedarray_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_typedarray_helpers.h; sourceTree = "<group>"; };
+		98CB542721CBD81000929CC6 /* ecma_builtin_uint16array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint16array.inc.h; sourceTree = "<group>"; };
+		98CB542821CBD81000929CC6 /* ecma_builtin_float32array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_float32array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB542921CBD81000929CC6 /* ecma_builtin_uint16array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint16array_prototype.c; sourceTree = "<group>"; };
+		98CB542A21CBD81000929CC6 /* ecma_builtin_uint16array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint16array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB542B21CBD81000929CC6 /* ecma_builtin_typedarray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_typedarray.c; sourceTree = "<group>"; };
+		98CB542C21CBD81000929CC6 /* ecma_builtin_float32array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_float32array.c; sourceTree = "<group>"; };
+		98CB542D21CBD81000929CC6 /* ecma_builtin_uint8array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint8array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB542E21CBD81000929CC6 /* ecma_builtin_float64array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_float64array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB542F21CBD81000929CC6 /* ecma_builtin_int16array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_int16array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB543021CBD81000929CC6 /* ecma_builtin_int8array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_int8array_prototype.c; sourceTree = "<group>"; };
+		98CB543121CBD81000929CC6 /* ecma_builtin_int16array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_int16array.c; sourceTree = "<group>"; };
+		98CB543221CBD81000929CC6 /* ecma_builtin_uint8array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint8array_prototype.c; sourceTree = "<group>"; };
+		98CB543321CBD81000929CC6 /* ecma_builtin_int32array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_int32array.c; sourceTree = "<group>"; };
+		98CB543421CBD81000929CC6 /* ecma_builtin_int32array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_int32array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB543521CBD81000929CC6 /* ecma_builtin_uint32array_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint32array_prototype.inc.h; sourceTree = "<group>"; };
+		98CB543621CBD81000929CC6 /* ecma_builtin_uint32array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint32array.inc.h; sourceTree = "<group>"; };
+		98CB543721CBD81000929CC6 /* ecma_builtin_float32array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_float32array.inc.h; sourceTree = "<group>"; };
+		98CB543821CBD81000929CC6 /* ecma_builtin_float64array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_float64array_prototype.c; sourceTree = "<group>"; };
+		98CB543921CBD81000929CC6 /* ecma_builtin_uint8clampedarray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint8clampedarray.c; sourceTree = "<group>"; };
+		98CB543A21CBD81000929CC6 /* ecma_builtin_uint32array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint32array_prototype.c; sourceTree = "<group>"; };
+		98CB543B21CBD81000929CC6 /* ecma_builtin_typedarray_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_typedarray_prototype.c; sourceTree = "<group>"; };
+		98CB543C21CBD81000929CC6 /* ecma_builtin_int8array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_int8array.c; sourceTree = "<group>"; };
+		98CB543D21CBD81000929CC6 /* ecma_builtin_uint8clampedarray_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_uint8clampedarray_prototype.c; sourceTree = "<group>"; };
+		98CB543E21CBD81000929CC6 /* ecma_builtin_uint8clampedarray_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_uint8clampedarray_prototype.inc.h; sourceTree = "<group>"; };
+		98CB543F21CBD81000929CC6 /* ecma_builtin_date_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_date_prototype.inc.h; sourceTree = "<group>"; };
+		98CB544021CBD81000929CC6 /* ecma_builtin_object.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_object.inc.h; sourceTree = "<group>"; };
+		98CB544121CBD81000929CC6 /* ecma_builtins.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtins.inc.h; sourceTree = "<group>"; };
+		98CB544221CBD81000929CC6 /* ecma_builtin_function.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_function.inc.h; sourceTree = "<group>"; };
+		98CB544321CBD81000929CC6 /* ecma_builtin_type_error_thrower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_type_error_thrower.c; sourceTree = "<group>"; };
+		98CB544421CBD81000929CC6 /* ecma_builtin_syntaxerror_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_syntaxerror_prototype.inc.h; sourceTree = "<group>"; };
+		98CB544521CBD81000929CC6 /* ecma_builtin_global.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_global.c; sourceTree = "<group>"; };
+		98CB544621CBD81000929CC6 /* ecma_builtin_internal_routines_template.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_internal_routines_template.inc.h; sourceTree = "<group>"; };
+		98CB544721CBD81000929CC6 /* ecma_builtin_promise.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_promise.c; sourceTree = "<group>"; };
+		98CB544821CBD81000929CC6 /* ecma_builtin_promise.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_promise.inc.h; sourceTree = "<group>"; };
+		98CB544921CBD81000929CC6 /* ecma_builtin_error.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_error.inc.h; sourceTree = "<group>"; };
+		98CB544A21CBD81000929CC6 /* ecma_builtin_regexp_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_regexp_prototype.c; sourceTree = "<group>"; };
+		98CB544B21CBD81000929CC6 /* ecma_builtin_boolean_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_boolean_prototype.c; sourceTree = "<group>"; };
+		98CB544C21CBD81000929CC6 /* ecma_builtin_function_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_function_prototype.c; sourceTree = "<group>"; };
+		98CB544D21CBD81000929CC6 /* ecma_builtin_syntaxerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_syntaxerror.c; sourceTree = "<group>"; };
+		98CB544E21CBD81000929CC6 /* ecma_builtin_function_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_function_prototype.inc.h; sourceTree = "<group>"; };
+		98CB544F21CBD81000929CC6 /* ecma_builtin_array.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_array.inc.h; sourceTree = "<group>"; };
+		98CB545021CBD81000929CC6 /* ecma_builtins.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtins.c; sourceTree = "<group>"; };
+		98CB545121CBD81000929CC6 /* ecma_builtin_object_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_object_prototype.inc.h; sourceTree = "<group>"; };
+		98CB545221CBD81000929CC6 /* ecma_builtin_boolean_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_boolean_prototype.inc.h; sourceTree = "<group>"; };
+		98CB545321CBD81000929CC6 /* ecma_builtin_map_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_map_prototype.inc.h; sourceTree = "<group>"; };
+		98CB545421CBD81000929CC6 /* ecma_builtin_global.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_global.inc.h; sourceTree = "<group>"; };
+		98CB545521CBD81000929CC6 /* ecma_builtin_arraybuffer_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_arraybuffer_prototype.c; sourceTree = "<group>"; };
+		98CB545621CBD81000929CC6 /* ecma_builtin_urierror_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_urierror_prototype.inc.h; sourceTree = "<group>"; };
+		98CB545721CBD81000929CC6 /* ecma_builtins_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtins_internal.h; sourceTree = "<group>"; };
+		98CB545821CBD81000929CC6 /* ecma_builtin_function.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_function.c; sourceTree = "<group>"; };
+		98CB545921CBD81000929CC6 /* ecma_builtin_referenceerror_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_referenceerror_prototype.c; sourceTree = "<group>"; };
+		98CB545A21CBD81000929CC6 /* ecma_builtin_helpers_date.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_helpers_date.c; sourceTree = "<group>"; };
+		98CB545B21CBD81000929CC6 /* ecma_builtin_array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_array.c; sourceTree = "<group>"; };
+		98CB545C21CBD81000929CC6 /* ecma_builtin_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_object.c; sourceTree = "<group>"; };
+		98CB545D21CBD81000929CC6 /* ecma_builtin_helpers_error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_helpers_error.c; sourceTree = "<group>"; };
+		98CB545E21CBD81000929CC6 /* ecma_builtin_map.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_map.inc.h; sourceTree = "<group>"; };
+		98CB545F21CBD81000929CC6 /* ecma_builtin_arraybuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_arraybuffer.c; sourceTree = "<group>"; };
+		98CB546021CBD81000929CC6 /* ecma_builtin_json.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_json.inc.h; sourceTree = "<group>"; };
+		98CB546121CBD81000929CC6 /* ecma_builtin_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_helpers.h; sourceTree = "<group>"; };
+		98CB546221CBD81000929CC6 /* ecma_builtin_arraybuffer.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_arraybuffer.inc.h; sourceTree = "<group>"; };
+		98CB546321CBD81000929CC6 /* ecma_builtin_math.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_math.inc.h; sourceTree = "<group>"; };
+		98CB546421CBD81000929CC6 /* ecma_builtin_math.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_math.c; sourceTree = "<group>"; };
+		98CB546521CBD81000929CC6 /* ecma_builtin_referenceerror_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_referenceerror_prototype.inc.h; sourceTree = "<group>"; };
+		98CB546621CBD81000929CC6 /* ecma_builtin_date.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_date.inc.h; sourceTree = "<group>"; };
+		98CB546721CBD81000929CC6 /* ecma_builtin_typeerror_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_typeerror_prototype.inc.h; sourceTree = "<group>"; };
+		98CB546821CBD81000929CC6 /* ecma_builtin_array_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_array_prototype.c; sourceTree = "<group>"; };
+		98CB546921CBD81000929CC6 /* ecma_builtin_error_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_error_prototype.inc.h; sourceTree = "<group>"; };
+		98CB546A21CBD81000929CC6 /* ecma_builtin_helpers_macro_defines.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_helpers_macro_defines.inc.h; sourceTree = "<group>"; };
+		98CB546B21CBD81000929CC6 /* ecma_builtin_number.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_number.c; sourceTree = "<group>"; };
+		98CB546C21CBD81000929CC6 /* ecma_builtin_string_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_string_prototype.c; sourceTree = "<group>"; };
+		98CB546D21CBD81000929CC6 /* ecma_builtins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtins.h; sourceTree = "<group>"; };
+		98CB546E21CBD81000929CC6 /* ecma_builtin_json.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_json.c; sourceTree = "<group>"; };
+		98CB546F21CBD81000929CC6 /* ecma_builtin_object_prototype.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_object_prototype.c; sourceTree = "<group>"; };
+		98CB547021CBD81000929CC6 /* ecma_builtin_number.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_number.inc.h; sourceTree = "<group>"; };
+		98CB547121CBD81000929CC6 /* ecma_builtin_string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_string.c; sourceTree = "<group>"; };
+		98CB547221CBD81000929CC6 /* ecma_builtin_referenceerror.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_referenceerror.inc.h; sourceTree = "<group>"; };
+		98CB547321CBD81000929CC6 /* ecma_builtin_helpers-json.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "ecma_builtin_helpers-json.c"; sourceTree = "<group>"; };
+		98CB547421CBD81000929CC6 /* ecma_builtin_type_error_thrower.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_type_error_thrower.inc.h; sourceTree = "<group>"; };
+		98CB547521CBD81000929CC6 /* ecma_builtin_regexp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_regexp.c; sourceTree = "<group>"; };
+		98CB547721CBD81000929CC6 /* ecma_reference.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_reference.c; sourceTree = "<group>"; };
+		98CB547821CBD81000929CC6 /* ecma_jobqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_jobqueue.h; sourceTree = "<group>"; };
+		98CB547921CBD81000929CC6 /* ecma_get_put_value.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_get_put_value.c; sourceTree = "<group>"; };
+		98CB547A21CBD81000929CC6 /* ecma_conversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_conversion.c; sourceTree = "<group>"; };
+		98CB547B21CBD81000929CC6 /* ecma_objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_objects.h; sourceTree = "<group>"; };
+		98CB547C21CBD81000929CC6 /* ecma_arraybuffer_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_arraybuffer_object.c; sourceTree = "<group>"; };
+		98CB547D21CBD81000929CC6 /* ecma_promise_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_promise_object.h; sourceTree = "<group>"; };
+		98CB547E21CBD81000929CC6 /* ecma_string_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_string_object.h; sourceTree = "<group>"; };
+		98CB547F21CBD81000929CC6 /* ecma_exceptions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_exceptions.c; sourceTree = "<group>"; };
+		98CB548021CBD81000929CC6 /* ecma_lex_env.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_lex_env.h; sourceTree = "<group>"; };
+		98CB548121CBD81000929CC6 /* ecma_array_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_array_object.h; sourceTree = "<group>"; };
+		98CB548221CBD81000929CC6 /* ecma_boolean_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_boolean_object.h; sourceTree = "<group>"; };
+		98CB548321CBD81000929CC6 /* ecma_objects_general.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_objects_general.h; sourceTree = "<group>"; };
+		98CB548421CBD81000929CC6 /* ecma_objects_arguments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_objects_arguments.h; sourceTree = "<group>"; };
+		98CB548521CBD81000929CC6 /* ecma_compiled_code.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_compiled_code.h; sourceTree = "<group>"; };
+		98CB548621CBD81000929CC6 /* ecma_function_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_function_object.h; sourceTree = "<group>"; };
+		98CB548721CBD81000929CC6 /* ecma_try_catch_macro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_try_catch_macro.h; sourceTree = "<group>"; };
+		98CB548821CBD81000929CC6 /* ecma_number_arithmetic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_number_arithmetic.h; sourceTree = "<group>"; };
+		98CB548921CBD81000929CC6 /* ecma_number_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_number_object.h; sourceTree = "<group>"; };
+		98CB548A21CBD81000929CC6 /* ecma_map_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_map_object.h; sourceTree = "<group>"; };
+		98CB548B21CBD81000929CC6 /* ecma_comparison.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_comparison.c; sourceTree = "<group>"; };
+		98CB548C21CBD81000929CC6 /* ecma_typedarray_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_typedarray_object.h; sourceTree = "<group>"; };
+		98CB548D21CBD81000929CC6 /* ecma_regexp_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_regexp_object.c; sourceTree = "<group>"; };
+		98CB548E21CBD81000929CC6 /* ecma_objects.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_objects.c; sourceTree = "<group>"; };
+		98CB548F21CBD81000929CC6 /* ecma_conversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_conversion.h; sourceTree = "<group>"; };
+		98CB549021CBD81000929CC6 /* ecma_jobqueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_jobqueue.c; sourceTree = "<group>"; };
+		98CB549121CBD81000929CC6 /* ecma_reference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_reference.h; sourceTree = "<group>"; };
+		98CB549221CBD81000929CC6 /* ecma_lex_env.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_lex_env.c; sourceTree = "<group>"; };
+		98CB549321CBD81000929CC6 /* ecma_boolean_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_boolean_object.c; sourceTree = "<group>"; };
+		98CB549421CBD81000929CC6 /* ecma_array_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_array_object.c; sourceTree = "<group>"; };
+		98CB549521CBD81000929CC6 /* ecma_exceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_exceptions.h; sourceTree = "<group>"; };
+		98CB549621CBD81000929CC6 /* ecma_promise_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_promise_object.c; sourceTree = "<group>"; };
+		98CB549721CBD81000929CC6 /* ecma_arraybuffer_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_arraybuffer_object.h; sourceTree = "<group>"; };
+		98CB549821CBD81000929CC6 /* ecma_string_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_string_object.c; sourceTree = "<group>"; };
+		98CB549921CBD81000929CC6 /* ecma_number_arithmetic.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_number_arithmetic.c; sourceTree = "<group>"; };
+		98CB549A21CBD81000929CC6 /* ecma_compiled_code.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_compiled_code.c; sourceTree = "<group>"; };
+		98CB549B21CBD81000929CC6 /* ecma_function_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_function_object.c; sourceTree = "<group>"; };
+		98CB549C21CBD81000929CC6 /* ecma_objects_general.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_objects_general.c; sourceTree = "<group>"; };
+		98CB549D21CBD81000929CC6 /* ecma_objects_arguments.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_objects_arguments.c; sourceTree = "<group>"; };
+		98CB549E21CBD81000929CC6 /* ecma_typedarray_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_typedarray_object.c; sourceTree = "<group>"; };
+		98CB549F21CBD81000929CC6 /* ecma_regexp_object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_regexp_object.h; sourceTree = "<group>"; };
+		98CB54A021CBD81000929CC6 /* ecma_comparison.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_comparison.h; sourceTree = "<group>"; };
+		98CB54A121CBD81000929CC6 /* ecma_number_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_number_object.c; sourceTree = "<group>"; };
+		98CB54A221CBD81000929CC6 /* ecma_map_object.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_map_object.c; sourceTree = "<group>"; };
+		98CB54A421CBD81000929CC6 /* ecma_alloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_alloc.c; sourceTree = "<group>"; };
+		98CB54A521CBD81000929CC6 /* ecma_literal_storage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_literal_storage.c; sourceTree = "<group>"; };
+		98CB54A621CBD81000929CC6 /* ecma_helpers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers.c; sourceTree = "<group>"; };
+		98CB54A721CBD81000929CC6 /* ecma_globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_globals.h; sourceTree = "<group>"; };
+		98CB54A821CBD81000929CC6 /* ecma_gc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_gc.h; sourceTree = "<group>"; };
+		98CB54A921CBD81000929CC6 /* ecma_lcache.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_lcache.c; sourceTree = "<group>"; };
+		98CB54AA21CBD81000929CC6 /* ecma_helpers_conversion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers_conversion.c; sourceTree = "<group>"; };
+		98CB54AB21CBD81000929CC6 /* ecma_property_hashmap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_property_hashmap.c; sourceTree = "<group>"; };
+		98CB54AC21CBD81000929CC6 /* ecma_helpers_errol.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers_errol.c; sourceTree = "<group>"; };
+		98CB54AD21CBD81000929CC6 /* ecma_init_finalize.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_init_finalize.c; sourceTree = "<group>"; };
+		98CB54AE21CBD81000929CC6 /* ecma_gc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_gc.c; sourceTree = "<group>"; };
+		98CB54AF21CBD81000929CC6 /* ecma_helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_helpers.h; sourceTree = "<group>"; };
+		98CB54B021CBD81000929CC6 /* ecma_literal_storage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_literal_storage.h; sourceTree = "<group>"; };
+		98CB54B121CBD81000929CC6 /* ecma_helpers_value.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers_value.c; sourceTree = "<group>"; };
+		98CB54B221CBD81000929CC6 /* ecma_alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_alloc.h; sourceTree = "<group>"; };
+		98CB54B321CBD81000929CC6 /* ecma_lcache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_lcache.h; sourceTree = "<group>"; };
+		98CB54B421CBD81000929CC6 /* ecma_init_finalize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_init_finalize.h; sourceTree = "<group>"; };
+		98CB54B521CBD81000929CC6 /* ecma_helpers_external_pointers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers_external_pointers.c; sourceTree = "<group>"; };
+		98CB54B621CBD81000929CC6 /* ecma_helpers_number.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers_number.c; sourceTree = "<group>"; };
+		98CB54B721CBD81000929CC6 /* ecma_helpers_values_collection.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers_values_collection.c; sourceTree = "<group>"; };
+		98CB54B821CBD81000929CC6 /* ecma_property_hashmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_property_hashmap.h; sourceTree = "<group>"; };
+		98CB54B921CBD81000929CC6 /* ecma_helpers_string.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_helpers_string.c; sourceTree = "<group>"; };
+		98CB54BB21CBD81000929CC6 /* jmem_poolman.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jmem_poolman.c; sourceTree = "<group>"; };
+		98CB54BC21CBD81000929CC6 /* jmem_heap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jmem_heap.c; sourceTree = "<group>"; };
+		98CB54BD21CBD81000929CC6 /* jmem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmem.h; sourceTree = "<group>"; };
+		98CB54BE21CBD81000929CC6 /* jmem_allocator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = jmem_allocator.c; sourceTree = "<group>"; };
+		98CB54BF21CBD81000929CC6 /* jmem_allocator_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmem_allocator_internal.h; sourceTree = "<group>"; };
+		98CB54C121CBD81000929CC6 /* debugger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = debugger.c; sourceTree = "<group>"; };
+		98CB54C221CBD81000929CC6 /* debugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debugger.h; sourceTree = "<group>"; };
+		98CB54C421CBD81000929CC6 /* qking_debugger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qking_debugger.c; sourceTree = "<group>"; };
+		98CB54C521CBD81000929CC6 /* qking_debugger_transport.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qking_debugger_transport.c; sourceTree = "<group>"; };
+		98CB54C621CBD81000929CC6 /* qking_snapshot.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qking_snapshot.c; sourceTree = "<group>"; };
+		98CB54C721CBD81000929CC6 /* qking.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qking.c; sourceTree = "<group>"; };
+		98CB54C821CBD81000929CC6 /* qking_internal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qking_internal.c; sourceTree = "<group>"; };
+		98CB54C921CBD81000929CC6 /* qking_snapshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_snapshot.h; sourceTree = "<group>"; };
+		98CB54CB21CBD81000929CC6 /* qking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking.h; sourceTree = "<group>"; };
+		98CB54CD21CBD81000929CC6 /* exec_state_decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = exec_state_decode.c; sourceTree = "<group>"; };
+		98CB54CE21CBD81000929CC6 /* decoder_sections.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = decoder_sections.c; sourceTree = "<group>"; };
+		98CB54CF21CBD81000929CC6 /* exec_state_decode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = exec_state_decode.h; sourceTree = "<group>"; };
+		98CB54D021CBD81000929CC6 /* decoder_sections.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = decoder_sections.h; sourceTree = "<group>"; };
+		98CB54D321CBD81000929CC6 /* default_io.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = default_io.c; sourceTree = "<group>"; };
+		98CB54D521CBD81000929CC6 /* qking_port_default.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qking_port_default.h; sourceTree = "<group>"; };
+		98CB54D621CBD81000929CC6 /* default_external_context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = default_external_context.c; sourceTree = "<group>"; };
+		98CB54D721CBD81000929CC6 /* default_fatal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = default_fatal.c; sourceTree = "<group>"; };
+		98CB54D821CBD81000929CC6 /* defaultx-handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "defaultx-handler.c"; sourceTree = "<group>"; };
+		98CB54D921CBD81000929CC6 /* default_debugger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = default_debugger.c; sourceTree = "<group>"; };
+		98CB54DA21CBD81000929CC6 /* default_date.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = default_date.c; sourceTree = "<group>"; };
+		98CB54DC21CBD81000929CC6 /* common_logger.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = common_logger.c; sourceTree = "<group>"; };
+		98CB54DD21CBD81000929CC6 /* string_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string_utils.h; sourceTree = "<group>"; };
+		98CB54DE21CBD81000929CC6 /* common_error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common_error.h; sourceTree = "<group>"; };
+		98CB54DF21CBD81000929CC6 /* common_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common_base.h; sourceTree = "<group>"; };
+		98CB54E021CBD81000929CC6 /* common_logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common_logger.h; sourceTree = "<group>"; };
+		98CB54E121CBD81000929CC6 /* common_binary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common_binary.h; sourceTree = "<group>"; };
 		9B9E74771FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXTestBridgeMethodDummy.h; sourceTree = "<group>"; };
 		9B9E74781FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXTestBridgeMethodDummy.m; sourceTree = "<group>"; };
 		B8394F3521468AF100CA1EFF /* render_action_trigger_vsync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = render_action_trigger_vsync.h; sourceTree = "<group>"; };
@@ -1604,7 +2166,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98CB53AD21CBCD2900929CC6 /* Qking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1628,7 +2189,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				98CB53AC21CBC8F800929CC6 /* Qking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1637,7 +2197,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DCA446241EFA5AFE00D0CFA8 /* UIKit.framework in Frameworks */,
-				98CB53AE21CBCE6600929CC6 /* Qking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2262,13 +2821,487 @@
 		98B69EF221CA295F00E03B77 /* qking */ = {
 			isa = PBXGroup;
 			children = (
-				98CB53AB21CBC8F800929CC6 /* Qking.framework */,
 				98B69EF321CA295F00E03B77 /* vnode_qking_convert.cc */,
 				98B69EF421CA295F00E03B77 /* vnode_qking_env.cc */,
 				98B69EF521CA295F00E03B77 /* vnode_qking_env.h */,
 				98B69EF621CA295F00E03B77 /* vnode_qking_convert.h */,
 			);
 			path = qking;
+			sourceTree = "<group>";
+		};
+		98CB53AF21CBD80F00929CC6 /* qking */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53B021CBD80F00929CC6 /* handler */,
+				98CB53B621CBD80F00929CC6 /* core */,
+				98CB54CA21CBD81000929CC6 /* include */,
+				98CB54CC21CBD81000929CC6 /* decoder */,
+				98CB54D121CBD81000929CC6 /* port */,
+				98CB54DB21CBD81000929CC6 /* base */,
+			);
+			name = qking;
+			path = ../../../../weex_core/Source/qking;
+			sourceTree = "<group>";
+		};
+		98CB53B021CBD80F00929CC6 /* handler */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53B121CBD80F00929CC6 /* handler-assert.c */,
+				98CB53B221CBD80F00929CC6 /* handler-register.c */,
+				98CB53B321CBD80F00929CC6 /* handler-gc.c */,
+				98CB53B421CBD80F00929CC6 /* handler-print.c */,
+				98CB53B521CBD80F00929CC6 /* handler.h */,
+			);
+			path = handler;
+			sourceTree = "<group>";
+		};
+		98CB53B621CBD80F00929CC6 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53B721CBD80F00929CC6 /* jcontext */,
+				98CB53BA21CBD80F00929CC6 /* lit */,
+				98CB53C621CBD80F00929CC6 /* config.h */,
+				98CB53C721CBD80F00929CC6 /* include */,
+				98CB53CF21CBD80F00929CC6 /* parser */,
+				98CB53D721CBD80F00929CC6 /* jrt */,
+				98CB53DD21CBD80F00929CC6 /* vm */,
+				98CB53EE21CBD81000929CC6 /* ecma */,
+				98CB54BA21CBD81000929CC6 /* jmem */,
+				98CB54C021CBD81000929CC6 /* debugger */,
+				98CB54C321CBD81000929CC6 /* api */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		98CB53B721CBD80F00929CC6 /* jcontext */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53B821CBD80F00929CC6 /* jcontext.c */,
+				98CB53B921CBD80F00929CC6 /* jcontext.h */,
+			);
+			path = jcontext;
+			sourceTree = "<group>";
+		};
+		98CB53BA21CBD80F00929CC6 /* lit */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53BB21CBD80F00929CC6 /* lit_magic_strings.ini */,
+				98CB53BC21CBD80F00929CC6 /* lit_magic_strings.c */,
+				98CB53BD21CBD80F00929CC6 /* lit_strings.h */,
+				98CB53BE21CBD80F00929CC6 /* lit_unicode_ranges.inc.h */,
+				98CB53BF21CBD80F00929CC6 /* lit_magic_strings.inc.h */,
+				98CB53C021CBD80F00929CC6 /* lit_char_helpers.h */,
+				98CB53C121CBD80F00929CC6 /* lit_strings.c */,
+				98CB53C221CBD80F00929CC6 /* lit_magic_strings.h */,
+				98CB53C321CBD80F00929CC6 /* lit_unicode_conversions.inc.h */,
+				98CB53C421CBD80F00929CC6 /* lit_globals.h */,
+				98CB53C521CBD80F00929CC6 /* lit_char_helpers.c */,
+			);
+			path = lit;
+			sourceTree = "<group>";
+		};
+		98CB53C721CBD80F00929CC6 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53C821CBD80F00929CC6 /* qking_internal.h */,
+				98CB53C921CBD80F00929CC6 /* qking_port.h */,
+				98CB53CA21CBD80F00929CC6 /* qking_compiler.h */,
+				98CB53CB21CBD80F00929CC6 /* qking_core.h */,
+				98CB53CC21CBD80F00929CC6 /* qking_debugger.h */,
+				98CB53CD21CBD80F00929CC6 /* qking_snapshot.h */,
+				98CB53CE21CBD80F00929CC6 /* qking_debugger_transport.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		98CB53CF21CBD80F00929CC6 /* parser */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53D021CBD80F00929CC6 /* regexp */,
+			);
+			path = parser;
+			sourceTree = "<group>";
+		};
+		98CB53D021CBD80F00929CC6 /* regexp */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53D121CBD80F00929CC6 /* re_bytecode.h */,
+				98CB53D221CBD80F00929CC6 /* re_parser.c */,
+				98CB53D321CBD80F00929CC6 /* re_compiler.c */,
+				98CB53D421CBD80F00929CC6 /* re_bytecode.c */,
+				98CB53D521CBD80F00929CC6 /* re_compiler.h */,
+				98CB53D621CBD80F00929CC6 /* re_parser.h */,
+			);
+			path = regexp;
+			sourceTree = "<group>";
+		};
+		98CB53D721CBD80F00929CC6 /* jrt */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53D821CBD80F00929CC6 /* jrt_libc_includes.h */,
+				98CB53D921CBD80F00929CC6 /* jrt_types.h */,
+				98CB53DA21CBD80F00929CC6 /* jrt_bit_fields.h */,
+				98CB53DB21CBD80F00929CC6 /* jrt_fatals.c */,
+				98CB53DC21CBD80F00929CC6 /* jrt.h */,
+			);
+			path = jrt;
+			sourceTree = "<group>";
+		};
+		98CB53DD21CBD80F00929CC6 /* vm */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53DE21CBD80F00929CC6 /* vm_logic_utils_relational_equality.c */,
+				98CB53DF21CBD80F00929CC6 /* vm_logic_utils.c */,
+				98CB53E021CBD80F00929CC6 /* vm.c */,
+				98CB53E121CBD80F00929CC6 /* vm_ecma_value_helper.c */,
+				98CB53E221CBD80F00929CC6 /* vm_logic_utils_bitwise.c */,
+				98CB53E321CBD80F00929CC6 /* vm_op_code.h */,
+				98CB53E421CBD80F00929CC6 /* vm_utils.c */,
+				98CB53E521CBD80F00929CC6 /* vm_exec_state.c */,
+				98CB53E621CBD80F00929CC6 /* vm_logic_utils.h */,
+				98CB53E721CBD80F00929CC6 /* vm_logic_utils_arithmetics.c */,
+				98CB53E821CBD80F00929CC6 /* vm_defines.h */,
+				98CB53E921CBD80F00929CC6 /* vm_ecma_value_helper.h */,
+				98CB53EA21CBD81000929CC6 /* vm.h */,
+				98CB53EB21CBD81000929CC6 /* vm_exec_state.h */,
+				98CB53EC21CBD81000929CC6 /* vm_context.h */,
+				98CB53ED21CBD81000929CC6 /* vm_op_code.c */,
+			);
+			path = vm;
+			sourceTree = "<group>";
+		};
+		98CB53EE21CBD81000929CC6 /* ecma */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53EF21CBD81000929CC6 /* builtin-objects */,
+				98CB547621CBD81000929CC6 /* operations */,
+				98CB54A321CBD81000929CC6 /* base */,
+			);
+			path = ecma;
+			sourceTree = "<group>";
+		};
+		98CB53EF21CBD81000929CC6 /* builtin-objects */ = {
+			isa = PBXGroup;
+			children = (
+				98CB53F021CBD81000929CC6 /* ecma_builtin_rangeerror.c */,
+				98CB53F121CBD81000929CC6 /* ecma_builtin_string_prototype.inc.h */,
+				98CB53F221CBD81000929CC6 /* ecma_builtin_rangeerror_prototype.inc.h */,
+				98CB53F321CBD81000929CC6 /* ecma_builtin_error.c */,
+				98CB53F421CBD81000929CC6 /* ecma_builtin_map_prototype.c */,
+				98CB53F521CBD81000929CC6 /* ecma_builtin_typeerror.inc.h */,
+				98CB53F621CBD81000929CC6 /* ecma_builtin_helpers_sort.c */,
+				98CB53F721CBD81000929CC6 /* ecma_builtin_arraybuffer_prototype.inc.h */,
+				98CB53F821CBD81000929CC6 /* ecma_builtin_array_prototype.inc.h */,
+				98CB53F921CBD81000929CC6 /* ecma_builtin_typeerror_prototype.c */,
+				98CB53FA21CBD81000929CC6 /* ecma_builtin_rangeerror_prototype.c */,
+				98CB53FB21CBD81000929CC6 /* ecma_builtin_urierror_prototype.c */,
+				98CB53FC21CBD81000929CC6 /* ecma_builtin_string.inc.h */,
+				98CB53FD21CBD81000929CC6 /* ecma_builtin_map.c */,
+				98CB53FE21CBD81000929CC6 /* ecma_builtin_promise_prototype.c */,
+				98CB53FF21CBD81000929CC6 /* ecma_builtin_error_prototype.c */,
+				98CB540021CBD81000929CC6 /* ecma_builtin_rangeerror.inc.h */,
+				98CB540121CBD81000929CC6 /* ecma_builtin_date.c */,
+				98CB540221CBD81000929CC6 /* ecma_builtin_number_prototype.c */,
+				98CB540321CBD81000929CC6 /* ecma_builtin_helpers.c */,
+				98CB540421CBD81000929CC6 /* ecma_builtin_number_prototype.inc.h */,
+				98CB540521CBD81000929CC6 /* ecma_builtin_date_prototype.c */,
+				98CB540621CBD81000929CC6 /* ecma_builtin_regexp.inc.h */,
+				98CB540721CBD81000929CC6 /* ecma_builtin_boolean.inc.h */,
+				98CB540821CBD81000929CC6 /* ecma_builtin_promise_prototype.inc.h */,
+				98CB540921CBD81000929CC6 /* ecma_builtin_helpers_macro_undefs.inc.h */,
+				98CB540A21CBD81000929CC6 /* ecma_builtin_urierror.c */,
+				98CB540B21CBD81000929CC6 /* ecma_builtin_urierror.inc.h */,
+				98CB540C21CBD81000929CC6 /* ecma_builtin_regexp_prototype.inc.h */,
+				98CB540D21CBD81000929CC6 /* ecma_builtin_syntaxerror.inc.h */,
+				98CB540E21CBD81000929CC6 /* ecma_builtin_boolean.c */,
+				98CB540F21CBD81000929CC6 /* ecma_builtin_syntaxerror_prototype.c */,
+				98CB541021CBD81000929CC6 /* ecma_builtin_typeerror.c */,
+				98CB541121CBD81000929CC6 /* ecma_builtin_referenceerror.c */,
+				98CB541221CBD81000929CC6 /* typedarray */,
+				98CB543F21CBD81000929CC6 /* ecma_builtin_date_prototype.inc.h */,
+				98CB544021CBD81000929CC6 /* ecma_builtin_object.inc.h */,
+				98CB544121CBD81000929CC6 /* ecma_builtins.inc.h */,
+				98CB544221CBD81000929CC6 /* ecma_builtin_function.inc.h */,
+				98CB544321CBD81000929CC6 /* ecma_builtin_type_error_thrower.c */,
+				98CB544421CBD81000929CC6 /* ecma_builtin_syntaxerror_prototype.inc.h */,
+				98CB544521CBD81000929CC6 /* ecma_builtin_global.c */,
+				98CB544621CBD81000929CC6 /* ecma_builtin_internal_routines_template.inc.h */,
+				98CB544721CBD81000929CC6 /* ecma_builtin_promise.c */,
+				98CB544821CBD81000929CC6 /* ecma_builtin_promise.inc.h */,
+				98CB544921CBD81000929CC6 /* ecma_builtin_error.inc.h */,
+				98CB544A21CBD81000929CC6 /* ecma_builtin_regexp_prototype.c */,
+				98CB544B21CBD81000929CC6 /* ecma_builtin_boolean_prototype.c */,
+				98CB544C21CBD81000929CC6 /* ecma_builtin_function_prototype.c */,
+				98CB544D21CBD81000929CC6 /* ecma_builtin_syntaxerror.c */,
+				98CB544E21CBD81000929CC6 /* ecma_builtin_function_prototype.inc.h */,
+				98CB544F21CBD81000929CC6 /* ecma_builtin_array.inc.h */,
+				98CB545021CBD81000929CC6 /* ecma_builtins.c */,
+				98CB545121CBD81000929CC6 /* ecma_builtin_object_prototype.inc.h */,
+				98CB545221CBD81000929CC6 /* ecma_builtin_boolean_prototype.inc.h */,
+				98CB545321CBD81000929CC6 /* ecma_builtin_map_prototype.inc.h */,
+				98CB545421CBD81000929CC6 /* ecma_builtin_global.inc.h */,
+				98CB545521CBD81000929CC6 /* ecma_builtin_arraybuffer_prototype.c */,
+				98CB545621CBD81000929CC6 /* ecma_builtin_urierror_prototype.inc.h */,
+				98CB545721CBD81000929CC6 /* ecma_builtins_internal.h */,
+				98CB545821CBD81000929CC6 /* ecma_builtin_function.c */,
+				98CB545921CBD81000929CC6 /* ecma_builtin_referenceerror_prototype.c */,
+				98CB545A21CBD81000929CC6 /* ecma_builtin_helpers_date.c */,
+				98CB545B21CBD81000929CC6 /* ecma_builtin_array.c */,
+				98CB545C21CBD81000929CC6 /* ecma_builtin_object.c */,
+				98CB545D21CBD81000929CC6 /* ecma_builtin_helpers_error.c */,
+				98CB545E21CBD81000929CC6 /* ecma_builtin_map.inc.h */,
+				98CB545F21CBD81000929CC6 /* ecma_builtin_arraybuffer.c */,
+				98CB546021CBD81000929CC6 /* ecma_builtin_json.inc.h */,
+				98CB546121CBD81000929CC6 /* ecma_builtin_helpers.h */,
+				98CB546221CBD81000929CC6 /* ecma_builtin_arraybuffer.inc.h */,
+				98CB546321CBD81000929CC6 /* ecma_builtin_math.inc.h */,
+				98CB546421CBD81000929CC6 /* ecma_builtin_math.c */,
+				98CB546521CBD81000929CC6 /* ecma_builtin_referenceerror_prototype.inc.h */,
+				98CB546621CBD81000929CC6 /* ecma_builtin_date.inc.h */,
+				98CB546721CBD81000929CC6 /* ecma_builtin_typeerror_prototype.inc.h */,
+				98CB546821CBD81000929CC6 /* ecma_builtin_array_prototype.c */,
+				98CB546921CBD81000929CC6 /* ecma_builtin_error_prototype.inc.h */,
+				98CB546A21CBD81000929CC6 /* ecma_builtin_helpers_macro_defines.inc.h */,
+				98CB546B21CBD81000929CC6 /* ecma_builtin_number.c */,
+				98CB546C21CBD81000929CC6 /* ecma_builtin_string_prototype.c */,
+				98CB546D21CBD81000929CC6 /* ecma_builtins.h */,
+				98CB546E21CBD81000929CC6 /* ecma_builtin_json.c */,
+				98CB546F21CBD81000929CC6 /* ecma_builtin_object_prototype.c */,
+				98CB547021CBD81000929CC6 /* ecma_builtin_number.inc.h */,
+				98CB547121CBD81000929CC6 /* ecma_builtin_string.c */,
+				98CB547221CBD81000929CC6 /* ecma_builtin_referenceerror.inc.h */,
+				98CB547321CBD81000929CC6 /* ecma_builtin_helpers-json.c */,
+				98CB547421CBD81000929CC6 /* ecma_builtin_type_error_thrower.inc.h */,
+				98CB547521CBD81000929CC6 /* ecma_builtin_regexp.c */,
+			);
+			path = "builtin-objects";
+			sourceTree = "<group>";
+		};
+		98CB541221CBD81000929CC6 /* typedarray */ = {
+			isa = PBXGroup;
+			children = (
+				98CB541321CBD81000929CC6 /* ecma_builtin_typedarray_template.inc.h */,
+				98CB541421CBD81000929CC6 /* ecma_builtin_int8array_prototype.inc.h */,
+				98CB541521CBD81000929CC6 /* ecma_builtin_float64array.c */,
+				98CB541621CBD81000929CC6 /* ecma_builtin_typedarray.inc.h */,
+				98CB541721CBD81000929CC6 /* ecma_builtin_int32array.inc.h */,
+				98CB541821CBD81000929CC6 /* ecma_builtin_uint16array.c */,
+				98CB541921CBD81000929CC6 /* ecma_builtin_typedarray_helpers.c */,
+				98CB541A21CBD81000929CC6 /* ecma_builtin_uint32array.c */,
+				98CB541B21CBD81000929CC6 /* ecma_builtin_int32array_prototype.c */,
+				98CB541C21CBD81000929CC6 /* ecma_builtin_typedarray_prototype.inc.h */,
+				98CB541D21CBD81000929CC6 /* ecma_builtin_uint8clampedarray.inc.h */,
+				98CB541E21CBD81000929CC6 /* ecma_builtin_float64array.inc.h */,
+				98CB541F21CBD81000929CC6 /* ecma_builtin_typedarray_prototype_template.inc.h */,
+				98CB542021CBD81000929CC6 /* ecma_builtin_uint8array.c */,
+				98CB542121CBD81000929CC6 /* ecma_builtin_int16array.inc.h */,
+				98CB542221CBD81000929CC6 /* ecma_builtin_uint8array.inc.h */,
+				98CB542321CBD81000929CC6 /* ecma_builtin_int8array.inc.h */,
+				98CB542421CBD81000929CC6 /* ecma_builtin_float32array_prototype.c */,
+				98CB542521CBD81000929CC6 /* ecma_builtin_int16array_prototype.c */,
+				98CB542621CBD81000929CC6 /* ecma_builtin_typedarray_helpers.h */,
+				98CB542721CBD81000929CC6 /* ecma_builtin_uint16array.inc.h */,
+				98CB542821CBD81000929CC6 /* ecma_builtin_float32array_prototype.inc.h */,
+				98CB542921CBD81000929CC6 /* ecma_builtin_uint16array_prototype.c */,
+				98CB542A21CBD81000929CC6 /* ecma_builtin_uint16array_prototype.inc.h */,
+				98CB542B21CBD81000929CC6 /* ecma_builtin_typedarray.c */,
+				98CB542C21CBD81000929CC6 /* ecma_builtin_float32array.c */,
+				98CB542D21CBD81000929CC6 /* ecma_builtin_uint8array_prototype.inc.h */,
+				98CB542E21CBD81000929CC6 /* ecma_builtin_float64array_prototype.inc.h */,
+				98CB542F21CBD81000929CC6 /* ecma_builtin_int16array_prototype.inc.h */,
+				98CB543021CBD81000929CC6 /* ecma_builtin_int8array_prototype.c */,
+				98CB543121CBD81000929CC6 /* ecma_builtin_int16array.c */,
+				98CB543221CBD81000929CC6 /* ecma_builtin_uint8array_prototype.c */,
+				98CB543321CBD81000929CC6 /* ecma_builtin_int32array.c */,
+				98CB543421CBD81000929CC6 /* ecma_builtin_int32array_prototype.inc.h */,
+				98CB543521CBD81000929CC6 /* ecma_builtin_uint32array_prototype.inc.h */,
+				98CB543621CBD81000929CC6 /* ecma_builtin_uint32array.inc.h */,
+				98CB543721CBD81000929CC6 /* ecma_builtin_float32array.inc.h */,
+				98CB543821CBD81000929CC6 /* ecma_builtin_float64array_prototype.c */,
+				98CB543921CBD81000929CC6 /* ecma_builtin_uint8clampedarray.c */,
+				98CB543A21CBD81000929CC6 /* ecma_builtin_uint32array_prototype.c */,
+				98CB543B21CBD81000929CC6 /* ecma_builtin_typedarray_prototype.c */,
+				98CB543C21CBD81000929CC6 /* ecma_builtin_int8array.c */,
+				98CB543D21CBD81000929CC6 /* ecma_builtin_uint8clampedarray_prototype.c */,
+				98CB543E21CBD81000929CC6 /* ecma_builtin_uint8clampedarray_prototype.inc.h */,
+			);
+			path = typedarray;
+			sourceTree = "<group>";
+		};
+		98CB547621CBD81000929CC6 /* operations */ = {
+			isa = PBXGroup;
+			children = (
+				98CB547721CBD81000929CC6 /* ecma_reference.c */,
+				98CB547821CBD81000929CC6 /* ecma_jobqueue.h */,
+				98CB547921CBD81000929CC6 /* ecma_get_put_value.c */,
+				98CB547A21CBD81000929CC6 /* ecma_conversion.c */,
+				98CB547B21CBD81000929CC6 /* ecma_objects.h */,
+				98CB547C21CBD81000929CC6 /* ecma_arraybuffer_object.c */,
+				98CB547D21CBD81000929CC6 /* ecma_promise_object.h */,
+				98CB547E21CBD81000929CC6 /* ecma_string_object.h */,
+				98CB547F21CBD81000929CC6 /* ecma_exceptions.c */,
+				98CB548021CBD81000929CC6 /* ecma_lex_env.h */,
+				98CB548121CBD81000929CC6 /* ecma_array_object.h */,
+				98CB548221CBD81000929CC6 /* ecma_boolean_object.h */,
+				98CB548321CBD81000929CC6 /* ecma_objects_general.h */,
+				98CB548421CBD81000929CC6 /* ecma_objects_arguments.h */,
+				98CB548521CBD81000929CC6 /* ecma_compiled_code.h */,
+				98CB548621CBD81000929CC6 /* ecma_function_object.h */,
+				98CB548721CBD81000929CC6 /* ecma_try_catch_macro.h */,
+				98CB548821CBD81000929CC6 /* ecma_number_arithmetic.h */,
+				98CB548921CBD81000929CC6 /* ecma_number_object.h */,
+				98CB548A21CBD81000929CC6 /* ecma_map_object.h */,
+				98CB548B21CBD81000929CC6 /* ecma_comparison.c */,
+				98CB548C21CBD81000929CC6 /* ecma_typedarray_object.h */,
+				98CB548D21CBD81000929CC6 /* ecma_regexp_object.c */,
+				98CB548E21CBD81000929CC6 /* ecma_objects.c */,
+				98CB548F21CBD81000929CC6 /* ecma_conversion.h */,
+				98CB549021CBD81000929CC6 /* ecma_jobqueue.c */,
+				98CB549121CBD81000929CC6 /* ecma_reference.h */,
+				98CB549221CBD81000929CC6 /* ecma_lex_env.c */,
+				98CB549321CBD81000929CC6 /* ecma_boolean_object.c */,
+				98CB549421CBD81000929CC6 /* ecma_array_object.c */,
+				98CB549521CBD81000929CC6 /* ecma_exceptions.h */,
+				98CB549621CBD81000929CC6 /* ecma_promise_object.c */,
+				98CB549721CBD81000929CC6 /* ecma_arraybuffer_object.h */,
+				98CB549821CBD81000929CC6 /* ecma_string_object.c */,
+				98CB549921CBD81000929CC6 /* ecma_number_arithmetic.c */,
+				98CB549A21CBD81000929CC6 /* ecma_compiled_code.c */,
+				98CB549B21CBD81000929CC6 /* ecma_function_object.c */,
+				98CB549C21CBD81000929CC6 /* ecma_objects_general.c */,
+				98CB549D21CBD81000929CC6 /* ecma_objects_arguments.c */,
+				98CB549E21CBD81000929CC6 /* ecma_typedarray_object.c */,
+				98CB549F21CBD81000929CC6 /* ecma_regexp_object.h */,
+				98CB54A021CBD81000929CC6 /* ecma_comparison.h */,
+				98CB54A121CBD81000929CC6 /* ecma_number_object.c */,
+				98CB54A221CBD81000929CC6 /* ecma_map_object.c */,
+			);
+			path = operations;
+			sourceTree = "<group>";
+		};
+		98CB54A321CBD81000929CC6 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54A421CBD81000929CC6 /* ecma_alloc.c */,
+				98CB54A521CBD81000929CC6 /* ecma_literal_storage.c */,
+				98CB54A621CBD81000929CC6 /* ecma_helpers.c */,
+				98CB54A721CBD81000929CC6 /* ecma_globals.h */,
+				98CB54A821CBD81000929CC6 /* ecma_gc.h */,
+				98CB54A921CBD81000929CC6 /* ecma_lcache.c */,
+				98CB54AA21CBD81000929CC6 /* ecma_helpers_conversion.c */,
+				98CB54AB21CBD81000929CC6 /* ecma_property_hashmap.c */,
+				98CB54AC21CBD81000929CC6 /* ecma_helpers_errol.c */,
+				98CB54AD21CBD81000929CC6 /* ecma_init_finalize.c */,
+				98CB54AE21CBD81000929CC6 /* ecma_gc.c */,
+				98CB54AF21CBD81000929CC6 /* ecma_helpers.h */,
+				98CB54B021CBD81000929CC6 /* ecma_literal_storage.h */,
+				98CB54B121CBD81000929CC6 /* ecma_helpers_value.c */,
+				98CB54B221CBD81000929CC6 /* ecma_alloc.h */,
+				98CB54B321CBD81000929CC6 /* ecma_lcache.h */,
+				98CB54B421CBD81000929CC6 /* ecma_init_finalize.h */,
+				98CB54B521CBD81000929CC6 /* ecma_helpers_external_pointers.c */,
+				98CB54B621CBD81000929CC6 /* ecma_helpers_number.c */,
+				98CB54B721CBD81000929CC6 /* ecma_helpers_values_collection.c */,
+				98CB54B821CBD81000929CC6 /* ecma_property_hashmap.h */,
+				98CB54B921CBD81000929CC6 /* ecma_helpers_string.c */,
+			);
+			path = base;
+			sourceTree = "<group>";
+		};
+		98CB54BA21CBD81000929CC6 /* jmem */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54BB21CBD81000929CC6 /* jmem_poolman.c */,
+				98CB54BC21CBD81000929CC6 /* jmem_heap.c */,
+				98CB54BD21CBD81000929CC6 /* jmem.h */,
+				98CB54BE21CBD81000929CC6 /* jmem_allocator.c */,
+				98CB54BF21CBD81000929CC6 /* jmem_allocator_internal.h */,
+			);
+			path = jmem;
+			sourceTree = "<group>";
+		};
+		98CB54C021CBD81000929CC6 /* debugger */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54C121CBD81000929CC6 /* debugger.c */,
+				98CB54C221CBD81000929CC6 /* debugger.h */,
+			);
+			path = debugger;
+			sourceTree = "<group>";
+		};
+		98CB54C321CBD81000929CC6 /* api */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54C421CBD81000929CC6 /* qking_debugger.c */,
+				98CB54C521CBD81000929CC6 /* qking_debugger_transport.c */,
+				98CB54C621CBD81000929CC6 /* qking_snapshot.c */,
+				98CB54C721CBD81000929CC6 /* qking.c */,
+				98CB54C821CBD81000929CC6 /* qking_internal.c */,
+				98CB54C921CBD81000929CC6 /* qking_snapshot.h */,
+			);
+			path = api;
+			sourceTree = "<group>";
+		};
+		98CB54CA21CBD81000929CC6 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54CB21CBD81000929CC6 /* qking.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		98CB54CC21CBD81000929CC6 /* decoder */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54CD21CBD81000929CC6 /* exec_state_decode.c */,
+				98CB54CE21CBD81000929CC6 /* decoder_sections.c */,
+				98CB54CF21CBD81000929CC6 /* exec_state_decode.h */,
+				98CB54D021CBD81000929CC6 /* decoder_sections.h */,
+			);
+			path = decoder;
+			sourceTree = "<group>";
+		};
+		98CB54D121CBD81000929CC6 /* port */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54D221CBD81000929CC6 /* default */,
+			);
+			path = port;
+			sourceTree = "<group>";
+		};
+		98CB54D221CBD81000929CC6 /* default */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54D321CBD81000929CC6 /* default_io.c */,
+				98CB54D421CBD81000929CC6 /* include */,
+				98CB54D621CBD81000929CC6 /* default_external_context.c */,
+				98CB54D721CBD81000929CC6 /* default_fatal.c */,
+				98CB54D821CBD81000929CC6 /* defaultx-handler.c */,
+				98CB54D921CBD81000929CC6 /* default_debugger.c */,
+				98CB54DA21CBD81000929CC6 /* default_date.c */,
+			);
+			path = default;
+			sourceTree = "<group>";
+		};
+		98CB54D421CBD81000929CC6 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54D521CBD81000929CC6 /* qking_port_default.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		98CB54DB21CBD81000929CC6 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				98CB54DC21CBD81000929CC6 /* common_logger.c */,
+				98CB54DD21CBD81000929CC6 /* string_utils.h */,
+				98CB54DE21CBD81000929CC6 /* common_error.h */,
+				98CB54DF21CBD81000929CC6 /* common_base.h */,
+				98CB54E021CBD81000929CC6 /* common_logger.h */,
+				98CB54E121CBD81000929CC6 /* common_binary.h */,
+			);
+			path = base;
 			sourceTree = "<group>";
 		};
 		99B2C631D0F27CDE9BFD2C0C /* Pods */ = {
@@ -2301,6 +3334,7 @@
 		B82A148120F849800098A509 /* WeexCore */ = {
 			isa = PBXGroup;
 			children = (
+				98CB53AF21CBD80F00929CC6 /* qking */,
 				B8D66B872125572F003960BD /* base */,
 				B8D66AEC2125572F003960BD /* core */,
 				B8D66B7D2125572F003960BD /* include */,
@@ -2744,39 +3778,63 @@
 			files = (
 				7715EB6221A69DD9001F1108 /* WXRichText.h in Headers */,
 				4532670A213FC84A00DAA620 /* WXDisplayLinkManager.h in Headers */,
+				98CB555421CBD81100929CC6 /* ecma_builtin_float64array_prototype.inc.h in Headers */,
 				B8D66C1B21255730003960BD /* style.h in Headers */,
+				98CB558821CBD81100929CC6 /* ecma_builtin_arraybuffer.inc.h in Headers */,
 				B8D66C2321255730003960BD /* layout.h in Headers */,
+				98CB54EC21CBD81100929CC6 /* lit_unicode_ranges.inc.h in Headers */,
 				B8D66C2521255730003960BD /* flex_enum.h in Headers */,
+				98CB550121CBD81100929CC6 /* re_parser.h in Headers */,
+				98CB55F921CBD81100929CC6 /* common_error.h in Headers */,
 				B8D66C4921255730003960BD /* render_action_interface.h in Headers */,
 				7408C48E1CFB345D000BCCD0 /* WXComponent+Events.h in Headers */,
+				98CB552D21CBD81100929CC6 /* ecma_builtin_regexp.inc.h in Headers */,
+				98CB54F021CBD81100929CC6 /* lit_magic_strings.h in Headers */,
 				B8D66C8F21255730003960BD /* render_cell_factory.h in Headers */,
 				B8D66C7521255730003960BD /* render_object.h in Headers */,
+				98CB554821CBD81100929CC6 /* ecma_builtin_uint8array.inc.h in Headers */,
+				98CB551421CBD81100929CC6 /* vm_exec_state.h in Headers */,
+				98CB559A21CBD81100929CC6 /* ecma_builtin_type_error_thrower.inc.h in Headers */,
 				B8D66BC12125572F003960BD /* vnode_render_manager.h in Headers */,
 				775BEE711C1BD977008D1629 /* WXModuleProtocol.h in Headers */,
 				B8F2C70E2133A83C00635B37 /* rax_parser.h in Headers */,
 				7469869F1C4E2C000054A57E /* NSArray+Weex.h in Headers */,
 				B8D66BDD2125572F003960BD /* scanner.h in Headers */,
 				B8D66C4121255730003960BD /* render_action_add_event.h in Headers */,
+				98CB54FA21CBD81100929CC6 /* qking_snapshot.h in Headers */,
 				74CC7A201C2BF9DC00829368 /* WXListComponent.h in Headers */,
 				17036A5320FDE7490029AE3D /* WXApmProtocol.h in Headers */,
+				98CB550021CBD81100929CC6 /* re_compiler.h in Headers */,
 				7423EB511F4ADE30001662D1 /* WXComponent+DataBinding.h in Headers */,
 				74FD6E041C7C0E9600DBEB6D /* WXScrollerProtocol.h in Headers */,
 				74CFDD3D1F459400007A1A66 /* WXRecycleListDataManager.h in Headers */,
 				B8D66BE52125572F003960BD /* object.h in Headers */,
+				98CB555D21CBD81100929CC6 /* ecma_builtin_float32array.inc.h in Headers */,
+				98CB550F21CBD81100929CC6 /* vm_logic_utils.h in Headers */,
 				77D161201C02DDB40010B15B /* WXSDKEngine.h in Headers */,
 				B8A72C9C213F8BAE0024E7BE /* class_string.h in Headers */,
+				98CB551821CBD81100929CC6 /* ecma_builtin_string_prototype.inc.h in Headers */,
+				98CB54F721CBD81100929CC6 /* qking_compiler.h in Headers */,
 				745ED2DA1C5F2C7E002DB5A8 /* WXView.h in Headers */,
+				98CB54FC21CBD81100929CC6 /* re_bytecode.h in Headers */,
 				B8F3323C2141A4C600701BA0 /* string_util.h in Headers */,
+				98CB55AC21CBD81100929CC6 /* ecma_try_catch_macro.h in Headers */,
+				98CB557D21CBD81100929CC6 /* ecma_builtins_internal.h in Headers */,
 				17B122252090AAB000387E33 /* WXSDKError.h in Headers */,
+				98CB550621CBD81100929CC6 /* jrt.h in Headers */,
+				98CB557421CBD81100929CC6 /* ecma_builtin_function_prototype.inc.h in Headers */,
 				2AE5B7521CAB7DBD0082FDDB /* WXAComponent.h in Headers */,
+				98CB551521CBD81100929CC6 /* vm_context.h in Headers */,
 				B8D66CC521255730003960BD /* thread_local.h in Headers */,
 				B8D66C4521255730003960BD /* render_action_createbody.h in Headers */,
 				77D1614F1C02E3880010B15B /* WXUtility.h in Headers */,
 				743933B41C7ED9AA00773BB7 /* WXSimulatorShortcutManager.h in Headers */,
+				98CB558C21CBD81100929CC6 /* ecma_builtin_date.inc.h in Headers */,
 				B8D66C0B21255730003960BD /* platform_bridge.h in Headers */,
 				74862F811E03A24500B7A041 /* WXComponentMethod.h in Headers */,
 				74915F471C8EB02B00BEBCC0 /* WXAssert.h in Headers */,
 				2A8E658A1C7C7AA20025C7B7 /* WXVideoComponent.h in Headers */,
+				98CB55B621CBD81100929CC6 /* ecma_reference.h in Headers */,
 				59A5961C1CB630F10012CD52 /* WXComponent+Navigation.h in Headers */,
 				B8D66C3D21255730003960BD /* render_action_createfinish.h in Headers */,
 				775BEE6E1C1BD8F4008D1629 /* WXImgLoaderProtocol.h in Headers */,
@@ -2784,35 +3842,52 @@
 				7410811F1CED585A001BC6E5 /* WXComponentManager.h in Headers */,
 				B8D66C8521255730003960BD /* render_appbar_factory.h in Headers */,
 				74CFDD411F45941E007A1A66 /* WXRecycleListTemplateManager.h in Headers */,
+				98CB55BC21CBD81100929CC6 /* ecma_arraybuffer_object.h in Headers */,
+				98CB556721CBD81100929CC6 /* ecma_builtins.inc.h in Headers */,
 				B8F2C7002133A83C00635B37 /* ast_builder.h in Headers */,
 				1D3000F11D40B9AC004F3B4F /* WXClipboardModule.h in Headers */,
 				59A583081CF5B2FD0081FD3E /* WXNavigationDefaultImpl.h in Headers */,
+				98CB55AE21CBD81100929CC6 /* ecma_number_object.h in Headers */,
 				B8D66CD721255730003960BD /* CoreConstants.h in Headers */,
+				98CB559D21CBD81100929CC6 /* ecma_jobqueue.h in Headers */,
 				17B122222090AA9300387E33 /* WXSDKInstance_performance.h in Headers */,
 				775BEE4E1C16F993008D1629 /* WXDefine.h in Headers */,
 				B8D66BE12125572F003960BD /* handle.h in Headers */,
+				98CB55AA21CBD81100929CC6 /* ecma_compiled_code.h in Headers */,
 				B8D66BCD2125572F003960BD /* statement.h in Headers */,
 				77D161241C02DDD10010B15B /* WXSDKInstance.h in Headers */,
+				98CB55BA21CBD81100929CC6 /* ecma_exceptions.h in Headers */,
 				DC6836E61EBB12B200AD2D84 /* WXConfigCenterProtocol.h in Headers */,
 				DC7764941F3C2CA300B5727E /* WXRecyclerDragController.h in Headers */,
 				74A4BAA61CB4F98300195969 /* WXStreamModule.h in Headers */,
 				B8D66CB321255730003960BD /* make_copyable.h in Headers */,
+				98CB553221CBD81100929CC6 /* ecma_builtin_urierror.inc.h in Headers */,
 				740451EA1E14BB26004157CB /* WXServiceFactory.h in Headers */,
+				98CB54F921CBD81100929CC6 /* qking_debugger.h in Headers */,
+				98CB55EB21CBD81100929CC6 /* qking.h in Headers */,
 				744BEA591D0520F300452B5D /* WXComponent+Layout.h in Headers */,
 				B8D66C3121255730003960BD /* render_action_appendtree_createfinish.h in Headers */,
+				98CB54F421CBD81100929CC6 /* config.h in Headers */,
+				98CB559021CBD81100929CC6 /* ecma_builtin_helpers_macro_defines.inc.h in Headers */,
 				B8F2C6EE2133A83C00635B37 /* class.h in Headers */,
+				98CB55D321CBD81100929CC6 /* ecma_helpers.h in Headers */,
 				B8D66C7F21255730003960BD /* render_scroller_factory.h in Headers */,
+				98CB556C21CBD81100929CC6 /* ecma_builtin_internal_routines_template.inc.h in Headers */,
 				74A4BA5B1CABBBD000195969 /* WXDebugTool.h in Headers */,
 				2A837AB41CD9DE9200AEDF03 /* WXLoadingIndicator.h in Headers */,
 				747A787C1D1BAAC900DED9D0 /* WXComponent+ViewManagement.h in Headers */,
 				2AE5B7561CABA04E0082FDDB /* WXEventModuleProtocol.h in Headers */,
+				98CB550C21CBD81100929CC6 /* vm_op_code.h in Headers */,
 				453F374D219A76A600A03F1D /* WXConvertUtility.h in Headers */,
+				98CB551321CBD81100929CC6 /* vm.h in Headers */,
 				B8D66C6B21255730003960BD /* render_scroller.h in Headers */,
+				98CB556521CBD81100929CC6 /* ecma_builtin_date_prototype.inc.h in Headers */,
 				B8D66C6921255730003960BD /* render_mask.h in Headers */,
 				C4C30DE91E1B833D00786B6C /* WXComponent+PseudoClassManagement.h in Headers */,
 				591DD3321D23AD5800BE8709 /* WXErrorView.h in Headers */,
 				B8D66C8D21255730003960BD /* render_creator.h in Headers */,
 				17C74F0B2072145100AB4CAB /* WXAnalyzerCenter+Transfer.h in Headers */,
+				98CB54F521CBD81100929CC6 /* qking_internal.h in Headers */,
 				D362F94F1C83EDA20003F546 /* WXWebViewModule.h in Headers */,
 				C4F012861E150307003378D0 /* WXWebSocketLoader.h in Headers */,
 				C4E97D331F1EF46D00ABC314 /* WXTracingManager.h in Headers */,
@@ -2822,26 +3897,39 @@
 				042013AD1E66CD6A001FC79C /* WXValidateProtocol.h in Headers */,
 				B8D66CE921255730003960BD /* message_pump_darwin.h in Headers */,
 				B8D66BF12125572F003960BD /* ast_visitor.h in Headers */,
+				98CB555321CBD81100929CC6 /* ecma_builtin_uint8array_prototype.inc.h in Headers */,
 				B8D66C2F21255730003960BD /* render_action_render_success.h in Headers */,
 				B8D66BD72125572F003960BD /* ast.h in Headers */,
+				98CB554221CBD81100929CC6 /* ecma_builtin_typedarray_prototype.inc.h in Headers */,
 				B8F2C6EC2133A83C00635B37 /* rax_jsx_ast.h in Headers */,
 				C4D872221E5DDEDA00E39BC1 /* WXInnerLayer.h in Headers */,
 				2A919DA61E321F1F006EB6B5 /* WXBridgeMethod.h in Headers */,
 				B8D66BB12125572F003960BD /* parser.h in Headers */,
 				B8D66C5121255730003960BD /* render_action_remove_event.h in Headers */,
+				98CB55FA21CBD81100929CC6 /* common_base.h in Headers */,
+				98CB553321CBD81100929CC6 /* ecma_builtin_regexp_prototype.inc.h in Headers */,
 				37B51EE41E97804D0040A743 /* WXCycleSliderComponent.h in Headers */,
 				77D161281C02DE1A0010B15B /* WXSDKManager.h in Headers */,
+				98CB552B21CBD81100929CC6 /* ecma_builtin_number_prototype.inc.h in Headers */,
+				98CB55AF21CBD81100929CC6 /* ecma_map_object.h in Headers */,
 				59CE27E81CC387DB000BE37A /* WXEmbedComponent.h in Headers */,
 				B8D66CC921255730003960BD /* thread_impl.h in Headers */,
 				B8D66BC72125572F003960BD /* ast_factory.h in Headers */,
 				B8D66C0F21255730003960BD /* core_side_in_platform.h in Headers */,
+				98CB556421CBD81100929CC6 /* ecma_builtin_uint8clampedarray_prototype.inc.h in Headers */,
 				B8D66C9121255730003960BD /* render_factory_interface.h in Headers */,
 				DCE2CF9B1F46D4220021BDC4 /* WXVoiceOverModule.h in Headers */,
 				453F3756219A76CA00A03F1D /* default_request_handler.h in Headers */,
+				98CB55CC21CBD81100929CC6 /* ecma_gc.h in Headers */,
 				74BB5FB91DFEE81A004FC3DF /* WXMetaModule.h in Headers */,
 				98399A9621916A9800D83CCE /* class_function.h in Headers */,
+				98CB54EB21CBD81100929CC6 /* lit_strings.h in Headers */,
+				98CB554921CBD81100929CC6 /* ecma_builtin_int8array.inc.h in Headers */,
+				98CB55F821CBD81100929CC6 /* string_utils.h in Headers */,
 				DCA0EF641D6EED6F00CB18B9 /* WXGlobalEventModule.h in Headers */,
 				2A837AB21CD9DE9200AEDF03 /* WXLoadingComponent.h in Headers */,
+				98CB556621CBD81100929CC6 /* ecma_builtin_object.inc.h in Headers */,
+				98CB55E021CBD81100929CC6 /* jmem.h in Headers */,
 				B8D66BBD2125572F003960BD /* vnode_exec_env.h in Headers */,
 				DCA446271EFA5DAF00D0CFA8 /* WeexSDK.h in Headers */,
 				841CD1051F974DFA0081196D /* WXExceptionUtils.h in Headers */,
@@ -2856,35 +3944,47 @@
 				77D1614B1C02E3790010B15B /* WXConvert.h in Headers */,
 				1746EA7320E9D253007E55BD /* WXComponent_performance.h in Headers */,
 				59A596221CB6311F0012CD52 /* WXNavigatorModule.h in Headers */,
+				98CB553421CBD81100929CC6 /* ecma_builtin_syntaxerror.inc.h in Headers */,
 				B8F2C7082133A83C00635B37 /* rax_parser_context.h in Headers */,
 				33CE190E2153443000CF9670 /* WXJSFrameworkLoadDefaultImpl.h in Headers */,
 				C47B78CE1F2998EE001D3B0C /* WXExtendCallNativeManager.h in Headers */,
 				B8D66CA321255730003960BD /* wson.h in Headers */,
 				749DC27B1D40827B009E1C91 /* WXMonitor.h in Headers */,
+				98CB559321CBD81100929CC6 /* ecma_builtins.h in Headers */,
 				B8D66CB521255730003960BD /* ViewUtils.h in Headers */,
 				77E659DA1C07F594008B8775 /* WXDomModule.h in Headers */,
+				98CB554C21CBD81100929CC6 /* ecma_builtin_typedarray_helpers.h in Headers */,
 				74EF31AD1DE58BE200667A07 /* WXURLRewriteDefaultImpl.h in Headers */,
 				B87B9E7D21539B3300B6DC61 /* WXVersion.h in Headers */,
 				746B923B1F46BE36009AE86B /* WXCellSlotComponent.h in Headers */,
 				744D61101E49979000B624B3 /* WXFooterComponent.h in Headers */,
 				744D61141E4AF23E00B624B3 /* WXDiffUtil.h in Headers */,
+				98CB54F821CBD81100929CC6 /* qking_core.h in Headers */,
 				B8F2C7022133A83C00635B37 /* rax_parser_scope.h in Headers */,
+				98CB557521CBD81100929CC6 /* ecma_builtin_array.inc.h in Headers */,
 				74862F791E02B88D00B7A041 /* JSValue+Weex.h in Headers */,
 				453F375A219A76CA00A03F1D /* http_module.h in Headers */,
 				B8F2C6FA2133A83C00635B37 /* class_factory.h in Headers */,
 				2A1F57B71C75C6A600B58017 /* WXTextInputComponent.h in Headers */,
 				B8D66C2D21255730003960BD /* render_manager.h in Headers */,
 				74CFDD451F459443007A1A66 /* WXRecycleListUpdateManager.h in Headers */,
+				98CB553C21CBD81100929CC6 /* ecma_builtin_typedarray.inc.h in Headers */,
 				74A4BA9A1CB3BAA100195969 /* WXThreadSafeMutableDictionary.h in Headers */,
 				74A4BA9E1CB3C0A100195969 /* WXHandlerFactory.h in Headers */,
 				741DFE021DDD7D18009B020F /* WXRoundedRect.h in Headers */,
 				17C74F0F2072147B00AB4CAB /* WXAnalyzerProtocol.h in Headers */,
 				7423899B1C3174EB00D748CA /* WXWeakObjectWrapper.h in Headers */,
+				98CB55B421CBD81100929CC6 /* ecma_conversion.h in Headers */,
+				98CB557C21CBD81100929CC6 /* ecma_builtin_urierror_prototype.inc.h in Headers */,
 				74BF19F81F5139BB00AEE3D7 /* WXJSASTParser.h in Headers */,
+				98CB552321CBD81100929CC6 /* ecma_builtin_string.inc.h in Headers */,
+				98CB55FC21CBD81100929CC6 /* common_binary.h in Headers */,
 				59A596191CB630E50012CD52 /* WXNavigationProtocol.h in Headers */,
 				B8D66CBF21255730003960BD /* LogDefines.h in Headers */,
 				59A5962F1CB632050012CD52 /* WXBaseViewController.h in Headers */,
 				33CE19132153444900CF9670 /* WXJSFrameworkLoadProtocol.h in Headers */,
+				98CB559821CBD81100929CC6 /* ecma_builtin_referenceerror.inc.h in Headers */,
+				98CB558921CBD81100929CC6 /* ecma_builtin_math.inc.h in Headers */,
 				B8F2C7142133A8BC00635B37 /* vm_monitor.h in Headers */,
 				B8D66C012125572F003960BD /* constants_value.h in Headers */,
 				74AD99841D5B0E59008F0336 /* WXPolyfillSet.h in Headers */,
@@ -2897,44 +3997,76 @@
 				B8D66CCD21255730003960BD /* thread.h in Headers */,
 				98B69EFA21CA295F00E03B77 /* vnode_qking_convert.h in Headers */,
 				B8D66C6121255730003960BD /* render_cell.h in Headers */,
+				98CB55AD21CBD81100929CC6 /* ecma_number_arithmetic.h in Headers */,
 				B8D66C3B21255730003960BD /* render_action_update_style.h in Headers */,
+				98CB55EF21CBD81100929CC6 /* decoder_sections.h in Headers */,
+				98CB54F221CBD81100929CC6 /* lit_globals.h in Headers */,
+				98CB54E621CBD81100929CC6 /* handler.h in Headers */,
+				98CB557721CBD81100929CC6 /* ecma_builtin_object_prototype.inc.h in Headers */,
 				B8D66C7721255730003960BD /* render_appbar.h in Headers */,
 				B8D66C5B21255730003960BD /* render_action_add_element.h in Headers */,
 				745B2D701E5A8E1E0092D38A /* WXSectionDataController.h in Headers */,
 				745B2D6E1E5A8E1E0092D38A /* WXRecyclerUpdateController.h in Headers */,
+				98CB55A321CBD81100929CC6 /* ecma_string_object.h in Headers */,
+				98CB554721CBD81100929CC6 /* ecma_builtin_int16array.inc.h in Headers */,
+				98CB556821CBD81100929CC6 /* ecma_builtin_function.inc.h in Headers */,
 				D3FC0DF71C508B2A002B9E31 /* WXTimerModule.h in Headers */,
+				98CB552F21CBD81100929CC6 /* ecma_builtin_promise_prototype.inc.h in Headers */,
 				D312CE3B1C730DEB00046D68 /* WXWebComponent.h in Headers */,
+				98CB553921CBD81100929CC6 /* ecma_builtin_typedarray_template.inc.h in Headers */,
+				98CB55E221CBD81100929CC6 /* jmem_allocator_internal.h in Headers */,
+				98CB55EA21CBD81100929CC6 /* qking_snapshot.h in Headers */,
+				98CB54E821CBD81100929CC6 /* jcontext.h in Headers */,
 				B8D66CE521255730003960BD /* message_pump.h in Headers */,
+				98CB55E421CBD81100929CC6 /* debugger.h in Headers */,
+				98CB55A721CBD81100929CC6 /* ecma_boolean_object.h in Headers */,
 				B8D66CCF21255730003960BD /* waitable_event.h in Headers */,
 				741081261CEDB4EC001BC6E5 /* WXComponent_internal.h in Headers */,
+				98CB551121CBD81100929CC6 /* vm_defines.h in Headers */,
+				98CB55A821CBD81100929CC6 /* ecma_objects_general.h in Headers */,
 				77E65A191C155F25008B8775 /* WXScrollerComponent.h in Headers */,
 				C4E375381E5FCBD3009B2D9C /* WXComponent+BoxShadow.h in Headers */,
 				B8394F3721468AF100CA1EFF /* render_action_trigger_vsync.h in Headers */,
+				98CB551F21CBD81100929CC6 /* ecma_builtin_array_prototype.inc.h in Headers */,
+				98CB559621CBD81100929CC6 /* ecma_builtin_number.inc.h in Headers */,
 				B8D66C8921255730003960BD /* render_object_interface.h in Headers */,
+				98CB556F21CBD81100929CC6 /* ecma_builtin_error.inc.h in Headers */,
 				74BA4AB31F70F4B600AC29BF /* WXRecycleListLayout.h in Headers */,
 				B8D66C3521255730003960BD /* render_action_move_element.h in Headers */,
+				98CB554E21CBD81100929CC6 /* ecma_builtin_float32array_prototype.inc.h in Headers */,
 				98ABF28E21CA50B800062F1C /* qking.h in Headers */,
+				98CB55A921CBD81100929CC6 /* ecma_objects_arguments.h in Headers */,
+				98CB553A21CBD81100929CC6 /* ecma_builtin_int8array_prototype.inc.h in Headers */,
 				B8D66CB921255730003960BD /* time_point.h in Headers */,
 				742AD7311DF98C45007DC46C /* WXResourceRequestHandlerDefaultImpl.h in Headers */,
 				C4F0127D1E1502A6003378D0 /* WXWebSocketHandler.h in Headers */,
 				B8D66C9D21255730003960BD /* json11.hpp in Headers */,
+				98CB55AB21CBD81100929CC6 /* ecma_function_object.h in Headers */,
 				DC03ADBA1D508719003F76E7 /* WXTextAreaComponent.h in Headers */,
 				B8D66C5721255730003960BD /* render_action_layout.h in Headers */,
 				2AC750241C7565690041D390 /* WXIndicatorComponent.h in Headers */,
 				B8F2C6E82133A83C00635B37 /* class_array.h in Headers */,
 				DCAB35FE1D658EB700C0EA70 /* WXRuleManager.h in Headers */,
+				98CB55A221CBD81100929CC6 /* ecma_promise_object.h in Headers */,
 				748B25181C44A6F9005D491E /* WXSDKInstance_private.h in Headers */,
 				74862F7D1E03A0F300B7A041 /* WXModuleMethod.h in Headers */,
 				742AD7331DF98C45007DC46C /* WXResourceResponse.h in Headers */,
 				77E65A0D1C155E99008B8775 /* WXDivComponent.h in Headers */,
+				98CB556E21CBD81100929CC6 /* ecma_builtin_promise.inc.h in Headers */,
 				B8D66CD321255730003960BD /* thread_impl_posix.h in Headers */,
+				98CB555A21CBD81100929CC6 /* ecma_builtin_int32array_prototype.inc.h in Headers */,
 				B8D66BED2125572F003960BD /* vm.h in Headers */,
 				C41E1A971DC1FD15009C7F90 /* WXDatePickerManager.h in Headers */,
+				98CB54EE21CBD81100929CC6 /* lit_char_helpers.h in Headers */,
+				98CB551E21CBD81100929CC6 /* ecma_builtin_arraybuffer_prototype.inc.h in Headers */,
 				B8D66CB721255730003960BD /* common.h in Headers */,
+				98CB55C521CBD81100929CC6 /* ecma_comparison.h in Headers */,
 				333D9A271F41507A007CED39 /* WXTransition.h in Headers */,
 				7461F8901CFB373100F62D44 /* WXDisplayQueue.h in Headers */,
 				B8D66C2921255730003960BD /* render_page.h in Headers */,
 				DCC77C141D770AE300CE7288 /* WXSliderNeighborComponent.h in Headers */,
+				98CB54F621CBD81100929CC6 /* qking_port.h in Headers */,
+				98CB552721CBD81100929CC6 /* ecma_builtin_rangeerror.inc.h in Headers */,
 				747DF6821E31AEE4005C53A8 /* WXLength.h in Headers */,
 				77E659F11C0C3612008B8775 /* WXModuleFactory.h in Headers */,
 				B8D66CE721255730003960BD /* message_pump_posix.h in Headers */,
@@ -2944,28 +4076,41 @@
 				2A837AB61CD9DE9200AEDF03 /* WXRefreshComponent.h in Headers */,
 				B8F2C6E62133A83C00635B37 /* common_error.h in Headers */,
 				B8D66BFD2125572F003960BD /* render_performance.h in Headers */,
+				98CB55A021CBD81100929CC6 /* ecma_objects.h in Headers */,
 				C43C03E81EC8ACA40044C7FF /* WXPrerenderManager.h in Headers */,
 				453267142140E38900DAA620 /* vcomponent.h in Headers */,
+				98CB55C421CBD81100929CC6 /* ecma_regexp_object.h in Headers */,
+				98CB54ED21CBD81100929CC6 /* lit_magic_strings.inc.h in Headers */,
 				17C74F0C2072145100AB4CAB /* WXAnalyzerCenter.h in Headers */,
 				B8D66CD121255730003960BD /* thread_impl_darwin.h in Headers */,
+				98CB553D21CBD81100929CC6 /* ecma_builtin_int32array.inc.h in Headers */,
 				B8D66CBD21255730003960BD /* closure.h in Headers */,
 				C4B834281DE69B09007AD27E /* WXPickerModule.h in Headers */,
 				59A596311CB632050012CD52 /* WXRootViewController.h in Headers */,
 				DCF087611DCAE161005CD6EB /* WXInvocationConfig.h in Headers */,
 				B8D66C7D21255730003960BD /* render_text_factory.h in Headers */,
+				98CB558621CBD81100929CC6 /* ecma_builtin_json.inc.h in Headers */,
+				98CB550321CBD81100929CC6 /* jrt_types.h in Headers */,
+				98CB555521CBD81100929CC6 /* ecma_builtin_int16array_prototype.inc.h in Headers */,
 				B8D66CDD21255730003960BD /* message_loop.h in Headers */,
+				98CB552E21CBD81100929CC6 /* ecma_builtin_boolean.inc.h in Headers */,
 				742AD7301DF98C45007DC46C /* WXResourceRequestHandler.h in Headers */,
 				77E65A151C155EB5008B8775 /* WXTextComponent.h in Headers */,
+				98CB555B21CBD81100929CC6 /* ecma_builtin_uint32array_prototype.inc.h in Headers */,
 				B8D66C9921255730003960BD /* weex_core_manager.h in Headers */,
+				98CB557921CBD81100929CC6 /* ecma_builtin_map_prototype.inc.h in Headers */,
 				C4B3D6D41E6954300013F38D /* WXEditComponent.h in Headers */,
 				74CC7A1C1C2BC5F800829368 /* WXCellComponent.h in Headers */,
 				74896F301D1AC79400D1D593 /* NSObject+WXSwizzle.h in Headers */,
 				B8D66C5921255730003960BD /* render_action_remove_element.h in Headers */,
 				DCF343671E49CAEE00A2FB34 /* WXJSExceptionInfo.h in Headers */,
+				98CB551221CBD81100929CC6 /* vm_ecma_value_helper.h in Headers */,
 				C4F012821E1502E9003378D0 /* WXWebSocketModule.h in Headers */,
 				74EF31AA1DE58AE600667A07 /* WXURLRewriteProtocol.h in Headers */,
 				98B69EF921CA295F00E03B77 /* vnode_qking_env.h in Headers */,
+				98CB55D621CBD81100929CC6 /* ecma_alloc.h in Headers */,
 				B8D66BE72125572F003960BD /* table.h in Headers */,
+				98CB550421CBD81100929CC6 /* jrt_bit_fields.h in Headers */,
 				59A596241CB6311F0012CD52 /* WXStorageModule.h in Headers */,
 				74A4BA851CAD453400195969 /* WXNetworkProtocol.h in Headers */,
 				7461F8A81CFC33A800F62D44 /* WXThreadSafeMutableArray.h in Headers */,
@@ -2973,43 +4118,70 @@
 				D33451081D3E19480083598A /* WXCanvasComponent.h in Headers */,
 				17036A4E20FDE72F0029AE3D /* WXApmForInstance.h in Headers */,
 				74B8BEFE1DC47B72004A6027 /* WXRootView.h in Headers */,
+				98CB550221CBD81100929CC6 /* jrt_libc_includes.h in Headers */,
+				98CB557821CBD81100929CC6 /* ecma_builtin_boolean_prototype.inc.h in Headers */,
+				98CB553021CBD81100929CC6 /* ecma_builtin_helpers_macro_undefs.inc.h in Headers */,
 				77E65A111C155EA8008B8775 /* WXImageComponent.h in Headers */,
+				98CB555C21CBD81100929CC6 /* ecma_builtin_uint32array.inc.h in Headers */,
 				745B2D6C1E5A8E1E0092D38A /* WXRecyclerDataController.h in Headers */,
 				B8D66C8121255730003960BD /* render_type.h in Headers */,
 				B8D66CA121255730003960BD /* WeexApiHeader.h in Headers */,
 				B8D66CA921255730003960BD /* wson_util.h in Headers */,
+				98CB54FB21CBD81100929CC6 /* qking_debugger_transport.h in Headers */,
 				B8D66C8B21255730003960BD /* render_list_factory.h in Headers */,
+				98CB55D721CBD81100929CC6 /* ecma_lcache.h in Headers */,
 				745B2D681E5A8E1E0092D38A /* WXMultiColumnLayout.h in Headers */,
+				98CB55A521CBD81100929CC6 /* ecma_lex_env.h in Headers */,
+				98CB554321CBD81100929CC6 /* ecma_builtin_uint8clampedarray.inc.h in Headers */,
+				98CB55FB21CBD81100929CC6 /* common_logger.h in Headers */,
 				B89543F720EB18B5006EAD63 /* WXCoreBridge.h in Headers */,
+				98CB554421CBD81100929CC6 /* ecma_builtin_float64array.inc.h in Headers */,
 				B8D66BD52125572F003960BD /* string_table.h in Headers */,
+				98CB558421CBD81100929CC6 /* ecma_builtin_map.inc.h in Headers */,
+				98CB55D421CBD81100929CC6 /* ecma_literal_storage.h in Headers */,
 				2A60CE9C1C91733E00857B9F /* WXSwitchComponent.h in Headers */,
+				98CB551921CBD81100929CC6 /* ecma_builtin_rangeerror_prototype.inc.h in Headers */,
 				DCDFED011E68238F00C228D7 /* WXJSExceptionProtocol.h in Headers */,
+				98CB558D21CBD81100929CC6 /* ecma_builtin_typeerror_prototype.inc.h in Headers */,
 				B8D66C0921255730003960BD /* core_environment.h in Headers */,
 				2A4445BF1CA8FD56009E7C6D /* WXTextComponentProtocol.h in Headers */,
 				746319021C60AFC100EFEBD4 /* WXThreadSafeCounter.h in Headers */,
+				98CB557A21CBD81100929CC6 /* ecma_builtin_global.inc.h in Headers */,
+				98CB551C21CBD81100929CC6 /* ecma_builtin_typeerror.inc.h in Headers */,
 				744D610C1E49978200B624B3 /* WXHeaderComponent.h in Headers */,
+				98CB55EE21CBD81100929CC6 /* exec_state_decode.h in Headers */,
 				B8D66C1521255730003960BD /* wx_type_define.h in Headers */,
 				B8D66BEB2125572F003960BD /* token.h in Headers */,
 				B8D66BEF2125572F003960BD /* op_code.h in Headers */,
+				98CB54F121CBD81100929CC6 /* lit_unicode_conversions.inc.h in Headers */,
 				B8D66C7921255730003960BD /* render_list.h in Headers */,
 				B8D66C3321255730003960BD /* render_action_update_attr.h in Headers */,
 				77D1613C1C02DEA60010B15B /* WXJSCoreBridge.h in Headers */,
 				74D205201E091B8000128F44 /* WXCallJSMethod.h in Headers */,
 				B8D66BAB2125572F003960BD /* code_generator.h in Headers */,
 				B8D66BB52125572F003960BD /* vnode.h in Headers */,
+				98CB554D21CBD81100929CC6 /* ecma_builtin_uint16array.inc.h in Headers */,
 				741DFE061DDD9B30009B020F /* UIBezierPath+Weex.h in Headers */,
+				98CB556A21CBD81100929CC6 /* ecma_builtin_syntaxerror_prototype.inc.h in Headers */,
 				BA5F00F11FC5AFFE00F76B5C /* WXLocaleModule.h in Headers */,
 				742AD72E1DF98C45007DC46C /* WXResourceRequest.h in Headers */,
+				98CB555021CBD81100929CC6 /* ecma_builtin_uint16array_prototype.inc.h in Headers */,
+				98CB55CB21CBD81100929CC6 /* ecma_globals.h in Headers */,
 				B8D66C9321255730003960BD /* dom_wson.h in Headers */,
 				B8D66CAF21255730003960BD /* wson_parser.h in Headers */,
 				D317338C1C57257000BB7539 /* WXTransform.h in Headers */,
 				453F3762219A770900A03F1D /* vcomponent_lifecycle_listener.h in Headers */,
+				98CB55F121CBD81100929CC6 /* qking_port_default.h in Headers */,
 				B8D66BC32125572F003960BD /* vnode_render_context.h in Headers */,
 				77D161301C02DE4E0010B15B /* WXComponent.h in Headers */,
+				98CB558F21CBD81100929CC6 /* ecma_builtin_error_prototype.inc.h in Headers */,
+				98CB558B21CBD81100929CC6 /* ecma_builtin_referenceerror_prototype.inc.h in Headers */,
 				B8D66CB121255730003960BD /* TimeUtils.h in Headers */,
+				98CB55B121CBD81100929CC6 /* ecma_typedarray_object.h in Headers */,
 				B8D66C1921255730003960BD /* measure_func_adapter.h in Headers */,
 				2AFEB17B1C747139000507FA /* WXInstanceWrap.h in Headers */,
 				744BEA551D05178F00452B5D /* WXComponent+Display.h in Headers */,
+				98CB558721CBD81100929CC6 /* ecma_builtin_helpers.h in Headers */,
 				DCE7F1EF20AD358A00D471E7 /* WXPageEventNotifyEvent.h in Headers */,
 				B8D66C7B21255730003960BD /* render_mask_factory.h in Headers */,
 				741081231CED6756001BC6E5 /* WXComponentFactory.h in Headers */,
@@ -3018,11 +4190,15 @@
 				B8F2C6FE2133A83C00635B37 /* rax_parser_builder.h in Headers */,
 				74CFDD391F45939C007A1A66 /* WXRecycleListComponent.h in Headers */,
 				B8D66CC121255730003960BD /* time_unit.h in Headers */,
+				98CB55A621CBD81100929CC6 /* ecma_array_object.h in Headers */,
 				ED053500207F4DEB007B4568 /* JSContext+Weex.h in Headers */,
 				B8D66BCF2125572F003960BD /* tokenizer.h in Headers */,
+				98CB55D821CBD81100929CC6 /* ecma_init_finalize.h in Headers */,
 				D334510C1D3E19B80083598A /* WXCanvasModule.h in Headers */,
 				742AD73A1DF98C8B007DC46C /* WXResourceLoader.h in Headers */,
 				746319291C71B92600EFEBD4 /* WXModalUIModule.h in Headers */,
+				98CB554521CBD81100929CC6 /* ecma_builtin_typedarray_prototype_template.inc.h in Headers */,
+				98CB55DC21CBD81100929CC6 /* ecma_property_hashmap.h in Headers */,
 				B8D66BFF2125572F003960BD /* constants_name.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3451,6 +4627,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DC15A3DC2010BC93009C8977 /* weex-rax-api.js in Resources */,
+				98CB54E921CBD81100929CC6 /* lit_magic_strings.ini in Resources */,
 				DCD8D0F32073392A0002C420 /* weex-polyfill.js in Resources */,
 				DC15A3DB2010BC93009C8977 /* weex-main-jsfm.js in Resources */,
 				59AC02511D2A7E6E00355112 /* wx_load_error@3x.png in Resources */,
@@ -3554,62 +4731,102 @@
 			files = (
 				77D161291C02DE1A0010B15B /* WXSDKManager.m in Sources */,
 				7461F8911CFB373100F62D44 /* WXDisplayQueue.m in Sources */,
+				98CB559E21CBD81100929CC6 /* ecma_get_put_value.c in Sources */,
 				74896F311D1AC79400D1D593 /* NSObject+WXSwizzle.m in Sources */,
 				746986A01C4E2C010054A57E /* NSArray+Weex.m in Sources */,
 				74B8BEFF1DC47B72004A6027 /* WXRootView.m in Sources */,
 				742AD7321DF98C45007DC46C /* WXResourceRequestHandlerDefaultImpl.m in Sources */,
+				98CB55E121CBD81100929CC6 /* jmem_allocator.c in Sources */,
+				98CB55F221CBD81100929CC6 /* default_external_context.c in Sources */,
+				98CB556221CBD81100929CC6 /* ecma_builtin_int8array.c in Sources */,
+				98CB550921CBD81100929CC6 /* vm.c in Sources */,
 				74CFDD421F45941E007A1A66 /* WXRecycleListTemplateManager.m in Sources */,
+				98CB550D21CBD81100929CC6 /* vm_utils.c in Sources */,
+				98CB552C21CBD81100929CC6 /* ecma_builtin_date_prototype.c in Sources */,
 				747DF6831E31AEE4005C53A8 /* WXLength.m in Sources */,
 				17E5ACE2209211BD00EE81F1 /* WXTransition.mm in Sources */,
 				77E65A0E1C155E99008B8775 /* WXDivComponent.m in Sources */,
 				B8D66BF92125572F003960BD /* exec_state.cc in Sources */,
+				98CB55B221CBD81100929CC6 /* ecma_regexp_object.c in Sources */,
 				98B69EF821CA295F00E03B77 /* vnode_qking_env.cc in Sources */,
+				98CB55DA21CBD81100929CC6 /* ecma_helpers_number.c in Sources */,
 				B8D66CAB21255730003960BD /* wson_util.cpp in Sources */,
 				ED053502207F4DEB007B4568 /* JSContext+Weex.m in Sources */,
 				2A60CE9D1C91733E00857B9F /* WXSwitchComponent.mm in Sources */,
 				744D61111E49979000B624B3 /* WXFooterComponent.m in Sources */,
+				98CB558321CBD81100929CC6 /* ecma_builtin_helpers_error.c in Sources */,
 				B8D66C0721255730003960BD /* core_environment.cpp in Sources */,
+				98CB553521CBD81100929CC6 /* ecma_builtin_boolean.c in Sources */,
 				745B2D6F1E5A8E1E0092D38A /* WXRecyclerUpdateController.m in Sources */,
+				98CB553621CBD81100929CC6 /* ecma_builtin_syntaxerror_prototype.c in Sources */,
 				745B2D6B1E5A8E1E0092D38A /* WXRecyclerComponent.mm in Sources */,
+				98CB552A21CBD81100929CC6 /* ecma_builtin_helpers.c in Sources */,
+				98CB54E321CBD81100929CC6 /* handler-register.c in Sources */,
 				B8D66C0D21255730003960BD /* core_side_in_platform.cpp in Sources */,
+				98CB559F21CBD81100929CC6 /* ecma_conversion.c in Sources */,
 				B8D66C5D21255730003960BD /* render_action_appendtree_createfinish.cpp in Sources */,
+				98CB55C621CBD81100929CC6 /* ecma_number_object.c in Sources */,
 				2A837AB71CD9DE9200AEDF03 /* WXRefreshComponent.mm in Sources */,
+				98CB559421CBD81100929CC6 /* ecma_builtin_json.c in Sources */,
+				98CB559721CBD81100929CC6 /* ecma_builtin_string.c in Sources */,
 				74A4BA9B1CB3BAA100195969 /* WXThreadSafeMutableDictionary.m in Sources */,
+				98CB55E521CBD81100929CC6 /* qking_debugger.c in Sources */,
 				77E65A1A1C155F25008B8775 /* WXScrollerComponent.mm in Sources */,
+				98CB55D521CBD81100929CC6 /* ecma_helpers_value.c in Sources */,
 				747A787D1D1BAAC900DED9D0 /* WXComponent+ViewManagement.mm in Sources */,
 				C4E375371E5FCBD3009B2D9C /* WXComponent+BoxShadow.m in Sources */,
 				C43C03E91EC8ACA40044C7FF /* WXPrerenderManager.m in Sources */,
 				B8D66BD12125572F003960BD /* statement.cc in Sources */,
+				98CB550A21CBD81100929CC6 /* vm_ecma_value_helper.c in Sources */,
 				B8D66CDF21255730003960BD /* message_loop.cc in Sources */,
+				98CB551021CBD81100929CC6 /* vm_logic_utils_arithmetics.c in Sources */,
 				B8F2C6F82133A83C00635B37 /* class.cc in Sources */,
 				B8D66CC321255730003960BD /* thread_impl_posix.cc in Sources */,
+				98CB55DE21CBD81100929CC6 /* jmem_poolman.c in Sources */,
+				98CB55C821CBD81100929CC6 /* ecma_alloc.c in Sources */,
 				B8D66C4B21255730003960BD /* render_action_remove_event.cpp in Sources */,
+				98CB55F521CBD81100929CC6 /* default_debugger.c in Sources */,
 				B8F2C6F22133A83C00635B37 /* class_factory.cc in Sources */,
 				B8D66BD32125572F003960BD /* vm.cc in Sources */,
+				98CB54FF21CBD81100929CC6 /* re_bytecode.c in Sources */,
 				98399A9121916A9800D83CCE /* class_function.cc in Sources */,
 				2A837AB51CD9DE9200AEDF03 /* WXLoadingIndicator.m in Sources */,
 				B8D66BBF2125572F003960BD /* vnode_render_manager.cc in Sources */,
 				B8D66C6321255730003960BD /* render_text.cpp in Sources */,
+				98CB558E21CBD81100929CC6 /* ecma_builtin_array_prototype.c in Sources */,
 				C4F012831E1502E9003378D0 /* WXWebSocketModule.m in Sources */,
+				98CB55BF21CBD81100929CC6 /* ecma_compiled_code.c in Sources */,
 				B8D66CE121255730003960BD /* message_pump_darwin.cc in Sources */,
 				DCF087621DCAE161005CD6EB /* WXInvocationConfig.m in Sources */,
 				C47B78CF1F2998EE001D3B0C /* WXExtendCallNativeManager.m in Sources */,
 				77D161311C02DE4E0010B15B /* WXComponent.mm in Sources */,
 				74CFDD461F459443007A1A66 /* WXRecycleListUpdateManager.m in Sources */,
+				98CB55C921CBD81100929CC6 /* ecma_literal_storage.c in Sources */,
+				98CB55CA21CBD81100929CC6 /* ecma_helpers.c in Sources */,
 				B8F2C7102133A83C00635B37 /* ast_builder.cc in Sources */,
+				98CB557121CBD81100929CC6 /* ecma_builtin_boolean_prototype.c in Sources */,
 				B8F2C7042133A83C00635B37 /* class_array.cc in Sources */,
 				74862F7A1E02B88D00B7A041 /* JSValue+Weex.m in Sources */,
+				98CB55C221CBD81100929CC6 /* ecma_objects_arguments.c in Sources */,
+				98CB54E721CBD81100929CC6 /* jcontext.c in Sources */,
+				98CB554021CBD81100929CC6 /* ecma_builtin_uint32array.c in Sources */,
 				B8D66BC52125572F003960BD /* tokenizer.cc in Sources */,
 				33CE19102153443000CF9670 /* WXJSFrameworkLoadDefaultImpl.m in Sources */,
 				B8D66C7321255730003960BD /* render_list.cpp in Sources */,
 				B8D66BC92125572F003960BD /* ast.cc in Sources */,
 				740451EB1E14BB26004157CB /* WXServiceFactory.m in Sources */,
+				98CB556121CBD81100929CC6 /* ecma_builtin_typedarray_prototype.c in Sources */,
+				98CB558221CBD81100929CC6 /* ecma_builtin_object.c in Sources */,
 				B8D66C6521255730003960BD /* render_mask.cpp in Sources */,
+				98CB551621CBD81100929CC6 /* vm_op_code.c in Sources */,
+				98CB556321CBD81100929CC6 /* ecma_builtin_uint8clampedarray_prototype.c in Sources */,
 				77E659DB1C07F594008B8775 /* WXDomModule.m in Sources */,
 				D3FC0DF81C508B2A002B9E31 /* WXTimerModule.m in Sources */,
 				594C28921CF9E61A009793A4 /* WXAnimationModule.m in Sources */,
+				98CB55EC21CBD81100929CC6 /* exec_state_decode.c in Sources */,
 				B8D66C6F21255730003960BD /* render_object.cpp in Sources */,
 				B8D66BB92125572F003960BD /* vnode.cc in Sources */,
+				98CB553821CBD81100929CC6 /* ecma_builtin_referenceerror.c in Sources */,
 				59A5961D1CB630F10012CD52 /* WXComponent+Navigation.m in Sources */,
 				B8F2C6FC2133A83C00635B37 /* rax_parser_builder.cc in Sources */,
 				77D161631C02ED790010B15B /* WXLog.m in Sources */,
@@ -3618,118 +4835,202 @@
 				BA5F00F21FC5AFFE00F76B5C /* WXLocaleModule.m in Sources */,
 				B8D66C9F21255730003960BD /* json11.cc in Sources */,
 				B8D66CCB21255730003960BD /* thread_impl_darwin.cc in Sources */,
+				98CB54EF21CBD81100929CC6 /* lit_strings.c in Sources */,
+				98CB55CD21CBD81100929CC6 /* ecma_lcache.c in Sources */,
+				98CB555621CBD81100929CC6 /* ecma_builtin_int8array_prototype.c in Sources */,
 				B8D66BB72125572F003960BD /* vnode_exec_env.cc in Sources */,
+				98CB550B21CBD81100929CC6 /* vm_logic_utils_bitwise.c in Sources */,
 				74BB5FBA1DFEE81A004FC3DF /* WXMetaModule.m in Sources */,
 				741081201CED585A001BC6E5 /* WXComponentManager.mm in Sources */,
+				98CB55B821CBD81100929CC6 /* ecma_boolean_object.c in Sources */,
 				1D3000F21D40B9AC004F3B4F /* WXClipboardModule.m in Sources */,
 				B8F2C6EA2133A83C00635B37 /* rax_source_locator.cc in Sources */,
+				98CB55A421CBD81100929CC6 /* ecma_exceptions.c in Sources */,
+				98CB552921CBD81100929CC6 /* ecma_builtin_number_prototype.c in Sources */,
 				741DFE071DDD9B30009B020F /* UIBezierPath+Weex.m in Sources */,
+				98CB55DF21CBD81100929CC6 /* jmem_heap.c in Sources */,
 				D312CE3C1C730DEB00046D68 /* WXWebComponent.m in Sources */,
 				B8D66C4721255730003960BD /* render_action_add_event.cpp in Sources */,
+				98CB55C121CBD81100929CC6 /* ecma_objects_general.c in Sources */,
 				B8D66BAD2125572F003960BD /* code_generator.cc in Sources */,
+				98CB55E721CBD81100929CC6 /* qking_snapshot.c in Sources */,
 				74AD99851D5B0E59008F0336 /* WXPolyfillSet.m in Sources */,
 				D317338D1C57257000BB7539 /* WXTransform.m in Sources */,
 				B8D66BAF2125572F003960BD /* ast_factory.cc in Sources */,
 				7461F8A91CFC33A800F62D44 /* WXThreadSafeMutableArray.m in Sources */,
+				98CB553B21CBD81100929CC6 /* ecma_builtin_float64array.c in Sources */,
+				98CB554F21CBD81100929CC6 /* ecma_builtin_uint16array_prototype.c in Sources */,
 				745B2D6D1E5A8E1E0092D38A /* WXRecyclerDataController.m in Sources */,
 				453F375F219A76FA00A03F1D /* vnode_on_event_listener.mm in Sources */,
 				B8D66BF32125572F003960BD /* object.cc in Sources */,
 				2AC750251C7565690041D390 /* WXIndicatorComponent.m in Sources */,
 				591DD3311D23AD5800BE8709 /* WXErrorView.m in Sources */,
+				98CB55B721CBD81100929CC6 /* ecma_lex_env.c in Sources */,
 				7715EB6421A69DD9001F1108 /* WXRichText.mm in Sources */,
+				98CB55F421CBD81100929CC6 /* defaultx-handler.c in Sources */,
 				B8D66C1121255730003960BD /* core_side_in_script.cpp in Sources */,
 				B8D66C032125572F003960BD /* css_value_getter.cpp in Sources */,
+				98CB55D921CBD81100929CC6 /* ecma_helpers_external_pointers.c in Sources */,
 				B8394F3921468AF100CA1EFF /* render_action_trigger_vsync.cpp in Sources */,
+				98CB558021CBD81100929CC6 /* ecma_builtin_helpers_date.c in Sources */,
 				B8F2C6F62133A83C00635B37 /* rax_parser_context.cc in Sources */,
 				59D3CA4B1CFC3CE1008835DC /* NSTimer+Weex.m in Sources */,
 				59A596321CB632050012CD52 /* WXRootViewController.m in Sources */,
 				DCC77C131D770AE300CE7288 /* WXSliderNeighborComponent.mm in Sources */,
 				2A8E658B1C7C7AA20025C7B7 /* WXVideoComponent.m in Sources */,
 				B8D66CBB21255730003960BD /* time_point.cc in Sources */,
+				98CB55B321CBD81100929CC6 /* ecma_objects.c in Sources */,
+				98CB55C021CBD81100929CC6 /* ecma_function_object.c in Sources */,
+				98CB54E221CBD81100929CC6 /* handler-assert.c in Sources */,
 				74862F7E1E03A0F300B7A041 /* WXModuleMethod.m in Sources */,
 				B8D66C4D21255730003960BD /* render_action_move_element.cpp in Sources */,
+				98CB552021CBD81100929CC6 /* ecma_builtin_typeerror_prototype.c in Sources */,
+				98CB551D21CBD81100929CC6 /* ecma_builtin_helpers_sort.c in Sources */,
 				742AD7341DF98C45007DC46C /* WXResourceResponse.m in Sources */,
+				98CB55E321CBD81100929CC6 /* debugger.c in Sources */,
+				98CB55DB21CBD81100929CC6 /* ecma_helpers_values_collection.c in Sources */,
+				98CB559921CBD81100929CC6 /* ecma_builtin_helpers-json.c in Sources */,
+				98CB554621CBD81100929CC6 /* ecma_builtin_uint8array.c in Sources */,
 				B87B9E7F21539B3300B6DC61 /* WXVersion.m in Sources */,
 				77E65A161C155EB5008B8775 /* WXTextComponent.mm in Sources */,
+				98CB54E421CBD81100929CC6 /* handler-gc.c in Sources */,
 				C4D872261E5DDF7500E39BC1 /* WXBoxShadow.m in Sources */,
+				98CB55E621CBD81100929CC6 /* qking_debugger_transport.c in Sources */,
 				B8D66BB32125572F003960BD /* parser.cc in Sources */,
 				746319031C60AFC100EFEBD4 /* WXThreadSafeCounter.m in Sources */,
 				B8D66C8321255730003960BD /* render_creator.cpp in Sources */,
+				98CB553721CBD81100929CC6 /* ecma_builtin_typeerror.c in Sources */,
 				74A4BAA71CB4F98300195969 /* WXStreamModule.m in Sources */,
+				98CB55CE21CBD81100929CC6 /* ecma_helpers_conversion.c in Sources */,
 				744D610D1E49978200B624B3 /* WXHeaderComponent.mm in Sources */,
 				B8F2C7062133A83C00635B37 /* rax_parser_scope.cc in Sources */,
 				77E659F21C0C3612008B8775 /* WXModuleFactory.m in Sources */,
 				B8D66C5F21255730003960BD /* render_action_render_success.cpp in Sources */,
 				DCF343681E49CAEE00A2FB34 /* WXJSExceptionInfo.m in Sources */,
 				B863DF322107308000EA887D /* WXBridgeContext.m in Sources */,
+				98CB553F21CBD81100929CC6 /* ecma_builtin_typedarray_helpers.c in Sources */,
 				59CE27E91CC387DB000BE37A /* WXEmbedComponent.m in Sources */,
 				DCA0EF651D6EED6F00CB18B9 /* WXGlobalEventModule.m in Sources */,
 				453267152140E38900DAA620 /* vcomponent.cc in Sources */,
 				2A919DA71E321F1F006EB6B5 /* WXBridgeMethod.m in Sources */,
 				453F3758219A76CA00A03F1D /* default_request_handler.mm in Sources */,
 				7423EB521F4ADE30001662D1 /* WXComponent+DataBinding.mm in Sources */,
+				98CB554A21CBD81100929CC6 /* ecma_builtin_float32array_prototype.c in Sources */,
+				98CB552621CBD81100929CC6 /* ecma_builtin_error_prototype.c in Sources */,
+				98CB555121CBD81100929CC6 /* ecma_builtin_typedarray.c in Sources */,
+				98CB557221CBD81100929CC6 /* ecma_builtin_function_prototype.c in Sources */,
 				DCAB35FF1D658EB700C0EA70 /* WXRuleManager.m in Sources */,
+				98CB55C721CBD81100929CC6 /* ecma_map_object.c in Sources */,
 				77D161251C02DDD10010B15B /* WXSDKInstance.m in Sources */,
+				98CB557F21CBD81100929CC6 /* ecma_builtin_referenceerror_prototype.c in Sources */,
+				98CB55BE21CBD81100929CC6 /* ecma_number_arithmetic.c in Sources */,
+				98CB551721CBD81100929CC6 /* ecma_builtin_rangeerror.c in Sources */,
+				98CB55E821CBD81100929CC6 /* qking.c in Sources */,
+				98CB55A121CBD81100929CC6 /* ecma_arraybuffer_object.c in Sources */,
+				98CB55F621CBD81100929CC6 /* default_date.c in Sources */,
 				DC7764931F3C2CA300B5727E /* WXRecyclerDragController.m in Sources */,
 				744D61151E4AF23E00B624B3 /* WXDiffUtil.m in Sources */,
 				B8D66C4321255730003960BD /* render_action_remove_element.cpp in Sources */,
 				B8D66BFB2125572F003960BD /* render_performance.cpp in Sources */,
 				74EF31AE1DE58BE200667A07 /* WXURLRewriteDefaultImpl.m in Sources */,
 				17B122262090AAB000387E33 /* WXSDKError.m in Sources */,
+				98CB55F021CBD81100929CC6 /* default_io.c in Sources */,
 				B8D66C1F21255730003960BD /* layout.cpp in Sources */,
 				B8D66C2B21255730003960BD /* render_manager.cpp in Sources */,
+				98CB559C21CBD81100929CC6 /* ecma_reference.c in Sources */,
+				98CB55BB21CBD81100929CC6 /* ecma_promise_object.c in Sources */,
 				98B69EF721CA295F00E03B77 /* vnode_qking_convert.cc in Sources */,
+				98CB556D21CBD81100929CC6 /* ecma_builtin_promise.c in Sources */,
 				453F374E219A76A600A03F1D /* WXConvertUtility.mm in Sources */,
+				98CB559121CBD81100929CC6 /* ecma_builtin_number.c in Sources */,
 				C4B3D6D51E6954300013F38D /* WXEditComponent.mm in Sources */,
 				C4C30DE81E1B833D00786B6C /* WXComponent+PseudoClassManagement.m in Sources */,
 				B8D66C4F21255730003960BD /* render_action_add_element.cpp in Sources */,
+				98CB55E921CBD81100929CC6 /* qking_internal.c in Sources */,
 				B8D66C3F21255730003960BD /* render_action_update_style.cpp in Sources */,
+				98CB55DD21CBD81100929CC6 /* ecma_helpers_string.c in Sources */,
 				74915F481C8EB02B00BEBCC0 /* WXAssert.m in Sources */,
+				98CB552221CBD81100929CC6 /* ecma_builtin_urierror_prototype.c in Sources */,
+				98CB558A21CBD81100929CC6 /* ecma_builtin_math.c in Sources */,
+				98CB55BD21CBD81100929CC6 /* ecma_string_object.c in Sources */,
 				59A596251CB6311F0012CD52 /* WXStorageModule.m in Sources */,
 				2AFEB17C1C747139000507FA /* WXInstanceWrap.m in Sources */,
 				74A4BA5C1CABBBD000195969 /* WXDebugTool.m in Sources */,
 				98399A9721916A9800D83CCE /* op_code.cc in Sources */,
+				98CB557321CBD81100929CC6 /* ecma_builtin_syntaxerror.c in Sources */,
 				742AD73B1DF98C8B007DC46C /* WXResourceLoader.m in Sources */,
+				98CB552521CBD81100929CC6 /* ecma_builtin_promise_prototype.c in Sources */,
 				453F3757219A76CA00A03F1D /* http_module.cc in Sources */,
+				98CB55F721CBD81100929CC6 /* common_logger.c in Sources */,
+				98CB558121CBD81100929CC6 /* ecma_builtin_array.c in Sources */,
 				B8A72CA0213F8BAE0024E7BE /* class_string.cc in Sources */,
 				B8D66C6721255730003960BD /* render_scroller.cpp in Sources */,
+				98CB54E521CBD81100929CC6 /* handler-print.c in Sources */,
+				98CB54FD21CBD81100929CC6 /* re_parser.c in Sources */,
 				B8D66C5321255730003960BD /* render_action_createbody.cpp in Sources */,
+				98CB558521CBD81100929CC6 /* ecma_builtin_arraybuffer.c in Sources */,
+				98CB55B521CBD81100929CC6 /* ecma_jobqueue.c in Sources */,
 				B8D66BA92125572F003960BD /* table.cc in Sources */,
+				98CB54EA21CBD81100929CC6 /* lit_magic_strings.c in Sources */,
+				98CB557B21CBD81100929CC6 /* ecma_builtin_arraybuffer_prototype.c in Sources */,
+				98CB550E21CBD81100929CC6 /* vm_exec_state.c in Sources */,
 				B8D66C5521255730003960BD /* render_action_createfinish.cpp in Sources */,
 				D334510D1D3E19B80083598A /* WXCanvasModule.m in Sources */,
+				98CB54FE21CBD81100929CC6 /* re_compiler.c in Sources */,
 				B8D66C1D21255730003960BD /* style.cpp in Sources */,
 				B89543F520EB18B5006EAD63 /* WXJSCoreBridge.mm in Sources */,
+				98CB557021CBD81100929CC6 /* ecma_builtin_regexp_prototype.c in Sources */,
+				98CB55C321CBD81100929CC6 /* ecma_typedarray_object.c in Sources */,
 				741081241CED6756001BC6E5 /* WXComponentFactory.m in Sources */,
 				D362F9501C83EDA20003F546 /* WXWebViewModule.m in Sources */,
 				745B2D711E5A8E1E0092D38A /* WXSectionDataController.m in Sources */,
+				98CB55D021CBD81100929CC6 /* ecma_helpers_errol.c in Sources */,
 				DCE2CF9A1F46D4220021BDC4 /* WXVoiceOverModule.m in Sources */,
+				98CB555221CBD81100929CC6 /* ecma_builtin_float32array.c in Sources */,
+				98CB555721CBD81100929CC6 /* ecma_builtin_int16array.c in Sources */,
 				2A1F57B81C75C6A600B58017 /* WXTextInputComponent.m in Sources */,
+				98CB552121CBD81100929CC6 /* ecma_builtin_rangeerror_prototype.c in Sources */,
+				98CB556921CBD81100929CC6 /* ecma_builtin_type_error_thrower.c in Sources */,
+				98CB555E21CBD81100929CC6 /* ecma_builtin_float64array_prototype.c in Sources */,
 				74CC7A1D1C2BC5F800829368 /* WXCellComponent.mm in Sources */,
 				B8D66BA72125572F003960BD /* string_table.cc in Sources */,
 				74862F821E03A24500B7A041 /* WXComponentMethod.m in Sources */,
+				98CB559521CBD81100929CC6 /* ecma_builtin_object_prototype.c in Sources */,
 				77E65A121C155EA8008B8775 /* WXImageComponent.m in Sources */,
+				98CB55F321CBD81100929CC6 /* default_fatal.c in Sources */,
 				74CFDD3E1F459400007A1A66 /* WXRecycleListDataManager.m in Sources */,
+				98CB559221CBD81100929CC6 /* ecma_builtin_string_prototype.c in Sources */,
 				4532670B213FC84A00DAA620 /* WXDisplayLinkManager.m in Sources */,
 				2A837AB31CD9DE9200AEDF03 /* WXLoadingComponent.mm in Sources */,
 				2AE5B7531CAB7DBD0082FDDB /* WXAComponent.m in Sources */,
 				B8D66C9521255730003960BD /* dom_wson.cpp in Sources */,
 				B8F2C70C2133A83C00635B37 /* rax_parser.cc in Sources */,
 				176BE43C209172330086B6AF /* WXComponent+Layout.mm in Sources */,
+				98CB556021CBD81100929CC6 /* ecma_builtin_uint32array_prototype.c in Sources */,
 				74CFDD3A1F45939C007A1A66 /* WXRecycleListComponent.mm in Sources */,
 				741DFE031DDD7D18009B020F /* WXRoundedRect.mm in Sources */,
+				98CB559B21CBD81100929CC6 /* ecma_builtin_regexp.c in Sources */,
+				98CB550721CBD81100929CC6 /* vm_logic_utils_relational_equality.c in Sources */,
 				59A596301CB632050012CD52 /* WXBaseViewController.m in Sources */,
+				98CB557E21CBD81100929CC6 /* ecma_builtin_function.c in Sources */,
+				98CB55D221CBD81100929CC6 /* ecma_gc.c in Sources */,
+				98CB550821CBD81100929CC6 /* vm_logic_utils.c in Sources */,
 				74CC7A211C2BF9DC00829368 /* WXListComponent.mm in Sources */,
 				7423899C1C3174EB00D748CA /* WXWeakObjectWrapper.m in Sources */,
 				744BEA561D05178F00452B5D /* WXComponent+Display.m in Sources */,
 				7408C48F1CFB345D000BCCD0 /* WXComponent+Events.m in Sources */,
 				B89543F320EB18B5006EAD63 /* WXCoreBridge.mm in Sources */,
 				C4F012871E150307003378D0 /* WXWebSocketLoader.m in Sources */,
+				98CB54F321CBD81100929CC6 /* lit_char_helpers.c in Sources */,
 				B8D66C2721255730003960BD /* render_page.cpp in Sources */,
+				98CB55D121CBD81100929CC6 /* ecma_init_finalize.c in Sources */,
 				C4D872211E5DDEDA00E39BC1 /* WXInnerLayer.m in Sources */,
+				98CB55ED21CBD81100929CC6 /* decoder_sections.c in Sources */,
 				B8D66C7121255730003960BD /* render_appbar.cpp in Sources */,
 				B8D66CAD21255730003960BD /* wson_parser.cpp in Sources */,
 				74BA4AB41F70F4B600AC29BF /* WXRecycleListLayout.m in Sources */,
 				745ED2DB1C5F2C7E002DB5A8 /* WXView.m in Sources */,
+				98CB556B21CBD81100929CC6 /* ecma_builtin_global.c in Sources */,
 				DC03ADB91D508719003F76E7 /* WXTextAreaComponent.mm in Sources */,
 				59A596231CB6311F0012CD52 /* WXNavigatorModule.m in Sources */,
 				B8D66CA721255730003960BD /* wson.c in Sources */,
@@ -3740,17 +5041,29 @@
 				17B122212090AA9300387E33 /* WXSDKInstance_performance.m in Sources */,
 				B8D66C3921255730003960BD /* render_action_layout.cpp in Sources */,
 				59A583091CF5B2FD0081FD3E /* WXNavigationDefaultImpl.m in Sources */,
+				98CB550521CBD81100929CC6 /* jrt_fatals.c in Sources */,
+				98CB555F21CBD81100929CC6 /* ecma_builtin_uint8clampedarray.c in Sources */,
 				B8D66BF52125572F003960BD /* token.cc in Sources */,
+				98CB554B21CBD81100929CC6 /* ecma_builtin_int16array_prototype.c in Sources */,
 				746B923C1F46BE36009AE86B /* WXCellSlotComponent.mm in Sources */,
 				7463192A1C71B92600EFEBD4 /* WXModalUIModule.m in Sources */,
+				98CB555921CBD81100929CC6 /* ecma_builtin_int32array.c in Sources */,
+				98CB55CF21CBD81100929CC6 /* ecma_property_hashmap.c in Sources */,
 				77D161501C02E3880010B15B /* WXUtility.m in Sources */,
+				98CB55B021CBD81100929CC6 /* ecma_comparison.c in Sources */,
+				98CB552421CBD81100929CC6 /* ecma_builtin_map.c in Sources */,
+				98CB552821CBD81100929CC6 /* ecma_builtin_date.c in Sources */,
 				B8F2C6F42133A83C00635B37 /* rax_parser_statistics.cc in Sources */,
+				98CB551B21CBD81100929CC6 /* ecma_builtin_map_prototype.c in Sources */,
+				98CB553E21CBD81100929CC6 /* ecma_builtin_uint16array.c in Sources */,
 				1771795721416DF0006F39A9 /* WXApmForInstance.m in Sources */,
 				74A4BA9F1CB3C0A100195969 /* WXHandlerFactory.m in Sources */,
 				B8D66C3721255730003960BD /* render_action_update_attr.cpp in Sources */,
 				B8F2C6F02133A83C00635B37 /* rax_jsx_ast.cc in Sources */,
 				B8D66BBB2125572F003960BD /* vnode_render_context.cc in Sources */,
+				98CB55B921CBD81100929CC6 /* ecma_array_object.c in Sources */,
 				841CD1031F9739890081196D /* WXExceptionUtils.m in Sources */,
+				98CB551A21CBD81100929CC6 /* ecma_builtin_error.c in Sources */,
 				B8D66CD921255730003960BD /* message_pump_posix.cc in Sources */,
 				453F375E219A76FA00A03F1D /* vcomponent_lifecycle_listener.mm in Sources */,
 				C4E97D341F1EF46D00ABC314 /* WXTracingManager.m in Sources */,
@@ -3760,8 +5073,12 @@
 				C41E1A981DC1FD15009C7F90 /* WXDatePickerManager.m in Sources */,
 				77D1614C1C02E3790010B15B /* WXConvert.m in Sources */,
 				749DC27C1D40827B009E1C91 /* WXMonitor.m in Sources */,
+				98CB555821CBD81100929CC6 /* ecma_builtin_uint8array_prototype.c in Sources */,
+				98CB554121CBD81100929CC6 /* ecma_builtin_int32array_prototype.c in Sources */,
+				98CB557621CBD81100929CC6 /* ecma_builtins.c in Sources */,
 				C4B834271DE69B09007AD27E /* WXPickerModule.m in Sources */,
 				745B2D691E5A8E1E0092D38A /* WXMultiColumnLayout.m in Sources */,
+				98CB553121CBD81100929CC6 /* ecma_builtin_urierror.c in Sources */,
 				77D161391C02DE940010B15B /* WXBridgeManager.m in Sources */,
 				74BF19F91F5139BB00AEE3D7 /* WXJSASTParser.mm in Sources */,
 			);
@@ -4209,6 +5526,9 @@
 				GCC_PREFIX_HEADER = "WeexSDK/Sources/Supporting Files/WeexSDK-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
+					CONFIG_DISABLE_ERROR_BUILTINS,
+					QKING_ENABLE_EXTERNAL_CONTEXT,
+					QKING_NDEBUG,
 					"OS_IOS=1",
 				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -4217,6 +5537,7 @@
 					"$(PROJECT_DIR)/WeexSDK/Dependency",
 					"$(PROJECT_DIR)/../../weex_core/Source",
 					"$(PROJECT_DIR)/../../weex_core/Source/core/layout",
+					"$(PROJECT_DIR)/../../weex_core/Source/qking",
 				);
 				INFOPLIST_FILE = WeexSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -4265,7 +5586,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "WeexSDK/Sources/Supporting Files/WeexSDK-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"${inherited}",
+					"$(inherited)",
+					QKING_ENABLE_EXTERNAL_CONTEXT,
+					QKING_NDEBUG,
+					CONFIG_DISABLE_ERROR_BUILTINS,
 					"OS_IOS=1",
 				);
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -4274,6 +5598,7 @@
 					"$(PROJECT_DIR)/WeexSDK/Dependency",
 					"$(PROJECT_DIR)/../../weex_core/Source",
 					"$(PROJECT_DIR)/../../weex_core/Source/core/layout",
+					"$(PROJECT_DIR)/../../weex_core/Source/qking",
 				);
 				INFOPLIST_FILE = WeexSDK/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

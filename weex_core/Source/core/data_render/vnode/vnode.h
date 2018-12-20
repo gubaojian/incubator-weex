@@ -25,7 +25,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <memory>
-#include "include/Qking/qking.h"
+#include "include/qking.h"
 #include "core/render/node/render_object.h"
 
 namespace weex {

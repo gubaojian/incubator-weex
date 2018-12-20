@@ -20,7 +20,7 @@
 #ifndef CORE_DATA_RENDER_VNODE_VNODE_QKING_EXEC_ENV_H
 #define CORE_DATA_RENDER_VNODE_VNODE_QKING_EXEC_ENV_H
 
-#include "include/Qking/qking.h"
+#include "include/qking.h"
 
 namespace weex {
 namespace core {

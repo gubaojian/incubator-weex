@@ -22,7 +22,7 @@
 
 #include <map>
 #include <string>
-#include "include/Qking/qking.h"
+#include "include/qking.h"
 #include "core/data_render/vm.h"
 #include "core/data_render/vnode/vnode.h"
 #include "core/data_render/vnode/vcomponent.h"
