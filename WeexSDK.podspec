@@ -106,7 +106,7 @@ Pod::Spec.new do |s|
   s.user_target_xcconfig  = { 'FRAMEWORK_SEARCH_PATHS' => "'$(PODS_ROOT)/WeexSDK'" }
   s.requires_arc = true
   s.prefix_header_file = 'ios/sdk/WeexSDK/Sources/Supporting Files/WeexSDK-Prefix.pch'
-
+  s.ios.vendored_frameworks = 'Frameworks/Qking.framework'
   s.xcconfig = { "OTHER_LINK_FLAG" => '$(inherited) -ObjC' }
   s.pod_target_xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${PODS_ROOT}/WeexSDK/weex_core/Source/ ${PROJECT_DIR}/../../../weex_core/Source',
     'GCC_PREPROCESSOR_DEFINITIONS' => 'OS_IOS=1' }
