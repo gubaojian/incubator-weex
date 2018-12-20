@@ -17,7 +17,7 @@
 #define ECMA_FUNCTION_OBJECT_H
 
 #include "ecma_globals.h"
-#include "vm.h"
+#include "core/vm/vm.h"
 
 #ifdef __cplusplus
 extern "C" {

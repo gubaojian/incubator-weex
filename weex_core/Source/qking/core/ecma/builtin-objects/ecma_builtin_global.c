@@ -25,7 +25,7 @@
 #include "lit_char_helpers.h"
 #include "lit_magic_strings.h"
 #include "lit_strings.h"
-#include "vm.h"
+#include "core/vm/vm.h"
 #include "jrt_libc_includes.h"
 #include "jrt_bit_fields.h"
 
