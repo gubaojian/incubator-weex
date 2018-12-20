@@ -335,6 +335,7 @@
 		98B69EF921CA295F00E03B77 /* vnode_qking_env.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B69EF521CA295F00E03B77 /* vnode_qking_env.h */; };
 		98B69EFA21CA295F00E03B77 /* vnode_qking_convert.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B69EF621CA295F00E03B77 /* vnode_qking_convert.h */; };
 		98CB53AC21CBC8F800929CC6 /* Qking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CB53AB21CBC8F800929CC6 /* Qking.framework */; };
+		98CB53AD21CBCD2900929CC6 /* Qking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CB53AB21CBC8F800929CC6 /* Qking.framework */; };
 		9B9E74791FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B9E74781FA2DB5800DAAEA9 /* WXTestBridgeMethodDummy.m */; };
 		B82A159820F8556F0098A509 /* WXSDKInstance_performance.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B1221F2090AA9300387E33 /* WXSDKInstance_performance.m */; };
 		B82A159920F857200098A509 /* WXSDKError.m in Sources */ = {isa = PBXBuildFile; fileRef = 17B122242090AAB000387E33 /* WXSDKError.m */; };
@@ -1602,6 +1603,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98CB53AD21CBCD2900929CC6 /* Qking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
