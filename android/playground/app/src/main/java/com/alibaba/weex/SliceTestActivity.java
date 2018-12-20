@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.taobao.weex.IWXRenderListener;
 import com.taobao.weex.WXSDKEngine;
@@ -47,18 +48,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static com.taobao.weex.WXSDKInstance.BUNDLE_URL;
 
 public class SliceTestActivity extends AppCompatActivity {
   private static final String LOG_TAG = "SliceTestActivity";
+  private static final boolean USING_BIN = true;
   private RecyclerView mRecyclerView;
   private TextView mReportTextView;
 
   private final List<String> mData = new ArrayList<>();
   private WXInstanceAdapter mAdapter;
   private final Set<WXSDKInstance> mInstances = new HashSet<>();
+  private String mDataTmp;
 
   public static class SearchModule extends WXModule {
     @JSMethod(uiThread = true)
@@ -83,296 +90,21 @@ public class SliceTestActivity extends AppCompatActivity {
     mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     mAdapter = new WXInstanceAdapter();
     mRecyclerView.setAdapter(mAdapter);
+    mDataTmp = loadAssets("lite_template/test.json");
   }
 
   static int i = 0;
 
   public void addCellClick(View view) {
     //rax case.js
-    if (i++ % 2 == 0) {
-      mData.add("{\"model\":{\"tips\":[{\"show\":\"雪纺\",\"q\":\"连衣裙 雪纺\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%221%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"中长款\",\"q\":\"连衣裙 中长款\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%222%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"假两件\",\"q\":\"连衣裙 假两件\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%223%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"A字款\",\"q\":\"连衣裙 A字款\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%224%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"气质淑女\",\"q\":\"连衣裙 气质淑女\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%225%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]}],\"pos\":\"3\",\"src\":\"graph\",\"topic\":\"细选"+i+"\",\"type\":\"1\",\"tItemType\":\"wx_text\",\"tShowTmpl\":\"wx_text\",\"rl\":\"query_type-1|tip_show_type-1|tip_show_page-2\"},\"status\":{\"layoutStyle\":0}}");
+    JSONObject obj = JSON.parseObject(mDataTmp);
+    if(i++ % 2 == 0){
+      obj.getJSONObject("status").put("layoutStyle",0);
     } else {
-      mData.add("{\"model\":{\"tips\":[{\"show\":\"雪纺\",\"q\":\"连衣裙 雪纺\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%221%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"中长款\",\"q\":\"连衣裙 中长款\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%222%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"假两件\",\"q\":\"连衣裙 假两件\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%223%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"A字款\",\"q\":\"连衣裙 A字款\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%224%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]},{\"show\":\"气质淑女\",\"q\":\"连衣裙 气质淑女\",\"params\":[{\"key\":\"from\",\"value\":\"tips_1\"},{\"key\":\"vClickTrace\",\"value\":\"%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%225%22%2C%22pre_rn%22%3A%220189c4d06e11f32262fa896f5f364f76%22%7D\"}]}],\"pos\":\"3\",\"src\":\"graph\",\"topic\":\"细选"+i+"\",\"type\":\"1\",\"tItemType\":\"wx_text\",\"tShowTmpl\":\"wx_text\",\"rl\":\"query_type-1|tip_show_type-1|tip_show_page-2\"},\"status\":{\"layoutStyle\":1}}");
+      obj.getJSONObject("status").put("layoutStyle",1);
     }
-
-    //card.wasm
-    if (false) {
-      if (i++ % 2 == 0) {
-        mData.add("{\n" +
-            "    \"model\": {\n" +
-            "      \"src\": \"tmall_rec\",\n" +
-            "      \"pos\": 3,\n" +
-            "      \"topic\": \"你可能想看"+i+"\",\n" +
-            "      \"type\": \"tmall_rec\",\n" +
-            "      \"tShowTmpl\": \"wx_tmall_discovery\",\n" +
-            "      \"tItemType\": \"wx_tmall_discovery\",\n" +
-            "      \"tips\": [\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/imgextra/i1/2985924572/TB2EL5XnDnI8KJjy0FfXXcdoVXa_!!2985924572.jpg\",\n" +
-            "          \"show\": \"职场范儿\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%220%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1001\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/tfs/TB1.3ctnvDH8KJjy1XcXXcpdXXa-1125-390.png\",\n" +
-            "          \"show\": \"国际大牌\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%221%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1007\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/imgextra/i2/263817957/TB2STDSnwLD8KJjSszeXXaGRpXa-263817957.jpg\",\n" +
-            "          \"show\": \"优雅淑女\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%222%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1002\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/imgextra/i2/263817957/TB2_JnCnBHH8KJjy0FbXXcqlpXa-263817957.jpg\",\n" +
-            "          \"show\": \"活力少女\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%223%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1005\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        }\n" +
-            "      ]\n" +
-            "    },\n" +
-            "    \"status\": {\n" +
-            "      \"layoutStyle\": 0\n" +
-            "    }\n" +
-            "  }");
-      } else {
-        mData.add("{\n" +
-            "    \"model\": {\n" +
-            "      \"src\": \"tmall_rec\",\n" +
-            "      \"pos\": 3,\n" +
-            "      \"topic\": \"你可能不想看\",\n" +
-            "      \"type\": \"tmall_rec\",\n" +
-            "      \"tShowTmpl\": \"wx_tmall_discovery\",\n" +
-            "      \"tItemType\": \"wx_tmall_discovery\",\n" +
-            "      \"tips\": [\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/imgextra/i1/2985924572/TB2EL5XnDnI8KJjy0FfXXcdoVXa_!!2985924572.jpg\",\n" +
-            "          \"show\": \"职场范儿\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%220%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1001\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/tfs/TB1.3ctnvDH8KJjy1XcXXcpdXXa-1125-390.png\",\n" +
-            "          \"show\": \"国际大牌\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%221%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1007\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/imgextra/i2/263817957/TB2STDSnwLD8KJjSszeXXaGRpXa-263817957.jpg\",\n" +
-            "          \"show\": \"优雅淑女\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%222%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1002\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "          \"picUrl\": \"https://img.alicdn.com/imgextra/i2/263817957/TB2_JnCnBHH8KJjy0FbXXcqlpXa-263817957.jpg\",\n" +
-            "          \"show\": \"活力少女\",\n" +
-            "          \"params\": [\n" +
-            "            {\n" +
-            "              \"value\": \"tmall_rec\",\n" +
-            "              \"key\": \"from\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"%7B%22tips_oriq%22%3A%22%E7%BE%BD%E7%BB%92%E6%9C%8D%22%2C%22tips_srppage%22%3A%221%22%2C%22tips_type%22%3A%22mall1%22%2C%22tips_pos%22%3A%223%22%2C%22pre_rn%22%3A%22767d9f52662b4883b2dfcff69f12edce%22%7D\",\n" +
-            "              \"key\": \"vClickTrace\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"1005\",\n" +
-            "              \"key\": \"tag_id\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"767d9f52662b4883b2dfcff69f12edce\",\n" +
-            "              \"key\": \"sessionid\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"tmallRecCard\",\n" +
-            "              \"key\": \"m\"\n" +
-            "            },\n" +
-            "            {\n" +
-            "              \"value\": \"羽绒服\",\n" +
-            "              \"key\": \"q\"\n" +
-            "            }\n" +
-            "          ]\n" +
-            "        }\n" +
-            "      ]\n" +
-            "    },\n" +
-            "    \"status\": {\n" +
-            "      \"layoutStyle\": 1\n" +
-            "    }\n" +
-            "  }");
-      }
-    }
+    mData.add(obj.toJSONString());
     mAdapter.notifyItemInserted(mData.size() - 1);
-//    mAdapter.notifyDataSetChanged();
   }
 
   private class WXInstanceAdapter extends RecyclerView.Adapter<WXViewHolder> {
@@ -429,22 +161,21 @@ public class SliceTestActivity extends AppCompatActivity {
     }
 
     public void render(String initData, int position) {
-//
-      if (true) {
-
+      Map<String,Object> options = new HashMap<>();
+      options.put(BUNDLE_URL, "slice/test.js");
+      if (!USING_BIN) {
         mInstance.render(
             "testPage",
-            loadAssets(),
-            null,
+            loadAssets("lite_template/test.js"),
+            options,
             initData,
             WXRenderStrategy.DATA_RENDER
         );
       } else {
-//
         mInstance.render(
             "testPage",
             loadBytes(),
-            null,
+            options,
             initData
         );
       }
@@ -482,10 +213,10 @@ public class SliceTestActivity extends AppCompatActivity {
   }
 
   @NonNull
-  private String loadAssets() {
+  private String loadAssets(String fileName) {
     StringBuilder buf = new StringBuilder();
     try {
-      InputStream json = getAssets().open("lite_template/case.js");
+      InputStream json = getAssets().open(fileName);
       BufferedReader in =
           new BufferedReader(new InputStreamReader(json, "UTF-8"));
       String str;
@@ -498,13 +229,14 @@ public class SliceTestActivity extends AppCompatActivity {
     } catch (IOException e) {
       e.printStackTrace();
     }
-
     return buf.toString();
   }
 
+
+
   private byte[] loadBytes() {
     try {
-      AssetFileDescriptor assetFileDescriptor = getAssets().openFd("lite_template/card.wasm");
+      AssetFileDescriptor assetFileDescriptor = getAssets().openFd("lite_template/test.wasm");
       long len = assetFileDescriptor.getDeclaredLength();
       ByteBuffer buf = ByteBuffer.allocate((int) len);
       InputStream json = assetFileDescriptor.createInputStream();
