@@ -573,6 +573,7 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
               }
             }
           }
+          getScrollStartEndHelper().onScrollStateChanged(OnWXScrollListener.IDLE);
         }
 
         @Override

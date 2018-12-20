@@ -314,6 +314,9 @@ public class WXEmbed extends WXDiv implements WXSDKInstance.OnInstanceVisibleLis
    * Load embed content, default behavior is create a nested instance.
    */
   protected void loadContent(){
+    if(mNestedInstance != null){
+         destoryNestInstance();
+    }
     mNestedInstance = createInstance();
     if(mListener != null && mListener.mEventListener != null){
       if(!mListener.mEventListener.onPreCreate(this,src)){
