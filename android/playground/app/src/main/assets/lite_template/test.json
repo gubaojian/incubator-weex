@@ -1,41 +1,126 @@
 {
   "model": {
-    "info": {
-      "bottomLinkUrl":
-        "https://market.m.taobao.com/apps/abs/9/41/index?wh_weex=true&pageId=6273&wx_navbar_hidden=true&wx_navbar_transparent=true&tabString=feeds&accountId=2422582364",
-      "subTitle":
-        "夏季外出旅游，一款复古甜美的连衣裙能带给你愉悦的着装体验，冷淡风格清新自然，带有一丝丝的田野气息，唯美动人。",
-      "mainTitle": "连衣裙美从仙中来，小身板女生穿起来!",
-      "contentId": "200754512151",
-      "topLinkUrl":
-        "http://market.m.taobao.com/apps/market/content/index.html?contentId=200754512151",
-      "wfPic":
-        "//img.alicdn.com/tfscom/i4/261009757/TB2VmAtteuSBuNjy1XcXXcYjFXa_!!261009757.jpg",
-      "pics": [
-        "//img.alicdn.com/tfscom/i4/261009757/TB2VmAtteuSBuNjy1XcXXcYjFXa_!!261009757.jpg",
-        "//img.alicdn.com/tfscom/i2/261009757/TB2BzKrd7yWBuNjy0FpXXassXXa_!!261009757.jpg",
-        "//img.alicdn.com/tfscom/i4/261009757/TB22M3RiiCYBuNkHFCcXXcHtVXa_!!261009757.jpg",
-        "//img.alicdn.com/tfscom/i2/261009757/TB2LFMmqFXXXXXaXFXXXXXXXXXX_!!261009757.jpg"
-      ],
-      "bottomText": "搭配in时尚",
-      "bottomIcons": [
-        "//img.alicdn.com/imgextra/i3/2751477147/TB2bgawXdqUQKJjSZFIXXcOkFXa_!!2751477147-0-beehive-scenes.jpg",
-        "//img.alicdn.com/imgextra/i3/2751477147/TB2bgawXdqUQKJjSZFIXXcOkFXa_!!2751477147-0-beehive-scenes.jpg",
-        "//img.alicdn.com/imgextra/i3/2751477147/TB2bgawXdqUQKJjSZFIXXcOkFXa_!!2751477147-0-beehive-scenes.jpg",
-        "//img.alicdn.com/imgextra/i3/2751477147/TB2bgawXdqUQKJjSZFIXXcOkFXa_!!2751477147-0-beehive-scenes.jpg"
-      ],
-      "bizIcon": {
-        "url":
-          "https://gw.alicdn.com/tfs/TB1363FheSSBuNjy0FlXXbBpVXa-78-36.png",
-        "width": 72,
-        "height": 36
+    "pos": "3",
+    "src": "graph",
+    "topic": "细选",
+    "rl": "query_type-1|tip_show_type-1|tip_show_page-2",
+    "type": "1",
+    "tShowTmpl": "wx_text_newsrp",
+    "tItemType": "wx_text_newsrp",
+    "tips": [
+      {
+        "q": "连衣裙 端庄大气",
+        "show": "端庄大气",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%220%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
       },
-      "picText1": "买家秀",
-      "picText2": "+10086"
-    },
-    "tItemType": "wx_flow_post_choiceness",
-    "position": "5",
-    "pos": 7
+      {
+        "q": "连衣裙 雪纺",
+        "show": "雪纺",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%221%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
+      },
+      {
+        "q": "连衣裙 中长款",
+        "show": "中长款",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%222%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
+      },
+      {
+        "q": "连衣裙 假两件",
+        "show": "假两件",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%223%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
+      },
+      {
+        "q": "连衣裙 A字款",
+        "show": "A字款",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%224%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
+      },
+      {
+        "q": "连衣裙 气质淑女",
+        "show": "气质淑女",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%225%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
+      },
+      {
+        "q": "连衣裙 碎花",
+        "show": "碎花",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%226%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
+      },
+      {
+        "q": "连衣裙 藏肉",
+        "show": "藏肉",
+        "params": [
+          {
+            "value": "tips_1",
+            "key": "from"
+          },
+          {
+            "value": "%7B%22tips_oriq%22%3A%22%E8%BF%9E%E8%A1%A3%E8%A3%99%22%2C%22tips_srppage%22%3A%222%22%2C%22tips_type%22%3A%221%22%2C%22tips_pos%22%3A%227%22%2C%22pre_rn%22%3A%2264b19dff8285937266d3686890bcc6a6%22%7D",
+            "key": "vClickTrace"
+          }
+        ]
+      }
+    ]
   },
   "status": {
     "layoutStyle": 0
