@@ -33,6 +33,7 @@ VNode::VNode(const std::string &tag_name, const std::string &node_id,
   styles_ = new std::map<std::string, std::string>();
   attributes_ = new std::map<std::string, std::string>();
   events_ = new std::map<std::string, void *>();
+  qking_events_ = new std::map<std::string, qking_value_t>();
   event_params_map_.reset(new EventParamsMap);
   on_event_listener_.reset();
 }
@@ -53,6 +54,14 @@ VNode::~VNode() {
       delete events_;
       events_ = nullptr;
   }
+  if (qking_events_) {
+      for (auto it = qking_events_->begin(); it != qking_events_->end(); it++) {
+          qking_release_value(it->second);
+      }
+      delete qking_events_;
+      qking_events_ = nullptr;
+  }
+
 //  for (auto it = child_list_.begin(); it != child_list_.end(); it++) {
 //    VNode *&reference = *it;
 //    if (reference != nullptr) {
@@ -80,6 +89,16 @@ void VNode::SetStyle(const std::string &key, const std::string &value) {
 
 void VNode::SetAttribute(const std::string &key, const std::string &value) {
   MapInsertOrAssign(attributes_, key, value);
+}
+    
+void VNode::AddEvent(const std::string &event, qking_value_t handler) {
+    std::map<std::string, qking_value_t>::iterator iter = qking_events_->find(event);
+    if (iter != qking_events_->end()) {
+        iter->second = handler;
+    }
+    else {
+        qking_events_->insert({event, handler});
+    }
 }
     
 void VNode::AddEvent(const std::string &event, void *func, void *inst) {

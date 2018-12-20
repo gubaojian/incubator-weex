@@ -80,6 +80,12 @@ static void FireEventOnDataRenderNode(JNIEnv* env, jobject jcaller,
     jstring data,
     jstring domChanges);
 
+static void InvokeCallbackOnDataRender(JNIEnv* env, jobject jcaller,
+    jstring instanceId,
+    jstring callbackId,
+    jstring data,
+    jboolean keepAlive);
+
 static void RegisterModuleOnDataRenderNode(JNIEnv* env, jobject jcaller,
     jstring data);
 
@@ -997,6 +1003,14 @@ static const JNINativeMethod kMethodsWXBridge[] = {
 "Ljava/lang/String;"
 ")"
 "V", reinterpret_cast<void*>(FireEventOnDataRenderNode) },
+{ "nativeInvokeCallbackOnDataRender",
+"("
+"Ljava/lang/String;"
+"Ljava/lang/String;"
+"Ljava/lang/String;"
+"Z"
+")"
+"V", reinterpret_cast<void*>(InvokeCallbackOnDataRender) },
     { "nativeRegisterModuleOnDataRenderNode",
 "("
 "Ljava/lang/String;"
