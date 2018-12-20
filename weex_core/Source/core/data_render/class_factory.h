@@ -39,12 +39,6 @@ public:
     virtual Value CreateFuncInstance(FuncState *func_state);
     virtual Value ClassArray();
     virtual Value ClassString();
-    virtual Value ClassJSON();
-    virtual Value ClassObject();
-    virtual Value ClassRegExp();
-    virtual Value ClassWindow();
-    virtual Value ClassMath();
-    virtual Value ClassConsole();
     virtual Value CreateArray();
     virtual Value CreateTable();
     int Find(const ClassDescriptor *desc);
