@@ -320,10 +320,14 @@ bool VNodeRenderManager::RequireModule(std::string &name, std::string &result)
             break;
         }
         for (auto iter = modules_.begin(); iter != modules_.end(); iter++) {
-            if ((*iter).find(name) <= 10) {
-                result = *iter;
-                finished = true;
-                break;
+            std::string error;
+            auto module_info = json11::Json::parse(*iter, error);
+            if (module_info.is_object()) {
+                if (module_info[name].is_array()) {
+                    result = *iter;
+                    finished = true;
+                    break;
+                }
             }
         }
         
