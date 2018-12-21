@@ -109,8 +109,7 @@ Pod::Spec.new do |s|
   s.prefix_header_file = 'ios/sdk/WeexSDK/Sources/Supporting Files/WeexSDK-Prefix.pch'
   s.ios.vendored_frameworks = 'Frameworks/Qking.framework'
   s.xcconfig = { "OTHER_LINK_FLAG" => '$(inherited) -ObjC' }
-  s.pod_target_xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${PODS_ROOT}/WeexSDK/weex_core/Source/ ${PROJECT_DIR}/../../../weex_core/Source ${PROJECT_DIR}/../../../weex_core/Source/qking',
-    'GCC_PREPROCESSOR_DEFINITIONS' => 'OS_IOS=1 QKING_ENABLE_EXTERNAL_CONTEXT QKING_NDEBUG' }
+  s.pod_target_xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${PODS_ROOT}/WeexSDK/weex_core/Source/ ${PROJECT_DIR}/../../../weex_core/Source ${PROJECT_DIR}/../../../weex_core/Source/qking', 'GCC_PREPROCESSOR_DEFINITIONS[config=Debug]' => 'OS_IOS=1  QKING_ENABLE_EXTERNAL_CONTEXT QKING_ENABLE_ERROR_MESSAGES QKING_ENABLE_LOGGING JMEM_STATS',  'GCC_PREPROCESSOR_DEFINITIONS[config=Release]' => 'OS_IOS=1 QKING_ENABLE_EXTERNAL_CONTEXT QKING_NDEBUG' }
 
   s.frameworks = 'CoreMedia','MediaPlayer','AVFoundation','AVKit','JavaScriptCore','GLKit','OpenGLES','CoreText','QuartzCore','CoreGraphics'
   
