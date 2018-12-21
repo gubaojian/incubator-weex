@@ -58,7 +58,7 @@ class VNodeRenderManager {
   void CallNativeModule(qking_executor_t executor, const std::string &module, const std::string &method, const std::string &args, int argc = 0);
   void UpdateComponentData(const std::string& page_id, const char* cid, const std::string& json_data);
   void WXLogNative(ExecState *exec_state, const std::string &info);
-  void InvokeCallback(const std::string &page_id, const std::string &callback_id, const std::string &data,bool keep_alive);
+  void InvokeCallback(const std::string &page_id, const std::string &callback_id, const std::string &data, bool keep_alive);
   static VNodeRenderManager *GetInstance() {
     if (!g_instance) {
       g_instance = new VNodeRenderManager();

@@ -41,27 +41,31 @@ uint32_t CallbackManager::AddCallback(qking_value_t callback) {
 }
 
 void CallbackManager::Call(uint32_t id, const std::string &data, bool keep_alive) {
-    auto it = callback_map_.find(id);
-    if (it == callback_map_.end()){
-        //not found
-        return;
-    }
-    qking_value_t func = it->second;
-    
-    //call!
-    if (!qking_value_is_function(func)){
-        //not callable
-        LOGE("[data-render] InvokeCallback: not callable");
-        return;
-    }
-    
-    //todo add args;
-    qking_call_function(func,qking_create_undefined(), nullptr,0);
-    
-    if (!keep_alive){
-        qking_release_value(func);
-        callback_map_.erase(it);
-    }
+    do {
+        auto iter = callback_map_.find(id);
+        if (iter == callback_map_.end()) {
+            break;
+        }
+        qking_value_t func = iter->second;
+        if (!qking_value_is_function(func)) {
+            LOGE("[data-render] InvokeCallback: not callable");
+            break;
+        }
+        //todo add args;
+        if (data.length() > 0) {
+            qking_value_t result = qking_json_parse((const qking_char_t *)data.c_str(), (qking_size_t)data.length());
+            qking_call_function(func, qking_create_undefined(), &result, 1);
+            qking_release_value(result);
+        }
+        else {
+            qking_call_function(func, qking_create_undefined(), nullptr, 0);
+        }
+        if (!keep_alive) {
+            qking_release_value(func);
+            callback_map_.erase(iter);
+        }
+        
+    } while (0);
 }
     
 static qking_value_t CallNativeModule(const qking_value_t function_obj, const qking_value_t this_val, const qking_value_t args_p[], const qking_length_t args_count) {
@@ -95,7 +99,7 @@ static qking_value_t CallNativeModule(const qking_value_t function_obj, const qk
         qking_release_value(length_var);
         std::string args;
         CallbackManager *callback_manager = weex::core::data_render::VNodeRenderManager::GetInstance()->GetCallbackManager(qking_get_current_executor());
-        if(callback_manager== nullptr){
+        if (callback_manager == nullptr) {
             break;
         }
         if (argc > 0) {
@@ -103,11 +107,11 @@ static qking_value_t CallNativeModule(const qking_value_t function_obj, const qk
             for (int i = 0; i < argc; i++) {
                 qking_value_t var = qking_get_property_by_index(args_var, i);
                 bool is_function = qking_value_is_function(var);
-                if (is_function){
+                if (is_function) {
                   uint32_t func_callback = callback_manager->AddCallback(var);
-                  var = qking_create_string((const qking_char_t*)(WeexCore::to_string(
+                  var = qking_create_string((const qking_char_t *)(WeexCore::to_string(
                       func_callback).c_str()));
-                  if (qking_value_is_undefined(result)){
+                  if (qking_value_is_undefined(result)) {
                     result = qking_acquire_value(var);//make a copy.
                   }
                 }

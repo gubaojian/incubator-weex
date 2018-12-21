@@ -812,6 +812,19 @@ static WeexCore::ScriptBridge* jsBridge = nullptr;
     vnode_manager->FireEvent([pageId UTF8String] ? : "", [ref UTF8String] ? : "", [event UTF8String] ? : "", [params UTF8String] ? : "", "");
 }
 
++ (void)invokeCallBack:(NSString *)pageId function:(NSString *)funcId args:(NSDictionary *)args keepAlive:(BOOL)keepAlive
+{
+    do {
+        if (![funcId isKindOfClass:[NSString class]] || !funcId.length) {
+            break;
+        }
+        NSString *params = [WXUtility JSONString:args];
+        auto vnode_manager = weex::core::data_render::VNodeRenderManager::GetInstance();
+        vnode_manager->InvokeCallback(pageId.UTF8String ? : "", funcId.UTF8String, params.UTF8String ? : "", keepAlive);
+        
+    } while (0);
+}
+
 + (void)registerModules:(NSDictionary *)modules {
     NSString *setting = [WXUtility JSONString:modules];
     if (setting.length > 0) {

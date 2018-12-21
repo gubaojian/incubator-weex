@@ -32,6 +32,8 @@
 #import "WXMonitor.h"
 #import "WXSDKInstance_performance.h"
 #import "WXThreadSafeMutableArray.h"
+#import "WXCoreBridge.h"
+#import "WXComponentManager.h"
 
 @interface WXBridgeManager ()
 
@@ -478,9 +480,15 @@ void WXPerformBlockSyncOnBridgeThread(void (^block) (void))
         args = @[[funcId copy], params? [params copy]:@"\"{}\""];
     }
     WXSDKInstance *instance = [WXSDKManager instanceForID:instanceId];
-
-    WXCallJSMethod *method = [[WXCallJSMethod alloc] initWithModuleName:@"jsBridge" methodName:@"callback" arguments:args instance:instance];
-    [self callJsMethod:method];
+    if (instance.dataRender) {
+        WXPerformBlockOnComponentThread(^{
+            [WXCoreBridge invokeCallBack:instanceId function:funcId args:params keepAlive:keepAlive];
+        });
+    }
+    else {
+        WXCallJSMethod *method = [[WXCallJSMethod alloc] initWithModuleName:@"jsBridge" methodName:@"callback" arguments:args instance:instance];
+        [self callJsMethod:method];
+    }
 }
 
 - (void)callBack:(NSString *)instanceId funcId:(NSString *)funcId params:(id)params

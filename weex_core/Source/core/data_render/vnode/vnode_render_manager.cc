@@ -533,9 +533,8 @@ void VNodeRenderManager::InvokeCallback(const std::string& page_id,
         //convert to id err;
         LOGE("[data-render] InvokeCallback: callback_id err: %s",callback_id.c_str());
         return;
-    }
-    
-    callbackManager->Call(callback_var,data,keep_alive);
+    }    
+    callbackManager->Call(callback_var, data, keep_alive);
 }
     
 void VNodeRenderManager::FireQkingEvent(const std::string &page_id, const std::string &ref, const std::string &event,const std::string &args,const std::string &dom_changes)
