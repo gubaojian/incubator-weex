@@ -996,8 +996,6 @@ namespace WeexCore {
     
     /** ================================ CSS direction For RTL =================================== **/
       
-    void determineChildLayoutDirection(const WXCoreDirection direction);
-      
     WXCoreDirection getLayoutDirectionFromPathNode();
       
     /** ================================ flex-style =================================== **/
