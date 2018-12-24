@@ -1055,6 +1055,35 @@ void CompareAndApplyEvents1(const std::string& page_id, VNode* old_node,
   }
 }
 
+void CompareAndApplyEventsQking(const std::string& page_id, VNode* old_node,
+                            VNode* new_node) {
+  std::map<std::string, qking_value_t> old_events = *old_node->qking_events();
+  std::map<std::string, qking_value_t> new_events = *new_node->qking_events();
+  std::map<std::string, qking_value_t> remove_events;
+  std::map<std::string, qking_value_t> add_events;
+
+  for (auto it = old_events.cbegin(); it != old_events.cend(); it++) {
+    auto pos = new_events.find(it->first);
+    if (pos == new_events.end()) {
+      remove_events.insert(*it);
+    }
+  }
+  for (auto it = new_events.cbegin(); it != new_events.cend(); it++) {
+    auto pos = old_events.find(it->first);
+    if (pos == old_events.end()) {
+      add_events.insert(*it);
+    }
+  }
+  for (auto it = remove_events.cbegin(); it != remove_events.cend(); it++) {
+    RenderManager::GetInstance()->RemoveEvent(
+        page_id, new_node->render_object_ref(), it->first);
+  }
+  for (auto it = add_events.cbegin(); it != add_events.cend(); it++) {
+    RenderManager::GetInstance()->AddEvent(
+        page_id, new_node->render_object_ref(), it->first);
+  }
+}
+
 void CompareAndApplyEvents2(const std::string& page_id, VNode* old_node,
                             VNode* new_node) {
   VNode::EventParamsMap old_events = *old_node->event_params_map();
@@ -1116,6 +1145,7 @@ void PatchVNode(const string& page_id, VNode* old_node, VNode* new_node) {
   // compare and apply event
   CompareAndApplyEvents1(page_id, old_node, new_node);
   CompareAndApplyEvents2(page_id, old_node, new_node);
+  CompareAndApplyEventsQking(page_id, old_node, new_node);
 
   // compare children
   if (old_node->HasChildren() && new_node->HasChildren()) {

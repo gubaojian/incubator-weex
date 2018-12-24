@@ -244,6 +244,7 @@ if(file('../license/LICENSE').exists()){
                          'Source/android/base/base64/**/*.h','Source/android/base/base64/**/*.cpp',
                          'Source/android/jniprebuild/jniheader/*.h',
                          'Source/base/Compatible.cpp',
+                         'Source/qking/**/*.h', 'Source/qking/**/*.c',
                          'Source/IPC/**/*.h','Source/IPC/**/*.cpp', 'Source/IPC/**/*.c'])
     }
     preBuild.dependsOn licenseFormat
