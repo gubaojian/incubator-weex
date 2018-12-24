@@ -136,7 +136,7 @@ public class WXEnvironment {
   private static String LIB_LD_PATH = null;
 
 
-  private static Map<String, String> options = new ConcurrentHashMap<>();
+  private static Map<String, String> options = new HashMap<>();
   static {
     options.put(WXConfig.os, OS);
     options.put(WXConfig.osName, OS);
