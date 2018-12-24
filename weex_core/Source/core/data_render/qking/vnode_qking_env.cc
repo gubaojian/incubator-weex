@@ -60,6 +60,7 @@ void CallbackManager::Call(uint32_t id, const std::string &data, bool keep_alive
         else {
             qking_call_function(func, qking_create_undefined(), nullptr, 0);
         }
+        qking_run_all_enqueued_jobs();
         if (!keep_alive) {
             qking_release_value(func);
             callback_map_.erase(iter);
