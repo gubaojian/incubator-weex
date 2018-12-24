@@ -50,6 +50,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import dalvik.system.PathClassLoader;
 
@@ -135,7 +136,7 @@ public class WXEnvironment {
   private static String LIB_LD_PATH = null;
 
 
-  private static Map<String, String> options = new HashMap<>();
+  private static Map<String, String> options = new ConcurrentHashMap<>();
   static {
     options.put(WXConfig.os, OS);
     options.put(WXConfig.osName, OS);
