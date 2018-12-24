@@ -225,8 +225,6 @@ void *qking_get_context_data(const qking_context_data_manager_t *manager_p);
 
 bool qking_get_memory_stats(qking_heap_stats_t *out_stats_p);
 
-qking_value_t qking_run_all_enqueued_jobs(void);
-
 /**
  * Get the global context.
  */

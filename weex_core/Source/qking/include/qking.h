@@ -305,6 +305,8 @@ qking_value_t qking_print_log(const char *prefix,
 
 void qking_gc(qking_gc_mode_t mode);
 
+qking_value_t qking_run_all_enqueued_jobs(void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
