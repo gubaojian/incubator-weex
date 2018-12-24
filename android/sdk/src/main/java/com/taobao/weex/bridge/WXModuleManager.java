@@ -324,6 +324,7 @@ public class WXModuleManager {
         WXModule module = modules.get(key);
         if (module != null) {
           module.onActivityDestroy();
+          module.mWXSDKInstance = null;
         } else {
           WXLogUtils.w("onActivityDestroy can not find the " + key + " module");
         }

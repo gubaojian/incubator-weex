@@ -1114,7 +1114,7 @@ WX_EXPORT_METHOD(@selector(resetLoadmore))
             // this is scroll rtl solution.
             // scroll layout not use direction, use self tranform
             // but we need inherit direction in CSS, so we set children layout diretion manually
-            _flexCssNode->determineChildLayoutDirection(_flexCssNode->getLayoutDirectionFromPathNode());
+            _flexCssNode->getLayoutDirectionFromPathNode();
             
             std::pair<float, float> renderPageSize;
             renderPageSize.first = self.weexInstance.frame.size.width;
