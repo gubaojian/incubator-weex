@@ -476,11 +476,11 @@ void WXPerformBlockSyncOnBridgeThread(void (^block) (void))
     NSArray *args = nil;
     if (keepAlive) {
         args = @[[funcId copy], params? [params copy]:@"\"{}\"", @true];
-    }else {
+    } else {
         args = @[[funcId copy], params? [params copy]:@"\"{}\""];
     }
     WXSDKInstance *instance = [WXSDKManager instanceForID:instanceId];
-    if (instance.dataRender) {
+    if (instance.asmRender) {
         WXPerformBlockOnComponentThread(^{
             [WXCoreBridge invokeCallBack:instanceId function:funcId args:params keepAlive:keepAlive];
         });
