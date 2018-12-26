@@ -95,6 +95,11 @@ static jint InitAppFramework(JNIEnv* env, jobject jcaller, jstring jinstanceid,
 static jint DestoryAppContext(JNIEnv* env, jobject jcaller,
                               jstring jinstanceid) {
   ScopedJStringUTF8 id(env, jinstanceid);
+  if(id.getChars() == nullptr) {
+    LOGE("wml instance Id is null");
+    return false;
+  }
+
   return WeexCoreManager::Instance()
       ->getPlatformBridge()
       ->core_side()
@@ -105,6 +110,16 @@ static jint CreateAppContext(JNIEnv* env, jobject jcaller, jstring jinstanceid,
                              jstring jbundle, jobject jargs) {
   ScopedJStringUTF8 id(env, jinstanceid);
   ScopedJStringUTF8 bundle(env, jbundle);
+  if(id.getChars() == nullptr) {
+    LOGE("wml instance Id is null");
+    return false;
+  }
+
+  if(bundle.getChars() == nullptr) {
+    LOGE("wml bundle is null");
+    return false;
+  }
+
   return WeexCoreManager::Instance()
       ->getPlatformBridge()
       ->core_side()
@@ -116,6 +131,17 @@ static jbyteArray ExecJsOnAppWithResult(JNIEnv* env, jobject jcaller,
                                         jobject jargs) {
   ScopedJStringUTF8 id(env, jinstanceid);
   ScopedJStringUTF8 bundle(env, jbundle);
+
+  if(id.getChars() == nullptr) {
+    LOGE("wml instance Id is null");
+    return false;
+  }
+
+  if(bundle.getChars() == nullptr) {
+    LOGE("wml bundle is null");
+    return false;
+  }
+
   auto ret = WeexCoreManager::Instance()
                  ->getPlatformBridge()
                  ->core_side()
@@ -137,6 +163,16 @@ static jint ExecJsOnApp(JNIEnv* env, jobject jcaller, jstring jinstanceid,
 
   ScopedJStringUTF8 id(env, jinstanceid);
   ScopedJStringUTF8 function(env, jfunction);
+
+  if(id.getChars() == nullptr) {
+    LOGE("wml instance Id is null");
+    return false;
+  }
+
+  if(function.getChars() == nullptr) {
+    LOGE("wml function is null");
+    return false;
+  }
 
   int length = 0;
   if (jargs != NULL) {
