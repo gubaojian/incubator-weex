@@ -145,7 +145,7 @@ public class WXScroller extends WXVContainer<ViewGroup> implements WXScrollViewL
    */
   @Override
   public ViewGroup getRealView() {
-    return mScrollerView;
+    return mRealView;
   }
 
 
