@@ -755,6 +755,13 @@ typedef enum : NSUInteger {
     return _defaultDataRender;
 }
 
+- (BOOL)asmRender {
+    if ([_options[@"WLASM_RENDER"] boolValue]) {
+        return YES;
+    }
+    return NO;
+}
+
 - (NSURL *)completeURL:(NSString *)url
 {
     if (!_scriptURL) {

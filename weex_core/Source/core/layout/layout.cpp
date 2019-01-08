@@ -1102,21 +1102,6 @@ namespace WeexCore {
         break;
     }
   }
-    void WXCoreLayoutNode::determineChildLayoutDirection(const WXCoreDirection direction) {
-        for (Index i = 0; i < getChildCount(kBFC); ++i) {
-            WXCoreLayoutNode *child = getChildAt(kBFC, i);
-            // determin direction
-            if (child->mLayoutResult->mLayoutDirection == kDirectionInherit) {
-                if(child->mCssStyle->mDirection == kDirectionInherit) {
-                    // default direction in css is inherit, inherit direction from parent node
-                    child->mLayoutResult->mLayoutDirection = direction;
-                } else {
-                    // specific direction in current Node's style
-                    child->mLayoutResult->mLayoutDirection = child->mCssStyle->mDirection;
-                }
-            }
-        }
-    }
     
     WXCoreDirection WXCoreLayoutNode::getLayoutDirectionFromPathNode() {
         if (getLayoutDirection() != kDirectionInherit)

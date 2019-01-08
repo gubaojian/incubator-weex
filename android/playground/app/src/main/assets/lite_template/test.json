@@ -1,0 +1,86 @@
+{
+  "model": {
+    "itemId": "12111",
+    "tItemType": "nt_text",
+    "source": "server",
+    "topic": "hello world",
+    "tips": [
+      {
+        "show": "西湖龙井14-1",
+        "params": [
+          {
+            "key": "ppath",
+            "value": "20000:84669"
+          }
+        ],
+        "imageurl": "http://img01.taobaocdn.com/bao/uploaded/TB1HH0WdFmWBuNjSspdwu2ugXXa.png"
+      },
+      {
+        "show": "临安山核临安山核",
+        "q": "临安山核桃"
+      },
+      {
+        "show": "杭州丝绸杭州丝",
+        "q": "杭州丝绸",
+        "params": [
+          {
+            "key": "ppath",
+            "value": "20000:84669"
+          }
+        ]
+      },
+      {
+        "show": "黑珍珠山核桃",
+        "q": "黑珍珠山核桃"
+      },
+      {
+        "show": "杭州酱鸭5",
+        "q": "杭州酱鸭"
+      },
+      {
+        "show": "径山茶6",
+        "q": "径山茶"
+      },
+      {
+        "show": "多味笋干7",
+        "q": "多味笋干"
+      },
+      {
+        "show": "临安核桃仁8",
+        "q": "临安核桃仁"
+      },
+      {
+        "show": "临安核桃仁9",
+        "q": "临安核桃仁"
+      },
+      {
+        "show": "临安核桃仁10",
+        "q": "临安核桃仁"
+      },
+      {
+        "show": "临安核桃仁11",
+        "q": "临安核桃仁"
+      },
+      {
+        "show": "临安核桃仁12",
+        "q": "临安核桃仁"
+      },
+      {
+        "show": "临安核桃仁13",
+        "q": "临安核桃仁"
+      },
+      {
+        "show": "临安核桃仁14",
+        "params": [
+          {
+            "key": "ppath",
+            "value": "20000:84669"
+          }
+        ]
+      }
+    ]
+  },
+  "status": {
+    "layoutStyle": 1
+  }
+}

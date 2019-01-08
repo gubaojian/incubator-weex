@@ -57,17 +57,20 @@ public class WXMetaModule extends WXModule {
                 param = URLDecoder.decode(param, "utf-8");
                 JSONObject jsObj = JSON.parseObject(param);
                 Context cxt = mWXSDKInstance.getContext();
-                // todo maybe getString(WIDTH) is "device-height"
-                if (DEVICE_WIDTH.endsWith(jsObj.getString(WIDTH))) {
-                    int width = (int)(WXViewUtils.getScreenWidth(cxt)/WXViewUtils.getScreenDensity(cxt));
-                    mWXSDKInstance.setInstanceViewPortWidth(width);
-                    WXLogUtils.d("[WXMetaModule] setViewport success[device-width]=" + width);
-                } else {
-                    int width = jsObj.getInteger(WIDTH);
-                    if (width > 0) {
+
+                if (null != jsObj.getString(WIDTH)) {
+                    // todo maybe getString(WIDTH) is "device-height"
+                    if (DEVICE_WIDTH.endsWith(jsObj.getString(WIDTH))) {
+                        int width = (int) (WXViewUtils.getScreenWidth(cxt) / WXViewUtils.getScreenDensity(cxt));
                         mWXSDKInstance.setInstanceViewPortWidth(width);
+                        WXLogUtils.d("[WXMetaModule] setViewport success[device-width]=" + width);
+                    } else {
+                        int width = jsObj.getInteger(WIDTH);
+                        if (width > 0) {
+                            mWXSDKInstance.setInstanceViewPortWidth(width);
+                        }
+                        WXLogUtils.d("[WXMetaModule] setViewport success[width]=" + width);
                     }
-                    WXLogUtils.d("[WXMetaModule] setViewport success[width]=" + width);
                 }
             } catch (Exception e) {
                 WXLogUtils.e("[WXMetaModule] alert param parse error ", e);

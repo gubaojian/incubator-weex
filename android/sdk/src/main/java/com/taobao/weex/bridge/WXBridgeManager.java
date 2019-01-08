@@ -18,8 +18,6 @@
  */
 package com.taobao.weex.bridge;
 
-import static com.taobao.weex.bridge.WXModuleManager.createDomModule;
-
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
@@ -33,6 +31,8 @@ import android.support.annotation.UiThread;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -44,38 +44,12 @@ import com.taobao.weex.WXSDKManager;
 import com.taobao.weex.adapter.IWXJSExceptionAdapter;
 import com.taobao.weex.adapter.IWXJsFileLoaderAdapter;
 import com.taobao.weex.adapter.IWXUserTrackAdapter;
-import com.taobao.weex.common.IWXBridge;
-import com.taobao.weex.common.IWXDebugConfig;
-import com.taobao.weex.common.WXConfig;
-import com.taobao.weex.common.WXErrorCode;
-import com.taobao.weex.common.WXException;
-import com.taobao.weex.common.WXJSBridgeMsgType;
-import com.taobao.weex.common.WXJSExceptionInfo;
-import com.taobao.weex.common.WXRefreshData;
-import com.taobao.weex.common.WXRenderStrategy;
-import com.taobao.weex.common.WXRuntimeException;
-import com.taobao.weex.common.WXThread;
+import com.taobao.weex.common.*;
 import com.taobao.weex.dom.CSSShorthand;
 import com.taobao.weex.layout.ContentBoxMeasurement;
 import com.taobao.weex.performance.WXInstanceApm;
 import com.taobao.weex.ui.WXComponentRegistry;
-import com.taobao.weex.ui.action.ActionReloadPage;
-import com.taobao.weex.ui.action.BasicGraphicAction;
-import com.taobao.weex.ui.action.GraphicActionAddElement;
-import com.taobao.weex.ui.action.GraphicActionAddEvent;
-import com.taobao.weex.ui.action.GraphicActionAppendTreeCreateFinish;
-import com.taobao.weex.ui.action.GraphicActionCreateBody;
-import com.taobao.weex.ui.action.GraphicActionCreateFinish;
-import com.taobao.weex.ui.action.GraphicActionLayout;
-import com.taobao.weex.ui.action.GraphicActionMoveElement;
-import com.taobao.weex.ui.action.GraphicActionRefreshFinish;
-import com.taobao.weex.ui.action.GraphicActionRemoveElement;
-import com.taobao.weex.ui.action.GraphicActionRemoveEvent;
-import com.taobao.weex.ui.action.GraphicActionRenderSuccess;
-import com.taobao.weex.ui.action.GraphicActionUpdateAttr;
-import com.taobao.weex.ui.action.GraphicActionUpdateStyle;
-import com.taobao.weex.ui.action.GraphicPosition;
-import com.taobao.weex.ui.action.GraphicSize;
+import com.taobao.weex.ui.action.*;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.module.WXDomModule;
 import com.taobao.weex.utils.WXExceptionUtils;
@@ -87,6 +61,7 @@ import com.taobao.weex.utils.WXViewUtils;
 import com.taobao.weex.utils.WXWsonJSONSwitch;
 import com.taobao.weex.utils.batch.BactchExecutor;
 import com.taobao.weex.utils.batch.Interceptor;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -109,6 +84,8 @@ import java.util.Stack;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+
+import static com.taobao.weex.bridge.WXModuleManager.createDomModule;
 
 /**
  * Manager class for communication between JavaScript and Android.
@@ -1260,8 +1237,39 @@ public class WXBridgeManager implements Callback, BactchExecutor {
       return;
     }
 
-    addJSTask(METHOD_CALLBACK, instanceId, callback, data, keepAlive);
-    sendMessage(instanceId, WXJSBridgeMsgType.CALL_JS_BATCH);
+    WXSDKInstance instance = WXSDKManager.getInstance().getAllInstanceMap().get(instanceId);
+    if (instance != null && (instance.getRenderStrategy() == WXRenderStrategy.DATA_RENDER_BINARY)) {
+      callbackJavascriptOnDataRender(instanceId, callback, data, keepAlive);
+    } else {
+      addJSTask(METHOD_CALLBACK, instanceId, callback, data, keepAlive);
+      sendMessage(instanceId, WXJSBridgeMsgType.CALL_JS_BATCH);
+    }
+  }
+
+  void callbackJavascriptOnDataRender(final String instanceId, final String callback, final Object data, final boolean keepAlive){
+    mJSHandler.postDelayed(WXThread.secure(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          long start = System.currentTimeMillis();
+          String data_str = JSON.toJSONString(data);
+          if (WXEnvironment.isApkDebugable()) {
+            WXLogUtils.d("callbackJavascriptOnDataRender >>>> instanceId:" + instanceId
+                + ", data:" + data_str);
+          }
+          if (mWXBridge instanceof WXBridge) {
+            ((WXBridge) mWXBridge).invokeCallbackOnDataRender(instanceId, callback,data_str ,keepAlive);
+          }
+          WXLogUtils.renderPerformanceLog("callbackJavascriptOnDataRender", System.currentTimeMillis() - start);
+        } catch (Throwable e) {
+          String err = "[WXBridgeManager] callbackJavascriptOnDataRender " + WXLogUtils.getStackTrace(e);
+          WXExceptionUtils.commitCriticalExceptionRT(instanceId,
+              WXErrorCode.WX_KEY_EXCEPTION_INVOKE_BRIDGE, "callbackJavascriptOnDataRender",
+              err, null);
+          WXLogUtils.e(err);
+        }
+      }
+    }), 0);
   }
 
   /**
@@ -1730,14 +1738,43 @@ public class WXBridgeManager implements Callback, BactchExecutor {
       WXLogUtils.d(mLodBuilder.substring(0));
       mLodBuilder.setLength(0);
     }
-    final long start = System.currentTimeMillis();
-    mWXBridge.execJS(instanceId, namespace, function, args);
-    WXSDKInstance instance = WXSDKManager.getInstance().getSDKInstance(instanceId);
+    final long start = System.currentTimeMillis();    WXSDKInstance instance = WXSDKManager.getInstance().getSDKInstance(instanceId);
+    if (instance != null && (instance.getRenderStrategy() == WXRenderStrategy.DATA_RENDER_BINARY)) {
+      Pair<Object,Boolean> data = null;
+      if(args.length!=2 || !(args[0].data instanceof String)
+          || !(args[1].data instanceof String)
+          || (data = extractCallbackArgs((String) args[1].data))==null){
+        WXLogUtils.w("invokeExecJS on data render that is not a callback call");
+        return;
+      }
+      callbackJavascriptOnDataRender(instanceId, (String) args[0].data, data.first, data.second);
+    } else {
+      mWXBridge.execJS(instanceId, namespace, function, args);
+    }
     if (null != instance){
       long diff = System.currentTimeMillis()-start;
       instance.getApmForInstance().updateFSDiffStats(WXInstanceApm.KEY_PAGE_STATS_FS_CALL_JS_NUM,1);
       instance.getApmForInstance().updateFSDiffStats(WXInstanceApm.KEY_PAGE_STATS_FS_CALL_JS_TIME,diff);
       instance.callJsTime(diff);
+    }
+  }
+
+  private Pair<Object,Boolean> extractCallbackArgs(String data) {
+    try {
+      JSONArray obj = JSON.parseArray(data);
+      JSONObject arg_obj = obj.getJSONObject(0);
+      JSONArray args = arg_obj.getJSONArray("args");
+      if (args.size()!=3){
+        return null;
+      }
+      String method = arg_obj.getString("method");
+      if (!"callback".equals(method)){
+        return null;
+      }
+
+      return new Pair<Object, Boolean>(args.getJSONObject(1),args.getBooleanValue(2));
+    } catch (Exception e) {
+      return null;
     }
   }
 

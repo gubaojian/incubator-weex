@@ -13,6 +13,14 @@
         android:onClick="addCellClick"
         android:text="ADD CELL"/>
 
+    <Button
+        android:id="@+id/button_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:onClick="refreshCellClick"
+        android:text="Refresh CELL"/>
+
     <TextView
         android:id="@+id/report_text"
         android:layout_width="wrap_content"

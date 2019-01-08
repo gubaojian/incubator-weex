@@ -630,6 +630,26 @@ static void FireEventOnDataRenderNode(JNIEnv* env, jobject jcaller,
   }
 }
 
+static void InvokeCallbackOnDataRender(JNIEnv* env, jobject jcaller,
+                                       jstring instanceId, jstring callbackId,
+                                       jstring data, jboolean keepAlive) {
+  if (instanceId == NULL || callbackId == NULL || data == NULL) {
+    return;
+  }
+
+  ScopedJStringUTF8 idChar(env, instanceId);
+  ScopedJStringUTF8 callbackChar(env, callbackId);
+  ScopedJStringUTF8 dataChar(env, data);
+
+  try {
+    weex::core::data_render::VNodeRenderManager::GetInstance()->InvokeCallback(
+        idChar.getChars(), callbackChar.getChars(), dataChar.getChars(),keepAlive);
+  } catch (std::exception& e) {
+    LOGE("Error on FireEventOnDataRenderNode %s", e.what());
+    return;
+  }
+}
+
 static void RegisterModuleOnDataRenderNode(JNIEnv* env, jobject jcaller,
                                       jstring data) {
   if (data == NULL) {

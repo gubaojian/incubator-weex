@@ -767,10 +767,12 @@ static WeexCore::ScriptBridge* jsBridge = nullptr;
 
 + (void)createDataRenderInstance:(NSString *)pageId contents:(NSData *)contents options:(NSDictionary *)options data:(id)data
 {
+    
     auto node_manager = weex::core::data_render::VNodeRenderManager::GetInstance();
+    NSString *envString =  [WXUtility JSONString:[WXUtility getEnvironment]];
     NSString *optionsString = [WXUtility JSONString:options];
     NSString *dataString = [WXUtility JSONString:data];
-    node_manager->CreatePage(static_cast<const char *>(contents.bytes), contents.length, [pageId UTF8String], [optionsString UTF8String], dataString ? [dataString UTF8String] : "", [=](const char* javascript) {
+    node_manager->CreatePage(static_cast<const char *>(contents.bytes), contents.length, [pageId UTF8String], [optionsString UTF8String], envString.UTF8String, dataString ? [dataString UTF8String] : "", [=](const char *javascript) {
         if (!javascript) {
             return;
         }
@@ -795,6 +797,19 @@ static WeexCore::ScriptBridge* jsBridge = nullptr;
     NSString *params = [WXUtility JSONString:args];
     auto vnode_manager = weex::core::data_render::VNodeRenderManager::GetInstance();
     vnode_manager->FireEvent([pageId UTF8String] ? : "", [ref UTF8String] ? : "", [event UTF8String] ? : "", [params UTF8String] ? : "", "");
+}
+
++ (void)invokeCallBack:(NSString *)pageId function:(NSString *)funcId args:(NSDictionary *)args keepAlive:(BOOL)keepAlive
+{
+    do {
+        if (![funcId isKindOfClass:[NSString class]] || !funcId.length) {
+            break;
+        }
+        NSString *params = [WXUtility JSONString:args];
+        auto vnode_manager = weex::core::data_render::VNodeRenderManager::GetInstance();
+        vnode_manager->InvokeCallback(pageId.UTF8String ? : "", funcId.UTF8String, params.UTF8String ? : "", keepAlive);
+        
+    } while (0);
 }
 
 + (void)registerModules:(NSDictionary *)modules {

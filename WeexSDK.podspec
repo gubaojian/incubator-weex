@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
 
   s.name         = "WeexSDK"
 
-  s.version      = "0.20.0"
+  s.version      = "0.20.0.1"
 
   s.summary      = "WeexSDK Source."
 
@@ -45,7 +45,8 @@ Pod::Spec.new do |s|
                     'weex_core/Source/core/**/*.{h,hpp,m,mm,c,cpp,cc}',
                     'weex_core/Source/wson/**/*.{h,hpp,m,mm,c,cpp,cc}',
                     'weex_core/Source/third_party/**/*.{h,hpp,m,mm,c,cpp,cc}',
-                    'weex_core/Source/include/**/*.{h,hpp,m,mm,c,cpp,cc}'
+                    'weex_core/Source/include/**/*.{h,hpp,m,mm,c,cpp,cc}',
+                    'weex_core/Source/qking/**/*.{h,c,cc}',
   s.exclude_files = 'weex_core/Source/**/*android.{h,hpp,m,mm,c,cpp,cc}',
                     'weex_core/Source/base/android',
                     'weex_core/Source/base/crash',
@@ -110,10 +111,9 @@ Pod::Spec.new do |s|
   s.user_target_xcconfig  = { 'FRAMEWORK_SEARCH_PATHS' => "'$(PODS_ROOT)/WeexSDK'" }
   s.requires_arc = true
   s.prefix_header_file = 'ios/sdk/WeexSDK/Sources/Supporting Files/WeexSDK-Prefix.pch'
-
+  s.ios.vendored_frameworks = 'Frameworks/Qking.framework'
   s.xcconfig = { "OTHER_LINK_FLAG" => '$(inherited) -ObjC' }
-  s.pod_target_xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${PODS_ROOT}/WeexSDK/weex_core/Source/ ${PROJECT_DIR}/../../../weex_core/Source',
-    'GCC_PREPROCESSOR_DEFINITIONS' => 'OS_IOS=1' }
+  s.pod_target_xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${PODS_ROOT}/WeexSDK/weex_core/Source/ ${PROJECT_DIR}/../../../weex_core/Source ${PROJECT_DIR}/../../../weex_core/Source/qking ${PROJECT_DIR}/../../weex/weex_core/Source ${PROJECT_DIR}/../../weex/weex_core/Source/qking', 'GCC_PREPROCESSOR_DEFINITIONS[config=Debug]' => 'OS_IOS=1  QKING_ENABLE_EXTERNAL_CONTEXT QKING_ENABLE_ERROR_MESSAGES QKING_ENABLE_LOGGING JMEM_STATS CONFIG_DISABLE_COMPILER_BUILTIN',  'GCC_PREPROCESSOR_DEFINITIONS[config=Release]' => 'OS_IOS=1 QKING_ENABLE_EXTERNAL_CONTEXT QKING_NDEBUG CONFIG_DISABLE_COMPILER_BUILTIN' }
 
   s.frameworks = 'CoreMedia','MediaPlayer','AVFoundation','AVKit','JavaScriptCore','GLKit','OpenGLES','CoreText','QuartzCore','CoreGraphics'
   

@@ -25,7 +25,6 @@
 #include "core/bridge/platform_bridge.h"
 #include "core/data_render/common_error.h"
 #include "core/data_render/exec_state.h"
-#include "core/data_render/exec_state_binary.h"
 #include "core/data_render/string_table.h"
 #include "core/data_render/vnode/vnode.h"
 #include "core/data_render/vnode/vnode_exec_env.h"
@@ -33,6 +32,10 @@
 #include "core/network/http_module.h"
 #include "core/render/manager/render_manager.h"
 #include "core/render/node/factory/render_creator.h"
+#include "core/data_render/qking/vnode_qking_env.h"
+#include "core/data_render/qking/vnode_qking_convert.h"
+#include "qking/rax/vdom/rax_element_factory.h"
+#include "qking/rax/vdom/rax_native_element.h"
 
 #define VRENDER_LOG true
 
@@ -99,6 +102,10 @@ WeexCore::RenderObject* ParseVNode2RenderObject(VNode* vnode,
   for (auto iter = events->begin(); iter != events->end(); iter++) {
       render_object->events()->insert(iter->first);
   }
+  std::map<std::string, qking_value_t> *qking_events = vnode->qking_events();
+  for (auto iter = qking_events->begin(); iter != qking_events->end(); iter++) {
+      render_object->events()->insert(iter->first);
+  }
   auto event_params_map = vnode->event_params_map();
   for (auto it = event_params_map->begin(); it != event_params_map->end();
        it++) {
@@ -161,20 +168,43 @@ bool VNodeRenderManager::RefreshPageInternal(const string& page_id,
 }
 
 bool VNodeRenderManager::ClosePageInternal(const string& page_id) {
-  auto node = vnode_trees_.find(page_id);
-  if (node == vnode_trees_.end()) {
-    return false;
-  }
-  RenderManager::GetInstance()->ClosePage(page_id);
-  delete node->second;
-  vnode_trees_.erase(node);
-  return true;
+    RenderManager::GetInstance()->ClosePage(page_id);
+    qking_executor_t executor = NULL;
+    auto iter = executors_.find(page_id);
+    if (iter != executors_.end()) {
+        executor = iter->second;
+    }
+    if (executor) {
+        qking_set_current_executor(executor);
+    }
+    auto node = vnode_trees_.find(page_id);
+    if (node != vnode_trees_.end()) {
+      if (node->second) {
+        delete node->second;
+      }
+      vnode_trees_.erase(node);
+    }
+    DestroyExecutor();
+    return true;
 }
 
 void VNodeRenderManager::InitVM() {
   if (g_vm == nullptr) {
     g_vm = new VM();
   }
+}
+    
+CallbackManager *VNodeRenderManager::GetCallbackManager(qking_executor_t executor) {
+    for (auto iter = executors_.begin(); iter != executors_.end(); iter++) {
+        if (iter->second == executor) {
+            const auto& page_id = iter->first;
+            auto it = callback_managers_.find(page_id);
+            if (it != callback_managers_.end()){
+                return it->second.get();
+            }
+        }
+    }
+    return nullptr;
 }
 
 void VNodeRenderManager::CreatePage(const std::string &input, const std::string &page_id, const  std::string &options, const std::string &init_data, std::function<void(const char*)> exec_js) {
@@ -184,7 +214,7 @@ void VNodeRenderManager::CreatePage(const std::string &input, const std::string 
     }
 }
 
-std::string VNodeRenderManager::CreatePageWithContent(const std::string &input, const std::string &page_id, const std::string &options, const std::string &init_data, std::function<void(const char*)> exec_js) {
+std::string VNodeRenderManager::CreatePageWithContent(const std::string &input, const std::string &page_id, const std::string &options, const std::string &init_data, std::function<void(const char *)> exec_js) {
     InitVM();
 #ifdef DEBUG
     auto start = std::chrono::steady_clock::now();
@@ -237,7 +267,7 @@ std::string VNodeRenderManager::CreatePageWithContent(const std::string &input, 
 }
 
 void VNodeRenderManager::DownloadAndExecScript(
-    ExecState* exec_state, const std::string& page_id,
+    ExecState *exec_state, const std::string& page_id,
     std::function<void(const char*)> exec_js) {
   // If script exists in json, run script into js vm
   const json11::Json& script_array =
@@ -292,7 +322,7 @@ void VNodeRenderManager::DownloadAndExecScript(
   }
 }
 
-bool VNodeRenderManager::RequireModule(ExecState *exec_state, std::string &name, std::string &result)
+bool VNodeRenderManager::RequireModule(std::string &name, std::string &result)
 {
     bool finished = false;
     do {
@@ -300,10 +330,14 @@ bool VNodeRenderManager::RequireModule(ExecState *exec_state, std::string &name,
             break;
         }
         for (auto iter = modules_.begin(); iter != modules_.end(); iter++) {
-            if ((*iter).find(name) <= 10) {
-                result = *iter;
-                finished = true;
-                break;
+            std::string error;
+            auto module_info = json11::Json::parse(*iter, error);
+            if (module_info.is_object()) {
+                if (module_info[name].is_array()) {
+                    result = *iter;
+                    finished = true;
+                    break;
+                }
             }
         }
         
@@ -312,73 +346,153 @@ bool VNodeRenderManager::RequireModule(ExecState *exec_state, std::string &name,
     return finished;
 }
     
-void VNodeRenderManager::ExecuteRegisterModules(ExecState *exec_state, std::vector<std::string>& registers) {
+void VNodeRenderManager::DestroyExecutor() {
     do {
-        if (!modules_.size()) {
+        qking_executor_t executor = qking_get_current_executor();
+        if (!executor) {
             break;
         }
-        const std::string func_name = "registerModule";
-        for (auto iter = modules_.begin(); iter != modules_.end(); iter++) {
-            for (int j = 0; j < registers.size(); j++) {
-                std::string prefix = registers[j];
-                if ((*iter).find(prefix) <= 10) {
-                    Value arg = StringToValue(exec_state, *iter);
-                    exec_state->Call(func_name, {arg});
-                    break;
-                }
+        std::string page_id;
+        auto iter = executors_.begin();
+        for (; iter != executors_.end(); iter++) {
+            if (iter->second == executor) {
+                page_id = iter->first;
+                break;
             }
         }
+        if (page_id.empty()) {
+            break;
+        }
+        auto callback = callback_managers_.find(page_id);
+        if (callback != callback_managers_.end()){
+            callback_managers_.erase(callback);
+        }
+        VNodeRenderContext *context = (VNodeRenderContext *)qking_get_external_context_from_executor(executor);
+        try {
+            rax::RaxElementFactory::DestroyFactory(page_id);
+        }
+        catch (std::exception &e) {
+            LOGE("[exception]:=>rax destroy factory err => %s", e.what());
+        }
+        try {
+            qking_destroy_executor(executor);
+        }
+        catch (std::exception &e) {
+            LOGE("[exception]:=>qking destroy executor err => %s", e.what());
+        }
+        if (context) {
+            delete context;
+        }
+        executors_.erase(iter);
         
     } while (0);
 }
 
-std::string VNodeRenderManager::CreatePageWithContent(const uint8_t *contents, size_t length, const std::string &page_id, const std::string &options, const std::string &init_data,  std::function<void(const char*)> exec_js) {
-    InitVM();
+std::string VNodeRenderManager::CreatePageWithContent(const uint8_t *contents, size_t length, const std::string &page_id, const std::string &options, const std::string &env, const std::string &init_data, std::function<void(const char *)> exec_js) {
 #ifdef DEBUG
     auto start = std::chrono::steady_clock::now();
 #endif
-    ExecState *exec_state = new ExecState(g_vm);
-    exec_states_.insert({page_id, exec_state});
-    VNodeExecEnv::ImportExecEnv(exec_state);
-    exec_state->context()->page_id(page_id);
+    VNodeRenderContext *context = new VNodeRenderContext();
+    qking_executor_t executor = qking_create_executor(context);
+    executors_.insert({page_id, executor});
+    RAX_NS::RaxElementFactory::CreateFactory(page_id);
+    callback_managers_.insert(std::make_pair(page_id, std::unique_ptr<CallbackManager>(new CallbackManager)));
+    VNodeQkingEnv::Register();
+    context->page_id(page_id);
     std::string err;
-    if (!weex::core::data_render::WXExecDecoder(exec_state, (uint8_t *)contents, length, err)) {
+    if (!string_from_qking_set_assembly_code(executor, (uint8_t *)contents, length, err)) {
+        DestroyExecutor();
         return err;
     }
     if (init_data.length() > 0) {
-        VNodeExecEnv::ImportExecData(exec_state, init_data);
+        VNodeQkingEnv::RegisterVariable(init_data);
     }
+    VNodeQkingEnv::RegisterVariable("WXEnvironment", env);
+    VNodeQkingEnv::RegisterVariable("__weex_options__", "{}");//todo
 #ifdef DEBUG
     auto decoder_post = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
     LOGD("[DATA_RENDER], Decoder time:[%lld]\n", decoder_post.count());
 #endif
-    exec_state->Execute(err);
-    if (!err.empty()) {
+    if (!string_from_qking_execute_code(executor, err)) {
+        DestroyExecutor();
         return err;
     }
-    if (exec_state->context()->root() == NULL) {
-        err = "Root vonde is null";
-        return err;
-    }
-    CreatePageInternal(page_id, exec_state->context()->root());
+//    if (context->root() == NULL) {
+//        err = "Root vonde is null";
+//        return err;
+//    }
+//    CreatePageInternal(page_id, context->root());
 #ifdef DEBUG
     auto duration_post = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start);
     LOGD("[DATA_RENDER], All time:[%lld]\n", duration_post.count());
 #endif
-    DownloadAndExecScript(exec_state, page_id, exec_js);
     return err;
 }
 
-void VNodeRenderManager::CreatePage(const char *contents, size_t length, const std::string& page_id, const std::string& options, const std::string& init_data, std::function<void(const char*)> exec_js) {
-    string err = CreatePageWithContent((const uint8_t *)contents, length, page_id, options, init_data, exec_js);
+void VNodeRenderManager::CreatePage(const char *contents, size_t length, const std::string& page_id, const std::string& options, const std::string &env, const std::string& init_data,std::function<void(const char *)> exec_js) {
+    string err = CreatePageWithContent((const uint8_t *)contents, length, page_id, options, env, init_data,exec_js);
     if (!err.empty()) {
         WeexCore::WeexCoreManager::Instance()->getPlatformBridge()->platform_side()->ReportException(page_id.c_str(), nullptr, err.c_str());
     }
+}
+    
+bool VNodeRenderManager::RefreshPageWithExecutor(const std::string& page_id,
+                                     const std::string& init_data) {
+    do {
+        auto iter = executors_.find(page_id);
+        if (iter == executors_.end()) {
+            break;
+        }
+        qking_executor_t executor = iter->second;
+        qking_set_current_executor(executor);
+        RAX_NS::RaxElementFactory *factory = nullptr;
+        try {
+          factory = RAX_NS::RaxElementFactory::GetFactory(page_id);
+        } catch (...) {
+          LOGE("[exception]:=>qking GetRaxElementFactory err, page_id %s",page_id.c_str());
+        }
+        if (!factory) {
+          break;
+        }
+        //no needs to release;
+        qking_value_t qking_handler = factory->get_docuemnt_event_handler();
+        qking_value_t args[2] = {qking_create_string_c("refresh"), qking_create_string_c(init_data.c_str())};
+        qking_value_t ret = qking_create_undefined();
+        bool is_error = false;
+        try {
+            ret = qking_call_function(qking_handler, qking_create_undefined(), args, 2);
+        }
+        catch (std::exception &e) {
+            LOGE("[exception]:=>qking refresh page error: %s", e.what());
+            is_error = true;
+        }
+        qking_release_value(args[0]);
+        qking_release_value(args[1]);
+        if (qking_value_is_error(ret)) {
+          LOGE("RefreshPage event handle err: %s", string_from_qking_error(ret).c_str());
+        }
+        qking_release_value(ret);
+        if (is_error) {
+            DestroyExecutor();
+        }
+        WeexCore::WeexCoreManager::Instance()
+          ->getPlatformBridge()
+          ->platform_side()
+          ->RefreshFinish(page_id.c_str(), nullptr, "");
+      return true;
+        
+    } while (0);
+
+    return false;
 }
 
 bool VNodeRenderManager::RefreshPage(const std::string& page_id,
                                      const std::string& init_data) {
     do {
+        auto iter = executors_.find(page_id);
+        if (iter != executors_.end()) {
+            return RefreshPageWithExecutor(page_id, init_data);
+        }
         auto it = exec_states_.find(page_id);
         if (it == exec_states_.end()) {
             break;
@@ -419,19 +533,127 @@ bool VNodeRenderManager::RefreshPage(const std::string& page_id,
 }
 
 bool VNodeRenderManager::ClosePage(const std::string& page_id) {
-  auto it = exec_states_.find(page_id);
-  if (it == exec_states_.end()) {
-    return false;
-  }
-  ExecState *exec_state = it->second;
-  ClosePageInternal(page_id);
-  delete exec_state;
-  exec_states_.erase(it);
-  return true;
+    auto iter = exec_states_.find(page_id);
+    if (iter != exec_states_.end()) {
+        ExecState *exec_state = iter->second;
+        if (exec_state) {
+            delete exec_state;
+        }
+        exec_states_.erase(iter);
+    }
+    return ClosePageInternal(page_id);
+}
+    
+static uint32_t StringToUint32(const std::string &s) {
+    uint32_t val = 0;
+    std::stringstream ss;
+    ss << s;
+    ss >> val;
+    return val;
+}
+    
+void VNodeRenderManager::InvokeCallback(const std::string& page_id,
+                                        const std::string& callback_id,
+                                        const std::string& data,
+                                        bool keep_alive) {
+    auto iter = executors_.find(page_id);
+    if (iter == executors_.end()) {
+        LOGE("[data-render] InvokeCallback: executor not found: %s",page_id.c_str());
+        return;
+    }
+    qking_executor_t executor = iter->second;
+    CallbackManager *callbackManager = GetCallbackManager(executor);
+    if (!callbackManager){
+        LOGE("[data-render] InvokeCallback: callbackManager not found: %s",page_id.c_str());
+        return;
+    }
+    qking_set_current_executor(executor);
+    
+    uint32_t callback_var = StringToUint32(callback_id);
+    if (callback_var == 0) {
+        //convert to id err;
+        LOGE("[data-render] InvokeCallback: callback_id err: %s",callback_id.c_str());
+        return;
+    }
+    // if there is exception, must destroy executor
+    if (!callbackManager->Call(callback_var, data, keep_alive)) {
+        DestroyExecutor();
+    }
+}
+    
+void VNodeRenderManager::FireEventWithExecutor(const std::string &page_id, const std::string &ref, const std::string &event,const std::string &args,const std::string &dom_changes)
+{
+    do {
+        auto iter = executors_.find(page_id);
+        if (iter == executors_.end()) {
+            break;
+        }
+        qking_executor_t executor = iter->second;
+        qking_set_current_executor(executor);
+        RAX_NS::RaxElementFactory *factory = nullptr;
+        try{
+          factory = RAX_NS::RaxElementFactory::GetFactory(page_id);
+        } catch (...) {
+          LOGE("GetRaxElementFactory err, page_id %s",page_id.c_str());
+        }
+        if (!factory) {
+          break;
+        }
+        if (ref == "__root") {
+          //todo support root event.
+          LOGW("FireEvent on __root: skip, event: %s, args: %s",event.c_str(),args.c_str());
+          break;
+        }
+        RAX_NS::RaxElement *pElement = factory->GetComponent(ref);
+        if (!pElement) {
+          LOGE("FireEvent err: node not found for ref: %s",ref.c_str());
+          break;
+        }
+        if (pElement->type()!=rax::RaxElementType::kNative) {
+          LOGE("FireEvent err: node not a native node");
+          break;
+        }
+
+        RAX_NS::RaxNativeElement *native_ele = dynamic_cast<RAX_NS::RaxNativeElement*>(pElement);
+        
+        const auto& events = native_ele->get_events();
+        const auto& it = events.find(event);
+        if (it == events.end()) {
+          LOGE("FireEvent err: node event registry not found for event: %s",event.c_str());
+          break;
+        }
+
+        if (!qking_value_is_function(it->second->get())) {
+          LOGE("FireEvent err: node event handler not function, event: %s",event.c_str());
+          break;
+        }
+        qking_value_t func_args = qking_json_parse((const qking_char_t *)args.c_str(), (qking_size_t)args.length());
+        qking_value_t completion_value = qking_create_undefined();
+        bool is_error = false;
+        try {
+            completion_value = qking_call_function(it->second->get(), qking_create_undefined(), &func_args, 1);
+        }
+        catch (std::exception &e) {
+            LOGE("[exception]:=>qking fire event error: %s", e.what());
+            is_error = true;
+        }
+        if (qking_value_is_error(completion_value)) {
+            LOGE("FireEvent error, %s",string_from_qking_error(completion_value).c_str());
+        } else {
+            LOGE("FireEvent succ: event: %s",event.c_str());
+        }
+        qking_release_value(func_args);
+        qking_release_value(completion_value);
+        if (is_error) {
+            DestroyExecutor();
+        }
+        
+    } while (0);
 }
         
 void VNodeRenderManager::FireEvent(const std::string &page_id, const std::string &ref, const std::string &event,const std::string &args,const std::string &dom_changes) {
     do {
+        FireEventWithExecutor(page_id, ref, event, args, dom_changes);
         auto iter = exec_states_.find(page_id);
         if (iter == exec_states_.end()) {
             break;
@@ -509,22 +731,22 @@ void VNodeRenderManager::FireEvent(const std::string &page_id, const std::string
     } while (0);
 }
 
-void VNodeRenderManager::CallNativeModule(ExecState *exec_state,
+void VNodeRenderManager::CallNativeModule(qking_executor_t executor,
                                           const std::string& module,
                                           const std::string& method,
                                           const std::string& args, int argc) {
-  for (auto iter = exec_states_.begin(); iter != exec_states_.end(); iter++) {
-    if (iter->second == exec_state) {
-      WeexCoreManager::Instance()
-          ->getPlatformBridge()
-          ->platform_side()
-          ->CallNativeModule(iter->first.c_str(), module.c_str(),
-                             method.c_str(),
-                             args.length() > 0 ? args.c_str() : nullptr,
-                             static_cast<int>(args.length()), nullptr, 0);
-      break;
+    for (auto iter = executors_.begin(); iter != executors_.end(); iter++) {
+        if (iter->second == executor) {
+            WeexCoreManager::Instance()
+            ->getPlatformBridge()
+            ->platform_side()
+            ->CallNativeModule(iter->first.c_str(), module.c_str(),
+                               method.c_str(),
+                               args.length() > 0 ? args.c_str() : nullptr,
+                               static_cast<int>(args.length()), nullptr, 0);
+            break;
+        }
     }
-  }
 }
     
 void VNodeRenderManager::WXLogNative(ExecState *exec_state, const std::string &info) {
@@ -554,6 +776,15 @@ void VNodeRenderManager::UpdateComponentData(const std::string& page_id,
 void VNodeRenderManager::PatchVNode(ExecState *exec_state, VNode *v_node, VNode *new_node) {
     for (auto iter = exec_states_.begin(); iter != exec_states_.end(); iter++) {
         if (iter->second == exec_state) {
+            Patch(iter->first, v_node, new_node);
+            break;
+        }
+    }
+}
+
+void VNodeRenderManager::PatchVNode(qking_executor_t executor, VNode *v_node, VNode *new_node) {
+    for (auto iter = executors_.begin(); iter != executors_.end(); iter++) {
+        if (iter->second == executor) {
             Patch(iter->first, v_node, new_node);
             break;
         }

@@ -21,14 +21,8 @@
 #include "core/data_render/class.h"
 #include "core/data_render/class_array.h"
 #include "core/data_render/class_string.h"
-#include "core/data_render/class_json.h"
-#include "core/data_render/class_object.h"
-#include "core/data_render/class_console.h"
 #include "core/data_render/table.h"
 #include "core/data_render/exec_state.h"
-#include "core/data_render/class_regex.h"
-#include "core/data_render/class_window.h"
-#include "class_math.h"
 
 namespace weex {
 namespace core {
@@ -66,56 +60,8 @@ Value ClassFactory::ClassString() {
     return value;
 }
 
-Value ClassFactory::ClassJSON() {
-    ClassDescriptor *desc = NewClassJSON();
-    Value value;
-    SetCDValue(&value, reinterpret_cast<GCObject *>(desc));
-    stores_.push_back(std::make_pair(reinterpret_cast<GCObject *>(desc), value.type));
-    return value;
-}
-
 Value ClassFactory::ClassArray() {
     ClassDescriptor *desc = NewClassArray();
-    Value value;
-    SetCDValue(&value, reinterpret_cast<GCObject *>(desc));
-    stores_.push_back(std::make_pair(reinterpret_cast<GCObject *>(desc), value.type));
-    return value;
-}
-
-Value ClassFactory::ClassObject() {
-    ClassDescriptor *desc = NewClassOject();
-    Value value;
-    SetCDValue(&value, reinterpret_cast<GCObject *>(desc));
-    stores_.push_back(std::make_pair(reinterpret_cast<GCObject *>(desc), value.type));
-    return value;
-}
-
-Value ClassFactory::ClassRegExp() {
-    ClassDescriptor *desc = NewClassRegex();
-    Value value;
-    SetCDValue(&value, reinterpret_cast<GCObject *>(desc));
-    stores_.push_back(std::make_pair(reinterpret_cast<GCObject *>(desc), value.type));
-    return value;
-}
-
-Value ClassFactory::ClassWindow() {
-    ClassDescriptor *desc = NewClassWindow();
-    Value value;
-    SetCDValue(&value, reinterpret_cast<GCObject *>(desc));
-    stores_.push_back(std::make_pair(reinterpret_cast<GCObject *>(desc), value.type));
-    return value;
-}
-
-Value ClassFactory::ClassMath() {
-    ClassDescriptor *desc = NewClassMath();
-    Value value;
-    SetCDValue(&value, reinterpret_cast<GCObject *>(desc));
-    stores_.push_back(std::make_pair(reinterpret_cast<GCObject *>(desc), value.type));
-    return value;
-}
-
-Value ClassFactory::ClassConsole() {
-    ClassDescriptor *desc = NewClassConsole();
     Value value;
     SetCDValue(&value, reinterpret_cast<GCObject *>(desc));
     stores_.push_back(std::make_pair(reinterpret_cast<GCObject *>(desc), value.type));

@@ -71,6 +71,8 @@ public class WXBridge implements IWXBridge {
 
   public native void nativeFireEventOnDataRenderNode(String instanceId, String ref, String type, String data, String domChanges);
 
+  public native void nativeInvokeCallbackOnDataRender(String instanceId, String callbackId, String data, boolean keepAlive);
+
   public native void nativeRegisterModuleOnDataRenderNode( String data);
 
   private native void nativeTakeHeapSnapshot(String filename);
@@ -712,6 +714,10 @@ public class WXBridge implements IWXBridge {
 
   public void fireEventOnDataRenderNode(String instanceId, String ref, String type, String data, String domChanges) {
     nativeFireEventOnDataRenderNode(instanceId,ref,type,data, domChanges);
+  }
+
+  public void invokeCallbackOnDataRender(String instanceId, String callbackId, String data, boolean keepAlive) {
+    nativeInvokeCallbackOnDataRender(instanceId,callbackId,data, keepAlive);
   }
 
   public void registerModuleOnDataRenderNode(String data) {
