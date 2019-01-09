@@ -176,6 +176,7 @@ bool VNodeRenderManager::ClosePageInternal(const string& page_id) {
     }
     if (executor) {
         qking_set_current_executor(executor);
+        DestroyExecutor();
     }
     auto node = vnode_trees_.find(page_id);
     if (node != vnode_trees_.end()) {
@@ -184,7 +185,6 @@ bool VNodeRenderManager::ClosePageInternal(const string& page_id) {
       }
       vnode_trees_.erase(node);
     }
-    DestroyExecutor();
     return true;
 }
 
