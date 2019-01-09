@@ -2886,7 +2886,6 @@
 				98D78E4921E5F2820065C41D /* core */,
 				98D78F6521E5F2830065C41D /* include */,
 				98D78F6721E5F2830065C41D /* decoder */,
-				98D78F6C21E5F2830065C41D /* third_party */,
 				98D78F6E21E5F2830065C41D /* port */,
 				98D78F7821E5F2830065C41D /* base */,
 				98D78F7F21E5F2830065C41D /* rax */,
@@ -3312,21 +3311,6 @@
 				98D78F6B21E5F2830065C41D /* decoder_sections.h */,
 			);
 			path = decoder;
-			sourceTree = "<group>";
-		};
-		98D78F6C21E5F2830065C41D /* third_party */ = {
-			isa = PBXGroup;
-			children = (
-				98D78F6D21E5F2830065C41D /* json12 */,
-			);
-			path = third_party;
-			sourceTree = "<group>";
-		};
-		98D78F6D21E5F2830065C41D /* json12 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = json12;
 			sourceTree = "<group>";
 		};
 		98D78F6E21E5F2830065C41D /* port */ = {
