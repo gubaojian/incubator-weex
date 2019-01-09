@@ -1555,8 +1555,10 @@ void ecma_op_function_add_out_closure(ecma_register_t *register_p) {
         ecma_free_value_if_not_object(closure_p->var);
         closure_p->var = ecma_copy_value_if_not_object(register_p->var);
     }
-    else if (ecma_op_closure_add_register(closure_p, register_p)) {
-        ecma_ref_closure(closure_p);
+    else {
+        if (ecma_op_closure_add_register(closure_p, register_p)) {
+            ecma_ref_closure(closure_p);
+        }
         /** weak reference copy **/
         ecma_free_value_if_not_object(closure_p->var);
         closure_p->var = ecma_copy_value_if_not_object(register_p->var);

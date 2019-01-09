@@ -36,6 +36,8 @@ std::string string_from_qking_string_value(const qking_value_t var);
 std::string string_from_qking_get_property_by_name(const qking_value_t obj_val, const char *name_p);
     
 std::string string_from_qking_json_stringify(const qking_value_t object_to_stringify);
+
+std::string string_from_qking_to_string(const qking_value_t object_to_string);
     
 std::string string_from_qking_get_property_by_index(const qking_value_t obj_val, uint32_t index);
 

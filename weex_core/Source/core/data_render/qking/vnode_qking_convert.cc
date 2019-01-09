@@ -175,6 +175,19 @@ std::string string_from_qking_json_stringify(const qking_value_t object_to_strin
     return str;
 }
 
+std::string string_from_qking_to_string(const qking_value_t object_to_string) {
+    qking_value_t string_var = qking_value_to_string(object_to_string);
+    if (qking_value_is_error(string_var)) {
+        const std::string &err_log = string_from_qking_error(string_var);
+        LOGE("[qking] string_from_qking_to_string err: %s", err_log.c_str());
+        qking_release_value(string_var);
+        return "";
+    }
+    std::string str = string_from_qking_string_value(string_var);
+    qking_release_value(string_var);
+    return str;
+}
+
 std::string string_from_qking_get_property_by_index(const qking_value_t obj_val, uint32_t index)
 {
     qking_value_t string_var = qking_get_property_by_index(obj_val, index);

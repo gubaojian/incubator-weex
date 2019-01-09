@@ -13,9 +13,7 @@ void RaxEmptyElement::MountComponentInternal(native_node_ptr render_parent,
   // don't do anything, skip;
 }
 RaxEmptyElement::RaxEmptyElement(uint32_t eid)
-    : RaxElement(eid, RaxElementType::kEmpty) {
-  RAX_LOGW("Create an empty element %u", eid);
-}
+    : RaxElement(eid, RaxElementType::kEmpty) {}
 void RaxEmptyElement::DebugPrintComponent() {
   RaxElement::DebugPrintComponent();
   RAX_LOGD("RaxComponent(%u): Empty", eid());

@@ -1,86 +1,24 @@
 {
   "model": {
-    "itemId": "12111",
-    "tItemType": "nt_text",
-    "source": "server",
-    "topic": "hello world",
-    "tips": [
-      {
-        "show": "西湖龙井14-1",
-        "params": [
-          {
-            "key": "ppath",
-            "value": "20000:84669"
-          }
-        ],
-        "imageurl": "http://img01.taobaocdn.com/bao/uploaded/TB1HH0WdFmWBuNjSspdwu2ugXXa.png"
-      },
-      {
-        "show": "临安山核临安山核",
-        "q": "临安山核桃"
-      },
-      {
-        "show": "杭州丝绸杭州丝",
-        "q": "杭州丝绸",
-        "params": [
-          {
-            "key": "ppath",
-            "value": "20000:84669"
-          }
-        ]
-      },
-      {
-        "show": "黑珍珠山核桃",
-        "q": "黑珍珠山核桃"
-      },
-      {
-        "show": "杭州酱鸭5",
-        "q": "杭州酱鸭"
-      },
-      {
-        "show": "径山茶6",
-        "q": "径山茶"
-      },
-      {
-        "show": "多味笋干7",
-        "q": "多味笋干"
-      },
-      {
-        "show": "临安核桃仁8",
-        "q": "临安核桃仁"
-      },
-      {
-        "show": "临安核桃仁9",
-        "q": "临安核桃仁"
-      },
-      {
-        "show": "临安核桃仁10",
-        "q": "临安核桃仁"
-      },
-      {
-        "show": "临安核桃仁11",
-        "q": "临安核桃仁"
-      },
-      {
-        "show": "临安核桃仁12",
-        "q": "临安核桃仁"
-      },
-      {
-        "show": "临安核桃仁13",
-        "q": "临安核桃仁"
-      },
-      {
-        "show": "临安核桃仁14",
-        "params": [
-          {
-            "key": "ppath",
-            "value": "20000:84669"
-          }
-        ]
-      }
-    ]
+    "tShowTmpl": "wx_coupon_tips_20181111",
+    "data": {
+      "linkUrl": "https://gw.alicdn.com/bao/uploaded/TB1YZ5aSVXXXXbrXpXXXXXXXXXX.htm",
+      "couponList": [
+        {
+          "icon": "https://ossgw.alicdn.com/ju-moqie-bucket-cn/plCoupon_g_ch_default_key_50990001-233-36.png",
+          "title": "满10减1",
+          "params": [],
+          "selected": "true",
+          "desc": "有效期：2018-10-11 15:19:58-2019-01-31 00:59:59"
+        }
+      ],
+      "linkTitle": "使用帮助",
+      "title": "以下商品可使用如下优惠",
+      "desc": "使用时间  2018.10.11 15:19 - 2019.01.31 00:59"
+    },
+    "tItemType": "wx_coupon_tips_20181111"
   },
   "status": {
-    "layoutStyle": 1
+    "layoutStyle": 0
   }
 }

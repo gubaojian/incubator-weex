@@ -712,6 +712,11 @@ static ecma_value_t vm_run_loop(
 #ifdef QKING_ENABLE_GC_DEBUG
           printf("[gc][%d]=>[add_out_closure][register][%d]\n", a->var, idxA);
 #endif
+#ifdef DEBUG_LOG_ENABLE
+            QKING_TO_LOG_STR_START(debug_print_str, a->var);
+            LOGD("-- OP_OUT_CLOSURE: %s", debug_print_str);
+            QKING_TO_LOG_STR_FINISH(debug_print_str);
+#endif
           ecma_op_function_add_out_closure(a);
           break;
         }

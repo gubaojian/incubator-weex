@@ -184,7 +184,16 @@ static qking_value_t RequireModule(const qking_value_t function_obj, const qking
 }
     
 static qking_value_t Print(const qking_value_t function_obj, const qking_value_t this_val, const qking_value_t args_p[], const qking_length_t args_count) {
-    return qking_print_log("JSLog: ",function_obj,this_val,args_p,args_count);
+    std::string log_result;
+    for (int i = 0; i < args_count; ++i) {
+      log_result.append(string_from_qking_to_string(args_p[i]));
+      log_result.append(" ");
+    }
+    WeexCoreManager::Instance()
+      ->getPlatformBridge()
+      ->platform_side()
+      ->NativeLog(log_result.c_str());
+    return qking_print_log("QK_JSLog: ",function_obj,this_val,args_p,args_count);
 }
 
 static qking_value_t EmptyFunc(const qking_value_t function_obj, const qking_value_t this_val, const qking_value_t args_p[], const qking_length_t args_count) {
