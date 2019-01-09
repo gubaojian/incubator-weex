@@ -135,6 +135,7 @@ bool qking_vm_exec_state_execute(qking_vm_exec_state_t *exec_state_p, ecma_value
     QKING_TO_LOG_STR_FINISH(err_str);
     qking_release_value(err_ret_value);
   } else {
+    // todo process context error value
     ecma_free_value(QKING_CONTEXT (error_value));
     QKING_CONTEXT (error_value) = ECMA_VALUE_UNDEFINED;
     if (err_value) {

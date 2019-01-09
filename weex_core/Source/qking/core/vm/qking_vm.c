@@ -1827,7 +1827,8 @@ static ecma_value_t vm_run_loop(
           QKING_ASSERT(GET_OP_CODE(pc[-1]) == OP_CATCH);
           ecma_register_t *register_error = registers_p + (uint32_t)(GET_ARG_A(pc[-1]));
           ecma_fast_free_value(register_error->var);
-          register_error->var = ecma_copy_value(QKING_CONTEXT(error_value));
+          register_error->var = QKING_CONTEXT(error_value);
+          QKING_CONTEXT(error_value) = ECMA_VALUE_UNDEFINED;
           ecma_object_t *catch_env_p = ecma_create_decl_lex_env(frame_ctx_p->lex_env_p);
           frame_ctx_p->lex_env_p = catch_env_p;
         } else {
