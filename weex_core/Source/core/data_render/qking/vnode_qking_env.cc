@@ -203,7 +203,7 @@ static qking_value_t EmptyFunc(const qking_value_t function_obj, const qking_val
 void VNodeQkingEnv::Register()
 {
     // release must register fatal error, debug abort to discover the problem
-#ifdef QKING_NODEBUG
+#ifdef QKING_NDEBUG
     qking_register_handler_fatal_error(qking_handler_fatal_error);
 #endif
     rax::RegisterRaxBuiltin();
