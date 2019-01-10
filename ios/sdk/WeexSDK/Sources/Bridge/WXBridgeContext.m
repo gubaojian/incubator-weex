@@ -668,12 +668,13 @@ _Pragma("clang diagnostic pop") \
 
 - (bool)_isParserByRegEx
 {
-    bool useRegEx = true;
-    id<WXConfigCenterProtocol> configCenter = [WXSDKEngine handlerForProtocol:@protocol(WXConfigCenterProtocol)];
-
-    if ([configCenter respondsToSelector:@selector(configForKey:defaultValue:isDefault:)]) {
-        useRegEx = [[configCenter configForKey:@"iOS_weex_ext_config.parserTypeByRegEx" defaultValue:@(YES) isDefault:NULL] boolValue];
-    }
+    // apache/master是return useRegEx；但在手淘里有些页面还不能用正则来检查文件头。所以强制返回false @神漠
+//    bool useRegEx = true;
+//    id<WXConfigCenterProtocol> configCenter = [WXSDKEngine handlerForProtocol:@protocol(WXConfigCenterProtocol)];
+//
+//    if ([configCenter respondsToSelector:@selector(configForKey:defaultValue:isDefault:)]) {
+//        useRegEx = [[configCenter configForKey:@"iOS_weex_ext_config.parserTypeByRegEx" defaultValue:@(YES) isDefault:NULL] boolValue];
+//    }
     return false;
 }
 
