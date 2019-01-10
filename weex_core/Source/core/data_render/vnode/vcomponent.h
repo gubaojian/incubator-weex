@@ -52,10 +52,7 @@ class VComponent : public VNode {
   void MoveTo(VComponent* new_component);
 
   inline const std::string render_object_ref() const override {
-    if (root_vnode_.get()) {
-      return root_vnode_->render_object_ref();
-    }
-    return "";
+    return "_component_" + std::to_string(id_);
   }
 
   inline int id() { return id_; }
@@ -66,6 +63,7 @@ class VComponent : public VNode {
   inline VNode* root_vnode() { return root_vnode_.get(); }
   void SetRootNode(VNode* node);
   bool IsVirtualComponent() const override { return true; }
+  VComponent* component() override {return this;}
 
   void DispatchCreated();
   void DispatchUpdated();

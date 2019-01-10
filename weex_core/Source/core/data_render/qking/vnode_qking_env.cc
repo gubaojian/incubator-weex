@@ -35,11 +35,13 @@
 namespace weex {
 namespace core {
 namespace data_render {
-    
+
+#ifdef QKING_NDEBUG
 static void qking_handler_fatal_error(int code) {
     throw quick::king::FatalError(code);
 }
-
+#endif
+    
 CallbackManager::~CallbackManager() {
     for (auto iter = callback_map_.begin(); iter != callback_map_.end(); iter++) {
         qking_release_value(iter->second);

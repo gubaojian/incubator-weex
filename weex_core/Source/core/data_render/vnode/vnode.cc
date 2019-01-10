@@ -144,7 +144,7 @@ void VNode::AddEvent(const std::string &event,
 
 void VNode::AddChild(VNode *child) {
   child->parent_ = this;
-  child->component_ = component_;
+  child->set_component(component_);
   child_list_.push_back(child);
   child->DispatchAttachedToParent();
 }
@@ -152,7 +152,7 @@ void VNode::AddChild(VNode *child) {
 void VNode::InsertChild(VNode *child, int index) {
   if (!child) return;
   child->parent_ = this;
-  child->component_ = component_;
+  child->set_component(component_);
   if (index < child_list_.size()) {
     child_list_.insert(child_list_.begin() + index, child);
   } else {
