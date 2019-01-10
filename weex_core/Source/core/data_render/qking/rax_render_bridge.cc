@@ -122,7 +122,7 @@ void UpdateStyle(native_node_ptr node,
                  std::vector<std::pair<std::string, std::string>> *styles) {
   RAX_ASSERT(node);
   RAX_ASSERT(styles);
-  RenderManager::GetInstance()->UpdateAttr(node->page_id(),node->ref(),styles);
+  RenderManager::GetInstance()->UpdateStyle(node->page_id(),node->ref(),styles);
 }
 void AddEvent(native_node_ptr node, const std::string &event) {
   RAX_ASSERT(node);
