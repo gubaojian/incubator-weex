@@ -536,16 +536,14 @@ bool VNodeRenderManager::RefreshPage(const std::string& page_id,
 }
 
 bool VNodeRenderManager::ClosePage(const std::string& page_id) {
+    ClosePageInternal(page_id);
     auto iter = exec_states_.find(page_id);
     if (iter != exec_states_.end()) {
-        ClosePageInternal(page_id);
         ExecState *exec_state = iter->second;
         if (exec_state) {
             delete exec_state;
         }
         exec_states_.erase(iter);
-    } else {
-        return false;
     }
     return true;
 }
