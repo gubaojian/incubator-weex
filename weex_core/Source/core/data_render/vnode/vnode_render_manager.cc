@@ -536,15 +536,14 @@ bool VNodeRenderManager::RefreshPage(const std::string& page_id,
 }
 
 bool VNodeRenderManager::ClosePage(const std::string& page_id) {
-    auto iter = exec_states_.find(page_id);
-    if (iter != exec_states_.end()) {
-        ExecState *exec_state = iter->second;
-        if (exec_state) {
-            delete exec_state;
-        }
-        exec_states_.erase(iter);
+    auto node = vnode_trees_.find(page_id);
+    if (node == vnode_trees_.end()) {
+        return false;
     }
-    return ClosePageInternal(page_id);
+    RenderManager::GetInstance()->ClosePage(page_id);
+    delete node->second;
+    vnode_trees_.erase(node);
+    return true;
 }
     
 static uint32_t StringToUint32(const std::string &s) {

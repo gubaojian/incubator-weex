@@ -46,7 +46,8 @@ Pod::Spec.new do |s|
                     'weex_core/Source/wson/**/*.{h,hpp,m,mm,c,cpp,cc}',
                     'weex_core/Source/third_party/**/*.{h,hpp,m,mm,c,cpp,cc}',
                     'weex_core/Source/include/**/*.{h,hpp,m,mm,c,cpp,cc}',
-                    'weex_core/Source/qking/**/*.{h,c,cc}',
+                    'weex_core/Source/qking/**/*.{h,c,cc}'
+
   s.exclude_files = 'weex_core/Source/**/*android.{h,hpp,m,mm,c,cpp,cc}',
                     'weex_core/Source/base/android',
                     'weex_core/Source/base/base64',
