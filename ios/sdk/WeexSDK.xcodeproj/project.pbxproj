@@ -391,7 +391,6 @@
 		98D78FCE21E5F2830065C41D /* vm_defines.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D78E8021E5F2830065C41D /* vm_defines.h */; };
 		98D78FCF21E5F2830065C41D /* vm_ecma_value_helper.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D78E8121E5F2830065C41D /* vm_ecma_value_helper.h */; };
 		98D78FD021E5F2830065C41D /* vm_exec_state.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D78E8221E5F2830065C41D /* vm_exec_state.h */; };
-		98D78FD121E5F2830065C41D /* vm_context.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D78E8321E5F2830065C41D /* vm_context.h */; };
 		98D78FD221E5F2830065C41D /* vm_op_code.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D78E8421E5F2830065C41D /* vm_op_code.c */; };
 		98D78FD321E5F2830065C41D /* ecma_builtin_rangeerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 98D78E8721E5F2830065C41D /* ecma_builtin_rangeerror.c */; };
 		98D78FD421E5F2830065C41D /* ecma_builtin_string_prototype.inc.h in Headers */ = {isa = PBXBuildFile; fileRef = 98D78E8821E5F2830065C41D /* ecma_builtin_string_prototype.inc.h */; };
@@ -1657,7 +1656,6 @@
 		98D78E8021E5F2830065C41D /* vm_defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_defines.h; sourceTree = "<group>"; };
 		98D78E8121E5F2830065C41D /* vm_ecma_value_helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_ecma_value_helper.h; sourceTree = "<group>"; };
 		98D78E8221E5F2830065C41D /* vm_exec_state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_exec_state.h; sourceTree = "<group>"; };
-		98D78E8321E5F2830065C41D /* vm_context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vm_context.h; sourceTree = "<group>"; };
 		98D78E8421E5F2830065C41D /* vm_op_code.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = vm_op_code.c; sourceTree = "<group>"; };
 		98D78E8721E5F2830065C41D /* ecma_builtin_rangeerror.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ecma_builtin_rangeerror.c; sourceTree = "<group>"; };
 		98D78E8821E5F2830065C41D /* ecma_builtin_string_prototype.inc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ecma_builtin_string_prototype.inc.h; sourceTree = "<group>"; };
@@ -2955,7 +2953,6 @@
 				98D78E8021E5F2830065C41D /* vm_defines.h */,
 				98D78E8121E5F2830065C41D /* vm_ecma_value_helper.h */,
 				98D78E8221E5F2830065C41D /* vm_exec_state.h */,
-				98D78E8321E5F2830065C41D /* vm_context.h */,
 				98D78E8421E5F2830065C41D /* vm_op_code.c */,
 			);
 			path = vm;
@@ -3299,7 +3296,6 @@
 		98D78F7F21E5F2830065C41D /* rax */ = {
 			isa = PBXGroup;
 			children = (
-				98D78F8021E5F2830065C41D /* test */,
 				98D78F8121E5F2830065C41D /* rax_builtin_env.h */,
 				98D78F8221E5F2830065C41D /* rax_render_bridge.h */,
 				98D78F8321E5F2830065C41D /* rax_update.cc */,
@@ -3310,13 +3306,6 @@
 				98D78F8821E5F2830065C41D /* vdom */,
 			);
 			path = rax;
-			sourceTree = "<group>";
-		};
-		98D78F8021E5F2830065C41D /* test */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = test;
 			sourceTree = "<group>";
 		};
 		98D78F8821E5F2830065C41D /* vdom */ = {
@@ -4088,7 +4077,6 @@
 				98D78FA921E5F2830065C41D /* lit_magic_strings.inc.h in Headers */,
 				98D7908021E5F2830065C41D /* ecma_regexp_object.h in Headers */,
 				17C74F0C2072145100AB4CAB /* WXAnalyzerCenter.h in Headers */,
-				B8D66CD121255730003960BD /* thread_impl_darwin.h in Headers */,
 				B8D66CBD21255730003960BD /* closure.h in Headers */,
 				98D78FF921E5F2830065C41D /* ecma_builtin_int32array.inc.h in Headers */,
 				C4B834281DE69B09007AD27E /* WXPickerModule.h in Headers */,
