@@ -492,7 +492,9 @@ std::unique_ptr<WeexJSResult> CoreSideInPlatform::ExecJSOnInstance(const char *i
 int CoreSideInPlatform::DestroyInstance(const char *instanceId) {
   auto node_manager =
       weex::core::data_render::VNodeRenderManager::GetInstance();
-  node_manager->ClosePage(instanceId);
+  if (node_manager->ClosePage(instanceId)) {
+    return true;
+  }
   return WeexCoreManager::Instance()
       ->script_bridge()
       ->script_side()
