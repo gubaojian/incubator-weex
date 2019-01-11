@@ -107,7 +107,8 @@ class RaxElementFactory {
   void DebugPrintMountedComponent();
 
  private:
-  static std::map<std::string, std::unique_ptr<RaxElementFactory>> g_factories_;
+  //static object got release on app terminate in IOS. Using ptr to avoid this issue.
+  static std::map<std::string, std::unique_ptr<RaxElementFactory>>* g_factories_;
 
  private:
   uint32_t element_id_ = 0;

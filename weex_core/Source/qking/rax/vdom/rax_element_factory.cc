@@ -14,31 +14,31 @@
 RAX_NAME_SPACE_BEGIN
 
 std::map<std::string, std::unique_ptr<RaxElementFactory>>
-    RaxElementFactory::g_factories_{};
+    *RaxElementFactory::g_factories_ = new std::map<std::string, std::unique_ptr<RaxElementFactory>>();
 
 void RaxElementFactory::CreateFactory(const std::string &name) {
-  RAX_MAKESURE(g_factories_.find(name) == g_factories_.end());
+  RAX_MAKESURE(g_factories_->find(name) == g_factories_->end());
 
-  g_factories_.insert(std::make_pair(
+  g_factories_->insert(std::make_pair(
       name, std::unique_ptr<RaxElementFactory>(new RaxElementFactory(name))));
 }
 
 void RaxElementFactory::DestroyFactory(const std::string &name) {
-  const auto &ptr = g_factories_.find(name);
-  RAX_MAKESURE(ptr != g_factories_.end());
-  g_factories_.erase(ptr);
+  const auto &ptr = g_factories_->find(name);
+  RAX_MAKESURE(ptr != g_factories_->end());
+  g_factories_->erase(ptr);
 }
 
 RaxElementFactory *RaxElementFactory::GetFactory(const std::string &name) {
-  const auto &ptr = g_factories_.find(name);
-  RAX_MAKESURE(ptr != g_factories_.end());
+  const auto &ptr = g_factories_->find(name);
+  RAX_MAKESURE(ptr != g_factories_->end());
   return ptr->second.get();
 }
 
 RaxElementFactory *RaxElementFactory::GetFactoryOrNull(
     const std::string &name) {
-  const auto &ptr = g_factories_.find(name);
-  if (ptr != g_factories_.end()) {
+  const auto &ptr = g_factories_->find(name);
+  if (ptr != g_factories_->end()) {
     return ptr->second.get();
   } else {
     return nullptr;
