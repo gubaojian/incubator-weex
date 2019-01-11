@@ -531,20 +531,18 @@ bool VNodeRenderManager::RefreshPage(const std::string& page_id,
         return true;
         
     } while (0);
-    
+
     return false;
 }
 
-bool VNodeRenderManager::ClosePage(const std::string& page_id) {
+bool VNodeRenderManager::ClosePage(const std::string& page_id) {auto it = exec_states_.find(page_id);
     ClosePageInternal(page_id);
-    auto iter = exec_states_.find(page_id);
-    if (iter != exec_states_.end()) {
-        ExecState *exec_state = iter->second;
-        if (exec_state) {
-            delete exec_state;
-        }
-        exec_states_.erase(iter);
+    if (it == exec_states_.end()) {
+        return false;
     }
+    ExecState *exec_state = it->second;
+    delete exec_state;
+    exec_states_.erase(it);
     return true;
 }
     
