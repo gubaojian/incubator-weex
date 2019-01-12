@@ -222,7 +222,7 @@ ecma_builtin_json_parse_string (ecma_json_token_t *token_p) /**< token argument 
 
   if (!has_escape_sequence)
   {
-    token_p->u.string_p = ecma_new_ecma_string_from_utf8 (token_p->current_p, buffer_size);
+    token_p->u.string_p = ecma_new_ecma_string_from_utf8_converted_to_cesu8 (token_p->current_p, buffer_size);
     token_p->current_p = current_p + 1;
     return;
   }
@@ -294,7 +294,7 @@ ecma_builtin_json_parse_string (ecma_json_token_t *token_p) /**< token argument 
 
   QKING_ASSERT (write_p == buffer_p + buffer_size);
 
-  token_p->u.string_p = ecma_new_ecma_string_from_utf8 (buffer_p, buffer_size);
+  token_p->u.string_p = ecma_new_ecma_string_from_utf8_converted_to_cesu8 (buffer_p, buffer_size);
 
   JMEM_FINALIZE_LOCAL_ARRAY (buffer_p);
 
