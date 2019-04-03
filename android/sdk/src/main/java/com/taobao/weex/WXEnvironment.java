@@ -264,7 +264,7 @@ public class WXEnvironment {
     if (WXEnvironment.isApkDebugable()) {
       WXLogUtils.d("isTableDevice:" + WXUtils.isTabletDevice());
     }
-    return isCPUSupport() && !WXUtils.isTabletDevice();
+    return isCPUSupport();
   }
 
   /**
