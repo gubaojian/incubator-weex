@@ -12,7 +12,7 @@ plugins {
 apply plugin: 'com.android.library'
 apply plugin: 'checkstyle'
 
-ext.disableCov = project.hasProperty('disableCov') ? project.getProperty('disableCov') : 'false'
+ext.disableCov = true; // project.hasProperty('disableCov') ? project.getProperty('disableCov') : 'false'
 if(!disableCov.toBoolean()){
     /**
     apply plugin: 'com.vanniktech.android.junit.jacoco'
