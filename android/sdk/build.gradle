@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
-        classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.5.0'
+        //classpath 'com.vanniktech:gradle-android-junit-jacoco-plugin:0.5.0'
     }
 }
 
@@ -133,7 +133,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            testCoverageEnabled true
+            testCoverageEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "boolean", "ENABLE_TRACE", "false"
             consumerProguardFiles 'proguard-rules.pro'
@@ -142,6 +142,7 @@ android {
         debug {
             buildConfigField "boolean", "ENABLE_TRACE", "true"
             jniDebuggable true
+            testCoverageEnabled false
             debuggable true
             consumerProguardFiles 'proguard-rules.pro'
         }

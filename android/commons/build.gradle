@@ -46,8 +46,8 @@ dependencies {
     compile "com.android.support:support-v4:${project.supportLibVersion}"
     compile "com.android.support:appcompat-v7:${project.supportLibVersion}"
     // compile project(':weex_sdk')
-    debugCompile project(path: ':weex_sdk', configuration: 'debug')
-    releaseCompile project(path: ':weex_sdk', configuration: 'release')
+    //provided project(path: ':weex_sdk', configuration: 'debug')
+    provided project(path: ':weex_sdk')
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.facebook.fresco:fresco:0.10.0'
     compile 'com.taobao.android.weex_inspection:protocol:1.1.4.1'

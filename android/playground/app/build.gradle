@@ -5,6 +5,12 @@ plugins {
 apply plugin: 'com.android.application'
 
 android {
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
     compileSdkVersion project.compileSdkVersion
     buildToolsVersion project.buildToolsVersion
 
@@ -93,8 +99,8 @@ dependencies {
     debugCompile project(path: ':commons', configuration: 'debug')
     releaseCompile project(path: ':commons', configuration: 'release')
 
-    debugCompile project(path: ':weex_sdk', configuration: 'debug')
-    releaseCompile project(path: ':weex_sdk', configuration: 'release')
+    //debugCompile project(path: ':weex_sdk', configuration: 'debug')
+    //releaseCompile project(path: ':weex_sdk', configuration: 'release')
 
     //https://github.com/weexteam/weex-analyzer-android
     //Weex-Analyzer provides several convenient tools such as Memory Monitor
@@ -120,6 +126,8 @@ dependencies {
     compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
     compile 'com.taobao.android:weex_inspector:0.16.7'
     //compile project(":weex_inspector")
+
+    compile(name: 'weex_sdk-release', ext: 'aar')
 }
 
 if(file('../../license/LICENSE').exists()){
